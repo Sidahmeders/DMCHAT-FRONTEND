@@ -9,7 +9,7 @@ import { HARD_CODED_DATA } from './data'
 
 import './TodayPatientsList.scss'
 
-const Calendar = () => {
+const TodayPatientsList = () => {
   const [waitingRoomPatients, setWaitingRoomPatients] = useState(HARD_CODED_DATA.slice(0, 3))
   const [nextAppointmentsPatients, setNextAppointmentsPatients] = useState(HARD_CODED_DATA.slice(3))
 
@@ -51,4 +51,4 @@ const Calendar = () => {
   )
 }
 
-export default Calendar
+export default TodayPatientsList

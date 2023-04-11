@@ -25,7 +25,7 @@ export default function NextAppointmentsTable({ patients }) {
                 <CardHeader>
                   <Flex spacing="4">
                     <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-                      <Avatar name="Segun Adebayo" src="" />
+                      <Avatar name={item.name} src="" />
                       <Box>
                         <Heading size="sm">
                           {item.name} / {item.age}
@@ -52,7 +52,7 @@ export default function NextAppointmentsTable({ patients }) {
                     parti
                   </Button>
                   <Button flex="1" variant="ghost" leftIcon={<MessageCircle />}>
-                    comment
+                    avis
                   </Button>
                 </CardFooter>
               </Card>

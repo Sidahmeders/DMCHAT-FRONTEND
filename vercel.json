@@ -1,8 +1,4 @@
 {
-  "rewrites": [
-    {
-      "source": "/api/*",
-      "destination": "https://dnmchat-backend.onrender.com/api/*"
-    }
-  ]
+  "source": "/api/*",
+  "destination": "https://dnmchat-backend.onrender.com/api/*"
 }

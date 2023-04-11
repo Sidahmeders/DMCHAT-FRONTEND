@@ -1,9 +1,9 @@
 export const HARD_CODED_DATA = [
   {
     id: 'id-1',
-    name: 'Amine Deghmine 1',
+    name: 'Amine Deghmine',
     age: '29',
-    motif: 'douleur 7/10',
+    motif: 'douleur 3/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
     treatmentPlan: 'Ipsum Dolor Sit Amet',
@@ -11,9 +11,9 @@ export const HARD_CODED_DATA = [
   },
   {
     id: 'id-2',
-    name: 'Amine Deghmine 2',
+    name: 'Ahmed Boutaraa',
     age: '29',
-    motif: 'douleur 7/10',
+    motif: 'douleur 5/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
     treatmentPlan: 'Ipsum Dolor Sit Amet',
@@ -21,7 +21,7 @@ export const HARD_CODED_DATA = [
   },
   {
     id: 'id-3',
-    name: 'Amine Deghmine 3',
+    name: 'Hamid Abd Meriem',
     age: '29',
     motif: 'douleur 7/10',
     state: 'très bien',
@@ -31,7 +31,7 @@ export const HARD_CODED_DATA = [
   },
   {
     id: 'id-4',
-    name: 'Amine Deghmine 4',
+    name: 'Kamal Jamal',
     age: '29',
     motif: 'douleur 7/10',
     state: 'très bien',
@@ -41,9 +41,9 @@ export const HARD_CODED_DATA = [
   },
   {
     id: 'id-5',
-    name: 'Amine Deghmine 5',
+    name: 'Walid Bensouna',
     age: '29',
-    motif: 'douleur 7/10',
+    motif: 'douleur 2/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
     treatmentPlan: 'Ipsum Dolor Sit Amet',
@@ -51,7 +51,7 @@ export const HARD_CODED_DATA = [
   },
   {
     id: 'id-6',
-    name: 'Amine Deghmine 6',
+    name: 'Halimi Yassine',
     age: '29',
     motif: 'douleur 7/10',
     state: 'très bien',
@@ -61,7 +61,7 @@ export const HARD_CODED_DATA = [
   },
   {
     id: 'id-7',
-    name: 'Amine Deghmine 7',
+    name: 'AbAlah Mejahed',
     age: '29',
     motif: 'douleur 7/10',
     state: 'très bien',
