@@ -4,13 +4,13 @@ import { Droppable } from 'react-beautiful-dnd'
 import PatientCard from './PatientCard'
 import { DragWrap } from './TodayPatientsList'
 
-export default function WaitingRoomTable({ patients }) {
+export default function DoneTable({ patients }) {
   return (
-    <Droppable droppableId="waiting-room" type="PATIENT">
+    <Droppable droppableId="done-table" type="PATIENT">
       {(provided, snapshot) => (
-        <div className="waiting-room-container" ref={provided.innerRef} {...provided.droppableProps}>
+        <div className="done-table-container" ref={provided.innerRef} {...provided.droppableProps}>
           <h1 className="title">
-            Salle D'Attente
+            Rendez-vous Fini
             <Circle className="circle" size="25px">
               {patients.length}
             </Circle>

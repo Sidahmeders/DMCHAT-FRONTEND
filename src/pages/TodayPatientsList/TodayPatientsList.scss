@@ -8,13 +8,15 @@
     display: flex;
 
     .next-appointments-container,
-    .waiting-room-container {
+    .waiting-room-container,
+    .done-table-container,
+    .awaiting-list-container {
       margin-right: 1rem;
       margin-top: 1rem;
       padding: 0.5rem;
 
       .title {
-        padding: 0.75rem 0.25rem;
+        padding: 0.75rem;
         font-weight: bold;
         text-align: center;
         text-transform: uppercase;
@@ -46,6 +48,22 @@
         color: #20ac20;
         .circle {
           background-color: #20ac20;
+        }
+      }
+
+      &:nth-child(3) .title {
+        border-top: 2px solid #0bbe98;
+        color: #0bbe98;
+        .circle {
+          background-color: #0bbe98;
+        }
+      }
+
+      &:nth-child(4) .title {
+        border-top: 2px solid #5c746f;
+        color: #5c746f;
+        .circle {
+          background-color: #5c746f;
         }
       }
 

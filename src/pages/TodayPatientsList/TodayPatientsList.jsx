@@ -4,8 +4,9 @@ import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import AddPatientModal from './AddPatientModal'
 import WaitingRoomTable from './WaitingRoomTable'
 import NextAppointmentsTable from './NextAppointmentsTable'
-
-import { HARD_CODED_DATA } from './data'
+import DoneTable from './DoneTable'
+import AwaitingList from './AwaitingList'
+import { HARD_CODED_DATA, AWAITINGLIST_DATA } from './data'
 
 import './TodayPatientsList.scss'
 
@@ -22,6 +23,7 @@ export const DragWrap = ({ id, index, children }) => (
 export default function TodayPatientsList() {
   const [waitingRoomPatients, setWaitingRoomPatients] = useState(HARD_CODED_DATA.slice(0, 3))
   const [nextAppointmentsPatients, setNextAppointmentsPatients] = useState(HARD_CODED_DATA.slice(3))
+  const doneAppointmentsPatients = []
 
   const onDragEnd = (props) => {
     const { draggableId, destination } = props
@@ -36,6 +38,7 @@ export default function TodayPatientsList() {
         setNextAppointmentsPatients(() => newNextAppointmentsPatients)
       }
     }
+
     if (droppableId === 'next-appointments' && destination) {
       const newWaitingRoomPatients = waitingRoomPatients.filter((item) => item.id !== draggableId)
       const droppedPatient = waitingRoomPatients.find((item) => item.id === draggableId)
@@ -55,6 +58,8 @@ export default function TodayPatientsList() {
         <div className="room-container">
           <WaitingRoomTable patients={waitingRoomPatients} />
           <NextAppointmentsTable patients={nextAppointmentsPatients} />
+          <DoneTable patients={doneAppointmentsPatients} />
+          <AwaitingList patients={AWAITINGLIST_DATA} />
         </div>
       </div>
     </DragDropContext>

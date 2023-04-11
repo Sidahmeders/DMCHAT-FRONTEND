@@ -70,3 +70,26 @@ export const HARD_CODED_DATA = [
     history: 'Ipsum Dolor',
   },
 ]
+
+export const AWAITINGLIST_DATA = [
+  {
+    id: 'id-100',
+    name: 'Samir Benmahjoub',
+    age: '35',
+    motif: 'douleur 1/10',
+    state: 'très bien',
+    diagnostic: 'carie entre les dents',
+    treatmentPlan: 'Ipsum Dolor Sit Amet',
+    history: 'Ipsum Dolor',
+  },
+  {
+    id: 'id-101',
+    name: 'Adb Kader Lamouri',
+    age: '35',
+    motif: 'douleur 1/10',
+    state: 'très bien',
+    diagnostic: 'carie entre les dents',
+    treatmentPlan: 'Ipsum Dolor Sit Amet',
+    history: 'Ipsum Dolor',
+  },
+]
