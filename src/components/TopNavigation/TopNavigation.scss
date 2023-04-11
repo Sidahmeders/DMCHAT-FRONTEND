@@ -1,0 +1,36 @@
+.top-navigation-container {
+  position: absolute;
+  top: 0;
+  z-index: 9;
+  width: 50vw;
+  min-width: 20rem;
+  max-width: 60rem;
+  display: flex;
+  justify-content: space-evenly;
+  padding: 0.25rem;
+  border-top: 0;
+
+  .save-icon,
+  a {
+    border: 1px solid #020f5c56;
+    border-radius: 50%;
+    background: #474aff11;
+    padding: 6px;
+  }
+
+  .selected {
+    border-color: #020f5c56;
+    background: #474aff66;
+
+    svg {
+      fill: #474aff66;
+      color: #474aff;
+    }
+  }
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    color: #474aff;
+  }
+}

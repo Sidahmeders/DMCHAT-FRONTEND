@@ -1,0 +1,26 @@
+@import 'react-big-calendar/lib/sass/styles';
+@import 'react-big-calendar/lib/addons/dragAndDrop/styles';
+
+.calendar-container {
+  margin-top: 6.5rem;
+  width: 100%;
+  min-height: 80vh;
+  display: flex;
+  justify-content: center;
+}
+
+.rbc-calendar {
+  width: 60rem !important;
+  min-height: 40rem !important;
+  height: 85vh;
+}
+
+.rbc-btn-group {
+  display: none;
+}
+
+.rbc-time-view,
+.rbc-agenda-view {
+  max-height: 35rem;
+  overflow-y: auto;
+}
