@@ -7,6 +7,7 @@ import { ChatState } from '../context/ChatProvider'
 import ChatLoading from './ChatLoading'
 import { getSender } from '../config/ChatLogics'
 import GroupChatModal from './miscellaneous/GroupChatModal'
+import SearchUserDrawer from './SearchUserDrawer'
 
 const MyChats = ({ fetchAgain }) => {
   const [loggedUser, setLoggedUser] = useState()
@@ -61,7 +62,6 @@ const MyChats = ({ fetchAgain }) => {
         pb={3}
         px={3}
         fontSize={{ base: '28px', md: '30px' }}
-        fontFamily="Work sans"
         display="flex"
         w="100%"
         justifyContent="space-between"
@@ -71,6 +71,9 @@ const MyChats = ({ fetchAgain }) => {
             nouv. group
           </Button>
         </GroupChatModal>
+
+        <SearchUserDrawer />
+
         <LogOut
           style={{ cursor: 'pointer' }}
           onClick={() => {

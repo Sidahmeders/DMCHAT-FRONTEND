@@ -26,7 +26,7 @@ const Home = () => {
         m="40px 0 15px 0"
         borderRadius="lg"
         borderWidth="1px">
-        <Text fontSize="4xl" fontFamily="Work sans" textAlign="center">
+        <Text fontSize="4xl" textAlign="center">
           Deghmine M.A
         </Text>
       </Box>
