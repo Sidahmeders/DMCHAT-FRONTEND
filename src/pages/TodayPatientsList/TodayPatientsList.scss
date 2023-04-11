@@ -9,19 +9,49 @@
 
     .next-appointments-container,
     .waiting-room-container {
-      border: 1px solid #ddd;
-      border-radius: 0.5rem;
       margin-right: 1rem;
       margin-top: 1rem;
       padding: 0.5rem;
 
       .title {
-        padding: 1rem 0.25rem;
-        font-size: 1.5rem;
+        padding: 0.75rem 0.25rem;
+        font-weight: bold;
+        text-align: center;
+        text-transform: uppercase;
+        border-radius: 0.5rem;
+        background-color: #ddd3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .circle {
+          color: white;
+          display: inline-block;
+          margin-left: 0.75rem;
+          display: flex;
+          align-items: center;
+        }
+      }
+
+      &:nth-child(1) .title {
+        border-top: 2px solid #ffa500;
+        color: #ffa500;
+        .circle {
+          background-color: #ffa500;
+        }
+      }
+
+      &:nth-child(2) .title {
+        border-top: 2px solid #20ac20;
+        color: #20ac20;
+        .circle {
+          background-color: #20ac20;
+        }
       }
 
       .card-container {
-        border: 1px solid #ddd;
+        background-color: #ddd3;
+        border: 1px solid #ddd3;
         border-radius: 0.5rem;
         padding: 0.5rem;
         margin-top: 0.5rem;

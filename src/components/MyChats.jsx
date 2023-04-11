@@ -58,18 +58,9 @@ const MyChats = ({ fetchAgain }) => {
       w={{ base: '100%', md: '31%' }}
       borderRadius="lg"
       borderWidth="1px">
-      <Box
-        pb={3}
-        px={3}
-        fontSize={{ base: '28px', md: '30px' }}
-        display="flex"
-        w="100%"
-        justifyContent="space-between"
-        alignItems="center">
+      <Box pb={3} px={3} display="flex" w="100%" justifyContent="space-between" alignItems="center">
         <GroupChatModal>
-          <Button display="flex" fontSize={{ base: '17px', md: '10px', lg: '17px' }}>
-            nouv. group
-          </Button>
+          <Button display="flex">nouveau group</Button>
         </GroupChatModal>
 
         <SearchUserDrawer />
