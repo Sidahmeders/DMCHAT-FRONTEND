@@ -2,7 +2,7 @@ export const HARD_CODED_DATA = [
   {
     id: 'id-1',
     name: 'Amine Deghmine',
-    age: '29',
+    age: '27',
     motif: 'douleur 3/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
@@ -12,7 +12,7 @@ export const HARD_CODED_DATA = [
   {
     id: 'id-2',
     name: 'Ahmed Boutaraa',
-    age: '29',
+    age: '25',
     motif: 'douleur 5/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
@@ -22,7 +22,7 @@ export const HARD_CODED_DATA = [
   {
     id: 'id-3',
     name: 'Hamid Abd Meriem',
-    age: '29',
+    age: '43',
     motif: 'douleur 7/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
@@ -32,7 +32,7 @@ export const HARD_CODED_DATA = [
   {
     id: 'id-4',
     name: 'Kamal Jamal',
-    age: '29',
+    age: '23',
     motif: 'douleur 7/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
@@ -42,7 +42,7 @@ export const HARD_CODED_DATA = [
   {
     id: 'id-5',
     name: 'Walid Bensouna',
-    age: '29',
+    age: '33',
     motif: 'douleur 2/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
@@ -52,7 +52,7 @@ export const HARD_CODED_DATA = [
   {
     id: 'id-6',
     name: 'Halimi Yassine',
-    age: '29',
+    age: '19',
     motif: 'douleur 7/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
@@ -62,7 +62,7 @@ export const HARD_CODED_DATA = [
   {
     id: 'id-7',
     name: 'AbAlah Mejahed',
-    age: '29',
+    age: '22',
     motif: 'douleur 7/10',
     state: 'très bien',
     diagnostic: 'carie entre les dents',
