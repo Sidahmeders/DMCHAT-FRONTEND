@@ -15,21 +15,25 @@ const Calendar = () => {
 
   const onDragEnd = (props) => {
     const { draggableId, destination } = props
-    const { droppableId } = destination
+    const { droppableId } = destination || {}
 
-    if (droppableId === 'waiting-room') {
+    if (droppableId === 'waiting-room' && destination) {
       const newNextAppointmentsPatients = nextAppointmentsPatients.filter((item) => item.id !== draggableId)
       const droppedPatient = nextAppointmentsPatients.find((item) => item.id === draggableId)
 
-      setWaitingRoomPatients(() => [...waitingRoomPatients, droppedPatient])
-      setNextAppointmentsPatients(() => newNextAppointmentsPatients)
+      if (droppedPatient) {
+        setWaitingRoomPatients(() => [...waitingRoomPatients, droppedPatient])
+        setNextAppointmentsPatients(() => newNextAppointmentsPatients)
+      }
     }
-    if (droppableId === 'next-appointments') {
+    if (droppableId === 'next-appointments' && destination) {
       const newWaitingRoomPatients = waitingRoomPatients.filter((item) => item.id !== draggableId)
       const droppedPatient = waitingRoomPatients.find((item) => item.id === draggableId)
 
-      setNextAppointmentsPatients(() => [...nextAppointmentsPatients, droppedPatient])
-      setWaitingRoomPatients(() => newWaitingRoomPatients)
+      if (droppedPatient) {
+        setNextAppointmentsPatients(() => [...nextAppointmentsPatients, droppedPatient])
+        setWaitingRoomPatients(() => newWaitingRoomPatients)
+      }
     }
   }
 
