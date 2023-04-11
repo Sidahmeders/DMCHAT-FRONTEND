@@ -2,7 +2,7 @@
   "name": "dmchatfrontend",
   "version": "0.1.0",
   "private": true,
-  "proxy": "https://dnmchat-backend.onrender.com",
+  "proxy": "https://dnmchat-backend.onrender.com/",
   "dependencies": {
     "@chakra-ui/card": "^2.1.6",
     "@chakra-ui/icons": "^2.0.11",
