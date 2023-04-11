@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { DragDropContext } from 'react-beautiful-dnd'
+import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 
 import AddPatientModal from './AddPatientModal'
 import WaitingRoomTable from './WaitingRoomTable'
@@ -9,7 +9,17 @@ import { HARD_CODED_DATA } from './data'
 
 import './TodayPatientsList.scss'
 
-const TodayPatientsList = () => {
+export const DragWrap = ({ id, index, children }) => (
+  <Draggable draggableId={id} index={index}>
+    {(provided, snapshot) => (
+      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+        {children}
+      </div>
+    )}
+  </Draggable>
+)
+
+export default function TodayPatientsList() {
   const [waitingRoomPatients, setWaitingRoomPatients] = useState(HARD_CODED_DATA.slice(0, 3))
   const [nextAppointmentsPatients, setNextAppointmentsPatients] = useState(HARD_CODED_DATA.slice(3))
 
@@ -50,5 +60,3 @@ const TodayPatientsList = () => {
     </DragDropContext>
   )
 }
-
-export default TodayPatientsList
