@@ -52,19 +52,19 @@ export default function TodayPatientsList() {
   }
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      <div className="today-patients-list-page-container">
-        <Box w="100%" p="0.5rem">
-          <AddPatientModal />
-        </Box>
+    <div className="today-patients-list-page-container">
+      <Box w="100%" p="0.5rem">
+        <AddPatientModal />
+      </Box>
 
+      <DragDropContext onDragEnd={onDragEnd}>
         <div className="room-container">
           <WaitingRoomTable patients={waitingRoomPatients} />
           <NextAppointmentsTable patients={nextAppointmentsPatients} />
           <DoneTable patients={doneAppointmentsPatients} />
           <AwaitingList patients={AWAITINGLIST_DATA} />
         </div>
-      </div>
-    </DragDropContext>
+      </DragDropContext>
+    </div>
   )
 }

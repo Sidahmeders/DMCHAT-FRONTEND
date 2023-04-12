@@ -9,7 +9,7 @@ export default function PatientCard({ patient }) {
   const [isLeft, setIsLeft] = useState(false)
 
   return (
-    <Card maxW="sm" className={`card-container ${isConfirmed && 'confirmed'} ${isLeft && 'left'}`}>
+    <Card className={`card-container ${isConfirmed && 'confirmed'} ${isLeft && 'left'}`}>
       <CardHeader marginBottom="2">
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
