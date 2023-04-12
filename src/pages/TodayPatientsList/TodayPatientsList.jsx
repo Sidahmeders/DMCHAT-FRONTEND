@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { Box } from '@chakra-ui/react'
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 
 import AddPatientModal from './AddPatientModal'
@@ -53,7 +54,9 @@ export default function TodayPatientsList() {
   return (
     <DragDropContext onDragEnd={onDragEnd}>
       <div className="today-patients-list-page-container">
-        <AddPatientModal />
+        <Box w="100%" p="0.5rem">
+          <AddPatientModal />
+        </Box>
 
         <div className="room-container">
           <WaitingRoomTable patients={waitingRoomPatients} />

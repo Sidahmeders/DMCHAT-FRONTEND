@@ -5,9 +5,11 @@ import { useState } from 'react'
 
 export default function PatientCard({ patient }) {
   const [showCardBody, setShowCardBody] = useState(false)
+  const [isConfirmed, setIsConfirmed] = useState(false)
+  const [isLeft, setIsLeft] = useState(false)
 
   return (
-    <Card maxW="sm" className="card-container">
+    <Card maxW="sm" className={`card-container ${isConfirmed && 'confirmed'} ${isLeft && 'left'}`}>
       <CardHeader marginBottom="2">
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
@@ -39,12 +41,14 @@ export default function PatientCard({ patient }) {
       )}
 
       <CardFooter justify="space-between" flexWrap="wrap" paddingTop="2">
-        <Button flex="1" variant="ghost" leftIcon={<CheckCircle />}>
+        <Button flex="1" variant="ghost" leftIcon={<CheckCircle />} onClick={() => setIsConfirmed(!isConfirmed)}>
           confirm.
         </Button>
-        <Button flex="1" variant="ghost" leftIcon={<Flag />}>
+
+        <Button flex="1" variant="ghost" leftIcon={<Flag />} onClick={() => setIsLeft(!isLeft)}>
           parti
         </Button>
+
         <Button flex="1" variant="ghost" leftIcon={<MessageCircle />}>
           avis
         </Button>
