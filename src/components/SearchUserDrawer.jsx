@@ -15,7 +15,7 @@ import {
   Spinner,
 } from '@chakra-ui/react'
 
-import { ChatState } from '../context/ChatProvider'
+import { ChatState } from '../context'
 
 import UserListItem from './UserAvatar/UserListItem'
 import ChatLoading from './ChatLoading'
