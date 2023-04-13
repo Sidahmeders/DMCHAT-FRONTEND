@@ -2,21 +2,31 @@
 @import 'react-big-calendar/lib/addons/dragAndDrop/styles';
 
 .calendar-container {
-  margin-top: 6.5rem;
+  margin-top: 4rem;
   width: 100%;
   min-height: 80vh;
   display: flex;
   justify-content: center;
 }
 
+.calendar-date-picker {
+  input {
+    outline: none;
+    border: 1px solid #ddd;
+    width: 6.5rem;
+    padding: 0.25rem 1rem;
+    border-radius: 0.25rem;
+  }
+}
+
 .rbc-calendar {
-  width: 60rem !important;
+  width: 80% !important;
   min-height: 40rem !important;
   height: 85vh;
 }
 
-.rbc-btn-group {
-  display: none;
+.rbc-month-view {
+  border-radius: 0.5rem;
 }
 
 .rbc-time-view,
@@ -24,3 +34,51 @@
   max-height: 35rem;
   overflow-y: auto;
 }
+
+.rbc-toolbar-label {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.rbc-btn-group {
+  button:nth-child(2) {
+    display: none;
+  }
+}
+
+@media (max-width: 768px) {
+  .rbc-calendar {
+    width: 90vw !important;
+  }
+  .rbc-toolbar-label {
+    justify-content: space-between;
+    margin-left: 10%;
+    padding: 0 !important;
+  }
+  .custom-toolbar {
+    display: none;
+  }
+}
+
+/* Remove weekends in month view */
+.rbc-month-header > :nth-child(6),
+.rbc-month-header > :nth-child(7) {
+  display: none;
+}
+
+.rbc-row-segment {
+  flex-basis: 20% !important;
+  max-width: 20% !important;
+}
+
+.rbc-month-row > .rbc-row-bg > :nth-child(6),
+.rbc-month-row > .rbc-row-bg > :nth-child(7) {
+  display: none;
+}
+
+.rbc-row-content > .rbc-row > .rbc-date-cell:nth-child(6),
+.rbc-row-content > .rbc-row > .rbc-date-cell:nth-child(7) {
+  display: none;
+}
+/* ------------------------------- */

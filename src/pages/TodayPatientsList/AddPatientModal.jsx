@@ -14,6 +14,7 @@ import {
 
 export default function AddPatientModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <>
       <Button onClick={onOpen}>Ajouter patient</Button>
