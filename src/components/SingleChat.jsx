@@ -4,7 +4,7 @@ import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@c
 import io from 'socket.io-client'
 
 import { ChatState } from '../context/ChatProvider'
-import { getSender, getSenderFull } from '../config/ChatLogics'
+import { getSender, getSenderFull } from '../utils'
 import ProfileModal from './miscellaneous/ProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat'

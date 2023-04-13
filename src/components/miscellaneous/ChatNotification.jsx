@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import { BellIcon } from '@chakra-ui/icons'
 
 import { ChatState } from '../../context/ChatProvider'
-import { getSender } from '../../config/ChatLogics'
+import { getSender } from '../../utils'
 
 const ChatNotification = () => {
   const { user, setSelectedChat, notification, setNotification } = ChatState()

@@ -5,7 +5,7 @@ import { LogOut } from 'react-feather'
 
 import { ChatState } from '../context/ChatProvider'
 import ChatLoading from './ChatLoading'
-import { getSender } from '../config/ChatLogics'
+import { getSender } from '../utils'
 import GroupChatModal from './miscellaneous/GroupChatModal'
 import SearchUserDrawer from './SearchUserDrawer'
 
