@@ -89,7 +89,7 @@ const Signup = () => {
     if (!credentials.name || !credentials.email || !credentials.password || !credentials.confirmPassword) {
       setLoading(false)
       return toast({
-        title: 'Please Fill all the Feilds',
+        title: 'Veuillez remplir tous les champs obligatoires',
         status: 'warning',
         duration: 5000,
         isClosable: true,

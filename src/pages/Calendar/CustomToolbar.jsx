@@ -6,6 +6,7 @@ import { isValid } from 'date-fns'
 import { CALENDAR_NAVIGATION } from '../../config'
 
 import DatePicker from '../../components/DatePicker/DatePicker'
+import AddPatientModal from '../../components/AddPatientModal'
 
 function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
   return viewNames.map((name) => (
@@ -48,6 +49,8 @@ export default function CustomToolbar({
             onChange={(value) => (isValid(value) ? setSelectedDate(value) : '')}
           />
         </div>
+
+        <AddPatientModal />
       </span>
 
       <span className="rbc-btn-group custom-toolbar">

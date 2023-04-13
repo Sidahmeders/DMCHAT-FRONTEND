@@ -38,7 +38,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, templateButtons, 
               )}
             />
 
-            <Input type="text" placeholder="Mettre événement" />
+            <Input type="text" placeholder="Mettre rendez-vous" />
           </Stack>
         </form>
       </ModalBody>

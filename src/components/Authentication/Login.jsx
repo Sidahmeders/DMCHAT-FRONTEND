@@ -24,7 +24,7 @@ const Login = () => {
     // If email or password is missing
     if (!credentials.email || !credentials.password) {
       toast({
-        title: 'Please Fill all the Feilds',
+        title: 'Veuillez remplir tous les champs obligatoires',
         status: 'warning',
         duration: 5000,
         isClosable: true,
