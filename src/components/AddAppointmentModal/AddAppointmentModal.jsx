@@ -39,7 +39,7 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose 
               />
             </TabPanel>
             <TabPanel>
-              <ConfigureCalendarAvailability handleClose={onClose} />
+              <ConfigureCalendarAvailability selectedSlotInfo={selectedSlotInfo} handleClose={onClose} />
             </TabPanel>
           </TabPanels>
         </Tabs>
