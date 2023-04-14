@@ -5,8 +5,10 @@ import PropTypes from 'prop-types'
 import { Calendar as BigCalendar, DateLocalizer, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { registerLocale } from 'react-datepicker'
-import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-fns'
+import { format, parse, startOfWeek, getDay, addMonths, subMonths, addHours } from 'date-fns'
 import { fr } from 'date-fns/locale'
+
+import { ChatState } from '../../context'
 
 import AddAppointmentModal from '../../components/AddAppointmentModal/AddAppointmentModal'
 import CustomToolbar from './CustomToolbar'
@@ -37,15 +39,16 @@ registerLocale(fr)
 
 export default function Calendar({ localizer = fnslocalizer, ...props }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
+  const { user } = ChatState()
 
-  const events = []
-  const patientsData = []
+  const [events, setEvents] = useState([])
 
-  const eventsData = events.map((item) => {
-    const { fullName } = patientsData.find((patient) => patient.id === item.patientId) || {}
-    const title = `${fullName?.slice(0, 6) || '#'} / ${item.title}`
-    return { ...item, title, fullName, eventName: item.title }
-  })
+  const eventsData = events.map(({ _id, date }) => ({
+    id: _id,
+    start: new Date(date),
+    end: addHours(new Date(date), 12),
+    title: 'Hello World!',
+  }))
 
   const clickRef = useRef(null)
 
@@ -106,11 +109,30 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
     }
   }, [])
 
+  useEffect(() => {
+    ;(async () => {
+      if (!user) return
+      const response = await fetch(`/api/calendar/${format(selectedDate, 'yyyy/MM')}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      })
+      setEvents(await response.json())
+    })()
+  }, [selectedDate, user])
+
   const ToolbarComponent = (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} />
 
   return (
     <div {...swipeHandlers} className="calendar-container" {...props}>
-      <AddAppointmentModal selectedSlotInfo={selectedSlotInfo} isOpen={isOpen} onClose={onClose} />
+      <AddAppointmentModal
+        selectedSlotInfo={selectedSlotInfo}
+        events={events}
+        setEvents={setEvents}
+        isOpen={isOpen}
+        onClose={onClose}
+      />
 
       <DnDCalendar
         selectable

@@ -65,11 +65,10 @@ const Signup = () => {
         })
         setLoading(false)
       } catch (error) {
-        console.log(error)
+        console.log(error.message)
         setLoading(false)
       }
     } else {
-      console.log('Hello')
       setLoading(false)
       return toast({
         title: 'Please select an image',

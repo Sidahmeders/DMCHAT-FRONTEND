@@ -60,25 +60,3 @@
     display: none;
   }
 }
-
-/* Remove weekends in month view */
-.rbc-month-header > :nth-child(6),
-.rbc-month-header > :nth-child(7) {
-  display: none;
-}
-
-.rbc-row-segment {
-  flex-basis: 20% !important;
-  max-width: 20% !important;
-}
-
-.rbc-month-row > .rbc-row-bg > :nth-child(6),
-.rbc-month-row > .rbc-row-bg > :nth-child(7) {
-  display: none;
-}
-
-.rbc-row-content > .rbc-row > .rbc-date-cell:nth-child(6),
-.rbc-row-content > .rbc-row > .rbc-date-cell:nth-child(7) {
-  display: none;
-}
-/* ------------------------------- */

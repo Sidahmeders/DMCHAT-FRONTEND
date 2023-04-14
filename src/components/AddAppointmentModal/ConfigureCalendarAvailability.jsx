@@ -13,14 +13,14 @@ const DAY_ENUM = {
   LOADED: 'LOADED',
 }
 
-export default function ConfigureCalendarAvailability({ selectedSlotInfo, handleClose }) {
+export default function ConfigureCalendarAvailability({ selectedSlotInfo, events, setEvents, handleClose }) {
   const [availability, setAvailability] = useState(DAY_ENUM.EMPTY)
   const [isLoading, setIsLoading] = useState(false)
   const { start, slots, action } = selectedSlotInfo
   const { user } = ChatState()
 
   const updateDayAvailability = async date => {
-    await fetch(`/api/calendar/${format(date, 'yyyy/MM/dd')}`, {
+    const response = await fetch(`/api/calendar/${format(date, 'yyyy/MM/dd')}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -28,17 +28,24 @@ export default function ConfigureCalendarAvailability({ selectedSlotInfo, handle
       },
       body: JSON.stringify({ availability }),
     })
+    return await response.json()
   }
 
   const handleCalendarAvailability = async () => {
     setIsLoading(true)
+    const newEvents = []
+
     if (action === 'click') {
-      await updateDayAvailability(start)
+      const newEvent = await updateDayAvailability(start)
+      newEvents.push(newEvent)
     } else if (action === 'select') {
       await slots.reduce(async (prevPromise, slot) => {
         await prevPromise
-        await updateDayAvailability(slot)
+        const newEvent = await updateDayAvailability(slot)
+        newEvents.push(newEvent)
       }, Promise.resolve())
+
+      setEvents([...events, ...newEvents])
     }
     setIsLoading(false)
     handleClose()
