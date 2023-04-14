@@ -41,17 +41,15 @@ export default function PatientCard({ patient }) {
       )}
 
       <CardFooter justify="space-between" flexWrap="wrap" paddingTop="2">
-        <Button flex="1" variant="ghost" leftIcon={<CheckCircle />} onClick={() => setIsConfirmed(!isConfirmed)}>
-          confirm.
+        <Button flex="4" variant="ghost" leftIcon={<CheckCircle />} onClick={() => setIsConfirmed(!isConfirmed)}>
+          confirmer
         </Button>
 
-        <Button flex="1" variant="ghost" leftIcon={<Flag />} onClick={() => setIsLeft(!isLeft)}>
+        <Button flex="3" variant="ghost" leftIcon={<Flag />} onClick={() => setIsLeft(!isLeft)}>
           parti
         </Button>
 
-        <Button flex="1" variant="ghost" leftIcon={<MessageCircle />}>
-          avis
-        </Button>
+        <Button flex="2" variant="ghost" pr="2" colorScheme="messenger" leftIcon={<MessageCircle />}></Button>
       </CardFooter>
     </Card>
   )

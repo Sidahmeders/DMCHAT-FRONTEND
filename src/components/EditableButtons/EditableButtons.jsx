@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ModalBody, ModalFooter, Button, Badge, Input, Stack, StackItem } from '@chakra-ui/react'
+import { ModalBody, ModalFooter, Button, Input, Stack, StackItem } from '@chakra-ui/react'
 import propTypes from 'prop-types'
 
 import { guid } from '../../utils'
@@ -22,23 +22,35 @@ export default function EditableButtons({
   }
 
   return (
-    <div className="editable-buttons-container">
+    <>
       <ModalBody>
         <Stack spacing={4}>
           <Input type="text" placeholder={label} />
 
           <StackItem>
             {templateButtons.length ? (
-              templateButtons.map(({ id, name }) => <Badge margin="2">{name}</Badge>)
+              templateButtons.map(({ id, name }) => (
+                <Button size="sm" margin="2">
+                  {name}
+                </Button>
+              ))
             ) : (
-              <Badge colorScheme="purple">exemple (ne s'affichera pas)</Badge>
+              <Button size="sm" colorScheme="telegram">
+                exemple (ne s'affichera pas)
+              </Button>
             )}
           </StackItem>
         </Stack>
 
         <div
-          className="drop-button-container"
-          style={{ width: '100%', height: '3rem', border: '2px solid red', marginTop: '1rem' }}></div>
+          style={{
+            width: '100%',
+            height: '3rem',
+            border: '2px dashed #f009',
+            borderRadius: '0.5rem',
+            marginTop: '1rem',
+            backgroundColor: '#f003',
+          }}></div>
       </ModalBody>
 
       <ModalFooter>
@@ -49,7 +61,7 @@ export default function EditableButtons({
           Annuler
         </Button>
       </ModalFooter>
-    </div>
+    </>
   )
 }
 

@@ -43,6 +43,7 @@ export default function CustomToolbar({
         <div>{label}</div>
         <div style={{ width: '12rem' }}>
           <DatePicker
+            showMonthYearPicker
             className="calendar-date-picker"
             dateFormat="yyyy/MM"
             value={date}
