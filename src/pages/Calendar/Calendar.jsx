@@ -136,7 +136,8 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         date={selectedDate}
         onNavigate={(date) => setSelectedDate(date)}
         min={new Date(1972, 0, 1, 8, 0, 59)}
-        step={30}
+        max={new Date(1972, 0, 1, 18, 30, 59)}
+        step={15}
         views={['month', 'day', 'agenda']}
         messages={messages}
         onSelectEvent={onSelectEvent}

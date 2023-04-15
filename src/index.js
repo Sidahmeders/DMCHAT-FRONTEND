@@ -11,7 +11,17 @@ const root = ReactDOM.createRoot(document.getElementById('root'))
 root.render(
   <BrowserRouter>
     <ChatProvider>
-      <ChakraProvider>
+      <ChakraProvider
+        toastOptions={{
+          defaultOptions: {
+            title: "quelque chose s'est mal passé. veuillez réessayer plus tard",
+            status: 'error',
+            duration: 5000,
+            isClosable: true,
+            position: 'bottom-right',
+            variant: 'solid',
+          },
+        }}>
         <App />
       </ChakraProvider>
     </ChatProvider>

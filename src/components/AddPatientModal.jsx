@@ -38,18 +38,15 @@ export default function AddPatientModal() {
       },
       body: JSON.stringify(data),
     })
-    const newPatient = await response.json()
+    const createdPatient = await response.json()
 
-    if (newPatient.statusCode === 400) {
-      toast({
-        title: 'Veuillez remplir tous les champs obligatoires',
-        status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'left-accent',
-      })
+    if (createdPatient.statusCode && createdPatient.statusCode !== 200) {
+      return toast()
     } else {
+      toast({
+        title: 'nouveau patient créé avec succès',
+        status: 'success',
+      })
       onClose()
     }
   }

@@ -31,42 +31,28 @@ export default function SearchUserDrawer() {
   const { user, setSelectedChat, chats, setChats } = ChatState()
 
   const handleSearch = async () => {
-    if (!search) {
+    if (!search.trim()) {
       return toast({
-        title: 'Please Enter something in search',
+        title: 'veuillez entrer quelque chose dans la recherche',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-left',
-        variant: 'solid',
       })
     }
+    setLoading(true)
 
-    try {
-      setLoading(true)
+    const response = await fetch(`/api/user?search=${search}`, {
+      method: 'GET',
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    })
+    const data = await response.json()
 
-      const response = await fetch(`/api/user?search=${search}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-      const data = await response.json()
-
-      setLoading(false)
+    if (data.statusCode && data.statusCode !== 200) {
+      return toast()
+    } else {
       setSearchResult(data)
-    } catch (error) {
-      setLoading(false)
-      return toast({
-        title: 'Error Occured!',
-        description: 'Failed to Load the Search Results',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-left',
-        variant: 'solid',
-      })
     }
+    setLoading(false)
   }
 
   const accessChat = async (userId) => {
@@ -94,13 +80,8 @@ export default function SearchUserDrawer() {
     } catch (error) {
       setLoadingChat(false)
       return toast({
-        title: 'Error fetching the chat',
+        title: 'Erreur lors de la récupération du chat',
         description: error.message,
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-left',
-        variant: 'solid',
       })
     }
   }

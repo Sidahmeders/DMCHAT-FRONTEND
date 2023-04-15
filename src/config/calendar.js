@@ -16,6 +16,11 @@ export const CREATE_PATIENT_NAMES = {
   APPOINTMENT: 'appointment',
 }
 
+export const ADD_APPOINTMENT_NAME = {
+  FULL_NAME: 'fullName',
+  TITLE: 'title',
+}
+
 export const CALENDAR_DAY_AVAILABILITY = {
   REST: 'REST',
   BUSY: 'BUSY',

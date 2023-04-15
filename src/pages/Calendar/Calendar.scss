@@ -43,12 +43,10 @@
       display: none;
     }
   }
-}
 
-.rbc-time-view,
-.rbc-agenda-view {
-  max-height: 35rem;
-  overflow-y: auto;
+  .rbc-selected-cell {
+    background-color: #0085dd66 !important;
+  }
 }
 
 @media (max-width: 768px) {

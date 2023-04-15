@@ -1,33 +1,69 @@
 import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { ModalBody, ModalFooter, Button, Input, Stack } from '@chakra-ui/react'
+import { ModalBody, ModalFooter, Button, Input, Stack, useToast } from '@chakra-ui/react'
+import { format } from 'date-fns'
 import Select from 'react-select'
 
-import { CREATE_PATIENT_NAMES } from '../../config'
+import { ADD_APPOINTMENT_NAME } from '../../config'
 import { ChatState } from '../../context'
+
+import Loader from '../Loader/Loader'
 
 const resolvePatientOptions = (patients) => {
   return patients.map(({ _id, fullName, age }) => ({
     label: `${fullName} ${age}`,
-    value: _id,
+    value: `${_id}-${fullName}`,
   }))
 }
 
-export default function AddAppointmentBody({ selectedSlotInfo, templateButtons, handleClose }) {
+const initialValues = Object.values(ADD_APPOINTMENT_NAME).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
+
+export default function AddAppointmentBody({ selectedSlotInfo, handleClose }) {
   const { user } = ChatState()
+  const toast = useToast()
+  const { start, action } = selectedSlotInfo
 
   const {
     handleSubmit,
     control,
     reset,
     formState: { isSubmitted },
-  } = useForm()
+  } = useForm({ defaultValues: initialValues })
 
   const [matchedPatients, setMatchedPatients] = useState([])
   const [searchName, setSearchName] = useState('@')
   const [isMounted, setIsMounted] = useState(false)
 
-  const onSubmit = () => handleClose()
+  const onSubmit = async (data) => {
+    if (!user || action !== 'click') return
+    const { fullName, title } = data
+    const [patientId] = fullName.split('-')
+    const { _id: userId } = user
+
+    const response = await fetch(`/api/appointment/${format(new Date(start), 'yyyy/MM/dd')}`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title,
+        sender: userId,
+        patient: patientId,
+      }),
+    })
+    const createdAppointment = await response.json()
+
+    if (createdAppointment.statusCode && createdAppointment.statusCode !== 200) {
+      return toast()
+    } else {
+      toast({
+        title: 'nouveau rendez-vous créé avec succès',
+        status: 'success',
+      })
+      handleClose()
+    }
+  }
 
   useEffect(() => {
     reset({})
@@ -56,13 +92,13 @@ export default function AddAppointmentBody({ selectedSlotInfo, templateButtons, 
   }, [searchName])
 
   return (
-    <>
-      <ModalBody>
-        <form onSubmit={handleSubmit(onSubmit)}>
+    <Loader loading={false}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <ModalBody>
           <Stack spacing={4}>
             <Controller
               control={control}
-              name={CREATE_PATIENT_NAMES.FULL_NAME}
+              name={ADD_APPOINTMENT_NAME.FULL_NAME}
               rules={{ required: true }}
               shouldUnregister={isSubmitted}
               render={({ field: { onChange, value } }) => (
@@ -81,18 +117,26 @@ export default function AddAppointmentBody({ selectedSlotInfo, templateButtons, 
               )}
             />
 
-            <Input type="text" placeholder="Mettre rendez-vous" />
+            <Controller
+              control={control}
+              name={ADD_APPOINTMENT_NAME.TITLE}
+              rules={{ required: true }}
+              shouldUnregister={isSubmitted}
+              render={({ field: { onChange, value } }) => (
+                <Input type="text" placeholder="Mettre rendez-vous" value={value} onChange={(val) => onChange(val)} />
+              )}
+            />
           </Stack>
-        </form>
-      </ModalBody>
-      <ModalFooter>
-        <Button type="submit" colorScheme="blue" mr={3}>
-          Ajouter rendez-vous
-        </Button>
-        <Button variant="ghost" onClick={handleClose}>
-          Annuler
-        </Button>
-      </ModalFooter>
-    </>
+        </ModalBody>
+        <ModalFooter>
+          <Button type="submit" colorScheme="blue" mr={3}>
+            Ajouter rendez-vous
+          </Button>
+          <Button variant="ghost" onClick={handleClose}>
+            Annuler
+          </Button>
+        </ModalFooter>
+      </form>
+    </Loader>
   )
 }
