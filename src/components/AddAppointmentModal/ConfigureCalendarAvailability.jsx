@@ -7,7 +7,7 @@ import { CALENDAR_DAY_AVAILABILITY } from '../../config'
 
 import Loader from '../Loader/Loader'
 
-export default function ConfigureCalendarAvailability({ selectedSlotInfo, events, setEvents, handleClose }) {
+export default function ConfigureCalendarAvailability({ selectedSlotInfo, handleClose }) {
   const [availability, setAvailability] = useState(CALENDAR_DAY_AVAILABILITY.REST)
   const [isLoading, setIsLoading] = useState(false)
   const { start, slots, action } = selectedSlotInfo
@@ -27,19 +27,14 @@ export default function ConfigureCalendarAvailability({ selectedSlotInfo, events
 
   const handleCalendarAvailability = async () => {
     setIsLoading(true)
-    const newEvents = []
 
     if (action === 'click') {
-      const newEvent = await updateDayAvailability(start)
-      newEvents.push(newEvent)
+      await updateDayAvailability(start)
     } else if (action === 'select') {
       await slots.reduce(async (prevPromise, slot) => {
         await prevPromise
-        const newEvent = await updateDayAvailability(slot)
-        newEvents.push(newEvent)
+        await updateDayAvailability(slot)
       }, Promise.resolve())
-
-      setEvents([...events, ...newEvents])
     }
     setIsLoading(false)
     handleClose()

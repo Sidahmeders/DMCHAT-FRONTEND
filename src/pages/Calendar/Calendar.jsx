@@ -5,8 +5,10 @@ import PropTypes from 'prop-types'
 import { Calendar as BigCalendar, DateLocalizer, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { registerLocale } from 'react-datepicker'
-import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-fns'
+import { format, parse, startOfWeek, getDay, addMonths, subMonths, addHours } from 'date-fns'
 import { fr } from 'date-fns/locale'
+
+import { ChatState } from '../../context'
 
 import AddAppointmentModal from '../../components/AddAppointmentModal/AddAppointmentModal'
 import CustomToolbar from './CustomToolbar'
@@ -37,6 +39,7 @@ const fnslocalizer = dateFnsLocalizer({
 registerLocale(fr)
 
 export default function Calendar({ localizer = fnslocalizer, ...props }) {
+  const { user } = ChatState()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const clickRef = useRef(null)
 
@@ -98,18 +101,32 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
     }
   }, [])
 
+  useEffect(() => {
+    if (!user) return
+    ;(async () => {
+      const response = await fetch(`/api/appointment/${format(selectedDate, 'yyyy/MM')}`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      })
+      const data = await response.json()
+      const eventsList = data.map((event) => ({
+        id: event._id,
+        title: event.title,
+        start: new Date(event.date),
+        end: addHours(new Date(event.date), 12),
+      }))
+      setEvents(eventsList)
+    })()
+  }, [selectedDate, user])
+
   const ToolbarComponent = (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} />
   const ColoredDateCellWrapperComponent = (props) => <ColoredDateCellWrapper {...props} />
 
   return (
     <div {...swipeHandlers} className="calendar-container" {...props}>
-      <AddAppointmentModal
-        selectedSlotInfo={selectedSlotInfo}
-        events={events}
-        setEvents={setEvents}
-        isOpen={isOpen}
-        onClose={onClose}
-      />
+      <AddAppointmentModal selectedSlotInfo={selectedSlotInfo} isOpen={isOpen} onClose={onClose} />
 
       <DnDCalendar
         selectable
