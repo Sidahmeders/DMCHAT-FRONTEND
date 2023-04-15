@@ -9,7 +9,7 @@ import { ChatState } from '../../context'
 
 import Loader from '../Loader/Loader'
 
-const resolvePatientOptions = (patients) => {
+const resolvePatientOptions = patients => {
   return patients.map(({ _id, fullName, age }) => ({
     label: `${fullName} ${age}`,
     value: `${_id}-${fullName}`,
@@ -33,9 +33,11 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [matchedPatients, setMatchedPatients] = useState([])
   const [searchName, setSearchName] = useState('@')
   const [isMounted, setIsMounted] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
-  const onSubmit = async (data) => {
+  const onSubmit = async data => {
     if (!user || action !== 'click') return
+    setIsLoading(true)
     const { fullName, title } = data
     const [patientId] = fullName.split('-')
     const { _id: userId } = user
@@ -72,6 +74,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       })
       handleClose()
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -101,7 +104,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   }, [searchName])
 
   return (
-    <Loader loading={false}>
+    <Loader loading={isLoading}>
       <form onSubmit={handleSubmit(onSubmit)}>
         <ModalBody>
           <Stack spacing={4}>
@@ -114,9 +117,9 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                 <Select
                   placeholder="Nom du patient..."
                   options={matchedPatients}
-                  value={matchedPatients.find((option) => option.value === value)}
-                  onChange={(val) => onChange(val.value)}
-                  onKeyDown={(e) => {
+                  value={matchedPatients.find(option => option.value === value)}
+                  onChange={val => onChange(val.value)}
+                  onKeyDown={e => {
                     const { value } = e.target
                     if (value.trim().length >= 2) {
                       setSearchName(value)
@@ -132,12 +135,12 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               rules={{ required: true }}
               shouldUnregister={isSubmitted}
               render={({ field: { onChange, value } }) => (
-                <Input type="text" placeholder="Mettre rendez-vous" value={value} onChange={(val) => onChange(val)} />
+                <Input type="text" placeholder="Mettre rendez-vous" value={value} onChange={val => onChange(val)} />
               )}
             />
           </Stack>
         </ModalBody>
-        <ModalFooter>
+        <ModalFooter pb="0">
           <Button type="submit" colorScheme="blue" mr={3}>
             Ajouter rendez-vous
           </Button>

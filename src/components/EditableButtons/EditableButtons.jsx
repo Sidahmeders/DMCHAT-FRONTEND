@@ -53,7 +53,7 @@ export default function EditableButtons({
           }}></div>
       </ModalBody>
 
-      <ModalFooter>
+      <ModalFooter pb="0">
         <Button colorScheme="blue" mr={3} onClick={addNewTemplate}>
           Ajouter bouton
         </Button>

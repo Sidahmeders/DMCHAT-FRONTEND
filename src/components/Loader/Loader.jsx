@@ -1,5 +1,5 @@
 import propTypes from 'prop-types'
-import LoadingOverlay from '@ronchalant/react-loading-overlay'
+import LoadingOverlay from 'react-loading-overlay-ts'
 import { ScaleLoader } from 'react-spinners'
 
 import './Loader.scss'

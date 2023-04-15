@@ -22,7 +22,7 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
           </TabList>
 
           <TabPanels>
-            <TabPanel pb={0}>
+            <TabPanel>
               <AddAppointmentBody
                 selectedSlotInfo={selectedSlotInfo}
                 templateButtons={templateButtons}
@@ -31,7 +31,7 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
                 setEvents={setEvents}
               />
             </TabPanel>
-            <TabPanel pb={0}>
+            <TabPanel>
               <EditableButtons
                 label="Mettre événement (btn modifiable)"
                 handleClose={onClose}
