@@ -15,3 +15,9 @@ export const CREATE_PATIENT_NAMES = {
   HISTORY: 'history',
   APPOINTMENT: 'appointment',
 }
+
+export const CALENDAR_DAY_AVAILABILITY = {
+  REST: 'REST',
+  BUSY: 'BUSY',
+  LOADED: 'LOADED',
+}

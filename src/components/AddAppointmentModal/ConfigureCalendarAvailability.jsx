@@ -3,18 +3,12 @@ import { ModalBody, ModalFooter, Stack, RadioGroup, Radio, Button } from '@chakr
 import { format } from 'date-fns'
 
 import { ChatState } from '../../context'
+import { CALENDAR_DAY_AVAILABILITY } from '../../config'
 
 import Loader from '../Loader/Loader'
 
-const DAY_ENUM = {
-  REST: 'REST',
-  EMPTY: 'EMPTY',
-  BUSY: 'BUSY',
-  LOADED: 'LOADED',
-}
-
 export default function ConfigureCalendarAvailability({ selectedSlotInfo, events, setEvents, handleClose }) {
-  const [availability, setAvailability] = useState(DAY_ENUM.EMPTY)
+  const [availability, setAvailability] = useState(CALENDAR_DAY_AVAILABILITY.REST)
   const [isLoading, setIsLoading] = useState(false)
   const { start, slots, action } = selectedSlotInfo
   const { user } = ChatState()
@@ -56,20 +50,15 @@ export default function ConfigureCalendarAvailability({ selectedSlotInfo, events
       <ModalBody>
         <Stack>
           <RadioGroup onChange={setAvailability} value={availability}>
-            <Stack spacing={6} direction="row">
-              <Radio colorScheme="purple" value={DAY_ENUM.REST}>
+            <Stack mt="2" spacing={6} direction="row">
+              <Radio colorScheme="gray" value={CALENDAR_DAY_AVAILABILITY.REST}>
                 jour de repos
               </Radio>
-              <Radio colorScheme="green" value={DAY_ENUM.EMPTY}>
-                journée vide
+              <Radio colorScheme="yellow" value={CALENDAR_DAY_AVAILABILITY.BUSY}>
+                jour occupée
               </Radio>
-            </Stack>
-            <Stack mt="2" spacing={6} direction="row">
-              <Radio colorScheme="yellow" value={DAY_ENUM.BUSY}>
-                journée occupée
-              </Radio>
-              <Radio colorScheme="red" value={DAY_ENUM.LOADED}>
-                journée chargée
+              <Radio colorScheme="red" value={CALENDAR_DAY_AVAILABILITY.LOADED}>
+                jour chargée
               </Radio>
             </Stack>
           </RadioGroup>

@@ -5,13 +5,12 @@ import PropTypes from 'prop-types'
 import { Calendar as BigCalendar, DateLocalizer, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { registerLocale } from 'react-datepicker'
-import { format, parse, startOfWeek, getDay, addMonths, subMonths, addHours } from 'date-fns'
+import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-fns'
 import { fr } from 'date-fns/locale'
-
-import { ChatState } from '../../context'
 
 import AddAppointmentModal from '../../components/AddAppointmentModal/AddAppointmentModal'
 import CustomToolbar from './CustomToolbar'
+import ColoredDateCellWrapper from './ColoredDateCellWrapper'
 
 import './Calendar.scss'
 
@@ -39,19 +38,9 @@ registerLocale(fr)
 
 export default function Calendar({ localizer = fnslocalizer, ...props }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { user } = ChatState()
-
-  const [events, setEvents] = useState([])
-
-  const eventsData = events.map(({ _id, date }) => ({
-    id: _id,
-    start: new Date(date),
-    end: addHours(new Date(date), 12),
-    title: 'Hello World!',
-  }))
-
   const clickRef = useRef(null)
 
+  const [events, setEvents] = useState([])
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedSlotInfo, setSelectedSlotInfo] = useState({})
 
@@ -109,20 +98,8 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
     }
   }, [])
 
-  useEffect(() => {
-    ;(async () => {
-      if (!user) return
-      const response = await fetch(`/api/calendar/${format(selectedDate, 'yyyy/MM')}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-      })
-      setEvents(await response.json())
-    })()
-  }, [selectedDate, user])
-
   const ToolbarComponent = (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} />
+  const ColoredDateCellWrapperComponent = (props) => <ColoredDateCellWrapper {...props} />
 
   return (
     <div {...swipeHandlers} className="calendar-container" {...props}>
@@ -138,8 +115,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         selectable
         culture="fr"
         localizer={localizer}
-        events={eventsData}
-        components={{ toolbar: ToolbarComponent }}
+        events={events}
         date={selectedDate}
         onNavigate={(date) => setSelectedDate(date)}
         min={new Date(1972, 0, 1, 8, 0, 59)}
@@ -150,6 +126,10 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         onDoubleClickEvent={onDoubleClickEvent}
         onSelectSlot={onSelectSlot}
         onEventDrop={onEventDrop}
+        components={{
+          toolbar: ToolbarComponent,
+          dateCellWrapper: ColoredDateCellWrapperComponent,
+        }}
       />
     </div>
   )
