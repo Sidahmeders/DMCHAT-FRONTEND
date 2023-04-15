@@ -10,7 +10,7 @@ export default function PatientCard({ patient }) {
 
   return (
     <Card className={`card-container ${isConfirmed && 'confirmed'} ${isLeft && 'left'}`}>
-      <CardHeader marginBottom="2">
+      <CardHeader mb="0" padding="0.5rem">
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
             <Avatar name={patient.name} src="" />
@@ -32,7 +32,7 @@ export default function PatientCard({ patient }) {
       </CardHeader>
 
       {showCardBody && (
-        <CardBody padding="0 0.25rem">
+        <CardBody padding="0 1.5rem">
           <p>Etate général: {patient.state}</p>
           <p>diagnostique: {patient.diagnostic}</p>
           <p>plan: {patient.treatmentPlan}</p>
@@ -40,7 +40,7 @@ export default function PatientCard({ patient }) {
         </CardBody>
       )}
 
-      <CardFooter justify="space-between" flexWrap="wrap" paddingTop="2">
+      <CardFooter justify="space-between" flexWrap="wrap" padding="0.5rem">
         <Button flex="4" variant="ghost" leftIcon={<CheckCircle />} onClick={() => setIsConfirmed(!isConfirmed)}>
           confirmer
         </Button>

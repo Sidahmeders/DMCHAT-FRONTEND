@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { ModalBody, ModalFooter, Button, Input, Stack, useToast } from '@chakra-ui/react'
-import { format } from 'date-fns'
+import { format, addHours } from 'date-fns'
 import Select from 'react-select'
 
 import { ADD_APPOINTMENT_NAME } from '../../config'
@@ -18,7 +18,7 @@ const resolvePatientOptions = (patients) => {
 
 const initialValues = Object.values(ADD_APPOINTMENT_NAME).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
 
-export default function AddAppointmentBody({ selectedSlotInfo, handleClose }) {
+export default function AddAppointmentBody({ selectedSlotInfo, handleClose, events, setEvents }) {
   const { user } = ChatState()
   const toast = useToast()
   const { start, action } = selectedSlotInfo
@@ -57,6 +57,15 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose }) {
     if (createdAppointment.statusCode && createdAppointment.statusCode !== 200) {
       return toast()
     } else {
+      setEvents([
+        ...events,
+        {
+          id: createdAppointment._id,
+          title: createdAppointment.title,
+          start: new Date(createdAppointment.date),
+          end: addHours(new Date(createdAppointment.date), 12),
+        },
+      ])
       toast({
         title: 'nouveau rendez-vous créé avec succès',
         status: 'success',

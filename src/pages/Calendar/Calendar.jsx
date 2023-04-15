@@ -126,7 +126,13 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
 
   return (
     <div {...swipeHandlers} className="calendar-container" {...props}>
-      <AddAppointmentModal selectedSlotInfo={selectedSlotInfo} isOpen={isOpen} onClose={onClose} />
+      <AddAppointmentModal
+        selectedSlotInfo={selectedSlotInfo}
+        isOpen={isOpen}
+        onClose={onClose}
+        events={events}
+        setEvents={setEvents}
+      />
 
       <DnDCalendar
         selectable
