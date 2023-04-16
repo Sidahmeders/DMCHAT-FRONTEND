@@ -1,15 +1,13 @@
 import { Avatar, Tooltip } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
-import Lottie from 'lottie-react'
+import { BeatLoader } from 'react-spinners'
 
 import '../App.css'
 import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from '../utils'
 import { ChatState } from '../context/ChatProvider'
-import typingAnimation from '../animations/typing.json'
 
 const ScrollableChat = ({ messages, isTyping }) => {
   const { user } = ChatState()
-
   const scrollRef = useRef()
 
   useEffect(() => {
@@ -52,13 +50,9 @@ const ScrollableChat = ({ messages, isTyping }) => {
             </div>
           ))}
       </div>
-      {isTyping ? (
-        <div style={{ width: '70px', marginTop: '5px' }}>
-          <Lottie animationData={typingAnimation} loop={true} />
-        </div>
-      ) : (
-        <></>
-      )}
+      <div style={{ paddingTop: '10px', paddingLeft: '10px' }}>
+        <BeatLoader loading={isTyping} size={10} margin={2} color="#38d" />
+      </div>
     </>
   )
 }

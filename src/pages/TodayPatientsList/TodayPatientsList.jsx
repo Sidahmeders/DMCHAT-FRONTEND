@@ -36,23 +36,23 @@ export default function TodayPatientsList() {
     const { draggableId, destination } = props
     const { droppableId } = destination || {}
 
-    if (droppableId === APPOINTMENTS_IDS.WAITING_ROOM && destination) {
-      const newNextAppointmentsPatients = inProgressPatients.filter((item) => item.id !== draggableId)
-      const droppedPatient = inProgressPatients.find((item) => item.id === draggableId)
-
-      if (droppedPatient) {
-        setWaitingRoomPatients(() => [...waitingRoomPatients, droppedPatient])
-        setInProgressPatients(() => newNextAppointmentsPatients)
-      }
-    }
-
-    if (droppableId === APPOINTMENTS_IDS.IN_PROGRESS && destination) {
-      const newWaitingRoomPatients = waitingRoomPatients.filter((item) => item.id !== draggableId)
+    if (droppableId === APPOINTMENTS_IDS.EXPECTED && destination) {
+      const newPatientsList = waitingRoomPatients.filter((item) => item.id !== draggableId)
       const droppedPatient = waitingRoomPatients.find((item) => item.id === draggableId)
 
       if (droppedPatient) {
-        setInProgressPatients(() => [...inProgressPatients, droppedPatient])
-        setWaitingRoomPatients(() => newWaitingRoomPatients)
+        setExpectedPatients(() => [...expectedPatients, droppedPatient])
+        setWaitingRoomPatients(() => newPatientsList)
+      }
+    }
+
+    if (droppableId === APPOINTMENTS_IDS.WAITING_ROOM && destination) {
+      const newPatientslist = expectedPatients.filter((item) => item.id !== draggableId)
+      const droppedPatient = expectedPatients.find((item) => item.id === draggableId)
+
+      if (droppedPatient) {
+        setWaitingRoomPatients(() => [...waitingRoomPatients, droppedPatient])
+        setExpectedPatients(() => newPatientslist)
       }
     }
   }
