@@ -1,16 +1,18 @@
 import { Circle } from '@chakra-ui/react'
 import { Droppable } from 'react-beautiful-dnd'
 
+import { APPOINTMENTS_IDS } from '../../config'
+
 import PatientCard from './PatientCard'
 import { DragWrap } from './TodayPatientsList'
 
-export default function NextAppointmentsTable({ patients }) {
+export default function InProgressAppointments({ patients }) {
   return (
-    <Droppable droppableId="next-appointments" type="PATIENT">
+    <Droppable droppableId={APPOINTMENTS_IDS.IN_PROGRESS}>
       {(provided, snapshot) => (
-        <div className="next-appointments-container" ref={provided.innerRef} {...provided.droppableProps}>
+        <div className="in-progress-appointments-container" ref={provided.innerRef} {...provided.droppableProps}>
           <h1 className="title">
-            Rendez-vous Prochain
+            Rendez-vous en cours
             <Circle className="circle" size="25px">
               {patients.length}
             </Circle>

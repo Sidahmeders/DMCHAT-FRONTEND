@@ -2,20 +2,24 @@
   width: 100%;
   background-color: white;
   padding: 1rem;
-  margin-top: 2rem;
+  margin-top: 3rem;
 
   .room-container {
     display: flex;
     width: 100%;
+    height: 90vh;
 
-    .next-appointments-container,
-    .waiting-room-container,
-    .done-table-container,
-    .awaiting-list-container {
+    .expected-appointments-container,
+    .in-progress-appointments-container,
+    .waiting-room-appointments-container,
+    .done-appointments-container,
+    .awaiting-list-appointments-container {
+      min-width: 22rem;
       margin-right: 1rem;
-      margin-top: 1rem;
       padding: 0.5rem;
       flex: 1;
+      height: 85vh;
+      overflow-y: auto;
 
       .title {
         padding: 0.75rem;
@@ -23,7 +27,7 @@
         text-align: center;
         text-transform: uppercase;
         border-radius: 0.5rem;
-        background-color: #ddd3;
+        background-color: #ddd2;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -38,6 +42,14 @@
       }
 
       &:nth-child(1) .title {
+        border-top: 2px solid #0084ff;
+        color: #0084ff;
+        .circle {
+          background-color: #0084ff;
+        }
+      }
+
+      &:nth-child(2) .title {
         border-top: 2px solid #ffa500;
         color: #ffa500;
         .circle {
@@ -45,7 +57,7 @@
         }
       }
 
-      &:nth-child(2) .title {
+      &:nth-child(3) .title {
         border-top: 2px solid #0bbe98;
         color: #0bbe98;
         .circle {
@@ -53,7 +65,7 @@
         }
       }
 
-      &:nth-child(3) .title {
+      &:nth-child(4) .title {
         border-top: 2px solid #ac2020;
         color: #ac2020;
         .circle {
@@ -61,7 +73,7 @@
         }
       }
 
-      &:nth-child(4) .title {
+      &:nth-child(5) .title {
         border-top: 2px solid #5c746f;
         color: #5c746f;
         .circle {
@@ -70,8 +82,7 @@
       }
 
       .card-container {
-        background-color: #ddd3;
-        border: 1px solid #ddd3;
+        background-color: #ddd2;
         margin-top: 0.5rem;
 
         &.confirmed {

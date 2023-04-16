@@ -1,16 +1,18 @@
 import { Circle } from '@chakra-ui/react'
 import { Droppable } from 'react-beautiful-dnd'
 
+import { APPOINTMENTS_IDS } from '../../config'
+
 import PatientCard from './PatientCard'
 import { DragWrap } from './TodayPatientsList'
 
-export default function AwaitingList({ patients }) {
+export default function WaitingRoomAppointments({ patients }) {
   return (
-    <Droppable droppableId="awaiting-list" type="PATIENT">
+    <Droppable droppableId={APPOINTMENTS_IDS.WAITING_ROOM}>
       {(provided, snapshot) => (
-        <div className="awaiting-list-container" ref={provided.innerRef} {...provided.droppableProps}>
+        <div className="waiting-room-appointments-container" ref={provided.innerRef} {...provided.droppableProps}>
           <h1 className="title">
-            Liste d'attente
+            Salle D'Attente
             <Circle className="circle" size="25px">
               {patients.length}
             </Circle>

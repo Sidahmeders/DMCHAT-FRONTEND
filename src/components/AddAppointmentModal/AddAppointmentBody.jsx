@@ -1,6 +1,16 @@
 import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { ModalBody, ModalFooter, Button, Input, Stack, useToast } from '@chakra-ui/react'
+import {
+  ModalBody,
+  ModalFooter,
+  Button,
+  Input,
+  Stack,
+  useToast,
+  FormControl,
+  FormLabel,
+  Switch,
+} from '@chakra-ui/react'
 import { format, addHours } from 'date-fns'
 import Select from 'react-select'
 
@@ -34,6 +44,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [searchName, setSearchName] = useState('@')
   const [isMounted, setIsMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const [isWaitingList, setIsWaitingList] = useState(false)
 
   const onSubmit = async data => {
     if (!user || action !== 'click') return
@@ -50,6 +61,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       },
       body: JSON.stringify({
         title,
+        isWaitingList,
         sender: userId,
         patient: patientId,
       }),
@@ -138,6 +150,18 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                 <Input type="text" placeholder="Mettre rendez-vous" value={value} onChange={val => onChange(val)} />
               )}
             />
+
+            <FormControl display="flex" alignItems="center">
+              <FormLabel htmlFor="email-alerts" ml="1" mb="0">
+                Ajouter à la liste d'attente
+              </FormLabel>
+              <Switch
+                id="email-alerts"
+                colorScheme="orange"
+                checked={isWaitingList}
+                onChange={() => setIsWaitingList(!isWaitingList)}
+              />
+            </FormControl>
           </Stack>
         </ModalBody>
         <ModalFooter pb="0">

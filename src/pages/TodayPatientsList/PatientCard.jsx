@@ -13,12 +13,12 @@ export default function PatientCard({ patient }) {
       <CardHeader mb="0" padding="0.5rem">
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar name={patient.name} src="" />
+            <Avatar name={patient.fullName} src="" />
             <Box>
               <Heading size="sm">
-                {patient.name} - {patient.age}
+                {patient.fullName} | {patient.age}
               </Heading>
-              <Text padding="0.5">{patient.motif}</Text>
+              <Text padding="0.5">{patient.title}</Text>
             </Box>
           </Flex>
           <IconButton
@@ -33,6 +33,7 @@ export default function PatientCard({ patient }) {
 
       {showCardBody && (
         <CardBody padding="0 1.5rem">
+          <p>motif: {patient.motif}</p>
           <p>Etate général: {patient.state}</p>
           <p>diagnostique: {patient.diagnostic}</p>
           <p>plan: {patient.treatmentPlan}</p>

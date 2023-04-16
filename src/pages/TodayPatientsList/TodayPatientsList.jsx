@@ -1,11 +1,15 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
+import { omit } from 'lodash'
 
-import WaitingRoomTable from './WaitingRoomTable'
-import NextAppointmentsTable from './NextAppointmentsTable'
-import DoneTable from './DoneTable'
-import AwaitingList from './AwaitingList'
-import { HARD_CODED_DATA, AWAITINGLIST_DATA } from './data'
+import { ChatState } from '../../context'
+import { AWAITINGLIST_DATA, APPOINTMENTS_IDS } from '../../config'
+
+import ExpectedAppointments from './ExpectedAppointments'
+import WaitingRoomAppointments from './WaitingRoomAppointments'
+import InProgressAppointments from './InProgressAppointments'
+import DoneAppointments from './DoneAppointments'
+import AwaitingListAppointments from './AwaitingListAppointments'
 
 import './TodayPatientsList.scss'
 
@@ -20,43 +24,89 @@ export const DragWrap = ({ id, index, children }) => (
 )
 
 export default function TodayPatientsList() {
-  const [waitingRoomPatients, setWaitingRoomPatients] = useState(HARD_CODED_DATA.slice(0, 3))
-  const [nextAppointmentsPatients, setNextAppointmentsPatients] = useState(HARD_CODED_DATA.slice(3))
-  const doneAppointmentsPatients = []
+  const { user } = ChatState()
+
+  const [expectedPatients, setExpectedPatients] = useState([])
+  const [waitingRoomPatients, setWaitingRoomPatients] = useState([])
+  const [inProgressPatients, setInProgressPatients] = useState([])
+  const [donePatients, setDonePatients] = useState([])
 
   const onDragEnd = (props) => {
     const { draggableId, destination } = props
     const { droppableId } = destination || {}
 
-    if (droppableId === 'waiting-room' && destination) {
-      const newNextAppointmentsPatients = nextAppointmentsPatients.filter((item) => item.id !== draggableId)
-      const droppedPatient = nextAppointmentsPatients.find((item) => item.id === draggableId)
+    if (droppableId === APPOINTMENTS_IDS.WAITING_ROOM && destination) {
+      const newNextAppointmentsPatients = inProgressPatients.filter((item) => item.id !== draggableId)
+      const droppedPatient = inProgressPatients.find((item) => item.id === draggableId)
 
       if (droppedPatient) {
         setWaitingRoomPatients(() => [...waitingRoomPatients, droppedPatient])
-        setNextAppointmentsPatients(() => newNextAppointmentsPatients)
+        setInProgressPatients(() => newNextAppointmentsPatients)
       }
     }
 
-    if (droppableId === 'next-appointments' && destination) {
+    if (droppableId === APPOINTMENTS_IDS.IN_PROGRESS && destination) {
       const newWaitingRoomPatients = waitingRoomPatients.filter((item) => item.id !== draggableId)
       const droppedPatient = waitingRoomPatients.find((item) => item.id === draggableId)
 
       if (droppedPatient) {
-        setNextAppointmentsPatients(() => [...nextAppointmentsPatients, droppedPatient])
+        setInProgressPatients(() => [...inProgressPatients, droppedPatient])
         setWaitingRoomPatients(() => newWaitingRoomPatients)
       }
     }
   }
 
+  useEffect(() => {
+    if (!user) return
+    ;(async () => {
+      const response = await fetch('api/appointment/2023/04/05', {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      })
+      const todayAppointments = await response.json()
+
+      const { expected, awaitingRoom, inProgress, doneList } = todayAppointments.reduce(
+        (prev, appointment) => {
+          const { _id: id, patient, isWaitingRoom, isInProgress, isDone } = appointment
+          const appointmentBody = { id, ...patient, ...omit(appointment, 'patient') }
+
+          if (isWaitingRoom) {
+            return { ...prev, awaitingRoom: [...prev.awaitingRoom, appointmentBody] }
+          }
+          if (isInProgress) {
+            return { ...prev, inProgress: [...prev.inProgress, appointmentBody] }
+          }
+          if (isDone) {
+            return { ...prev, doneList: [...prev.doneList, appointmentBody] }
+          }
+          return { ...prev, expected: [...prev.expected, appointmentBody] }
+        },
+        {
+          expected: [],
+          awaitingRoom: [],
+          inProgress: [],
+          doneList: [],
+        },
+      )
+
+      setExpectedPatients(expected)
+      setWaitingRoomPatients(awaitingRoom)
+      setInProgressPatients(inProgress)
+      setDonePatients(doneList)
+    })()
+  }, [user])
+
   return (
     <div className="today-patients-list-page-container">
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="room-container">
-          <WaitingRoomTable patients={waitingRoomPatients} />
-          <NextAppointmentsTable patients={nextAppointmentsPatients} />
-          <DoneTable patients={doneAppointmentsPatients} />
-          <AwaitingList patients={AWAITINGLIST_DATA} />
+          <ExpectedAppointments patients={expectedPatients} />
+          <WaitingRoomAppointments patients={waitingRoomPatients} />
+          <InProgressAppointments patients={inProgressPatients} />
+          <DoneAppointments patients={donePatients} />
+          <AwaitingListAppointments patients={AWAITINGLIST_DATA} />
         </div>
       </DragDropContext>
     </div>

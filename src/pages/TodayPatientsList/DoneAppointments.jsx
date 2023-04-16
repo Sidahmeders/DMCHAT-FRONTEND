@@ -1,14 +1,16 @@
 import { Circle } from '@chakra-ui/react'
 import { Droppable } from 'react-beautiful-dnd'
 
+import { APPOINTMENTS_IDS } from '../../config'
+
 import PatientCard from './PatientCard'
 import { DragWrap } from './TodayPatientsList'
 
-export default function DoneTable({ patients }) {
+export default function DoneAppointments({ patients }) {
   return (
-    <Droppable droppableId="done-table" type="PATIENT">
+    <Droppable droppableId={APPOINTMENTS_IDS.DONE}>
       {(provided, snapshot) => (
-        <div className="done-table-container" ref={provided.innerRef} {...provided.droppableProps}>
+        <div className="done-appointments-container" ref={provided.innerRef} {...provided.droppableProps}>
           <h1 className="title">
             Rendez-vous Fini
             <Circle className="circle" size="25px">

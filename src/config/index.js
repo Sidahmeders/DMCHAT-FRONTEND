@@ -1,4 +1,5 @@
 export * from './calendar'
+export * from './todayPatientsList'
 
 export const APP_ROUTES = {
   CHATS: '/chats',

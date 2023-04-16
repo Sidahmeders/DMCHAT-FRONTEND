@@ -19,6 +19,7 @@ export const CREATE_PATIENT_NAMES = {
 export const ADD_APPOINTMENT_NAME = {
   FULL_NAME: 'fullName',
   TITLE: 'title',
+  IS_WAITING_LIST: 'isWaitingList',
 }
 
 export const CALENDAR_DAY_AVAILABILITY = {
