@@ -1,7 +1,10 @@
+import { useState } from 'react'
 import { Text, IconButton, Button, Box, Flex, Avatar, Heading, Stack, Skeleton } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, CheckCircle, MessageCircle, Flag } from 'react-feather'
-import { useState } from 'react'
+import { isBoolean } from 'lodash'
+
+import { ChatState } from '../../context'
 
 export const LoadingCards = () => (
   <Stack mt="2">
@@ -12,9 +15,49 @@ export const LoadingCards = () => (
 )
 
 export default function PatientCard({ patient }) {
+  const { user } = ChatState()
+  const [isConfirmed, setIsConfirmed] = useState(patient.isConfirmed)
+  const [isLeft, setIsLeft] = useState(patient.isLeft)
   const [showCardBody, setShowCardBody] = useState(false)
-  const [isConfirmed, setIsConfirmed] = useState(false)
-  const [isLeft, setIsLeft] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
+
+  const handleConfirmation = async () => {
+    setIsLoading(true)
+    const response = await fetch(`/api/appointment/${patient.id}/confirm`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ isConfirmed }),
+    })
+    const confirmedPatient = await response.json()
+
+    if (isBoolean(confirmedPatient.isConfirmed)) {
+      setIsConfirmed(!isConfirmed)
+    }
+    setIsLoading(false)
+  }
+
+  const handleLeave = async () => {
+    setIsLoading(true)
+    const response = await fetch(`/api/appointment/${patient.id}/leave`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ isLeft }),
+    })
+    const leftPatient = await response.json()
+
+    if (isBoolean(leftPatient.isLeft)) {
+      setIsLeft(!isLeft)
+    }
+    setIsLoading(false)
+  }
+
+  if (isLoading) return <Skeleton mt="2" height="7.5rem" />
 
   return (
     <Card className={`card-container ${isConfirmed && 'confirmed'} ${isLeft && 'left'}`}>
@@ -50,11 +93,11 @@ export default function PatientCard({ patient }) {
       )}
 
       <CardFooter justify="space-between" flexWrap="wrap" padding="0.5rem">
-        <Button flex="4" variant="ghost" leftIcon={<CheckCircle />} onClick={() => setIsConfirmed(!isConfirmed)}>
+        <Button flex="4" variant="ghost" leftIcon={<CheckCircle />} onClick={handleConfirmation}>
           confirmer
         </Button>
 
-        <Button flex="3" variant="ghost" leftIcon={<Flag />} onClick={() => setIsLeft(!isLeft)}>
+        <Button flex="3" variant="ghost" leftIcon={<Flag />} onClick={handleLeave}>
           parti
         </Button>
 

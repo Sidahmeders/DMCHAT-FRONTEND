@@ -138,7 +138,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
 
     let lastTypingTime = new Date().getTime()
-    let timerLength = 3000
+    let timerLength = 15000
 
     setTimeout(() => {
       let timeNow = new Date().getTime()
