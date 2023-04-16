@@ -27,34 +27,31 @@ export default function TodayPatientsList() {
   const { user } = ChatState()
 
   const [isLoading, setIsLoading] = useState(false)
-  const [expectedPatients, setExpectedPatients] = useState([])
-  const [waitingRoomPatients, setWaitingRoomPatients] = useState([])
-  const [inProgressPatients, setInProgressPatients] = useState([])
-  const [donePatients, setDonePatients] = useState([])
+  const [appointmentsList, setAppointmentsList] = useState({
+    [APPOINTMENTS_IDS.EXPECTED]: [],
+    [APPOINTMENTS_IDS.WAITING_ROOM]: [],
+    [APPOINTMENTS_IDS.IN_PROGRESS]: [],
+    [APPOINTMENTS_IDS.DONE]: [],
+  })
 
   const onDragEnd = (props) => {
-    const { draggableId, destination } = props
-    const { droppableId } = destination || {}
+    const { draggableId, destination, source } = props
+    const { droppableId: sourceDroppableId } = source || {}
+    const { droppableId: destinationDroppableId } = destination || {}
 
-    if (droppableId === APPOINTMENTS_IDS.EXPECTED && destination) {
-      const newPatientsList = waitingRoomPatients.filter((item) => item.id !== draggableId)
-      const droppedPatient = waitingRoomPatients.find((item) => item.id === draggableId)
-
-      if (droppedPatient) {
-        setExpectedPatients(() => [...expectedPatients, droppedPatient])
-        setWaitingRoomPatients(() => newPatientsList)
+    Object.values(APPOINTMENTS_IDS).forEach((key) => {
+      if (destinationDroppableId === key && destination) {
+        const newPatientsList = appointmentsList[sourceDroppableId].filter((item) => item.id !== draggableId)
+        const droppedPatient = appointmentsList[sourceDroppableId].find((item) => item.id === draggableId)
+        if (droppedPatient) {
+          setAppointmentsList({
+            ...appointmentsList,
+            [destinationDroppableId]: [...appointmentsList[destinationDroppableId], droppedPatient],
+            [sourceDroppableId]: newPatientsList,
+          })
+        }
       }
-    }
-
-    if (droppableId === APPOINTMENTS_IDS.WAITING_ROOM && destination) {
-      const newPatientslist = expectedPatients.filter((item) => item.id !== draggableId)
-      const droppedPatient = expectedPatients.find((item) => item.id === draggableId)
-
-      if (droppedPatient) {
-        setWaitingRoomPatients(() => [...waitingRoomPatients, droppedPatient])
-        setExpectedPatients(() => newPatientslist)
-      }
-    }
+    })
   }
 
   useEffect(() => {
@@ -93,10 +90,12 @@ export default function TodayPatientsList() {
         },
       )
 
-      setExpectedPatients(expected)
-      setWaitingRoomPatients(awaitingRoom)
-      setInProgressPatients(inProgress)
-      setDonePatients(doneList)
+      setAppointmentsList({
+        [APPOINTMENTS_IDS.EXPECTED]: expected,
+        [APPOINTMENTS_IDS.WAITING_ROOM]: awaitingRoom,
+        [APPOINTMENTS_IDS.IN_PROGRESS]: inProgress,
+        [APPOINTMENTS_IDS.DONE]: doneList,
+      })
       setIsLoading(false)
     })()
   }, [user])
@@ -105,10 +104,10 @@ export default function TodayPatientsList() {
     <div className="today-patients-list-page-container">
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="room-container">
-          <ExpectedAppointments isLoading={isLoading} patients={expectedPatients} />
-          <WaitingRoomAppointments isLoading={isLoading} patients={waitingRoomPatients} />
-          <InProgressAppointments isLoading={isLoading} patients={inProgressPatients} />
-          <DoneAppointments isLoading={isLoading} patients={donePatients} />
+          <ExpectedAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.EXPECTED]} />
+          <WaitingRoomAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM]} />
+          <InProgressAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.IN_PROGRESS]} />
+          <DoneAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.DONE]} />
           <AwaitingListAppointments isLoading={isLoading} patients={AWAITINGLIST_DATA} />
         </div>
       </DragDropContext>

@@ -96,11 +96,9 @@ export default function PatientCard({ patient }) {
         <Button flex="4" variant="ghost" leftIcon={<CheckCircle />} onClick={handleConfirmation}>
           confirmer
         </Button>
-
         <Button flex="3" variant="ghost" leftIcon={<Flag />} onClick={handleLeave}>
           parti
         </Button>
-
         <Button flex="2" variant="ghost" pr="2" colorScheme="messenger" leftIcon={<MessageCircle />}></Button>
       </CardFooter>
     </Card>
