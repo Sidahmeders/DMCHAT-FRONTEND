@@ -26,6 +26,7 @@ export const DragWrap = ({ id, index, children }) => (
 export default function TodayPatientsList() {
   const { user } = ChatState()
 
+  const [isLoading, setIsLoading] = useState(false)
   const [expectedPatients, setExpectedPatients] = useState([])
   const [waitingRoomPatients, setWaitingRoomPatients] = useState([])
   const [inProgressPatients, setInProgressPatients] = useState([])
@@ -59,6 +60,7 @@ export default function TodayPatientsList() {
   useEffect(() => {
     if (!user) return
     ;(async () => {
+      setIsLoading(true)
       const response = await fetch('api/appointment/2023/04/05', {
         method: 'GET',
         headers: {
@@ -95,6 +97,7 @@ export default function TodayPatientsList() {
       setWaitingRoomPatients(awaitingRoom)
       setInProgressPatients(inProgress)
       setDonePatients(doneList)
+      setIsLoading(false)
     })()
   }, [user])
 
@@ -102,11 +105,11 @@ export default function TodayPatientsList() {
     <div className="today-patients-list-page-container">
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="room-container">
-          <ExpectedAppointments patients={expectedPatients} />
-          <WaitingRoomAppointments patients={waitingRoomPatients} />
-          <InProgressAppointments patients={inProgressPatients} />
-          <DoneAppointments patients={donePatients} />
-          <AwaitingListAppointments patients={AWAITINGLIST_DATA} />
+          <ExpectedAppointments isLoading={isLoading} patients={expectedPatients} />
+          <WaitingRoomAppointments isLoading={isLoading} patients={waitingRoomPatients} />
+          <InProgressAppointments isLoading={isLoading} patients={inProgressPatients} />
+          <DoneAppointments isLoading={isLoading} patients={donePatients} />
+          <AwaitingListAppointments isLoading={isLoading} patients={AWAITINGLIST_DATA} />
         </div>
       </DragDropContext>
     </div>

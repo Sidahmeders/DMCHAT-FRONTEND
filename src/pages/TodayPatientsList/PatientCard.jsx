@@ -1,7 +1,15 @@
-import { Text, IconButton, Button, Box, Flex, Avatar, Heading } from '@chakra-ui/react'
+import { Text, IconButton, Button, Box, Flex, Avatar, Heading, Stack, Skeleton } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, CheckCircle, MessageCircle, Flag } from 'react-feather'
 import { useState } from 'react'
+
+export const LoadingCards = () => (
+  <Stack mt="2">
+    <Skeleton height="7.5rem" />
+    <Skeleton height="7.5rem" />
+    <Skeleton height="7.5rem" />
+  </Stack>
+)
 
 export default function PatientCard({ patient }) {
   const [showCardBody, setShowCardBody] = useState(false)
