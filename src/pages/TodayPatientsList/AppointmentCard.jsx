@@ -18,16 +18,16 @@ export const LoadingCards = () => (
 
 let socket
 
-export default function PatientCard({ patient }) {
+export default function AppointmentCard({ appointment }) {
   const { user } = ChatState()
-  const [isConfirmed, setIsConfirmed] = useState(patient.isConfirmed)
-  const [isLeft, setIsLeft] = useState(patient.isLeft)
+  const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
+  const [isLeft, setIsLeft] = useState(appointment.isLeft)
   const [showCardBody, setShowCardBody] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const handleConfirmation = async () => {
     setIsLoading(true)
-    const response = await fetch(`/api/appointment/${patient.id}/confirm`, {
+    const response = await fetch(`/api/appointment/${appointment.id}/confirm`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -45,7 +45,7 @@ export default function PatientCard({ patient }) {
 
   const handleLeave = async () => {
     setIsLoading(true)
-    const response = await fetch(`/api/appointment/${patient.id}/leave`, {
+    const response = await fetch(`/api/appointment/${appointment.id}/leave`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -67,17 +67,18 @@ export default function PatientCard({ patient }) {
     }
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_CONFIRMATION, (payload) => {
-      if (payload._id === patient._id) {
+      if (payload._id === appointment._id) {
         setIsConfirmed(payload.isConfirmed)
       }
     })
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_LEFT, (payload) => {
-      if (payload._id === patient._id) {
+      if (payload._id === appointment._id) {
         setIsLeft(payload.isLeft)
       }
     })
-  }, [patient])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (isLoading) return <Skeleton mt="2" height="7.5rem" />
 
@@ -86,12 +87,12 @@ export default function PatientCard({ patient }) {
       <CardHeader mb="0" padding="0.5rem">
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar name={patient.fullName} src="" />
+            <Avatar name={appointment.fullName} src="" />
             <Box>
               <Heading size="sm">
-                {patient.fullName} | {patient.age}
+                {appointment.fullName} | {appointment.age}
               </Heading>
-              <Text padding="0.5">{patient.title}</Text>
+              <Text padding="0.5">{appointment.title}</Text>
             </Box>
           </Flex>
           <IconButton
@@ -106,11 +107,11 @@ export default function PatientCard({ patient }) {
 
       {showCardBody && (
         <CardBody padding="0 1.5rem">
-          <p>motif: {patient.motif}</p>
-          <p>Etate général: {patient.state}</p>
-          <p>diagnostique: {patient.diagnostic}</p>
-          <p>plan: {patient.treatmentPlan}</p>
-          <p>historique: {patient.history}</p>
+          <p>motif: {appointment.motif}</p>
+          <p>Etate général: {appointment.state}</p>
+          <p>diagnostique: {appointment.diagnostic}</p>
+          <p>plan: {appointment.treatmentPlan}</p>
+          <p>historique: {appointment.history}</p>
         </CardBody>
       )}
 

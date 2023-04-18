@@ -169,16 +169,16 @@ export default function TodayPatientsList() {
     <div className="today-patients-list-page-container">
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="room-container">
-          <ExpectedAppointments isLoading={isLoading} appointment={appointmentsList[APPOINTMENTS_IDS.EXPECTED]} />
+          <ExpectedAppointments isLoading={isLoading} appointments={appointmentsList[APPOINTMENTS_IDS.EXPECTED]} />
           <WaitingRoomAppointments
             isLoading={isLoading}
-            appointment={appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM]}
+            appointments={appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM]}
           />
-          <InProgressAppointments isLoading={isLoading} appointment={appointmentsList[APPOINTMENTS_IDS.IN_PROGRESS]} />
-          <DoneAppointments isLoading={isLoading} appointment={appointmentsList[APPOINTMENTS_IDS.DONE]} />
+          <InProgressAppointments isLoading={isLoading} appointments={appointmentsList[APPOINTMENTS_IDS.IN_PROGRESS]} />
+          <DoneAppointments isLoading={isLoading} appointments={appointmentsList[APPOINTMENTS_IDS.DONE]} />
           <AwaitingListAppointments
             isLoading={isLoading}
-            appointment={appointmentsList[APPOINTMENTS_IDS.AWAITING_LIST]}
+            appointments={appointmentsList[APPOINTMENTS_IDS.AWAITING_LIST]}
           />
         </div>
       </DragDropContext>

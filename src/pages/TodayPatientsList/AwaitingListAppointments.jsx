@@ -3,10 +3,10 @@ import { Droppable } from 'react-beautiful-dnd'
 
 import { APPOINTMENTS_IDS } from '../../config'
 
-import PatientCard, { LoadingCards } from './PatientCard'
+import AppointmentCard, { LoadingCards } from './AppointmentCard'
 import { DragWrap } from './TodayPatientsList'
 
-export default function AwaitingListAppointments({ appointment, isLoading }) {
+export default function AwaitingListAppointments({ appointments, isLoading }) {
   return (
     <Droppable droppableId={APPOINTMENTS_IDS.AWAITING_LIST}>
       {(provided, snapshot) => (
@@ -14,15 +14,15 @@ export default function AwaitingListAppointments({ appointment, isLoading }) {
           <h1 className="title">
             Liste d'attente
             <Circle className="circle" size="25px">
-              {appointment.length}
+              {appointments.length}
             </Circle>
           </h1>
           {isLoading ? (
             <LoadingCards />
           ) : (
-            appointment.map((patient, index) => (
-              <DragWrap key={patient.id} id={patient.id} index={index}>
-                <PatientCard patient={patient} />
+            appointments.map((appointment, index) => (
+              <DragWrap key={appointment.id} id={appointment.id} index={index}>
+                <AppointmentCard appointment={appointment} />
               </DragWrap>
             ))
           )}
