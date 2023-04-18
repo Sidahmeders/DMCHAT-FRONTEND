@@ -39,7 +39,7 @@ export default function PatientCard({ patient }) {
 
     if (isBoolean(confirmedPatient.isConfirmed)) {
       socket.emit(APPOINTMENTS_EVENTS.CONFIRM_APPOINTMENT, confirmedPatient)
-      setIsConfirmed(!isConfirmed)
+      setIsConfirmed(confirmedPatient.isConfirmed)
     }
     setIsLoading(false)
   }
@@ -58,7 +58,7 @@ export default function PatientCard({ patient }) {
 
     if (isBoolean(leftPatient.isLeft)) {
       socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENT, leftPatient)
-      setIsLeft(!isLeft)
+      setIsLeft(leftPatient.isLeft)
     }
     setIsLoading(false)
   }
