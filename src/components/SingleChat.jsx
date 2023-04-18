@@ -4,12 +4,12 @@ import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@c
 import io from 'socket.io-client'
 
 import { ChatState } from '../context/ChatProvider'
+import { ENDPOINT } from '../config'
 import { getSender, getSenderFull } from '../utils'
 import ProfileModal from './miscellaneous/ProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat'
 
-const ENDPOINT = 'http://localhost:5000' // If you are deploying the app, replace the value with "https://YOUR_DEPLOYED_APPLICATION_URL" then run "npm run build" to create a production build
 let socket, selectedChatCompare
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {

@@ -3,7 +3,7 @@ import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { omit } from 'lodash'
 
 import { ChatState } from '../../context'
-import { AWAITINGLIST_DATA, APPOINTMENTS_IDS } from '../../config'
+import { APPOINTMENTS_IDS } from '../../config'
 
 import ExpectedAppointments from './ExpectedAppointments'
 import WaitingRoomAppointments from './WaitingRoomAppointments'
@@ -32,6 +32,7 @@ export default function TodayPatientsList() {
     [APPOINTMENTS_IDS.WAITING_ROOM]: [],
     [APPOINTMENTS_IDS.IN_PROGRESS]: [],
     [APPOINTMENTS_IDS.DONE]: [],
+    [APPOINTMENTS_IDS.AWAITING_LIST]: [],
   })
 
   const onDragEnd = (props) => {
@@ -95,6 +96,28 @@ export default function TodayPatientsList() {
         [APPOINTMENTS_IDS.WAITING_ROOM]: awaitingRoom,
         [APPOINTMENTS_IDS.IN_PROGRESS]: inProgress,
         [APPOINTMENTS_IDS.DONE]: doneList,
+        [APPOINTMENTS_IDS.AWAITING_LIST]: [
+          {
+            id: 'id-100',
+            fullName: 'Samir Benmahjoub',
+            age: '35',
+            motif: 'douleur 1/10',
+            state: 'très bien',
+            diagnostic: 'carie entre les dents',
+            treatmentPlan: 'Ipsum Dolor Sit Amet',
+            history: 'Ipsum Dolor',
+          },
+          {
+            id: 'id-101',
+            fullName: 'Adb Kader Lamouri',
+            age: '35',
+            motif: 'douleur 1/10',
+            state: 'très bien',
+            diagnostic: 'carie entre les dents',
+            treatmentPlan: 'Ipsum Dolor Sit Amet',
+            history: 'Ipsum Dolor',
+          },
+        ],
       })
       setIsLoading(false)
     })()
@@ -108,7 +131,7 @@ export default function TodayPatientsList() {
           <WaitingRoomAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM]} />
           <InProgressAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.IN_PROGRESS]} />
           <DoneAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.DONE]} />
-          <AwaitingListAppointments isLoading={isLoading} patients={AWAITINGLIST_DATA} />
+          <AwaitingListAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.AWAITING_LIST]} />
         </div>
       </DragDropContext>
     </div>

@@ -1,9 +1,11 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Text, IconButton, Button, Box, Flex, Avatar, Heading, Stack, Skeleton } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, CheckCircle, MessageCircle, Flag } from 'react-feather'
 import { isBoolean } from 'lodash'
+import io from 'socket.io-client'
 
+import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
 import { ChatState } from '../../context'
 
 export const LoadingCards = () => (
@@ -13,6 +15,8 @@ export const LoadingCards = () => (
     <Skeleton height="7.5rem" />
   </Stack>
 )
+
+let socket
 
 export default function PatientCard({ patient }) {
   const { user } = ChatState()
@@ -34,6 +38,7 @@ export default function PatientCard({ patient }) {
     const confirmedPatient = await response.json()
 
     if (isBoolean(confirmedPatient.isConfirmed)) {
+      socket.emit(APPOINTMENTS_EVENTS.CONFIRM_APPOINTMENTS, confirmedPatient)
       setIsConfirmed(!isConfirmed)
     }
     setIsLoading(false)
@@ -52,10 +57,29 @@ export default function PatientCard({ patient }) {
     const leftPatient = await response.json()
 
     if (isBoolean(leftPatient.isLeft)) {
+      socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENTS, leftPatient)
       setIsLeft(!isLeft)
     }
     setIsLoading(false)
   }
+
+  useEffect(() => {
+    if (socket === undefined) {
+      socket = io(ENDPOINT)
+    }
+
+    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENTS_CONFIRMATION, (payload) => {
+      if (payload._id === patient._id) {
+        setIsConfirmed(payload.isConfirmed)
+      }
+    })
+
+    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENTS_LEFT, (payload) => {
+      if (payload._id === patient._id) {
+        setIsLeft(payload.isLeft)
+      }
+    })
+  }, [patient])
 
   if (isLoading) return <Skeleton mt="2" height="7.5rem" />
 
