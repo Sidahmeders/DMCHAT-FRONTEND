@@ -3,13 +3,13 @@ import { Droppable } from 'react-beautiful-dnd'
 
 import { APPOINTMENTS_IDS } from '../../config'
 
-import PatientCard, { LoadingCards } from './AppointmentCard'
+import AppointmentCard, { LoadingCards } from './AppointmentCard'
 import { DragWrap } from './TodayPatientsList'
 
 export default function ExpectedAppointments({ appointments, isLoading }) {
   return (
     <Droppable droppableId={APPOINTMENTS_IDS.EXPECTED}>
-      {(provided, snapshot) => (
+      {(provided) => (
         <div className="expected-appointments-container" ref={provided.innerRef} {...provided.droppableProps}>
           <h1 className="title">
             Rendez-vous attendus
@@ -22,7 +22,7 @@ export default function ExpectedAppointments({ appointments, isLoading }) {
           ) : (
             appointments.map((appointment, index) => (
               <DragWrap key={appointment.id} id={appointment.id} index={index}>
-                <PatientCard appointment={appointment} />
+                <AppointmentCard appointment={appointment} />
               </DragWrap>
             ))
           )}

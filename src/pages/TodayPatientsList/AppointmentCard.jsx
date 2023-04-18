@@ -77,8 +77,7 @@ export default function AppointmentCard({ appointment }) {
         setIsLeft(payload.isLeft)
       }
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [appointment])
 
   if (isLoading) return <Skeleton mt="2" height="7.5rem" />
 

@@ -9,7 +9,7 @@ import { DragWrap } from './TodayPatientsList'
 export default function AwaitingListAppointments({ appointments, isLoading }) {
   return (
     <Droppable droppableId={APPOINTMENTS_IDS.AWAITING_LIST}>
-      {(provided, snapshot) => (
+      {(provided) => (
         <div className="awaiting-list-appointments-container" ref={provided.innerRef} {...provided.droppableProps}>
           <h1 className="title">
             Liste d'attente

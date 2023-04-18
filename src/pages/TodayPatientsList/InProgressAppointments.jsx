@@ -3,13 +3,13 @@ import { Droppable } from 'react-beautiful-dnd'
 
 import { APPOINTMENTS_IDS } from '../../config'
 
-import PatientCard, { LoadingCards } from './AppointmentCard'
+import AppointmentCard, { LoadingCards } from './AppointmentCard'
 import { DragWrap } from './TodayPatientsList'
 
 export default function InProgressAppointments({ appointments, isLoading }) {
   return (
     <Droppable droppableId={APPOINTMENTS_IDS.IN_PROGRESS}>
-      {(provided, snapshot) => (
+      {(provided) => (
         <div className="in-progress-appointments-container" ref={provided.innerRef} {...provided.droppableProps}>
           <h1 className="title">
             Rendez-vous en cours
@@ -22,7 +22,7 @@ export default function InProgressAppointments({ appointments, isLoading }) {
           ) : (
             appointments.map((appointment, index) => (
               <DragWrap key={appointment.id} id={appointment.id} index={index}>
-                <PatientCard appointment={appointment} />
+                <AppointmentCard appointment={appointment} />
               </DragWrap>
             ))
           )}

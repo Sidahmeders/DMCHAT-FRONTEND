@@ -14,14 +14,15 @@ import AwaitingListAppointments from './AwaitingListAppointments'
 
 import './TodayPatientsList.scss'
 
-const flattenAppointment = (appointment) => {
-  const { _id: id, patient } = appointment
-  return { id, ...patient, ...omit(appointment, 'patient') }
-}
+const flattenAppointment = (appointment) => ({
+  id: appointment._id,
+  ...appointment.patient,
+  ...omit(appointment, 'patient'),
+})
 
 export const DragWrap = ({ id, index, children }) => (
   <Draggable draggableId={id} index={index}>
-    {(provided, snapshot) => (
+    {(provided) => (
       <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
         {children}
       </div>
@@ -33,7 +34,6 @@ let socket
 
 export default function TodayPatientsList() {
   const { user } = ChatState()
-
   const [isLoading, setIsLoading] = useState(false)
   const [appointmentsList, setAppointmentsList] = useState({
     [APPOINTMENTS_IDS.EXPECTED]: [],

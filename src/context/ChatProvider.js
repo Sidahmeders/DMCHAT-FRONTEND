@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 
 const ChatContext = createContext()
 
-const ChatProvider = ({ children }) => {
+export const ChatProvider = ({ children }) => {
   const [user, setUser] = useState() // If 'userInfo' is available, else set '{}'
   const [selectedChat, setSelectedChat] = useState()
   const [chats, setChats] = useState([])
@@ -39,8 +39,4 @@ const ChatProvider = ({ children }) => {
   )
 }
 
-export const ChatState = () => {
-  return useContext(ChatContext)
-}
-
-export default ChatProvider
+export const ChatState = () => useContext(ChatContext)

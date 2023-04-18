@@ -4,7 +4,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 import * as serviceWorker from './serviceWorkerRegistration'
-import ChatProvider from './context/ChatProvider'
+import { ChatProvider } from './context'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
 

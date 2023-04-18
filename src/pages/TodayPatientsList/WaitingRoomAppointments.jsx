@@ -3,13 +3,13 @@ import { Droppable } from 'react-beautiful-dnd'
 
 import { APPOINTMENTS_IDS } from '../../config'
 
-import PatientCard, { LoadingCards } from './AppointmentCard'
+import AppointmentCard, { LoadingCards } from './AppointmentCard'
 import { DragWrap } from './TodayPatientsList'
 
 export default function WaitingRoomAppointments({ appointments, isLoading }) {
   return (
     <Droppable droppableId={APPOINTMENTS_IDS.WAITING_ROOM}>
-      {(provided, snapshot) => (
+      {(provided) => (
         <div className="waiting-room-appointments-container" ref={provided.innerRef} {...provided.droppableProps}>
           <h1 className="title">
             Salle D'Attente
@@ -22,7 +22,7 @@ export default function WaitingRoomAppointments({ appointments, isLoading }) {
           ) : (
             appointments.map((appointment, index) => (
               <DragWrap key={appointment.id} id={appointment.id} index={index}>
-                <PatientCard appointment={appointment} />
+                <AppointmentCard appointment={appointment} />
               </DragWrap>
             ))
           )}
