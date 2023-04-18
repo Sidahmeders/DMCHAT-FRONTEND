@@ -6,7 +6,7 @@ import { APPOINTMENTS_IDS } from '../../config'
 import PatientCard, { LoadingCards } from './PatientCard'
 import { DragWrap } from './TodayPatientsList'
 
-export default function InProgressAppointments({ patients, isLoading }) {
+export default function InProgressAppointments({ appointment, isLoading }) {
   return (
     <Droppable droppableId={APPOINTMENTS_IDS.IN_PROGRESS}>
       {(provided, snapshot) => (
@@ -14,13 +14,13 @@ export default function InProgressAppointments({ patients, isLoading }) {
           <h1 className="title">
             Rendez-vous en cours
             <Circle className="circle" size="25px">
-              {patients.length}
+              {appointment.length}
             </Circle>
           </h1>
           {isLoading ? (
             <LoadingCards />
           ) : (
-            patients.map((patient, index) => (
+            appointment.map((patient, index) => (
               <DragWrap key={patient.id} id={patient.id} index={index}>
                 <PatientCard patient={patient} />
               </DragWrap>

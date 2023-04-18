@@ -6,7 +6,7 @@ import { APPOINTMENTS_IDS } from '../../config'
 import PatientCard, { LoadingCards } from './PatientCard'
 import { DragWrap } from './TodayPatientsList'
 
-export default function WaitingRoomAppointments({ patients, isLoading }) {
+export default function WaitingRoomAppointments({ appointment, isLoading }) {
   return (
     <Droppable droppableId={APPOINTMENTS_IDS.WAITING_ROOM}>
       {(provided, snapshot) => (
@@ -14,13 +14,13 @@ export default function WaitingRoomAppointments({ patients, isLoading }) {
           <h1 className="title">
             Salle D'Attente
             <Circle className="circle" size="25px">
-              {patients.length}
+              {appointment.length}
             </Circle>
           </h1>
           {isLoading ? (
             <LoadingCards />
           ) : (
-            patients.map((patient, index) => (
+            appointment.map((patient, index) => (
               <DragWrap key={patient.id} id={patient.id} index={index}>
                 <PatientCard patient={patient} />
               </DragWrap>

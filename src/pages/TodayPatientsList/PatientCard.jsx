@@ -38,7 +38,7 @@ export default function PatientCard({ patient }) {
     const confirmedPatient = await response.json()
 
     if (isBoolean(confirmedPatient.isConfirmed)) {
-      socket.emit(APPOINTMENTS_EVENTS.CONFIRM_APPOINTMENTS, confirmedPatient)
+      socket.emit(APPOINTMENTS_EVENTS.CONFIRM_APPOINTMENT, confirmedPatient)
       setIsConfirmed(!isConfirmed)
     }
     setIsLoading(false)
@@ -57,7 +57,7 @@ export default function PatientCard({ patient }) {
     const leftPatient = await response.json()
 
     if (isBoolean(leftPatient.isLeft)) {
-      socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENTS, leftPatient)
+      socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENT, leftPatient)
       setIsLeft(!isLeft)
     }
     setIsLoading(false)
@@ -68,13 +68,13 @@ export default function PatientCard({ patient }) {
       socket = io(ENDPOINT)
     }
 
-    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENTS_CONFIRMATION, (payload) => {
+    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_CONFIRMATION, (payload) => {
       if (payload._id === patient._id) {
         setIsConfirmed(payload.isConfirmed)
       }
     })
 
-    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENTS_LEFT, (payload) => {
+    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_LEFT, (payload) => {
       if (payload._id === patient._id) {
         setIsLeft(payload.isLeft)
       }

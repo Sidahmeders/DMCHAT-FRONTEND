@@ -1,9 +1,10 @@
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { omit } from 'lodash'
+import io from 'socket.io-client'
 
+import { ENDPOINT, APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
 import { ChatState } from '../../context'
-import { APPOINTMENTS_IDS } from '../../config'
 
 import ExpectedAppointments from './ExpectedAppointments'
 import WaitingRoomAppointments from './WaitingRoomAppointments'
@@ -12,6 +13,11 @@ import DoneAppointments from './DoneAppointments'
 import AwaitingListAppointments from './AwaitingListAppointments'
 
 import './TodayPatientsList.scss'
+
+const flattenAppointment = (appointment) => {
+  const { _id: id, patient } = appointment
+  return { id, ...patient, ...omit(appointment, 'patient') }
+}
 
 export const DragWrap = ({ id, index, children }) => (
   <Draggable draggableId={id} index={index}>
@@ -22,6 +28,8 @@ export const DragWrap = ({ id, index, children }) => (
     )}
   </Draggable>
 )
+
+let socket
 
 export default function TodayPatientsList() {
   const { user } = ChatState()
@@ -40,17 +48,34 @@ export default function TodayPatientsList() {
     const { droppableId: sourceDroppableId } = source || {}
     const { droppableId: destinationDroppableId } = destination || {}
 
-    Object.values(APPOINTMENTS_IDS).forEach((key) => {
-      if (destinationDroppableId === key && destination) {
-        const newPatientsList = appointmentsList[sourceDroppableId].filter((item) => item.id !== draggableId)
-        const droppedPatient = appointmentsList[sourceDroppableId].find((item) => item.id === draggableId)
-        if (droppedPatient) {
-          setAppointmentsList({
-            ...appointmentsList,
-            [destinationDroppableId]: [...appointmentsList[destinationDroppableId], droppedPatient],
-            [sourceDroppableId]: newPatientsList,
+    Object.values(APPOINTMENTS_IDS).forEach(async (key) => {
+      if (sourceDroppableId && destinationDroppableId === key && sourceDroppableId !== destinationDroppableId) {
+        setIsLoading(true)
+        const droppedAppointment = appointmentsList[sourceDroppableId].find(
+          (appointment) => appointment.id === draggableId,
+        )
+        const response = await fetch(`/api/appointment/${droppedAppointment.id}/update`, {
+          method: 'PUT',
+          headers: {
+            Authorization: `Bearer ${user.token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            [sourceDroppableId]: false,
+            [destinationDroppableId]: true,
+          }),
+        })
+
+        if (droppedAppointment && response.status === 200) {
+          const updatedAppointment = await response.json()
+          socket.emit(APPOINTMENTS_EVENTS.DROP_APPOINTMENT, {
+            draggableId,
+            sourceDroppableId,
+            destinationDroppableId,
+            updatedAppointment,
           })
         }
+        setIsLoading(false)
       }
     })
   }
@@ -69,19 +94,19 @@ export default function TodayPatientsList() {
 
       const { expected, awaitingRoom, inProgress, doneList } = todayAppointments.reduce(
         (prev, appointment) => {
-          const { _id: id, patient, isWaitingRoom, isInProgress, isDone } = appointment
-          const appointmentBody = { id, ...patient, ...omit(appointment, 'patient') }
+          const { isWaitingRoom, isInProgress, isDone } = appointment
+          const flatAppointment = flattenAppointment(appointment)
 
           if (isWaitingRoom) {
-            return { ...prev, awaitingRoom: [...prev.awaitingRoom, appointmentBody] }
+            return { ...prev, awaitingRoom: [...prev.awaitingRoom, flatAppointment] }
           }
           if (isInProgress) {
-            return { ...prev, inProgress: [...prev.inProgress, appointmentBody] }
+            return { ...prev, inProgress: [...prev.inProgress, flatAppointment] }
           }
           if (isDone) {
-            return { ...prev, doneList: [...prev.doneList, appointmentBody] }
+            return { ...prev, doneList: [...prev.doneList, flatAppointment] }
           }
-          return { ...prev, expected: [...prev.expected, appointmentBody] }
+          return { ...prev, expected: [...prev.expected, flatAppointment] }
         },
         {
           expected: [],
@@ -123,15 +148,38 @@ export default function TodayPatientsList() {
     })()
   }, [user])
 
+  useEffect(() => {
+    if (socket === undefined) {
+      socket = io(ENDPOINT)
+    }
+
+    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_DROPPED, (payload) => {
+      const { draggableId, sourceDroppableId, destinationDroppableId, updatedAppointment } = payload
+      setAppointmentsList({
+        ...appointmentsList,
+        [sourceDroppableId]: appointmentsList[sourceDroppableId].filter(
+          (appointment) => appointment.id !== draggableId,
+        ),
+        [destinationDroppableId]: [...appointmentsList[destinationDroppableId], flattenAppointment(updatedAppointment)],
+      })
+    })
+  }, [appointmentsList])
+
   return (
     <div className="today-patients-list-page-container">
       <DragDropContext onDragEnd={onDragEnd}>
         <div className="room-container">
-          <ExpectedAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.EXPECTED]} />
-          <WaitingRoomAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM]} />
-          <InProgressAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.IN_PROGRESS]} />
-          <DoneAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.DONE]} />
-          <AwaitingListAppointments isLoading={isLoading} patients={appointmentsList[APPOINTMENTS_IDS.AWAITING_LIST]} />
+          <ExpectedAppointments isLoading={isLoading} appointment={appointmentsList[APPOINTMENTS_IDS.EXPECTED]} />
+          <WaitingRoomAppointments
+            isLoading={isLoading}
+            appointment={appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM]}
+          />
+          <InProgressAppointments isLoading={isLoading} appointment={appointmentsList[APPOINTMENTS_IDS.IN_PROGRESS]} />
+          <DoneAppointments isLoading={isLoading} appointment={appointmentsList[APPOINTMENTS_IDS.DONE]} />
+          <AwaitingListAppointments
+            isLoading={isLoading}
+            appointment={appointmentsList[APPOINTMENTS_IDS.AWAITING_LIST]}
+          />
         </div>
       </DragDropContext>
     </div>
