@@ -38,9 +38,8 @@ export default function AddPatientModal() {
       },
       body: JSON.stringify(data),
     })
-    const createdPatient = await response.json()
 
-    if (createdPatient.statusCode && createdPatient.statusCode !== 200) {
+    if (response.status !== 200) {
       return toast()
     } else {
       toast({

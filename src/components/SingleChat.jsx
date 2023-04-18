@@ -31,19 +31,18 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     try {
       setLoading(true)
-
       const response = await fetch(`/api/message/${selectedChat._id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       })
-      const data = await response.json()
 
-      setMessages(data)
+      if (response.status === 200) {
+        setMessages(await response.json())
+        socket.emit('join chat', selectedChat._id)
+      }
       setLoading(false)
-
-      socket.emit('join chat', selectedChat._id)
     } catch (error) {
       setLoading(false)
       return toast({
@@ -107,11 +106,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             chatId: selectedChat._id,
           }),
         })
-        const data = await response.json()
 
-        socket.emit('new message', data)
-        setNewMessage('')
-        setMessages([...messages, data]) // Add new message with existing messages
+        if (response.status === 200) {
+          const data = await response.json()
+          socket.emit('new message', data)
+          setNewMessage('')
+          setMessages([...messages, data])
+        }
       } catch (error) {
         return toast({
           title: 'Error Occured!',

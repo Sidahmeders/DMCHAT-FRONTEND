@@ -19,7 +19,7 @@ import { ChatState } from '../../context'
 
 import Loader from '../Loader/Loader'
 
-const resolvePatientOptions = patients => {
+const resolvePatientOptions = (patients) => {
   return patients.map(({ _id, fullName, age }) => ({
     label: `${fullName} ${age}`,
     value: `${_id}-${fullName}`,
@@ -46,7 +46,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [isLoading, setIsLoading] = useState(false)
   const [isWaitingList, setIsWaitingList] = useState(false)
 
-  const onSubmit = async data => {
+  const onSubmit = async (data) => {
     if (!user || action !== 'click') return
     setIsLoading(true)
     const { fullName, title } = data
@@ -66,26 +66,26 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
         patient: patientId,
       }),
     })
-    const createdAppointment = await response.json()
 
-    if (createdAppointment.statusCode && createdAppointment.statusCode !== 200) {
+    if (response.status !== 200) {
       return toast()
-    } else {
-      setEvents([
-        ...events,
-        {
-          id: createdAppointment._id,
-          title: createdAppointment.title,
-          start: new Date(createdAppointment.date),
-          end: addHours(new Date(createdAppointment.date), 12),
-        },
-      ])
-      toast({
-        title: 'nouveau rendez-vous créé avec succès',
-        status: 'success',
-      })
-      handleClose()
     }
+
+    const createdAppointment = await response.json()
+    setEvents([
+      ...events,
+      {
+        id: createdAppointment._id,
+        title: createdAppointment.title,
+        start: new Date(createdAppointment.date),
+        end: addHours(new Date(createdAppointment.date), 12),
+      },
+    ])
+    toast({
+      title: 'nouveau rendez-vous créé avec succès',
+      status: 'success',
+    })
+    handleClose()
     setIsLoading(false)
   }
 
@@ -104,8 +104,10 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               Authorization: `Bearer ${user.token}`,
             },
           })
-          const patientData = await response.json()
-          setMatchedPatients(resolvePatientOptions(patientData))
+
+          if (response.status === 200) {
+            setMatchedPatients(resolvePatientOptions(await response.json()))
+          }
         } catch (error) {
           console.log(error.message)
         }
@@ -129,9 +131,9 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                 <Select
                   placeholder="Nom du patient..."
                   options={matchedPatients}
-                  value={matchedPatients.find(option => option.value === value)}
-                  onChange={val => onChange(val.value)}
-                  onKeyDown={e => {
+                  value={matchedPatients.find((option) => option.value === value)}
+                  onChange={(val) => onChange(val.value)}
+                  onKeyDown={(e) => {
                     const { value } = e.target
                     if (value.trim().length >= 2) {
                       setSearchName(value)
@@ -147,7 +149,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               rules={{ required: true }}
               shouldUnregister={isSubmitted}
               render={({ field: { onChange, value } }) => (
-                <Input type="text" placeholder="Mettre rendez-vous" value={value} onChange={val => onChange(val)} />
+                <Input type="text" placeholder="Mettre rendez-vous" value={value} onChange={(val) => onChange(val)} />
               )}
             />
 

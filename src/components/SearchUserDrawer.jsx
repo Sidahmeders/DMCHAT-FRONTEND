@@ -45,12 +45,11 @@ export default function SearchUserDrawer() {
         Authorization: `Bearer ${user.token}`,
       },
     })
-    const data = await response.json()
 
-    if (data.statusCode && data.statusCode !== 200) {
+    if (response.status !== 200) {
       return toast()
     } else {
-      setSearchResult(data)
+      setSearchResult(await response.json())
     }
     setLoading(false)
   }

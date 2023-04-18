@@ -25,19 +25,15 @@ const MyChats = ({ fetchAgain }) => {
           Authorization: `Bearer ${user.token}`,
         },
       })
-      const data = await response.json()
 
-      setChats(data)
-      onClose() // Close the side drawer
+      if (response.status === 200) {
+        setChats(await response.json())
+        onClose()
+      }
     } catch (error) {
       return toast({
         title: 'Error Occured!',
         description: 'Failed to Load the Search Results',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-left',
-        variant: 'solid',
       })
     }
   }
