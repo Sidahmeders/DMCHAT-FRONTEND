@@ -14,7 +14,7 @@ import AwaitingListAppointments from './AwaitingListAppointments'
 
 import './TodayPatientsList.scss'
 
-const flattenAppointment = (appointment) => ({
+export const flattenAppointment = (appointment) => ({
   id: appointment._id,
   ...appointment.patient,
   ...omit(appointment, 'patient'),
@@ -40,7 +40,6 @@ export default function TodayPatientsList() {
     [APPOINTMENTS_IDS.WAITING_ROOM]: [],
     [APPOINTMENTS_IDS.IN_PROGRESS]: [],
     [APPOINTMENTS_IDS.DONE]: [],
-    [APPOINTMENTS_IDS.AWAITING_LIST]: [],
   })
 
   const onDragEnd = (props) => {
@@ -121,28 +120,6 @@ export default function TodayPatientsList() {
         [APPOINTMENTS_IDS.WAITING_ROOM]: awaitingRoom,
         [APPOINTMENTS_IDS.IN_PROGRESS]: inProgress,
         [APPOINTMENTS_IDS.DONE]: doneList,
-        [APPOINTMENTS_IDS.AWAITING_LIST]: [
-          {
-            id: 'id-100',
-            fullName: 'Samir Benmahjoub',
-            age: '35',
-            motif: 'douleur 1/10',
-            state: 'très bien',
-            diagnostic: 'carie entre les dents',
-            treatmentPlan: 'Ipsum Dolor Sit Amet',
-            history: 'Ipsum Dolor',
-          },
-          {
-            id: 'id-101',
-            fullName: 'Adb Kader Lamouri',
-            age: '35',
-            motif: 'douleur 1/10',
-            state: 'très bien',
-            diagnostic: 'carie entre les dents',
-            treatmentPlan: 'Ipsum Dolor Sit Amet',
-            history: 'Ipsum Dolor',
-          },
-        ],
       })
       setIsLoading(false)
     })()
@@ -176,10 +153,7 @@ export default function TodayPatientsList() {
           />
           <InProgressAppointments isLoading={isLoading} appointments={appointmentsList[APPOINTMENTS_IDS.IN_PROGRESS]} />
           <DoneAppointments isLoading={isLoading} appointments={appointmentsList[APPOINTMENTS_IDS.DONE]} />
-          <AwaitingListAppointments
-            isLoading={isLoading}
-            appointments={appointmentsList[APPOINTMENTS_IDS.AWAITING_LIST]}
-          />
+          <AwaitingListAppointments />
         </div>
       </DragDropContext>
     </div>
