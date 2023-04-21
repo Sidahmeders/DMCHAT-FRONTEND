@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Box } from '@chakra-ui/react'
 
-import { ChatState } from '../../context/ChatProvider'
+import { ChatState } from '../../context'
 import { ChatBox, MyChats } from '../../components'
 
 const Chat = () => {

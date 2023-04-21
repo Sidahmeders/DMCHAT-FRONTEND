@@ -4,7 +4,7 @@ import { Circle } from '@chakra-ui/react'
 import { ChatState } from '../../context'
 
 import AppointmentCard, { LoadingCards } from './AppointmentCard'
-import { flattenAppointment } from './TodayPatientsList'
+import { flattenAppointment } from '../../utils'
 
 export default function AwaitingListAppointments() {
   const { user } = ChatState()

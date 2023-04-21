@@ -6,7 +6,7 @@ import { isBoolean } from 'lodash'
 import io from 'socket.io-client'
 
 import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
-import { ChatState } from '../../context'
+import { ChatState, TodayPatientsListState } from '../../context'
 
 export const LoadingCards = () => (
   <Stack mt="2">
@@ -20,6 +20,7 @@ let socket
 
 export default function AppointmentCard({ appointment }) {
   const { user } = ChatState()
+  const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
   const [isLeft, setIsLeft] = useState(appointment.isLeft)
   const [showCardBody, setShowCardBody] = useState(false)
@@ -69,15 +70,18 @@ export default function AppointmentCard({ appointment }) {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_CONFIRMATION, (payload) => {
       if (payload._id === appointment._id) {
         setIsConfirmed(payload.isConfirmed)
+        fetchTodayAppointments(user)
       }
     })
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_LEFT, (payload) => {
       if (payload._id === appointment._id) {
         setIsLeft(payload.isLeft)
+        fetchTodayAppointments(user)
       }
     })
-  }, [appointment])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   if (isLoading) return <Skeleton mt="2" height="7.5rem" />
 

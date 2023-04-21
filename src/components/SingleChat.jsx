@@ -3,7 +3,7 @@ import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
 import io from 'socket.io-client'
 
-import { ChatState } from '../context/ChatProvider'
+import { ChatState } from '../context'
 import { ENDPOINT } from '../config'
 import { getSender, getSenderFull } from '../utils'
 import ProfileModal from './miscellaneous/ProfileModal'

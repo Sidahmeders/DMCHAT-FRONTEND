@@ -1,3 +1,5 @@
+import { omit } from 'lodash'
+
 export * from './localStorage'
 export * from './ChatLogics'
 
@@ -10,3 +12,9 @@ export const guid = () => {
   // return id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 }
+
+export const flattenAppointment = (appointment) => ({
+  id: appointment._id,
+  ...appointment.patient,
+  ...omit(appointment, 'patient'),
+})

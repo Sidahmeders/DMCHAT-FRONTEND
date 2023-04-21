@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
-import { omit } from 'lodash'
+import { useLocation } from 'react-router-dom'
 import io from 'socket.io-client'
 
 import { ENDPOINT, APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
-import { ChatState } from '../../context'
+import { flattenAppointment } from '../../utils'
+import { ChatState, TodayPatientsListState } from '../../context'
 
 import ExpectedAppointments from './ExpectedAppointments'
 import WaitingRoomAppointments from './WaitingRoomAppointments'
@@ -13,12 +14,6 @@ import DoneAppointments from './DoneAppointments'
 import AwaitingListAppointments from './AwaitingListAppointments'
 
 import './TodayPatientsList.scss'
-
-export const flattenAppointment = (appointment) => ({
-  id: appointment._id,
-  ...appointment.patient,
-  ...omit(appointment, 'patient'),
-})
 
 export const DragWrap = ({ id, index, children }) => (
   <Draggable draggableId={id} index={index}>
@@ -34,13 +29,9 @@ let socket
 
 export default function TodayPatientsList() {
   const { user } = ChatState()
+  const { pathname } = useLocation()
+  const { appointmentsList, setAppointmentsList, fetchTodayAppointments } = TodayPatientsListState()
   const [isLoading, setIsLoading] = useState(false)
-  const [appointmentsList, setAppointmentsList] = useState({
-    [APPOINTMENTS_IDS.EXPECTED]: [],
-    [APPOINTMENTS_IDS.WAITING_ROOM]: [],
-    [APPOINTMENTS_IDS.IN_PROGRESS]: [],
-    [APPOINTMENTS_IDS.DONE]: [],
-  })
 
   const onDragEnd = (props) => {
     const { draggableId, destination, source } = props
@@ -81,49 +72,10 @@ export default function TodayPatientsList() {
 
   useEffect(() => {
     if (!user) return
-    ;(async () => {
-      setIsLoading(true)
-      const response = await fetch('api/appointment/2023/04/05', {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-      const todayAppointments = await response.json()
-
-      const { expected, awaitingRoom, inProgress, doneList } = todayAppointments.reduce(
-        (prev, appointment) => {
-          const { isWaitingRoom, isInProgress, isDone } = appointment
-          const flatAppointment = flattenAppointment(appointment)
-
-          if (isWaitingRoom) {
-            return { ...prev, awaitingRoom: [...prev.awaitingRoom, flatAppointment] }
-          }
-          if (isInProgress) {
-            return { ...prev, inProgress: [...prev.inProgress, flatAppointment] }
-          }
-          if (isDone) {
-            return { ...prev, doneList: [...prev.doneList, flatAppointment] }
-          }
-          return { ...prev, expected: [...prev.expected, flatAppointment] }
-        },
-        {
-          expected: [],
-          awaitingRoom: [],
-          inProgress: [],
-          doneList: [],
-        },
-      )
-
-      setAppointmentsList({
-        [APPOINTMENTS_IDS.EXPECTED]: expected,
-        [APPOINTMENTS_IDS.WAITING_ROOM]: awaitingRoom,
-        [APPOINTMENTS_IDS.IN_PROGRESS]: inProgress,
-        [APPOINTMENTS_IDS.DONE]: doneList,
-      })
-      setIsLoading(false)
-    })()
-  }, [user])
+    setIsLoading(true)
+    fetchTodayAppointments(user)
+    setIsLoading(false)
+  }, [user, pathname])
 
   useEffect(() => {
     if (socket === undefined) {
@@ -140,7 +92,7 @@ export default function TodayPatientsList() {
         [destinationDroppableId]: [...appointmentsList[destinationDroppableId], flattenAppointment(updatedAppointment)],
       })
     })
-  }, [appointmentsList])
+  }, [appointmentsList, setAppointmentsList])
 
   return (
     <div className="today-patients-list-page-container">

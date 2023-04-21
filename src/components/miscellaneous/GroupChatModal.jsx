@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { useState } from 'react'
 
-import { ChatState } from '../../context/ChatProvider'
+import { ChatState } from '../../context'
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem'
 

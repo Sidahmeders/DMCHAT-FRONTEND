@@ -1,7 +1,7 @@
 import { Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import { BellIcon } from '@chakra-ui/icons'
 
-import { ChatState } from '../../context/ChatProvider'
+import { ChatState } from '../../context'
 import { getSender } from '../../utils'
 
 const ChatNotification = () => {

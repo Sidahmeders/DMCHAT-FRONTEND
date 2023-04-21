@@ -4,7 +4,7 @@ import { BeatLoader } from 'react-spinners'
 
 import '../App.css'
 import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from '../utils'
-import { ChatState } from '../context/ChatProvider'
+import { ChatState } from '../context'
 
 const ScrollableChat = ({ messages, isTyping }) => {
   const { user } = ChatState()
