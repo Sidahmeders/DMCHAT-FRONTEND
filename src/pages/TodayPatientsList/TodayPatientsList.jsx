@@ -72,9 +72,12 @@ export default function TodayPatientsList() {
 
   useEffect(() => {
     if (!user) return
-    setIsLoading(true)
-    fetchTodayAppointments(user)
-    setIsLoading(false)
+    ;(async () => {
+      setIsLoading(true)
+      await fetchTodayAppointments(user)
+      setIsLoading(false)
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, pathname])
 
   useEffect(() => {
