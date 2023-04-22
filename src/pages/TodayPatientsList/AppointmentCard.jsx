@@ -1,12 +1,14 @@
 import { useEffect, useState } from 'react'
 import { Text, IconButton, Button, Box, Flex, Avatar, Heading, Stack, Skeleton } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/card'
-import { ChevronDown, ChevronUp, CheckCircle, MessageCircle, Flag } from 'react-feather'
+import { ChevronDown, ChevronUp, CheckCircle, Flag } from 'react-feather'
 import { isBoolean } from 'lodash'
 import io from 'socket.io-client'
 
 import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
 import { ChatState, TodayPatientsListState } from '../../context'
+
+import AppointmentChatModal from './AppointmentChatModal'
 
 export const LoadingCards = () => (
   <Stack mt="2">
@@ -93,7 +95,7 @@ export default function AppointmentCard({ appointment }) {
             <Avatar name={appointment.fullName} src="" />
             <Box>
               <Heading size="sm">
-                {appointment.fullName} | {appointment.age}
+                {appointment.fullName} / {appointment.age}
               </Heading>
               <Text padding="0.5">{appointment.title}</Text>
             </Box>
@@ -125,7 +127,7 @@ export default function AppointmentCard({ appointment }) {
         <Button flex="3" variant="ghost" leftIcon={<Flag />} onClick={handleLeave}>
           parti
         </Button>
-        <Button flex="2" variant="ghost" pr="2" colorScheme="messenger" leftIcon={<MessageCircle />}></Button>
+        <AppointmentChatModal appointment={appointment} />
       </CardFooter>
     </Card>
   )
