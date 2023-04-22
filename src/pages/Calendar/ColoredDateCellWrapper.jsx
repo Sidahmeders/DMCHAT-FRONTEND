@@ -17,15 +17,21 @@ export default function ColoredDateCellWrapper({ children, value }) {
 
   useEffect(() => {
     if (!user) return
+    const controller = new AbortController()
     ;(async () => {
       const response = await fetch(`/api/calendar/${format(new Date(value), 'yyyy/MM/dd')}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user?.token}`,
         },
+        signal: controller.signal,
       })
       setCalendarDay(await response.json())
     })()
+
+    return () => {
+      controller.abort()
+    }
   }, [user, value])
 
   return cloneElement(Children.only(children), {

@@ -121,9 +121,6 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
     })()
   }, [selectedDate, user])
 
-  const ToolbarComponent = (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} />
-  const ColoredDateCellWrapperComponent = (props) => <ColoredDateCellWrapper {...props} />
-
   return (
     <div {...swipeHandlers} className="calendar-container" {...props}>
       <AddAppointmentModal
@@ -151,8 +148,8 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         onSelectSlot={onSelectSlot}
         onEventDrop={onEventDrop}
         components={{
-          toolbar: ToolbarComponent,
-          dateCellWrapper: ColoredDateCellWrapperComponent,
+          toolbar: (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} />,
+          dateCellWrapper: ColoredDateCellWrapper,
         }}
       />
     </div>
