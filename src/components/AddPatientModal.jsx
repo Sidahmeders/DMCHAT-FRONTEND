@@ -39,13 +39,13 @@ export default function AddPatientModal() {
       body: JSON.stringify(data),
     })
 
-    if (response.status !== 200) {
-      return toast()
-    } else {
+    if (response.status === 200) {
       toast({
         title: 'nouveau patient créé avec succès',
         status: 'success',
       })
+    } else {
+      toast()
     }
     onClose()
   }
@@ -59,7 +59,7 @@ export default function AddPatientModal() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
         <ModalContent>
-          <ModalHeader>Ajouter un patient</ModalHeader>
+          <ModalHeader>Ajouter un patient avec rendez-vous</ModalHeader>
           <ModalCloseButton />
           <form className="create-profile-form" onSubmit={handleSubmit(onSubmit)}>
             <ModalBody>
