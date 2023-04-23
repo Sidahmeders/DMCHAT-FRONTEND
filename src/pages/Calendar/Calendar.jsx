@@ -15,6 +15,7 @@ import CustomToolbar from './CustomToolbar'
 import ColoredDateCellWrapper from './ColoredDateCellWrapper'
 
 import './Calendar.scss'
+import Loader from '../../components/Loader/Loader'
 
 const DnDCalendar = withDragAndDrop(BigCalendar)
 
@@ -46,6 +47,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   const [events, setEvents] = useState([])
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedSlotInfo, setSelectedSlotInfo] = useState({})
+  const [isLoading, setIsLoading] = useState(false)
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => setSelectedDate(addMonths(selectedDate, 1)),
@@ -88,7 +90,30 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
     [onOpen],
   )
 
-  const onEventDrop = ({ event, start, end }) => {}
+  const onEventDrop = async ({ event, start }) => {
+    setIsLoading(true)
+    const response = await fetch(`/api/appointment/${event.id}/update`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ date: start }),
+    })
+    const updatedAppointment = await response.json()
+    const updatedEvents = events.map((appointment) => {
+      if (appointment.id === updatedAppointment._id) {
+        return {
+          ...appointment,
+          start: new Date(updatedAppointment.date),
+          end: addHours(new Date(updatedAppointment.date), 12),
+        }
+      }
+      return appointment
+    })
+    setEvents(updatedEvents)
+    setIsLoading(false)
+  }
 
   useEffect(() => {
     /**
@@ -104,6 +129,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   useEffect(() => {
     if (!user) return
     ;(async () => {
+      setIsLoading(true)
       const response = await fetch(`/api/appointment/${format(selectedDate, 'yyyy/MM')}`, {
         method: 'GET',
         headers: {
@@ -118,6 +144,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         end: addHours(new Date(event.date), 12),
       }))
       setEvents(eventsList)
+      setIsLoading(false)
     })()
   }, [selectedDate, user])
 
@@ -131,27 +158,29 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         setEvents={setEvents}
       />
 
-      <DnDCalendar
-        selectable
-        culture="fr"
-        localizer={localizer}
-        events={events}
-        date={selectedDate}
-        onNavigate={(date) => setSelectedDate(date)}
-        min={new Date(1972, 0, 1, 8, 0, 59)}
-        max={new Date(1972, 0, 1, 18, 30, 59)}
-        step={15}
-        views={['month', 'day', 'agenda']}
-        messages={messages}
-        onSelectEvent={onSelectEvent}
-        onDoubleClickEvent={onDoubleClickEvent}
-        onSelectSlot={onSelectSlot}
-        onEventDrop={onEventDrop}
-        components={{
-          toolbar: (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} />,
-          dateCellWrapper: ColoredDateCellWrapper,
-        }}
-      />
+      <Loader loading={isLoading}>
+        <DnDCalendar
+          selectable
+          culture="fr"
+          localizer={localizer}
+          events={events}
+          date={selectedDate}
+          onNavigate={(date) => setSelectedDate(date)}
+          min={new Date(1972, 0, 1, 8, 0, 59)}
+          max={new Date(1972, 0, 1, 18, 30, 59)}
+          step={15}
+          views={['month', 'day', 'agenda']}
+          messages={messages}
+          onSelectEvent={onSelectEvent}
+          onDoubleClickEvent={onDoubleClickEvent}
+          onSelectSlot={onSelectSlot}
+          onEventDrop={onEventDrop}
+          components={{
+            toolbar: (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} />,
+            dateCellWrapper: ColoredDateCellWrapper,
+          }}
+        />
+      </Loader>
     </div>
   )
 }
