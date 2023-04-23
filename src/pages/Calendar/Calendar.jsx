@@ -11,6 +11,7 @@ import { fr } from 'date-fns/locale'
 import { ChatState } from '../../context'
 
 import AddAppointmentModal from '../../components/AddAppointmentModal/AddAppointmentModal'
+import DisplayEventModal from './DisplayEventModal'
 import CustomToolbar from './CustomToolbar'
 import ColoredDateCellWrapper from './ColoredDateCellWrapper'
 
@@ -41,12 +42,22 @@ registerLocale(fr)
 
 export default function Calendar({ localizer = fnslocalizer, ...props }) {
   const { user } = ChatState()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isAddAppointmentModalOpen,
+    onOpen: onAddAppointmentModalOpen,
+    onClose: onAddAppointmentModalClose,
+  } = useDisclosure()
+  const {
+    isOpen: isDisplayEventModalOpen,
+    onOpen: onDisplayEventModalOpen,
+    onClose: onDisplayEventModalClose,
+  } = useDisclosure()
   const clickRef = useRef(null)
 
   const [events, setEvents] = useState([])
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedSlotInfo, setSelectedSlotInfo] = useState({})
+  const [selectedEvent, setSelectedEvent] = useState({})
   const [isLoading, setIsLoading] = useState(false)
 
   const swipeHandlers = useSwipeable({
@@ -54,7 +65,10 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
     onSwipedRight: () => setSelectedDate(subMonths(selectedDate, 1)),
   })
 
-  const showMoreDetails = (message) => {}
+  const showMoreDetails = (callEvent) => {
+    setSelectedEvent(callEvent)
+    onDisplayEventModalOpen()
+  }
 
   const onSelectEvent = useCallback((callEvent) => {
     /**
@@ -66,11 +80,13 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
      */
     clearTimeout(clickRef?.current)
     clickRef.current = setTimeout(() => showMoreDetails(callEvent, 'onSelectEvent'), 250)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onDoubleClickEvent = useCallback((callEvent) => {
     clearTimeout(clickRef?.current)
     clickRef.current = setTimeout(() => showMoreDetails(callEvent, 'onDoubleClickEvent'), 250)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const onSelectSlot = useCallback(
@@ -85,9 +101,9 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
       clearTimeout(clickRef?.current)
       clickRef.current = setTimeout(() => 'TODO', 250)
       setSelectedSlotInfo(slotInfo)
-      onOpen()
+      onAddAppointmentModalOpen()
     },
-    [onOpen],
+    [onAddAppointmentModalOpen],
   )
 
   const onEventDrop = async ({ event, start }) => {
@@ -136,8 +152,9 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
           Authorization: `Bearer ${user.token}`,
         },
       })
-      const data = await response.json()
-      const eventsList = data.map((event) => ({
+      const monthAppointments = await response.json()
+      const eventsList = monthAppointments.map((event) => ({
+        ...event,
         id: event._id,
         title: event.title,
         start: new Date(event.date),
@@ -152,10 +169,15 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
     <div {...swipeHandlers} className="calendar-container" {...props}>
       <AddAppointmentModal
         selectedSlotInfo={selectedSlotInfo}
-        isOpen={isOpen}
-        onClose={onClose}
+        isOpen={isAddAppointmentModalOpen}
+        onClose={onAddAppointmentModalClose}
         events={events}
         setEvents={setEvents}
+      />
+      <DisplayEventModal
+        isOpen={isDisplayEventModalOpen}
+        onClose={onDisplayEventModalClose}
+        selectedEvent={selectedEvent}
       />
 
       <Loader loading={isLoading}>

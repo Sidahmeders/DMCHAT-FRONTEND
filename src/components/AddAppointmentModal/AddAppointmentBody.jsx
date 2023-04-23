@@ -154,11 +154,11 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
             />
 
             <FormControl display="flex" alignItems="center">
-              <FormLabel htmlFor="email-alerts" ml="1" mb="0">
+              <FormLabel htmlFor="awaiting-list" ml="1" mb="0">
                 Ajouter à la liste d'attente
               </FormLabel>
               <Switch
-                id="email-alerts"
+                id="awaiting-list"
                 colorScheme="orange"
                 checked={isWaitingList}
                 onChange={() => setIsWaitingList(!isWaitingList)}
