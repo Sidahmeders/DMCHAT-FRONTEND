@@ -175,9 +175,12 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         setEvents={setEvents}
       />
       <DisplayEventModal
+        user={user}
         isOpen={isDisplayEventModalOpen}
         onClose={onDisplayEventModalClose}
         selectedEvent={selectedEvent}
+        events={events}
+        setEvents={setEvents}
       />
 
       <Loader loading={isLoading}>

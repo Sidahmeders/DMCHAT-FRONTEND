@@ -67,24 +67,25 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       }),
     })
 
-    if (response.status !== 200) {
-      return toast()
+    if (response.status === 200) {
+      const createdAppointment = await response.json()
+      setEvents([
+        ...events,
+        {
+          id: createdAppointment._id,
+          title: createdAppointment.title,
+          start: new Date(createdAppointment.date),
+          end: addHours(new Date(createdAppointment.date), 12),
+        },
+      ])
+      toast({
+        title: 'nouveau rendez-vous créé avec succès',
+        status: 'success',
+      })
+    } else {
+      toast()
     }
 
-    const createdAppointment = await response.json()
-    setEvents([
-      ...events,
-      {
-        id: createdAppointment._id,
-        title: createdAppointment.title,
-        start: new Date(createdAppointment.date),
-        end: addHours(new Date(createdAppointment.date), 12),
-      },
-    ])
-    toast({
-      title: 'nouveau rendez-vous créé avec succès',
-      status: 'success',
-    })
     handleClose()
     setIsLoading(false)
   }

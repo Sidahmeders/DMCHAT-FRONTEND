@@ -46,8 +46,8 @@ export default function AddPatientModal() {
         title: 'nouveau patient créé avec succès',
         status: 'success',
       })
-      onClose()
     }
+    onClose()
   }
 
   return (
