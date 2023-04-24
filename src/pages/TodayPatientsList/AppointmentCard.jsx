@@ -3,6 +3,7 @@ import { Text, IconButton, Button, Box, Flex, Avatar, Heading, Stack, Skeleton }
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, CheckCircle, Flag } from 'react-feather'
 import { isBoolean } from 'lodash'
+import { format, parseISO } from 'date-fns'
 import io from 'socket.io-client'
 
 import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
@@ -22,6 +23,7 @@ let socket
 
 export default function AppointmentCard({ appointment }) {
   const { user } = ChatState()
+  const { startDate, endDate, fullName, age, title, motif, state, diagnostic, treatmentPlan, history } = appointment
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
   const [isLeft, setIsLeft] = useState(appointment.isLeft)
@@ -92,12 +94,16 @@ export default function AppointmentCard({ appointment }) {
       <CardHeader mb="0" padding="0.5rem">
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar name={appointment.fullName} src="" />
+            <Avatar name={fullName} src="" />
             <Box>
               <Heading size="sm">
-                {appointment.fullName} / {appointment.age}
+                {fullName} ~ {age}
               </Heading>
-              <Text padding="0.5">{appointment.title}</Text>
+              <Text padding="0.5">
+                {format(parseISO(startDate), 'hh:mm')} - {format(parseISO(endDate), 'hh:mm')}
+                <span style={{ fontWeight: 'bold', color: 'orange' }}> / </span>
+                {`${title.slice(0, 10)}..`}
+              </Text>
             </Box>
           </Flex>
           <IconButton
@@ -112,11 +118,11 @@ export default function AppointmentCard({ appointment }) {
 
       {showCardBody && (
         <CardBody padding="0 1.5rem">
-          <p>motif: {appointment.motif}</p>
-          <p>Etate général: {appointment.state}</p>
-          <p>diagnostique: {appointment.diagnostic}</p>
-          <p>plan: {appointment.treatmentPlan}</p>
-          <p>historique: {appointment.history}</p>
+          <p>motif: {motif}</p>
+          <p>Etate général: {state}</p>
+          <p>diagnostique: {diagnostic}</p>
+          <p>plan: {treatmentPlan}</p>
+          <p>historique: {history}</p>
         </CardBody>
       )}
 

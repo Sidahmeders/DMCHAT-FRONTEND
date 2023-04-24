@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { Calendar as BigCalendar, DateLocalizer, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { registerLocale } from 'react-datepicker'
-import { format, parse, startOfWeek, getDay, addMonths, subMonths, addHours } from 'date-fns'
+import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 import { ChatState } from '../../context'
@@ -106,7 +106,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
     [onAddAppointmentModalOpen],
   )
 
-  const onEventDrop = async ({ event, start }) => {
+  const onEventDrop = async ({ event, start, end }) => {
     setIsLoading(true)
     const response = await fetch(`/api/appointment/${event.id}/update`, {
       method: 'PUT',
@@ -114,15 +114,15 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         Authorization: `Bearer ${user.token}`,
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ date: start }),
+      body: JSON.stringify({ startDate: start, endDate: end }),
     })
     const updatedAppointment = await response.json()
     const updatedEvents = events.map((appointment) => {
       if (appointment.id === updatedAppointment._id) {
         return {
           ...appointment,
-          start: new Date(updatedAppointment.date),
-          end: addHours(new Date(updatedAppointment.date), 12),
+          start: new Date(updatedAppointment.startDate),
+          end: new Date(updatedAppointment.endDate),
         }
       }
       return appointment
@@ -157,8 +157,8 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         ...event,
         id: event._id,
         title: event.title,
-        start: new Date(event.date),
-        end: addHours(new Date(event.date), 12),
+        start: new Date(event.startDate),
+        end: new Date(event.endDate),
       }))
       setEvents(eventsList)
       setIsLoading(false)

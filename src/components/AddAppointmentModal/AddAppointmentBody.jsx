@@ -11,7 +11,6 @@ import {
   FormLabel,
   Switch,
 } from '@chakra-ui/react'
-import { format, addHours } from 'date-fns'
 import Select from 'react-select'
 
 import { ADD_APPOINTMENT_NAME } from '../../config'
@@ -31,7 +30,7 @@ const initialValues = Object.values(ADD_APPOINTMENT_NAME).reduce((prev, curr) =>
 export default function AddAppointmentBody({ selectedSlotInfo, handleClose, events, setEvents }) {
   const { user } = ChatState()
   const toast = useToast()
-  const { start } = selectedSlotInfo
+  const { start, end } = selectedSlotInfo
 
   const {
     handleSubmit,
@@ -53,7 +52,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
     const [patientId] = fullName.split('-')
     const { _id: userId } = user
 
-    const response = await fetch(`/api/appointment/${format(new Date(start), 'yyyy/MM/dd')}`, {
+    const response = await fetch('/api/appointment', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -64,6 +63,8 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
         isWaitingList,
         sender: userId,
         patient: patientId,
+        startDate: start,
+        endDate: end,
       }),
     })
 
@@ -74,8 +75,8 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
         {
           id: createdAppointment._id,
           title: createdAppointment.title,
-          start: new Date(createdAppointment.date),
-          end: addHours(new Date(createdAppointment.date), 12),
+          start: new Date(createdAppointment.startDate),
+          end: new Date(createdAppointment.endDate),
         },
       ])
       toast({

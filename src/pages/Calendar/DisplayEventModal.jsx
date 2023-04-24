@@ -19,7 +19,7 @@ import Loader from '../../components/Loader/Loader'
 const textStyles = { fontWeight: 'bold', paddingLeft: '6px' }
 
 export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose, events, setEvents }) {
-  const { id, start, title, patient, isWaitingList } = selectedEvent
+  const { id, start, end, title, patient, isWaitingList } = selectedEvent
   const { fullName, motif, generalState, diagnostic, treatmentPlan } = patient || {}
   const toast = useToast()
 
@@ -64,7 +64,7 @@ export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose
               <Box color="Highlight" display="flex" alignItems="center">
                 <Calendar />
                 <Text pl="3" pt="0.5">
-                  {format(start, 'yyyy-MM-dd / hh:mm')}
+                  {format(start, 'yy-MM-dd')} du {format(start, 'hh:mm')} à {format(end, 'hh:mm')}
                 </Text>
               </Box>
             )}
