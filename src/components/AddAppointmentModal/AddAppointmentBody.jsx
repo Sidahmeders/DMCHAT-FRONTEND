@@ -31,7 +31,7 @@ const initialValues = Object.values(ADD_APPOINTMENT_NAME).reduce((prev, curr) =>
 export default function AddAppointmentBody({ selectedSlotInfo, handleClose, events, setEvents }) {
   const { user } = ChatState()
   const toast = useToast()
-  const { start, action } = selectedSlotInfo
+  const { start } = selectedSlotInfo
 
   const {
     handleSubmit,
@@ -47,7 +47,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [isWaitingList, setIsWaitingList] = useState(false)
 
   const onSubmit = async (data) => {
-    if (!user || action !== 'click') return
+    if (!user) return
     setIsLoading(true)
     const { fullName, title } = data
     const [patientId] = fullName.split('-')
