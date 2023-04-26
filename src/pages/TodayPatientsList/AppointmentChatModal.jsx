@@ -13,12 +13,10 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react'
-import { omit } from 'lodash'
 import { format, parseISO } from 'date-fns'
 import io from 'socket.io-client'
 
 import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
-import { guid } from '../../utils'
 import { ChatState } from '../../context'
 
 import ScrollableChat from '../../components/ScrollableChat'
@@ -27,7 +25,7 @@ let socket
 
 export default function AppointmentChatModal({ appointment }) {
   const { user } = ChatState()
-  const { fullName, age, startDate, endDate } = appointment
+  const { id, fullName, age, startDate, endDate } = appointment
   const { isOpen, onOpen, onClose } = useDisclosure()
   const finalRef = useRef(null)
 
@@ -36,15 +34,29 @@ export default function AppointmentChatModal({ appointment }) {
   const [typing, setTyping] = useState(false)
   const isTyping = false
 
-  const sendChatMessage = (e) => {
-    if (e.key !== 'Enter') return
-    socket.emit(APPOINTMENTS_EVENTS.MESSAGE_APPOINTMENT, {
-      _id: guid(),
+  const sendChatMessage = async (e) => {
+    if (e.key !== 'Enter' || newMessage.trim().length === 0) return
+
+    const payload = {
       content: newMessage,
-      sender: omit(user, ['token', 'success', 'statusCode', 'message']),
-      appointmentId: appointment._id,
+      sender: user._id,
+      appointment: appointment._id,
+    }
+
+    const response = await fetch(`/api/appointment/${id}/message`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(payload),
     })
-    setNewMessage('')
+
+    if (response.status === 200) {
+      const appointmentData = await response.json()
+      socket.emit(APPOINTMENTS_EVENTS.MESSAGE_APPOINTMENT, appointmentData)
+      setNewMessage('')
+    }
   }
 
   const typingHandler = (e) => {
@@ -68,8 +80,20 @@ export default function AppointmentChatModal({ appointment }) {
   }
 
   useEffect(() => {
-    // fetch messages and then..
-    // setMessages()
+    ;(async () => {
+      const response = await fetch(`/api/appointment/${id}/message`, {
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      })
+
+      if (response.status === 200) {
+        const appointmentMessages = await response.json()
+        setMessages(appointmentMessages)
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   useEffect(() => {
@@ -78,7 +102,7 @@ export default function AppointmentChatModal({ appointment }) {
     }
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_MESSAGED, (payload) => {
-      if (payload.appointmentId === appointment.id) {
+      if (payload.appointment === appointment.id) {
         setMessages([...messages, payload])
       }
     })
