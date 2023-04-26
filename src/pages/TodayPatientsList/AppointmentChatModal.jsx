@@ -14,6 +14,7 @@ import {
   Button,
 } from '@chakra-ui/react'
 import { omit } from 'lodash'
+import { format, parseISO } from 'date-fns'
 import io from 'socket.io-client'
 
 import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
@@ -27,7 +28,7 @@ const HARD_MESSAGES = [
     _id: '643c85c1c32692863906b43b',
     sender: {
       _id: '64151aafe15bee4d0e1f12a9',
-      name: 'Ahmed Boutaraa',
+      name: 'Mock User',
       email: 'guest@example.com',
       pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
     },
@@ -52,7 +53,7 @@ const HARD_MESSAGES = [
     _id: '643c85ddc32692863906b44c',
     sender: {
       _id: '64151b22e15bee4d0e1f12bc',
-      name: 'Deghamine Amine',
+      name: 'Mock User',
       email: 'admin@gmail.com',
       pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
     },
@@ -77,7 +78,7 @@ const HARD_MESSAGES = [
     _id: '643dcf898ab0ed0f69cd07ff',
     sender: {
       _id: '64151aafe15bee4d0e1f12a9',
-      name: 'Ahmed Boutaraa',
+      name: 'Mock User',
       email: 'guest@example.com',
       pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
     },
@@ -102,7 +103,7 @@ const HARD_MESSAGES = [
     _id: '643c85ddc32692863906b44cf',
     sender: {
       _id: '64151b22e15bee4d0e1f12xbc',
-      name: 'Deghamine Amine',
+      name: 'Mock User',
       email: 'admin@gmail.com',
       pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
     },
@@ -127,7 +128,7 @@ const HARD_MESSAGES = [
     _id: '643c85ddc326928639x06b44cf',
     sender: {
       _id: '64151b22e15bee4d0e1f12bc',
-      name: 'Deghamine Amine',
+      name: 'Mock User',
       email: 'admin@gmail.com',
       pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
     },
@@ -152,7 +153,7 @@ const HARD_MESSAGES = [
     _id: '643c85ddc3269286390609b44c',
     sender: {
       _id: '64151aafe15bee4d0e1f12a9',
-      name: 'Deghamine Amine',
+      name: 'Mock User',
       email: 'admin@gmail.com',
       pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
     },
@@ -179,6 +180,7 @@ let socket
 
 export default function AppointmentChatModal({ appointment }) {
   const { user } = ChatState()
+  const { fullName, age, startDate, endDate } = appointment
   const { isOpen, onOpen, onClose } = useDisclosure()
   const finalRef = useRef(null)
 
@@ -251,7 +253,9 @@ export default function AppointmentChatModal({ appointment }) {
       <Modal closeOnOverlayClick={false} size="2xl" finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent height="xl">
-          <ModalHeader>(nom d'utilisateur) / (âge)</ModalHeader>
+          <ModalHeader>
+            {fullName} ~ {age} / {format(parseISO(startDate), 'hh:mm')} - {format(parseISO(endDate), 'hh:mm')}
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <ScrollableChat messages={messages} isTyping={isTyping} />

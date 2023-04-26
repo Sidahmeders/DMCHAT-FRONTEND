@@ -21,7 +21,7 @@ export const flattenAppointment = (appointment) => ({
 
 export const checkIsJWTExpired = (token = '') => {
   const payload = token.split('.')[1]
-  const decode = JSON.parse(atob(payload))
+  const decode = JSON.parse(window.atob(payload))
   if (decode.exp * 1000 < new Date().getTime()) {
     return true
   }
