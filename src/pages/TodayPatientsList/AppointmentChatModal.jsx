@@ -23,159 +23,6 @@ import { ChatState } from '../../context'
 
 import ScrollableChat from '../../components/ScrollableChat'
 
-const HARD_MESSAGES = [
-  {
-    _id: '643c85c1c32692863906b43b',
-    sender: {
-      _id: '64151aafe15bee4d0e1f12a9',
-      name: 'Mock User',
-      email: 'guest@example.com',
-      pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
-    },
-    content: 'dolor sit amet, consectetur?',
-    chat: [
-      {
-        _id: '6435506d5e6174341eeb3d52x',
-        chatName: 'sender',
-        isGroupChat: false,
-        users: ['64151aafe15bee4d0e1f12a9', '64151b22e15bee4d0e1f12bc'],
-        createdAt: '2023-04-11T12:19:57.459Z',
-        updatedAt: '2023-04-17T23:00:25.991Z',
-        __v: 0,
-        latestMessage: '643dcf898ab0ed0f69cd07ff',
-      },
-    ],
-    createdAt: '2023-04-16T23:33:21.907Z',
-    updatedAt: '2023-04-16T23:33:21.907Z',
-    __v: 0,
-  },
-  {
-    _id: '643c85ddc32692863906b44c',
-    sender: {
-      _id: '64151b22e15bee4d0e1f12bc',
-      name: 'Mock User',
-      email: 'admin@gmail.com',
-      pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
-    },
-    content: 'adipiscing elit. Proin augue est, venenatis nec egestas',
-    chat: [
-      {
-        _id: '6435506d5e6174341eeb3d5s2',
-        chatName: 'sender',
-        isGroupChat: false,
-        users: ['64151aafe15bee4d0e1f12a9', '64151b22e15bee4d0e1f12bc'],
-        createdAt: '2023-04-11T12:19:57.459Z',
-        updatedAt: '2023-04-17T23:00:25.991Z',
-        __v: 0,
-        latestMessage: '643dcf898ab0ed0f69cd07ff',
-      },
-    ],
-    createdAt: '2023-04-16T23:33:49.473Z',
-    updatedAt: '2023-04-16T23:33:49.473Z',
-    __v: 0,
-  },
-  {
-    _id: '643dcf898ab0ed0f69cd07ff',
-    sender: {
-      _id: '64151aafe15bee4d0e1f12a9',
-      name: 'Mock User',
-      email: 'guest@example.com',
-      pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
-    },
-    content: 'quis, tempor sed est Nullam magna mauris.',
-    chat: [
-      {
-        _id: '6435506d5e6174341eeb3d52',
-        chatName: 'sender',
-        isGroupChat: false,
-        users: ['64151aafe15bee4d0e1f12a9', '64151b22e15bee4d0e1f12bc'],
-        createdAt: '2023-04-11T12:19:57.459Z',
-        updatedAt: '2023-04-17T23:00:25.991Z',
-        __v: 0,
-        latestMessage: '643dcf898ab0ed0f69cd07ff',
-      },
-    ],
-    createdAt: '2023-04-17T23:00:25.485Z',
-    updatedAt: '2023-04-17T23:00:25.485Z',
-    __v: 0,
-  },
-  {
-    _id: '643c85ddc32692863906b44cf',
-    sender: {
-      _id: '64151b22e15bee4d0e1f12xbc',
-      name: 'Mock User',
-      email: 'admin@gmail.com',
-      pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
-    },
-    content: 'rutrum tempor tristique ultrices',
-    chat: [
-      {
-        _id: '6435506d5e6174341eeb3d52',
-        chatName: 'sender',
-        isGroupChat: false,
-        users: ['64151aafe15bee4d0e1f12a9', '64151b22e15bee4d0e1f12bc'],
-        createdAt: '2023-04-11T12:19:57.459Z',
-        updatedAt: '2023-04-17T23:00:25.991Z',
-        __v: 0,
-        latestMessage: '643dcf898ab0ed0f69cd07ff',
-      },
-    ],
-    createdAt: '2023-04-16T23:33:49.473Z',
-    updatedAt: '2023-04-16T23:33:49.473Z',
-    __v: 0,
-  },
-  {
-    _id: '643c85ddc326928639x06b44cf',
-    sender: {
-      _id: '64151b22e15bee4d0e1f12bc',
-      name: 'Mock User',
-      email: 'admin@gmail.com',
-      pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
-    },
-    content: 'sapien elit rhoncus erat, sed lacinia magna felis nec risus',
-    chat: [
-      {
-        _id: '6435506d5e617434x1eeb3d52',
-        chatName: 'sender',
-        isGroupChat: false,
-        users: ['64151aafe15bee4d0e1f12a9', '64151b22e15bee4d0e1f12bc'],
-        createdAt: '2023-04-11T12:19:57.459Z',
-        updatedAt: '2023-04-17T23:00:25.991Z',
-        __v: 0,
-        latestMessage: '643dcf898ab0ed0f69cd07ff',
-      },
-    ],
-    createdAt: '2023-04-16T23:33:49.473Z',
-    updatedAt: '2023-04-16T23:33:49.473Z',
-    __v: 0,
-  },
-  {
-    _id: '643c85ddc3269286390609b44c',
-    sender: {
-      _id: '64151aafe15bee4d0e1f12a9',
-      name: 'Mock User',
-      email: 'admin@gmail.com',
-      pic: 'https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg',
-    },
-    content: 'bibendum lacus non sollicitudin. Aenean efficitur',
-    chat: [
-      {
-        _id: '6435506d5e6174341eeb3d5s2',
-        chatName: 'sender',
-        isGroupChat: false,
-        users: ['64151aafe15bee4d0e1f12a9', '64151b22e15bee4d0e1f12bc'],
-        createdAt: '2023-04-11T12:19:57.459Z',
-        updatedAt: '2023-04-17T23:00:25.991Z',
-        __v: 0,
-        latestMessage: '643dcf898ab0ed0f69cd07ff',
-      },
-    ],
-    createdAt: '2023-04-16T23:33:49.473Z',
-    updatedAt: '2023-04-16T23:33:49.473Z',
-    __v: 0,
-  },
-]
-
 let socket
 
 export default function AppointmentChatModal({ appointment }) {
@@ -221,7 +68,8 @@ export default function AppointmentChatModal({ appointment }) {
   }
 
   useEffect(() => {
-    setMessages(HARD_MESSAGES)
+    // fetch messages and then..
+    // setMessages()
   }, [])
 
   useEffect(() => {
@@ -257,7 +105,7 @@ export default function AppointmentChatModal({ appointment }) {
             {fullName} ~ {age} / {format(parseISO(startDate), 'hh:mm')} - {format(parseISO(endDate), 'hh:mm')}
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody>
+          <ModalBody overflowY="auto">
             <ScrollableChat messages={messages} isTyping={isTyping} />
           </ModalBody>
           <ModalFooter>
