@@ -13,6 +13,12 @@ import {
   Input,
   Button,
 } from '@chakra-ui/react'
+import { omit } from 'lodash'
+import io from 'socket.io-client'
+
+import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
+import { guid } from '../../utils'
+import { ChatState } from '../../context'
 
 import ScrollableChat from '../../components/ScrollableChat'
 
@@ -169,7 +175,10 @@ const HARD_MESSAGES = [
   },
 ]
 
+let socket
+
 export default function AppointmentChatModal({ appointment }) {
+  const { user } = ChatState()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const finalRef = useRef(null)
 
@@ -180,13 +189,14 @@ export default function AppointmentChatModal({ appointment }) {
 
   const sendChatMessage = (e) => {
     if (e.key !== 'Enter') return
-
-    console.log(newMessage, 'ON SUBMIT!')
+    socket.emit(APPOINTMENTS_EVENTS.MESSAGE_APPOINTMENT, {
+      _id: guid(),
+      content: newMessage,
+      sender: omit(user, ['token', 'success', 'statusCode', 'message']),
+      appointmentId: appointment._id,
+    })
+    setNewMessage('')
   }
-
-  useEffect(() => {
-    setMessages(HARD_MESSAGES)
-  }, [])
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value)
@@ -207,6 +217,22 @@ export default function AppointmentChatModal({ appointment }) {
       }
     }, timerLength)
   }
+
+  useEffect(() => {
+    setMessages(HARD_MESSAGES)
+  }, [])
+
+  useEffect(() => {
+    if (socket === undefined) {
+      socket = io(ENDPOINT)
+    }
+
+    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_MESSAGED, (payload) => {
+      if (payload.appointmentId === appointment.id) {
+        setMessages([...messages, payload])
+      }
+    })
+  }, [appointment, messages])
 
   const messageIconColor = appointment.age > 30 && { color: 'red', fill: '#f003' }
   const unreadMessages = Math.floor(Math.random() * 4) + 1

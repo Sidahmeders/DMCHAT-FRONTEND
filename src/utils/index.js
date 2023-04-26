@@ -18,3 +18,12 @@ export const flattenAppointment = (appointment) => ({
   ...appointment.patient,
   ...omit(appointment, 'patient'),
 })
+
+export const checkIsJWTExpired = (token = '') => {
+  const payload = token.split('.')[1]
+  const decode = JSON.parse(atob(payload))
+  if (decode.exp * 1000 < new Date().getTime()) {
+    return true
+  }
+  return false
+}

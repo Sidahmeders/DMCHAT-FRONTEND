@@ -4,12 +4,20 @@ import { Home, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
 import { ChatState } from './context'
 import TopNavigation from './components/TopNavigation/TopNavigation'
 
+import { checkIsJWTExpired } from './utils'
 import { APP_ROUTES } from './config'
 
 import './App.css'
 
 const App = () => {
   const { user } = ChatState()
+
+  if (user && user.token) {
+    const isTokenExpired = checkIsJWTExpired(user.token)
+    if (isTokenExpired) {
+      localStorage.removeItem('userInfo')
+    }
+  }
 
   return (
     <div className="App">
