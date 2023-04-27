@@ -17,7 +17,7 @@ const ChatNotification = () => {
         )}
       </MenuButton>
 
-      <MenuList>
+      <MenuList p="2">
         {!notification.length && <Text pl="2">pas de nouveaux message</Text>}
         {notification.map((notif) => (
           <MenuItem
