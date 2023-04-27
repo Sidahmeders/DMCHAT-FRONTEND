@@ -57,37 +57,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   }
 
-  useEffect(() => {
-    socket = io(ENDPOINT)
-    socket.emit('setup', user)
-    socket.on('connected', () => setSocketConnected(true))
-
-    socket.on('typing', () => setIsTyping(true))
-    socket.on('stop typing', () => setIsTyping(false))
-    // eslint-disable-next-line
-  }, [])
-
-  useEffect(() => {
-    fetchMessages() // Whenever users switches chat, call the function again
-    selectedChatCompare = selectedChat
-    // eslint-disable-next-line
-  }, [selectedChat])
-
-  useEffect(() => {
-    socket.on('message recieved', (newMessageRecieved) => {
-      if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat[0]._id) {
-        if (!notification.includes(newMessageRecieved)) {
-          setNotification([newMessageRecieved, ...notification])
-          setFetchAgain(!fetchAgain) // Fetch all the chats again
-        }
-      } else {
-        setMessages([...messages, newMessageRecieved])
-      }
-    })
-
-    // eslint-disable-next-line
-  })
-
   const sendMessage = async (e) => {
     // Check if 'Enter' key is pressed and we have something inside 'newMessage'
     if (e.key === 'Enter' && newMessage) {
@@ -151,6 +120,37 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
       }
     }, timerLength)
   }
+
+  useEffect(() => {
+    socket = io(ENDPOINT)
+    socket.emit('setup', user)
+    socket.on('connected', () => setSocketConnected(true))
+
+    socket.on('typing', () => setIsTyping(true))
+    socket.on('stop typing', () => setIsTyping(false))
+    // eslint-disable-next-line
+  }, [])
+
+  useEffect(() => {
+    fetchMessages() // Whenever users switches chat, call the function again
+    selectedChatCompare = selectedChat
+    // eslint-disable-next-line
+  }, [selectedChat])
+
+  useEffect(() => {
+    socket.on('message recieved', (newMessageRecieved) => {
+      if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat[0]._id) {
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification])
+          setFetchAgain(!fetchAgain) // Fetch all the chats again
+        }
+      } else {
+        setMessages([...messages, newMessageRecieved])
+      }
+    })
+
+    // eslint-disable-next-line
+  })
 
   return (
     <>

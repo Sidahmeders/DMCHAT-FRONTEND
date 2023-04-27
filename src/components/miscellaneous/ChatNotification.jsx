@@ -1,11 +1,14 @@
+import { useNavigate } from 'react-router-dom'
 import { Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import { BellIcon } from '@chakra-ui/icons'
 
 import { ChatState } from '../../context'
 import { getSender } from '../../utils'
+import { APP_ROUTES } from '../../config'
 
 const ChatNotification = () => {
   const { user, setSelectedChat, notification, setNotification } = ChatState()
+  const navigate = useNavigate()
 
   return (
     <Menu>
@@ -23,6 +26,7 @@ const ChatNotification = () => {
           <MenuItem
             key={notif._id}
             onClick={() => {
+              navigate(APP_ROUTES.CHATS)
               setSelectedChat(notif.chat[0])
               setNotification(notification.filter((n) => n !== notif))
             }}>
