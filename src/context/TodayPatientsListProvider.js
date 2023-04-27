@@ -3,7 +3,7 @@ import { createContext, useContext, useState } from 'react'
 import { APPOINTMENTS_IDS } from '../config'
 import { flattenAppointment } from '../utils'
 
-const TodayPatientsListConsumer = createContext()
+const TodayPatientsListContext = createContext()
 
 export const TodayPatientsListProvider = ({ children }) => {
   const [appointmentsList, setAppointmentsList] = useState({
@@ -55,15 +55,15 @@ export const TodayPatientsListProvider = ({ children }) => {
   }
 
   return (
-    <TodayPatientsListConsumer.Provider
+    <TodayPatientsListContext.Provider
       value={{
         appointmentsList,
         setAppointmentsList,
         fetchTodayAppointments,
       }}>
       {children}
-    </TodayPatientsListConsumer.Provider>
+    </TodayPatientsListContext.Provider>
   )
 }
 
-export const TodayPatientsListState = () => useContext(TodayPatientsListConsumer)
+export const TodayPatientsListState = () => useContext(TodayPatientsListContext)
