@@ -38,7 +38,7 @@ const ProfileModal = ({ user, children }) => {
 
           <ModalBody display="flex" flexDir="column" alignItems="center" justifyContent="space-between">
             {/* Profile Picture */}
-            <Image borderRadius="full" boxSize="150px" src={user.pic} alt={user.name} />
+            <Image borderRadius="full" objectFit="cover" boxSize="150px" src={user.pic} alt={user.name} />
 
             {/* Email Address */}
             <Text fontSize={{ base: '28px', md: '30px' }}>Email: {user.email}</Text>

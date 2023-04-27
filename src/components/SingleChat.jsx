@@ -24,27 +24,20 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const toast = useToast()
 
   const fetchMessages = async () => {
-    // If no chat is selected, don't do anything
-    if (!selectedChat) {
-      return
-    }
-
+    if (!selectedChat) return
+    setLoading(true)
     try {
-      setLoading(true)
       const response = await fetch(`/api/message/${selectedChat._id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       })
-
       if (response.status === 200) {
         setMessages(await response.json())
         socket.emit('join chat', selectedChat._id)
       }
-      setLoading(false)
     } catch (error) {
-      setLoading(false)
       return toast({
         title: 'Error Occured!',
         description: 'Failed to Load the Messages',
@@ -55,6 +48,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         variant: 'solid',
       })
     }
+    setLoading(false)
   }
 
   const sendMessage = async (e) => {
@@ -128,6 +122,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
     socket.on('typing', () => setIsTyping(true))
     socket.on('stop typing', () => setIsTyping(false))
+
+    return () => {
+      selectedChatCompare = undefined
+    }
     // eslint-disable-next-line
   }, [])
 

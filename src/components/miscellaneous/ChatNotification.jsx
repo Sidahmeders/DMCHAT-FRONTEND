@@ -31,8 +31,8 @@ const ChatNotification = () => {
               setNotification(notification.filter((n) => n !== notif))
             }}>
             {notif.chat.isGroupChat
-              ? `New Message in ${notif.chat[0].chatName}`
-              : `New Message from ${getSender(user, notif.chat[0].users)}`}
+              ? `message dans ${notif.chat[0].chatName}`
+              : `${getSender(user, notif.chat[0].users)} t'a laissé un message`}
           </MenuItem>
         ))}
       </MenuList>
