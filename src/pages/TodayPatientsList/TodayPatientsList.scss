@@ -58,18 +58,18 @@
       }
 
       &:nth-child(3) .title {
-        border-top: 2px solid #0bbe98;
-        color: #0bbe98;
-        .circle {
-          background-color: #0bbe98;
-        }
-      }
-
-      &:nth-child(4) .title {
         border-top: 2px solid #ac2020;
         color: #ac2020;
         .circle {
           background-color: #ac2020;
+        }
+      }
+
+      &:nth-child(4) .title {
+        border-top: 2px solid #0bbe98;
+        color: #0bbe98;
+        .circle {
+          background-color: #0bbe98;
         }
       }
 
