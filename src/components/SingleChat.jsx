@@ -1,55 +1,32 @@
 import { useEffect, useState } from 'react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
-import io from 'socket.io-client'
 
 import { ChatState } from '../context'
-import { ENDPOINT } from '../config'
 import { getSender, getSenderFull } from '../utils'
 import ProfileModal from './miscellaneous/ProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat'
 
-let socket, selectedChatCompare
-
-const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-  const [messages, setMessages] = useState([])
+const SingleChat = () => {
   const [newMessage, setNewMessage] = useState('')
-  const [loading, setLoading] = useState(false)
   const [socketConnected, setSocketConnected] = useState(false)
   const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
 
-  const { user, selectedChat, setSelectedChat, notification, setNotification } = ChatState()
   const toast = useToast()
-
-  const fetchMessages = async () => {
-    if (!selectedChat) return
-    setLoading(true)
-    try {
-      const response = await fetch(`/api/message/${selectedChat._id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-      if (response.status === 200) {
-        setMessages(await response.json())
-        socket.emit('join chat', selectedChat._id)
-      }
-    } catch (error) {
-      return toast({
-        title: 'Error Occured!',
-        description: 'Failed to Load the Messages',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
-      })
-    }
-    setLoading(false)
-  }
+  const {
+    user,
+    socket,
+    selectedChat,
+    setSelectedChat,
+    messages,
+    setMessages,
+    fetchMessages,
+    isLoadingMessages,
+    fetchAgain,
+    setFetchAgain,
+  } = ChatState()
 
   const sendMessage = async (e) => {
     // Check if 'Enter' key is pressed and we have something inside 'newMessage'
@@ -116,39 +93,13 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   }
 
   useEffect(() => {
-    socket = io(ENDPOINT)
     socket.emit('setup', user)
     socket.on('connected', () => setSocketConnected(true))
 
     socket.on('typing', () => setIsTyping(true))
     socket.on('stop typing', () => setIsTyping(false))
-
-    return () => {
-      selectedChatCompare = undefined
-    }
     // eslint-disable-next-line
   }, [])
-
-  useEffect(() => {
-    fetchMessages() // Whenever users switches chat, call the function again
-    selectedChatCompare = selectedChat
-    // eslint-disable-next-line
-  }, [selectedChat])
-
-  useEffect(() => {
-    socket.on('message recieved', (newMessageRecieved) => {
-      if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat[0]._id) {
-        if (!notification.includes(newMessageRecieved)) {
-          setNotification([newMessageRecieved, ...notification])
-          setFetchAgain(!fetchAgain) // Fetch all the chats again
-        }
-      } else {
-        setMessages([...messages, newMessageRecieved])
-      }
-    })
-
-    // eslint-disable-next-line
-  })
 
   return (
     <>
@@ -194,7 +145,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             h="100%"
             borderRadius="lg"
             overflowY="hidden">
-            {loading ? (
+            {isLoadingMessages ? (
               <Spinner size="xl" w="20" h="20" alignSelf="center" margin="auto" />
             ) : (
               <div

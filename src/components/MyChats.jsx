@@ -9,11 +9,11 @@ import { getSender } from '../utils'
 import GroupChatModal from './miscellaneous/GroupChatModal'
 import SearchUserDrawer from './SearchUserDrawer'
 
-const MyChats = ({ fetchAgain }) => {
+const MyChats = () => {
   const [loggedUser, setLoggedUser] = useState()
   const navigate = useNavigate()
 
-  const { selectedChat, setSelectedChat, user, chats, setChats } = ChatState()
+  const { selectedChat, setSelectedChat, user, chats, setChats, fetchAgain } = ChatState()
   const toast = useToast()
   const { onClose } = useDisclosure()
 
