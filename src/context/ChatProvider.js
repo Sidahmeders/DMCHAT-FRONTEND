@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 import io from 'socket.io-client'
 
-import { ENDPOINT } from '../config'
+import { ENDPOINT, CHAT_EVENTS, CHAT_LISTENERS } from '../config'
 
 const ChatContext = createContext()
 
@@ -33,7 +33,7 @@ export const ChatProvider = ({ children }) => {
       })
       if (response.status === 200) {
         setMessages(await response.json())
-        socket.emit('join chat', selectedChat._id)
+        socket.emit(CHAT_EVENTS.JOIN_CHAT, selectedChat._id)
       }
     } catch (error) {
       toast({
@@ -75,7 +75,7 @@ export const ChatProvider = ({ children }) => {
   }, [selectedChat])
 
   useEffect(() => {
-    socket.on('message recieved', (messageRecieved) => {
+    socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (messageRecieved) => {
       if (!selectedChatCompare || selectedChatCompare._id !== messageRecieved.chat[0]._id) {
         const { name: senderName } = messageRecieved.sender
         const { chatName } = messageRecieved.chat?.[0]

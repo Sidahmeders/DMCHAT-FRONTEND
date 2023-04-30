@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
 
-import { ChatState } from '../context'
+import { CHAT_EVENTS, CHAT_LISTENERS } from '../config'
 import { getSender, getSenderFull } from '../utils'
+import { ChatState } from '../context'
 import ProfileModal from './miscellaneous/ProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat'
@@ -31,7 +32,7 @@ const SingleChat = () => {
   const sendMessage = async (e) => {
     // Check if 'Enter' key is pressed and we have something inside 'newMessage'
     if (e.key === 'Enter' && newMessage) {
-      socket.emit('stop typing', selectedChat._id)
+      socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
       try {
         setNewMessage('') // Clear message field before making API call (won't affect API call as the function is asynchronous)
 
@@ -49,7 +50,7 @@ const SingleChat = () => {
 
         if (response.status === 200) {
           const data = await response.json()
-          socket.emit('new message', data)
+          socket.emit(CHAT_EVENTS.NEW_MESSAGE, data)
           setNewMessage('')
           setMessages([...messages, data])
         }
@@ -75,7 +76,7 @@ const SingleChat = () => {
 
     if (!typing) {
       setTyping(true)
-      socket.emit('typing', selectedChat._id)
+      socket.emit(CHAT_EVENTS.TYPING, selectedChat._id)
     }
 
     let lastTypingTime = new Date().getTime()
@@ -86,18 +87,18 @@ const SingleChat = () => {
       let timeDiff = timeNow - lastTypingTime
 
       if (timeDiff >= timerLength && typing) {
-        socket.emit('stop typing', selectedChat._id)
+        socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
         setTyping(false)
       }
     }, timerLength)
   }
 
   useEffect(() => {
-    socket.emit('setup', user)
-    socket.on('connected', () => setSocketConnected(true))
+    socket.emit(CHAT_EVENTS.SETUP, user)
+    socket.on(CHAT_LISTENERS.CONNECTED, () => setSocketConnected(true))
 
-    socket.on('typing', () => setIsTyping(true))
-    socket.on('stop typing', () => setIsTyping(false))
+    socket.on(CHAT_LISTENERS.TYPING, () => setIsTyping(true))
+    socket.on(CHAT_LISTENERS.STOP_TYPING, () => setIsTyping(false))
     // eslint-disable-next-line
   }, [])
 
