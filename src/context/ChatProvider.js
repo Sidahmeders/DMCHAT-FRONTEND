@@ -13,7 +13,7 @@ export const ChatProvider = ({ children }) => {
   const [user, setUser] = useState() // If 'userInfo' is available, else set '{}'
   const [selectedChat, setSelectedChat] = useState()
   const [chats, setChats] = useState([])
-  const [notification, setNotification] = useState([])
+  const [notifications, setNotifications] = useState([])
   const [messages, setMessages] = useState([])
   const [fetchAgain, setFetchAgain] = useState(false)
   const [isLoadingMessages, setIsLoadingMessages] = useState(false)
@@ -75,14 +75,22 @@ export const ChatProvider = ({ children }) => {
   }, [selectedChat])
 
   useEffect(() => {
-    socket.on('message recieved', (newMessageRecieved) => {
-      if (!selectedChatCompare || selectedChatCompare._id !== newMessageRecieved.chat[0]._id) {
-        if (!notification.includes(newMessageRecieved)) {
-          setNotification([newMessageRecieved, ...notification])
-          setFetchAgain(!fetchAgain) // Fetch all the chats again
+    socket.on('message recieved', (messageRecieved) => {
+      if (!selectedChatCompare || selectedChatCompare._id !== messageRecieved.chat[0]._id) {
+        const { name: senderName } = messageRecieved.sender
+        const { chatName } = messageRecieved.chat?.[0]
+        const notificationSender = chatName === 'sender' ? senderName : chatName
+        const isSenderNotificationFound = Boolean(
+          notifications.find((notif) => notif.notificationSender === notificationSender),
+        )
+
+        if (!isSenderNotificationFound) {
+          const newNotification = { ...messageRecieved, notificationSender }
+          setNotifications([newNotification, ...notifications])
+          setFetchAgain(!fetchAgain) // fetch all the chats again
         }
       } else {
-        setMessages([...messages, newMessageRecieved])
+        setMessages([...messages, messageRecieved])
       }
     })
   })
@@ -97,8 +105,8 @@ export const ChatProvider = ({ children }) => {
         setSelectedChat,
         chats,
         setChats,
-        notification,
-        setNotification,
+        notifications,
+        setNotifications,
         messages,
         setMessages,
         fetchMessages,
