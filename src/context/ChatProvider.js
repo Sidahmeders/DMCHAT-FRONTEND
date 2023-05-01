@@ -12,6 +12,7 @@ let socket, selectedChatCompare
 export const ChatProvider = ({ children }) => {
   const [user, setUser] = useState() // If 'userInfo' is available, else set '{}'
   const [selectedChat, setSelectedChat] = useState()
+  const [selectedChatAppointmentModal, setSelectedChatAppointmentModal] = useState({})
   const [chats, setChats] = useState([])
   const [notifications, setNotifications] = useState([])
   const [messages, setMessages] = useState([])
@@ -103,6 +104,8 @@ export const ChatProvider = ({ children }) => {
         setUser,
         selectedChat,
         setSelectedChat,
+        selectedChatAppointmentModal,
+        setSelectedChatAppointmentModal,
         chats,
         setChats,
         notifications,

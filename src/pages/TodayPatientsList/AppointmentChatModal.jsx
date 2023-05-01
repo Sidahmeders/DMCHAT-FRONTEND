@@ -24,11 +24,13 @@ import ScrollableChat from '../../components/ScrollableChat'
 let socket
 
 export default function AppointmentChatModal({ appointment }) {
-  const { user } = ChatState()
+  const { user, notifications, setNotifications, selectedChatAppointmentModal, setSelectedChatAppointmentModal } =
+    ChatState()
   const { id, fullName, age, startDate, endDate } = appointment
   const { isOpen, onOpen, onClose } = useDisclosure()
   const finalRef = useRef(null)
 
+  const isNotificationFound = appointment._id === selectedChatAppointmentModal._id
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
   const [typing, setTyping] = useState(false)
@@ -103,9 +105,18 @@ export default function AppointmentChatModal({ appointment }) {
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_MESSAGED, (payload) => {
       if (payload.appointment === appointment.id) {
+        const { _id: senderId, name: userName } = payload.sender
+        const { fullName: patientName } = appointment
+        const isSenderNotificationFound = Boolean(notifications.find((notif) => notif._id === appointment._id))
+
+        if (!isSenderNotificationFound && user._id !== senderId) {
+          const newNotification = { ...appointment, userName, patientName, isAppointmentChat: true }
+          setNotifications([newNotification, ...notifications])
+        }
         setMessages([...messages, payload])
       }
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appointment, messages])
 
   const messageIconColor = appointment.age > 30 && { color: 'red', fill: '#f003' }
@@ -122,7 +133,15 @@ export default function AppointmentChatModal({ appointment }) {
         onClick={onOpen}>
         {messageIconColor.fill && <span style={{ color: 'red' }}>{unreadMessages}</span>}
       </Button>
-      <Modal closeOnOverlayClick={false} size="2xl" finalFocusRef={finalRef} isOpen={isOpen} onClose={onClose}>
+      <Modal
+        closeOnOverlayClick={false}
+        size="2xl"
+        finalFocusRef={finalRef}
+        isOpen={isOpen || isNotificationFound}
+        onClose={() => {
+          setSelectedChatAppointmentModal({})
+          onClose()
+        }}>
         <ModalOverlay />
         <ModalContent height="xl">
           <ModalHeader>

@@ -7,7 +7,7 @@ import { getSender } from '../../utils'
 import { APP_ROUTES } from '../../config'
 
 const ChatNotification = () => {
-  const { user, setSelectedChat, notifications, setNotifications } = ChatState()
+  const { user, setSelectedChat, notifications, setNotifications, setSelectedChatAppointmentModal } = ChatState()
   const navigate = useNavigate()
 
   return (
@@ -22,19 +22,37 @@ const ChatNotification = () => {
 
       <MenuList p="2">
         {!notifications.length && <Text pl="2">pas de nouveaux message</Text>}
-        {notifications.map((notif) => (
-          <MenuItem
-            key={notif._id}
-            onClick={() => {
-              navigate(APP_ROUTES.CHATS)
-              setSelectedChat(notif.chat[0])
-              setNotifications(notifications.filter((n) => n !== notif))
-            }}>
-            {notif.chat[0].isGroupChat
-              ? `message dans ${notif.chat[0].chatName}`
-              : `${getSender(user, notif.chat[0].users)} t'a laissé un message`}
-          </MenuItem>
-        ))}
+        {notifications.map((notif) => {
+          const { _id, isAppointmentChat, userName, patientName, chat } = notif
+
+          if (isAppointmentChat) {
+            return (
+              <MenuItem
+                key={_id}
+                onClick={() => {
+                  navigate(APP_ROUTES.TODAY_PATIENTS_LIST)
+                  setSelectedChatAppointmentModal(notif)
+                  setNotifications(notifications.filter((n) => n !== notif))
+                }}>
+                {`${userName} vous a envoyé un message concernant ${patientName}`}
+              </MenuItem>
+            )
+          }
+
+          return (
+            <MenuItem
+              key={_id}
+              onClick={() => {
+                navigate(APP_ROUTES.CHATS)
+                setSelectedChat(chat[0])
+                setNotifications(notifications.filter((n) => n !== notif))
+              }}>
+              {chat[0].isGroupChat
+                ? `message dans ${chat[0].chatName}`
+                : `${getSender(user, chat[0].users)} t'a laissé un message`}
+            </MenuItem>
+          )
+        })}
       </MenuList>
     </Menu>
   )
