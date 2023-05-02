@@ -9,6 +9,7 @@ export const CREATE_PATIENT_NAMES = {
   FULL_NAME: 'fullName',
   MOTIF: 'motif',
   AGE: 'age',
+  PHONE_NUMBER: 'phoneNumber',
   GENERAL_STATE: 'generalState',
   DIAGNOSTIC: 'diagnostic',
   TREATMENT_PLAN: 'treatmentPlan',

@@ -1,5 +1,6 @@
 import { useForm, Controller } from 'react-hook-form'
 import { useDisclosure } from '@chakra-ui/react'
+import { Activity, Book, Clock, Code, Feather, FileText, Thermometer, Folder, Phone } from 'react-feather'
 import {
   Button,
   Modal,
@@ -10,8 +11,11 @@ import {
   ModalBody,
   ModalCloseButton,
   Input,
+  Textarea,
   Stack,
   useToast,
+  InputGroup,
+  InputLeftElement,
 } from '@chakra-ui/react'
 
 import { CREATE_PATIENT_NAMES } from '../config'
@@ -44,10 +48,10 @@ export default function AddPatientModal() {
         title: 'nouveau patient créé avec succès',
         status: 'success',
       })
+      onClose()
     } else {
       toast()
     }
-    onClose()
   }
 
   return (
@@ -69,7 +73,13 @@ export default function AddPatientModal() {
                   name={CREATE_PATIENT_NAMES.FULL_NAME}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
-                    <Input type="text" placeholder="nom et prénom" value={value} onChange={onChange} />
+                    <InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={<Code size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                      />
+                      <Input type="text" placeholder="nom et prénom" value={value} onChange={onChange} />
+                    </InputGroup>
                   )}
                 />
 
@@ -78,7 +88,28 @@ export default function AddPatientModal() {
                   name={CREATE_PATIENT_NAMES.AGE}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
-                    <Input type="number" placeholder="Age" value={value} onChange={onChange} />
+                    <InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={<Feather size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                      />
+                      <Input type="number" placeholder="Age" value={value} onChange={onChange} />
+                    </InputGroup>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name={CREATE_PATIENT_NAMES.PHONE_NUMBER}
+                  shouldUnregister={isSubmitted}
+                  render={({ field: { onChange, value } }) => (
+                    <InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={<Phone size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                      />
+                      <Input type="tel" placeholder="numéro de téléphone" value={value} onChange={onChange} />
+                    </InputGroup>
                   )}
                 />
 
@@ -87,7 +118,13 @@ export default function AddPatientModal() {
                   name={CREATE_PATIENT_NAMES.MOTIF}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
-                    <Input type="text" placeholder="Motif de consultation" value={value} onChange={onChange} />
+                    <InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={<Book size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                      />
+                      <Input type="text" placeholder="Motif de consultation" value={value} onChange={onChange} />
+                    </InputGroup>
                   )}
                 />
 
@@ -96,16 +133,13 @@ export default function AddPatientModal() {
                   name={CREATE_PATIENT_NAMES.GENERAL_STATE}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
-                    <Input type="text" placeholder="Etate général" value={value} onChange={onChange} />
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name={CREATE_PATIENT_NAMES.APPOINTMENT}
-                  shouldUnregister={isSubmitted}
-                  render={({ field: { onChange, value } }) => (
-                    <Input type="datetime-local" placeholder="Fixe rendez vous" value={value} onChange={onChange} />
+                    <InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={<Activity size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                      />
+                      <Input type="text" placeholder="Etate général" value={value} onChange={onChange} />
+                    </InputGroup>
                   )}
                 />
 
@@ -114,7 +148,10 @@ export default function AddPatientModal() {
                   name={CREATE_PATIENT_NAMES.DIAGNOSTIC}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
-                    <Input type="text" placeholder="Diagnostique" value={value} onChange={onChange} />
+                    <InputGroup>
+                      <InputLeftElement pointerEvents="none" children={<Thermometer size="1.25rem" color="gray" />} />
+                      <Input type="text" placeholder="Diagnostique" value={value} onChange={onChange} />
+                    </InputGroup>
                   )}
                 />
 
@@ -123,7 +160,10 @@ export default function AddPatientModal() {
                   name={CREATE_PATIENT_NAMES.TREATMENT_PLAN}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
-                    <Input type="text" placeholder="Plan de traitement" value={value} onChange={onChange} />
+                    <InputGroup>
+                      <InputLeftElement pointerEvents="none" children={<FileText size="1.25rem" color="gray" />} />
+                      <Textarea pl="10" placeholder="Plan de traitement" value={value} onChange={onChange} />
+                    </InputGroup>
                   )}
                 />
 
@@ -132,7 +172,22 @@ export default function AddPatientModal() {
                   name={CREATE_PATIENT_NAMES.HISTORY}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
-                    <Input type="text" placeholder="Historique" value={value} onChange={onChange} />
+                    <InputGroup>
+                      <InputLeftElement pointerEvents="none" children={<Folder size="1.25rem" color="gray" />} />
+                      <Textarea pl="10" placeholder="Historique" value={value} onChange={onChange} />
+                    </InputGroup>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name={CREATE_PATIENT_NAMES.APPOINTMENT}
+                  shouldUnregister={isSubmitted}
+                  render={({ field: { onChange, value } }) => (
+                    <InputGroup>
+                      <InputLeftElement pointerEvents="none" children={<Clock size="1.25rem" color="orange" />} />
+                      <Input type="datetime-local" value={value} onChange={onChange} />
+                    </InputGroup>
                   )}
                 />
               </Stack>
