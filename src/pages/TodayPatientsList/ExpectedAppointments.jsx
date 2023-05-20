@@ -22,7 +22,7 @@ export default function ExpectedAppointments({ appointments, isLoading }) {
           ) : (
             appointments.map((appointment, index) => (
               <DragWrap key={appointment.id} id={appointment.id} index={index}>
-                <AppointmentCard appointment={appointment} />
+                <AppointmentCard withConfirm appointment={appointment} />
               </DragWrap>
             ))
           )}

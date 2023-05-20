@@ -6,6 +6,8 @@ export const APPOINTMENTS_IDS = {
 
 export const APPOINTMENTS_EVENTS = {
   CONFIRM_APPOINTMENT: 'confirm appointment',
+  LEAVE_APPOINTMENT: 'leave appointment',
+  DROP_APPOINTMENT: 'drop appointment',
 }
 
 export const APPOINTMENTS_LISTENERS = {
