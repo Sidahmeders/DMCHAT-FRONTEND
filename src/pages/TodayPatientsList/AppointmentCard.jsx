@@ -68,7 +68,7 @@ export default function AppointmentCard({ appointment }) {
 
   useEffect(() => {
     if (socket === undefined) {
-      socket = io(ENDPOINT, { rejectUnauthorized: false })
+      socket = io(ENDPOINT)
     }
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_CONFIRMATION, (payload) => {

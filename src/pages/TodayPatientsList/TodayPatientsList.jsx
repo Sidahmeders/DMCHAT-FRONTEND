@@ -82,7 +82,7 @@ export default function TodayPatientsList() {
 
   useEffect(() => {
     if (socket === undefined) {
-      socket = io(ENDPOINT, { rejectUnauthorized: false })
+      socket = io(ENDPOINT)
     }
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_DROPPED, (payload) => {
