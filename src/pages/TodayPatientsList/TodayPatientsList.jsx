@@ -9,9 +9,7 @@ import { ChatState, TodayPatientsListState } from '../../context'
 
 import ExpectedAppointments from './ExpectedAppointments'
 import WaitingRoomAppointments from './WaitingRoomAppointments'
-import InProgressAppointments from './InProgressAppointments'
 import DoneAppointments from './DoneAppointments'
-import AwaitingListAppointments from './AwaitingListAppointments'
 
 import './TodayPatientsList.scss'
 
@@ -106,9 +104,7 @@ export default function TodayPatientsList() {
             isLoading={isLoading}
             appointments={appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM]}
           />
-          <InProgressAppointments isLoading={isLoading} appointments={appointmentsList[APPOINTMENTS_IDS.IN_PROGRESS]} />
           <DoneAppointments isLoading={isLoading} appointments={appointmentsList[APPOINTMENTS_IDS.DONE]} />
-          <AwaitingListAppointments />
         </div>
       </DragDropContext>
     </div>

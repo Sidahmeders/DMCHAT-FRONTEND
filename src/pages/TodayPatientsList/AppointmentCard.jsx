@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react'
-import { Text, IconButton, Button, Box, Flex, Avatar, Heading, Stack, Skeleton } from '@chakra-ui/react'
+import { Text, IconButton, Button, Box, Flex, Heading, Stack, Skeleton } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody, CardFooter } from '@chakra-ui/card'
-import { ChevronDown, ChevronUp, CheckCircle, Flag } from 'react-feather'
+import { ChevronDown, ChevronUp, CheckCircle } from 'react-feather'
 import { isBoolean } from 'lodash'
 import { format, parseISO } from 'date-fns'
 import io from 'socket.io-client'
 
 import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
 import { ChatState, TodayPatientsListState } from '../../context'
-
-import AppointmentChatModal from './AppointmentChatModal'
 
 export const LoadingCards = () => (
   <Stack mt="2">
@@ -48,24 +46,6 @@ export default function AppointmentCard({ appointment }) {
     setIsLoading(false)
   }
 
-  const handleLeave = async () => {
-    setIsLoading(true)
-    const response = await fetch(`/api/appointment/${appointment.id}/leave`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ isLeft }),
-    })
-    const leftPatient = await response.json()
-
-    if (isBoolean(leftPatient.isLeft)) {
-      socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENT, leftPatient)
-    }
-    setIsLoading(false)
-  }
-
   useEffect(() => {
     if (socket === undefined) {
       socket = io(ENDPOINT)
@@ -94,8 +74,7 @@ export default function AppointmentCard({ appointment }) {
       <CardHeader mb="0" padding="0.5rem">
         <Flex spacing="4">
           <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar name={fullName} src="" />
-            <Box>
+            <Box pl="4">
               <Heading size="sm">
                 {fullName} ~ {age}
               </Heading>
@@ -127,13 +106,9 @@ export default function AppointmentCard({ appointment }) {
       )}
 
       <CardFooter justify="space-between" flexWrap="wrap" padding="0.5rem">
-        <Button flex="4" variant="ghost" leftIcon={<CheckCircle />} onClick={handleConfirmation}>
+        <Button variant="ghost" leftIcon={<CheckCircle />} onClick={handleConfirmation}>
           confirmer
         </Button>
-        <Button flex="3" variant="ghost" leftIcon={<Flag />} onClick={handleLeave}>
-          parti
-        </Button>
-        <AppointmentChatModal appointment={appointment} />
       </CardFooter>
     </Card>
   )
