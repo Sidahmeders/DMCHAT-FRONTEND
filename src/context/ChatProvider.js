@@ -52,7 +52,7 @@ export const ChatProvider = ({ children }) => {
 
   useEffect(() => {
     if (socket === undefined) {
-      socket = io(ENDPOINT)
+      socket = io(ENDPOINT, { rejectUnauthorized: false })
     }
   }, [])
 

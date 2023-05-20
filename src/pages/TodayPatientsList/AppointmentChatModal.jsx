@@ -100,7 +100,7 @@ export default function AppointmentChatModal({ appointment }) {
 
   useEffect(() => {
     if (socket === undefined) {
-      socket = io(ENDPOINT)
+      socket = io(ENDPOINT, { rejectUnauthorized: false })
     }
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_MESSAGED, (payload) => {
