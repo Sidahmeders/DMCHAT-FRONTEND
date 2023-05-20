@@ -2,7 +2,7 @@ export * from './chat'
 export * from './calendar'
 export * from './todayPatientsList'
 
-export const ENDPOINT = 'http://localhost:5000'
+export const ENDPOINT = 'https://dnmchat-backend.onrender.com'
 
 export const APP_ROUTES = {
   CHATS: '/chats',
