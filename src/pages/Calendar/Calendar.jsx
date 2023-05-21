@@ -14,6 +14,7 @@ import AddAppointmentModal from '../../components/AddAppointmentModal/AddAppoint
 import DisplayEventModal from './DisplayEventModal'
 import CustomToolbar from './CustomToolbar'
 import ColoredDateCellWrapper from './ColoredDateCellWrapper'
+import CustomAgenda from './CustomAgenda'
 
 import './Calendar.scss'
 
@@ -23,7 +24,7 @@ const messages = {
   month: 'Mois',
   week: 'Semaine',
   day: 'Jour',
-  agenda: 'Agenda',
+  agenda: 'Jour Liste',
   date: 'Date',
   time: 'Heure',
   event: 'Evenement',
@@ -187,7 +188,11 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         min={new Date(1972, 0, 1, 8, 0, 59)}
         max={new Date(1972, 0, 1, 18, 30, 59)}
         step={15}
-        views={['month', 'day', 'agenda']}
+        views={{
+          month: true,
+          day: true,
+          agenda: CustomAgenda,
+        }}
         messages={messages}
         onSelectEvent={onSelectEvent}
         onDoubleClickEvent={onDoubleClickEvent}

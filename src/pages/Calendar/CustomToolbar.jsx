@@ -45,7 +45,7 @@ export default function CustomToolbar({
           <DatePicker
             showMonthYearPicker
             className="calendar-date-picker"
-            dateFormat="yyyy/MM"
+            dateFormat="yyyy/MM/dd"
             value={date}
             onChange={(value) => (isValid(value) ? setSelectedDate(value) : '')}
           />
