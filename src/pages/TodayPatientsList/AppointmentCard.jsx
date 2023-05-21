@@ -3,7 +3,6 @@ import { Text, IconButton, Button, Box, Flex, Heading, Stack, Skeleton } from '@
 import { Card, CardHeader, CardBody } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, CheckCircle, UserCheck, UserX } from 'react-feather'
 import { isBoolean } from 'lodash'
-import { format, parseISO } from 'date-fns'
 import io from 'socket.io-client'
 
 import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
@@ -21,7 +20,7 @@ let socket
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
   const { user } = ChatState()
-  const { startDate, endDate, fullName, title, motif, state, diagnostic, treatmentPlan, history } = appointment
+  const { fullName, motif, state, diagnostic, treatmentPlan, history } = appointment
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
   const [isLeft, setIsLeft] = useState(appointment.isLeft)
@@ -96,10 +95,11 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
               <Heading size="sm">
                 {fullName} ~ {motif}
               </Heading>
-              <Text padding="0.5">
-                {format(parseISO(startDate), 'hh:mm')} - {format(parseISO(endDate), 'hh:mm')}
-                <span style={{ fontWeight: 'bold', color: 'orange' }}> / </span>
-                {`${title.slice(0, 10)}..`}
+              <Text>
+                versement:
+                <span style={{ fontWeight: 'bold', color: 'orange' }}> 1200 </span>
+                reste:
+                <span style={{ fontWeight: 'bold', color: 'orange' }}> 2800 </span>
               </Text>
             </Box>
             {withPresence && (
@@ -118,7 +118,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       </CardHeader>
 
       {showCardBody && (
-        <CardBody padding="0 1.5rem">
+        <CardBody p="0.25rem 1rem" mr="0">
           <p>Etate général: {state}</p>
           <p>diagnostique: {diagnostic}</p>
           <p>plan: {treatmentPlan}</p>
