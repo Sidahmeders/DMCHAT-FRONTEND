@@ -10,6 +10,7 @@ export default function ColoredDateCellWrapper({ children, value }) {
   const { availability } = calendarDay || {}
 
   const availabilityBgColor = {
+    [CALENDAR_DAY_AVAILABILITY.EMPTY]: '#fff',
     [CALENDAR_DAY_AVAILABILITY.REST]: '#ddd',
     [CALENDAR_DAY_AVAILABILITY.BUSY]: '#ffff0066',
     [CALENDAR_DAY_AVAILABILITY.LOADED]: '#ff000066',

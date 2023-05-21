@@ -8,12 +8,12 @@ import { CALENDAR_DAY_AVAILABILITY } from '../../config'
 import Loader from '../Loader/Loader'
 
 export default function ConfigureCalendarAvailability({ selectedSlotInfo, handleClose }) {
-  const [availability, setAvailability] = useState(CALENDAR_DAY_AVAILABILITY.REST)
+  const [availability, setAvailability] = useState(CALENDAR_DAY_AVAILABILITY.EMPTY)
   const [isLoading, setIsLoading] = useState(false)
   const { start, slots, action } = selectedSlotInfo
   const { user } = ChatState()
 
-  const updateDayAvailability = async date => {
+  const updateDayAvailability = async (date) => {
     const response = await fetch(`/api/calendar/${format(date, 'yyyy/MM/dd')}`, {
       method: 'PUT',
       headers: {
@@ -46,6 +46,9 @@ export default function ConfigureCalendarAvailability({ selectedSlotInfo, handle
         <Stack>
           <RadioGroup onChange={setAvailability} value={availability}>
             <Stack mt="2" spacing={6} direction="row">
+              <Radio colorScheme="cyan" value={CALENDAR_DAY_AVAILABILITY.EMPTY}>
+                jour vide
+              </Radio>
               <Radio colorScheme="gray" value={CALENDAR_DAY_AVAILABILITY.REST}>
                 jour de repos
               </Radio>

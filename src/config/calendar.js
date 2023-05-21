@@ -24,6 +24,7 @@ export const ADD_APPOINTMENT_NAME = {
 }
 
 export const CALENDAR_DAY_AVAILABILITY = {
+  EMPTY: 'EMPTY',
   REST: 'REST',
   BUSY: 'BUSY',
   LOADED: 'LOADED',

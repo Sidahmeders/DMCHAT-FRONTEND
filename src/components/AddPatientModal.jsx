@@ -1,6 +1,6 @@
 import { useForm, Controller } from 'react-hook-form'
 import { useDisclosure } from '@chakra-ui/react'
-import { Activity, Book, Clock, Code, Feather, FileText, Thermometer, Folder, Phone } from 'react-feather'
+import { AlertCircle, CheckCircle, FileText, File, Folder, Clock } from 'react-feather'
 import {
   Button,
   Modal,
@@ -76,7 +76,13 @@ export default function AddPatientModal() {
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
-                        children={<Code size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                        children={
+                          String(value).length >= 1 ? (
+                            <CheckCircle size="1.25rem" color="green" />
+                          ) : (
+                            <AlertCircle size="1.25rem" color="red" />
+                          )
+                        }
                       />
                       <Input type="text" placeholder="nom et prénom" value={value} onChange={onChange} />
                     </InputGroup>
@@ -91,7 +97,13 @@ export default function AddPatientModal() {
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
-                        children={<Feather size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                        children={
+                          String(value).length >= 1 ? (
+                            <CheckCircle size="1.25rem" color="green" />
+                          ) : (
+                            <AlertCircle size="1.25rem" color="red" />
+                          )
+                        }
                       />
                       <Input type="number" placeholder="Age" value={value} onChange={onChange} />
                     </InputGroup>
@@ -106,7 +118,13 @@ export default function AddPatientModal() {
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
-                        children={<Phone size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                        children={
+                          String(value).length >= 1 ? (
+                            <CheckCircle size="1.25rem" color="green" />
+                          ) : (
+                            <AlertCircle size="1.25rem" color="red" />
+                          )
+                        }
                       />
                       <Input type="tel" placeholder="numéro de téléphone" value={value} onChange={onChange} />
                     </InputGroup>
@@ -121,7 +139,13 @@ export default function AddPatientModal() {
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
-                        children={<Book size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                        children={
+                          String(value).length >= 1 ? (
+                            <CheckCircle size="1.25rem" color="green" />
+                          ) : (
+                            <AlertCircle size="1.25rem" color="red" />
+                          )
+                        }
                       />
                       <Input type="text" placeholder="Motif de consultation" value={value} onChange={onChange} />
                     </InputGroup>
@@ -136,7 +160,13 @@ export default function AddPatientModal() {
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
-                        children={<Activity size="1.25rem" color={String(value).length >= 1 ? 'green' : 'red'} />}
+                        children={
+                          String(value).length >= 1 ? (
+                            <CheckCircle size="1.25rem" color="green" />
+                          ) : (
+                            <AlertCircle size="1.25rem" color="red" />
+                          )
+                        }
                       />
                       <Input type="text" placeholder="Etate général" value={value} onChange={onChange} />
                     </InputGroup>
@@ -149,7 +179,7 @@ export default function AddPatientModal() {
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
-                      <InputLeftElement pointerEvents="none" children={<Thermometer size="1.25rem" color="gray" />} />
+                      <InputLeftElement pointerEvents="none" children={<File size="1.25rem" color="gray" />} />
                       <Input type="text" placeholder="Diagnostique" value={value} onChange={onChange} />
                     </InputGroup>
                   )}

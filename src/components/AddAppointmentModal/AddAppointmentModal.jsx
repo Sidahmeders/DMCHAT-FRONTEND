@@ -11,7 +11,7 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
   const [templateButtons, setTemplateButtons] = useState(getEventTemplateButtons())
 
   return (
-    <Modal size="lg" isOpen={isOpen} onClose={onClose}>
+    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
       <ModalContent>
         <Tabs>
