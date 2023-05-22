@@ -6,7 +6,7 @@ import { CALENDAR_NAVIGATION } from '../../config'
 
 import DatePicker from '../../components/DatePicker/DatePicker'
 import AddPatientModal from '../../components/AddPatientModal'
-import PatientsListModal from '../../components/PatientsListModal'
+import PatientsListModal from '../../components/PatientsListModal/PatientsListModal'
 
 function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
   return viewNames.map((name) => (

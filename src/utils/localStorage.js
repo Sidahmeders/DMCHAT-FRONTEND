@@ -16,6 +16,10 @@ export const getPatient = () => {
   return JSON.parse(patient) || {}
 }
 
+export const setPatient = (patient) => {
+  localStorage.setItem(PATIENT, JSON.stringify(patient))
+}
+
 export const getEventTemplateButtons = () => {
   const templateButtons = localStorage.getItem(TEMPLATE_BUTTONS)
   return JSON.parse(templateButtons) || []

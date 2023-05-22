@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import * as dates from 'date-arithmetic'
 import { startOfMonth, toDate } from 'date-fns'
-import { ChevronDown, Calendar, DollarSign, Target } from 'react-feather'
+import { ChevronDown, Calendar, DollarSign, Target, ChevronUp } from 'react-feather'
 
 function rangeFunc(start, end, unit = 'day') {
   let current = start
@@ -24,7 +24,7 @@ function inRange(e, start, end, accessors) {
   return startsBeforeEnd && endsAfterStart
 }
 
-export default function AgendaView({ accessors, localizer, length, date, events }) {
+export default function CustomAgenda({ accessors, localizer, length, date, events }) {
   const end = dates.add(date, length, 'day')
   const range = rangeFunc(date, end, 'day')
   events = events.filter((event) => inRange(event, date, end, accessors))
@@ -65,9 +65,7 @@ const DayEvents = ({ localizer, accessors, events, day }) => {
         <div style={{ width: '1rem' }}></div>
         <Target color="green" size="1rem" style={{ marginRight: '6px' }} /> Fini: {Math.floor(events.length / 2)}/
         {events.length}
-        <div style={{ marginLeft: 'auto' }}>
-          <ChevronDown />
-        </div>
+        <div style={{ marginLeft: 'auto' }}>{show ? <ChevronUp /> : <ChevronDown />}</div>
       </div>
       {events.map((event, index) => {
         const { isDone, patient } = event
@@ -95,12 +93,12 @@ const DayEvents = ({ localizer, accessors, events, day }) => {
   )
 }
 
-AgendaView.title = (start, { localizer }) => {
+CustomAgenda.title = (start, { localizer }) => {
   const end = dates.add(start, 1, 'month')
   return localizer.format({ start, end }, 'agendaHeaderFormat')
 }
 
-AgendaView.navigate = (date, action) => {
+CustomAgenda.navigate = (date, action) => {
   const sDate = toDate(startOfMonth(date))
   switch (action) {
     case 'PREV':
@@ -112,7 +110,7 @@ AgendaView.navigate = (date, action) => {
   }
 }
 
-AgendaView.propTypes = {
+CustomAgenda.propTypes = {
   events: PropTypes.array,
   date: PropTypes.instanceOf(Date),
   length: PropTypes.number,
