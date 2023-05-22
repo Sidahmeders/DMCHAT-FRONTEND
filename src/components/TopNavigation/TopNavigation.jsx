@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { MessageCircle, FileText, Calendar, PieChart } from 'react-feather'
+import { FileText, Calendar, PieChart } from 'react-feather'
 
 import { getPageRoute, setPageRoute } from '../../utils'
 import ChatNotification from '../miscellaneous/ChatNotification'
@@ -22,7 +22,7 @@ export default function TopNavigation() {
         className={`${selectedRoute === APP_ROUTES.CHATS ? 'selected' : ''}`}
         onClick={() => setPageRoute(APP_ROUTES.CHATS)}
         to={APP_ROUTES.CHATS}>
-        <MessageCircle />
+        <ChatNotification />
       </Link>
 
       <Link
@@ -45,7 +45,6 @@ export default function TopNavigation() {
         to={APP_ROUTES.STATISTICS}>
         <PieChart />
       </Link>
-      <ChatNotification />
     </div>
   )
 }

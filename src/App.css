@@ -53,7 +53,6 @@
 
 .notification-badge-container {
   position: relative;
-  margin-right: 10px;
 }
 
 .notification-badge {
@@ -66,5 +65,5 @@
   border-radius: 35%;
   position: absolute;
   top: 0px;
-  left: 18px;
+  left: 1.5rem;
 }

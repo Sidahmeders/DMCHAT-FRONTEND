@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import { Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
-import { BellIcon } from '@chakra-ui/icons'
+import { MessageCircle } from 'react-feather'
 
 import { ChatState } from '../../context'
 import { getSender } from '../../utils'
@@ -12,8 +12,8 @@ const ChatNotification = () => {
 
   return (
     <Menu>
-      <MenuButton p="1" className="notification-badge-container">
-        <BellIcon fontSize="2xl" m="1" />
+      <MenuButton className="notification-badge-container">
+        <MessageCircle />
 
         {notifications.length > 0 && (
           <span className="notification-badge">{notifications.length > 9 ? '9+' : notifications.length}</span>
