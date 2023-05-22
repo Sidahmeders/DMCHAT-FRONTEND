@@ -20,8 +20,6 @@ export const LoadingCards = () => (
 )
 
 let socket
-const ConfirmAudio = new Audio(ConfirmSong)
-const DoorBellAudio = new Audio(DoorBellSong)
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
   const { fullName, motif, state, diagnostic, treatmentPlan, history } = appointment
@@ -77,7 +75,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       if (payload._id === appointment._id) {
         setIsConfirmed(payload.isConfirmed)
         fetchTodayAppointments(user)
-        ConfirmAudio.play()
+        new Audio(ConfirmSong).play()
       }
     })
 
@@ -85,7 +83,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       if (payload._id === appointment._id) {
         setIsLeft(payload.isLeft)
         fetchTodayAppointments(user)
-        DoorBellAudio.play()
+        new Audio(DoorBellSong).play()
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
