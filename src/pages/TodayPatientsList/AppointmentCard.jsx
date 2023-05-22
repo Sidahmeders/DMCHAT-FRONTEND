@@ -8,6 +8,9 @@ import io from 'socket.io-client'
 import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
 import { ChatState, TodayPatientsListState } from '../../context'
 
+import ConfirmSong from '../../assets/songs/confirmation-tone.wav'
+import DoorBellSong from '../../assets/songs/door-bell.wav'
+
 export const LoadingCards = () => (
   <Stack mt="2">
     <Skeleton height="4rem" />
@@ -17,10 +20,12 @@ export const LoadingCards = () => (
 )
 
 let socket
+const ConfirmAudio = new Audio(ConfirmSong)
+const DoorBellAudio = new Audio(DoorBellSong)
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
-  const { user } = ChatState()
   const { fullName, motif, state, diagnostic, treatmentPlan, history } = appointment
+  const { user } = ChatState()
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
   const [isLeft, setIsLeft] = useState(appointment.isLeft)
@@ -72,6 +77,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       if (payload._id === appointment._id) {
         setIsConfirmed(payload.isConfirmed)
         fetchTodayAppointments(user)
+        ConfirmAudio.play()
       }
     })
 
@@ -79,6 +85,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       if (payload._id === appointment._id) {
         setIsLeft(payload.isLeft)
         fetchTodayAppointments(user)
+        DoorBellAudio.play()
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
