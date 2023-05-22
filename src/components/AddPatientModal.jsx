@@ -64,7 +64,7 @@ export default function AddPatientModal() {
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
         <ModalContent>
           <ModalHeader>Ajouter un patient avec rendez-vous</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton p="6" />
           <form className="create-profile-form" onSubmit={handleSubmit(onSubmit)}>
             <ModalBody>
               <Stack spacing={3}>
