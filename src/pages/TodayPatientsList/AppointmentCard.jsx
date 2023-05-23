@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Text, IconButton, Button, Box, Flex, Heading, Stack, Skeleton } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/card'
-import { ChevronDown, ChevronUp, CheckCircle, UserCheck, UserX } from 'react-feather'
+import { ChevronDown, ChevronUp } from 'react-feather'
 import { isBoolean } from 'lodash'
 import io from 'socket.io-client'
 
@@ -92,7 +92,10 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
   if (isLoading) return <Skeleton mt="2" height="4rem" />
 
   return (
-    <Card className={`card-container ${isConfirmed && 'confirmed'} ${isLeft && 'left'}`}>
+    <Card
+      className={`card-container ${(withConfirm || withPresence) && (isConfirmed || withPresence) && 'confirmed'} ${
+        withPresence && isLeft && 'left'
+      }`}>
       <CardHeader p="2">
         <Flex spacing="4">
           <Flex flex="1" gap="2" justifyContent="space-between">
@@ -107,10 +110,10 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
                 <span style={{ fontWeight: 'bold', color: 'orange' }}> 2800 </span>
               </Text>
             </Box>
-            {withPresence && (
-              <Button variant="ghost" leftIcon={isLeft ? <UserX /> : <UserCheck />} onClick={handlePresence}></Button>
+            {withPresence && <Button variant="ghost" leftIcon={isLeft ? 'A' : 'P'} onClick={handlePresence}></Button>}
+            {withConfirm && (
+              <Button variant="ghost" leftIcon={isConfirmed ? 'C' : 'NC'} onClick={handleConfirmation}></Button>
             )}
-            {withConfirm && <Button variant="ghost" leftIcon={<CheckCircle />} onClick={handleConfirmation}></Button>}
           </Flex>
           <IconButton
             variant="ghost"
