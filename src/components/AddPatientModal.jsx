@@ -33,7 +33,7 @@ export default function AddPatientModal() {
   } = useForm({ defaultValues: initialValues })
 
   const onSubmit = async (data) => {
-    const response = await fetch('/api/patient', {
+    const response = await fetch('/api/patients', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${user.token}`,

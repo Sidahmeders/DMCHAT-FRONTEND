@@ -19,8 +19,9 @@ import Loader from '../../components/Loader/Loader'
 const textStyles = { fontWeight: 'bold', paddingLeft: '6px' }
 
 export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose, events, setEvents }) {
-  const { id, start, end, title, patient, isWaitingList } = selectedEvent
-  const { fullName, motif, generalState, diagnostic, treatmentPlan } = patient || {}
+  const { id, start, end, title, motif, generalState, diagnostic, treatmentPlan, patient, isWaitingList } =
+    selectedEvent
+
   const toast = useToast()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -84,7 +85,7 @@ export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose
           <ModalBody>
             <Stack spacing="2">
               <Text>
-                Nom: <span style={textStyles}>{fullName}</span>
+                Nom: <span style={textStyles}>{patient?.fullName}</span>
               </Text>
               <Text>
                 Motif:

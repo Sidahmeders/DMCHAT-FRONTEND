@@ -33,7 +33,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
   } = useForm()
 
   const onSubmit = async (data) => {
-    const response = await fetch(`/api/patient/${data._id}`, {
+    const response = await fetch(`/api/patients/${data._id}`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${user.token}`,

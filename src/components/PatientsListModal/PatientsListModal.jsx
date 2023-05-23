@@ -21,7 +21,7 @@ export default function PatientListModal() {
   useEffect(() => {
     if (!user) return
     ;(async () => {
-      const response = await fetch('/api/patient', {
+      const response = await fetch('/api/patients', {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user.token}`,

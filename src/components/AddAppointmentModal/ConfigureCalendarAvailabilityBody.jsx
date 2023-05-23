@@ -7,7 +7,7 @@ import { CALENDAR_DAY_AVAILABILITY } from '../../config'
 
 import Loader from '../Loader/Loader'
 
-export default function ConfigureCalendarAvailability({ selectedSlotInfo, handleClose }) {
+export default function ConfigureCalendarAvailabilityBody({ selectedSlotInfo, handleClose }) {
   const [availability, setAvailability] = useState(CALENDAR_DAY_AVAILABILITY.EMPTY)
   const [isLoading, setIsLoading] = useState(false)
   const { start, slots, action } = selectedSlotInfo

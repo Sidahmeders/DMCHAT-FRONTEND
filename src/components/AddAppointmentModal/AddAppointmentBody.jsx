@@ -47,7 +47,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   } = useForm({ defaultValues: initialValues })
 
   const [matchedPatients, setMatchedPatients] = useState([])
-  const [searchName, setSearchName] = useState('@')
+  const [searchName, setSearchName] = useState('')
   const [isMounted, setIsMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isWaitingList, setIsWaitingList] = useState(false)
@@ -56,7 +56,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const onSubmit = async (data) => {
     if (!user) return
     setIsLoading(true)
-    const { fullName, title } = data
+    const { fullName } = data
     const [patientId] = fullName.split('-')
     const { _id: userId } = user
 
@@ -67,7 +67,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        title,
+        ...data,
         isWaitingList,
         sender: userId,
         patient: patientId,
@@ -81,6 +81,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       setEvents([
         ...events,
         {
+          ...createdAppointment,
           id: createdAppointment._id,
           title: createdAppointment.title,
           start: new Date(createdAppointment.startDate),
@@ -104,11 +105,11 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   }, [isSubmitted, reset])
 
   useEffect(() => {
-    if (!isMounted) {
+    if (!isMounted && searchName.trim().length >= 2) {
       ;(async () => {
         setIsMounted(true)
         try {
-          const response = await fetch(`/api/patient/${searchName}`, {
+          const response = await fetch(`/api/patients/fullname/${searchName}`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${user.token}`,
@@ -119,7 +120,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
             setMatchedPatients(resolvePatientOptions(await response.json()))
           }
         } catch (error) {
-          console.log(error.message)
+          console.error(error.message)
         }
         setIsMounted(false)
       })()
