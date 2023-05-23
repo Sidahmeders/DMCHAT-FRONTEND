@@ -7,12 +7,8 @@ export const CALENDAR_NAVIGATION = {
 
 export const CREATE_PATIENT_NAMES = {
   FULL_NAME: 'fullName',
-  MOTIF: 'motif',
   AGE: 'age',
   PHONE_NUMBER: 'phoneNumber',
-  GENERAL_STATE: 'generalState',
-  DIAGNOSTIC: 'diagnostic',
-  TREATMENT_PLAN: 'treatmentPlan',
   HISTORY: 'history',
   APPOINTMENT: 'appointment',
 }
@@ -20,6 +16,12 @@ export const CREATE_PATIENT_NAMES = {
 export const ADD_APPOINTMENT_NAME = {
   FULL_NAME: 'fullName',
   TITLE: 'title',
+  MOTIF: 'motif',
+  GENERAL_STATE: 'generalState',
+  DIAGNOSTIC: 'diagnostic',
+  TREATMENT_PLAN: 'treatmentPlan',
+  TOTAL_PRICE: 'totalPrice',
+  PAYMENT: 'payment',
   IS_WAITING_LIST: 'isWaitingList',
 }
 

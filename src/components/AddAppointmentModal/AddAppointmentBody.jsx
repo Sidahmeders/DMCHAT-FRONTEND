@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
+import { AlertCircle, CheckCircle, FileText, File, DollarSign } from 'react-feather'
 import {
   ModalBody,
   ModalFooter,
@@ -10,7 +11,13 @@ import {
   FormControl,
   FormLabel,
   Switch,
+  Textarea,
+  InputGroup,
+  InputLeftElement,
+  Grid,
+  GridItem,
 } from '@chakra-ui/react'
+
 import Select from 'react-select'
 
 import { ADD_APPOINTMENT_NAME } from '../../config'
@@ -44,6 +51,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [isMounted, setIsMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isWaitingList, setIsWaitingList] = useState(false)
+  const [isNewTreatment, setIsNewTreatment] = useState(false)
 
   const onSubmit = async (data) => {
     if (!user) return
@@ -137,7 +145,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   onChange={(val) => onChange(val.value)}
                   onKeyDown={(e) => {
                     const { value } = e.target
-                    if (value.trim().length >= 2) {
+                    if (value.length >= 2) {
                       setSearchName(value)
                     }
                   }}
@@ -151,13 +159,156 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               rules={{ required: true }}
               shouldUnregister={isSubmitted}
               render={({ field: { onChange, value } }) => (
-                <Input type="text" placeholder="Mettre rendez-vous" value={value} onChange={(val) => onChange(val)} />
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={
+                      value?.length >= 2 ? (
+                        <CheckCircle size="1.25rem" color="green" />
+                      ) : (
+                        <AlertCircle size="1.25rem" color="red" />
+                      )
+                    }
+                  />
+                  <Input type="text" placeholder="Mettre rendez-vous" value={value} onChange={(val) => onChange(val)} />
+                </InputGroup>
               )}
             />
 
+            {!isNewTreatment && (
+              <Controller
+                control={control}
+                name={ADD_APPOINTMENT_NAME.PAYMENT}
+                shouldUnregister={isSubmitted}
+                render={({ field: { onChange, value } }) => (
+                  <InputGroup>
+                    <InputLeftElement pointerEvents="none" children={<DollarSign size="1.25rem" color="gray" />} />
+                    <Input type="number" placeholder="versement" value={value} onChange={onChange} />
+                  </InputGroup>
+                )}
+              />
+            )}
+
+            <FormControl display="flex" alignItems="center">
+              <FormLabel htmlFor="new-treatment" ml="1" mb="0">
+                Nouvelle traitement?
+              </FormLabel>
+              <Switch
+                id="new-treatment"
+                colorScheme="red"
+                checked={isNewTreatment}
+                onChange={() => setIsNewTreatment(!isNewTreatment)}
+              />
+            </FormControl>
+
+            {isNewTreatment && (
+              <>
+                <Controller
+                  control={control}
+                  name={ADD_APPOINTMENT_NAME.MOTIF}
+                  shouldUnregister={isSubmitted}
+                  render={({ field: { onChange, value } }) => (
+                    <InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={
+                          value?.length >= 2 ? (
+                            <CheckCircle size="1.25rem" color="green" />
+                          ) : (
+                            <AlertCircle size="1.25rem" color="red" />
+                          )
+                        }
+                      />
+                      <Input type="text" placeholder="Motif de consultation" value={value} onChange={onChange} />
+                    </InputGroup>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name={ADD_APPOINTMENT_NAME.GENERAL_STATE}
+                  shouldUnregister={isSubmitted}
+                  render={({ field: { onChange, value } }) => (
+                    <InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={
+                          value?.length >= 2 ? (
+                            <CheckCircle size="1.25rem" color="green" />
+                          ) : (
+                            <AlertCircle size="1.25rem" color="red" />
+                          )
+                        }
+                      />
+                      <Input type="text" placeholder="Etate général" value={value} onChange={onChange} />
+                    </InputGroup>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name={ADD_APPOINTMENT_NAME.DIAGNOSTIC}
+                  shouldUnregister={isSubmitted}
+                  render={({ field: { onChange, value } }) => (
+                    <InputGroup>
+                      <InputLeftElement pointerEvents="none" children={<File size="1.25rem" color="gray" />} />
+                      <Input type="text" placeholder="Diagnostique" value={value} onChange={onChange} />
+                    </InputGroup>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name={ADD_APPOINTMENT_NAME.TREATMENT_PLAN}
+                  shouldUnregister={isSubmitted}
+                  render={({ field: { onChange, value } }) => (
+                    <InputGroup>
+                      <InputLeftElement pointerEvents="none" children={<FileText size="1.25rem" color="gray" />} />
+                      <Textarea pl="10" placeholder="Plan de traitement" value={value} onChange={onChange} />
+                    </InputGroup>
+                  )}
+                />
+
+                <Grid templateColumns="repeat(2, 1fr)" gap="2">
+                  <GridItem>
+                    <Controller
+                      control={control}
+                      name={ADD_APPOINTMENT_NAME.TOTAL_PRICE}
+                      shouldUnregister={isSubmitted}
+                      render={({ field: { onChange, value } }) => (
+                        <InputGroup>
+                          <InputLeftElement
+                            pointerEvents="none"
+                            children={<DollarSign size="1.25rem" color="gray" />}
+                          />
+                          <Input type="number" placeholder="Prix total" value={value} onChange={onChange} />
+                        </InputGroup>
+                      )}
+                    />
+                  </GridItem>
+                  <GridItem>
+                    <Controller
+                      control={control}
+                      name={ADD_APPOINTMENT_NAME.PAYMENT}
+                      shouldUnregister={isSubmitted}
+                      render={({ field: { onChange, value } }) => (
+                        <InputGroup>
+                          <InputLeftElement
+                            pointerEvents="none"
+                            children={<DollarSign size="1.25rem" color="gray" />}
+                          />
+                          <Input type="number" placeholder="versement" value={value} onChange={onChange} />
+                        </InputGroup>
+                      )}
+                    />
+                  </GridItem>
+                </Grid>
+              </>
+            )}
+
             <FormControl display="flex" alignItems="center">
               <FormLabel htmlFor="awaiting-list" ml="1" mb="0">
-                Ajouter à la liste d'attente
+                Ajouter à la liste d'attente?
               </FormLabel>
               <Switch
                 id="awaiting-list"

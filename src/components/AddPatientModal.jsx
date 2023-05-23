@@ -1,6 +1,6 @@
 import { useForm, Controller } from 'react-hook-form'
 import { useDisclosure } from '@chakra-ui/react'
-import { AlertCircle, CheckCircle, FileText, File, Folder, Clock } from 'react-feather'
+import { AlertCircle, CheckCircle, Folder, Clock } from 'react-feather'
 import {
   Button,
   Modal,
@@ -127,72 +127,6 @@ export default function AddPatientModal() {
                         }
                       />
                       <Input type="tel" placeholder="numéro de téléphone" value={value} onChange={onChange} />
-                    </InputGroup>
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name={CREATE_PATIENT_NAMES.MOTIF}
-                  shouldUnregister={isSubmitted}
-                  render={({ field: { onChange, value } }) => (
-                    <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        children={
-                          String(value).length >= 1 ? (
-                            <CheckCircle size="1.25rem" color="green" />
-                          ) : (
-                            <AlertCircle size="1.25rem" color="red" />
-                          )
-                        }
-                      />
-                      <Input type="text" placeholder="Motif de consultation" value={value} onChange={onChange} />
-                    </InputGroup>
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name={CREATE_PATIENT_NAMES.GENERAL_STATE}
-                  shouldUnregister={isSubmitted}
-                  render={({ field: { onChange, value } }) => (
-                    <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        children={
-                          String(value).length >= 1 ? (
-                            <CheckCircle size="1.25rem" color="green" />
-                          ) : (
-                            <AlertCircle size="1.25rem" color="red" />
-                          )
-                        }
-                      />
-                      <Input type="text" placeholder="Etate général" value={value} onChange={onChange} />
-                    </InputGroup>
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name={CREATE_PATIENT_NAMES.DIAGNOSTIC}
-                  shouldUnregister={isSubmitted}
-                  render={({ field: { onChange, value } }) => (
-                    <InputGroup>
-                      <InputLeftElement pointerEvents="none" children={<File size="1.25rem" color="gray" />} />
-                      <Input type="text" placeholder="Diagnostique" value={value} onChange={onChange} />
-                    </InputGroup>
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name={CREATE_PATIENT_NAMES.TREATMENT_PLAN}
-                  shouldUnregister={isSubmitted}
-                  render={({ field: { onChange, value } }) => (
-                    <InputGroup>
-                      <InputLeftElement pointerEvents="none" children={<FileText size="1.25rem" color="gray" />} />
-                      <Textarea pl="10" placeholder="Plan de traitement" value={value} onChange={onChange} />
                     </InputGroup>
                   )}
                 />
