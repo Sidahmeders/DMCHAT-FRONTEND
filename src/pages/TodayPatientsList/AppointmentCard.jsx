@@ -92,10 +92,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
   if (isLoading) return <Skeleton mt="2" height="4rem" />
 
   return (
-    <Card
-      className={`card-container ${(withConfirm || withPresence) && (isConfirmed || withPresence) && 'confirmed'} ${
-        withPresence && isLeft && 'left'
-      }`}>
+    <Card className={`card-container ${withConfirm && isConfirmed && 'confirmed'} ${withPresence && isLeft && 'left'}`}>
       <CardHeader p="2">
         <Flex spacing="4">
           <Flex flex="1" gap="2" justifyContent="space-between">
