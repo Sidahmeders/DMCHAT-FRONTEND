@@ -1,6 +1,5 @@
 import { useForm, Controller } from 'react-hook-form'
-import { useDisclosure } from '@chakra-ui/react'
-import { AlertCircle, CheckCircle } from 'react-feather'
+import { AlertCircle, CheckCircle, Folder } from 'react-feather'
 import {
   Button,
   Modal,
@@ -15,26 +14,27 @@ import {
   useToast,
   InputGroup,
   InputLeftElement,
+  Textarea,
 } from '@chakra-ui/react'
 
-import { CREATE_PATIENT_NAMES } from '../config'
-import { ChatState } from '../context'
+import { CREATE_PATIENT_NAMES } from '../../config'
+import { ChatState } from '../../context'
+import { getPatient } from '../../utils'
+import { useEffect } from 'react'
 
-const initialValues = Object.values(CREATE_PATIENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
-
-export default function AddPatientModal() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+export default function EditPatientModal({ isOpen, onClose, patientsList, setPatientsList }) {
   const { user } = ChatState()
   const toast = useToast()
   const {
     handleSubmit,
     control,
+    reset,
     formState: { isSubmitted },
-  } = useForm({ defaultValues: initialValues })
+  } = useForm()
 
   const onSubmit = async (data) => {
-    const response = await fetch('/api/patient', {
-      method: 'POST',
+    const response = await fetch(`/api/patient/${data._id}`, {
+      method: 'PUT',
       headers: {
         Authorization: `Bearer ${user.token}`,
         'Content-Type': 'application/json',
@@ -43,8 +43,13 @@ export default function AddPatientModal() {
     })
 
     if (response.status === 200) {
+      const updatedPatient = await response.json()
+      const updatedPatientList = patientsList.map((patient) =>
+        updatedPatient._id === patient._id ? updatedPatient : patient,
+      )
+      setPatientsList(updatedPatientList)
       toast({
-        title: 'nouveau patient créé avec succès',
+        title: 'le profil du patient a été mis à jour avec succès',
         status: 'success',
       })
       onClose()
@@ -53,16 +58,16 @@ export default function AddPatientModal() {
     }
   }
 
+  useEffect(() => {
+    reset(getPatient())
+  }, [reset, isOpen])
+
   return (
     <>
-      <Button onClick={onOpen} size="sm">
-        Ajouter patient
-      </Button>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
         <ModalContent>
-          <ModalHeader>Ajouter un patient avec rendez-vous</ModalHeader>
+          <ModalHeader>Modifier un patient</ModalHeader>
           <ModalCloseButton p="6" />
           <form className="create-profile-form" onSubmit={handleSubmit(onSubmit)}>
             <ModalBody>
@@ -129,11 +134,23 @@ export default function AddPatientModal() {
                     </InputGroup>
                   )}
                 />
+
+                <Controller
+                  control={control}
+                  name={CREATE_PATIENT_NAMES.HISTORY}
+                  shouldUnregister={isSubmitted}
+                  render={({ field: { onChange, value } }) => (
+                    <InputGroup>
+                      <InputLeftElement pointerEvents="none" children={<Folder size="1.25rem" color="gray" />} />
+                      <Textarea pl="10" placeholder="Historique" value={value} onChange={onChange} />
+                    </InputGroup>
+                  )}
+                />
               </Stack>
             </ModalBody>
             <ModalFooter>
               <Button type="submit" colorScheme="blue" mr={3}>
-                Créer patient
+                Modifier patient
               </Button>
               <Button variant="ghost" onClick={onClose}>
                 Annuler

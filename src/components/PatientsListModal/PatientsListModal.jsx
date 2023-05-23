@@ -8,12 +8,14 @@ import { ChatState } from '../../context'
 import { setPatient } from '../../utils'
 
 import DataTable from '../DataTable/DataTable'
+import EditPatientModal from './EditPatientModal'
 
 import './PatientsListModal.scss'
 
-export default function AddPatientModal() {
+export default function PatientListModal() {
   const { user } = ChatState()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isPatientsModalOpen, onOpen: onPatientsModalOpen, onClose: onPatientsModalClose } = useDisclosure()
+  const { isOpen: isEditModalisOpen, onOpen: onEditModalOpen, onClose: ondEditModalClose } = useDisclosure()
   const [patientsList, setPatientsList] = useState([])
 
   useEffect(() => {
@@ -29,21 +31,25 @@ export default function AddPatientModal() {
     })()
   }, [user])
 
-  console.log(patientsList, 'patientsList')
-
   return (
     <>
-      <Button onClick={onOpen} size="sm">
+      <Button onClick={onPatientsModalOpen} size="sm">
         Liste des patients
       </Button>
+      <EditPatientModal
+        isOpen={isEditModalisOpen}
+        onClose={ondEditModalClose}
+        patientsList={patientsList}
+        setPatientsList={setPatientsList}
+      />
 
-      <Modal size="full" isOpen={isOpen} onClose={onClose}>
+      <Modal size="full" isOpen={isPatientsModalOpen} onClose={onPatientsModalClose}>
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
         <ModalContent>
           <ModalHeader>Liste des patients</ModalHeader>
           <ModalCloseButton p="6" />
           <ModalBody>
-            <DataTable columns={patientColumns()} data={patientsList} />
+            <DataTable columns={patientColumns({ onEditModalOpen })} data={patientsList} />
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -51,12 +57,17 @@ export default function AddPatientModal() {
   )
 }
 
-export const patientColumns = () => [
+export const patientColumns = ({ onEditModalOpen }) => [
   {
     name: 'Nom',
     selector: ({ fullName }) => fullName,
     sortable: true,
     minWidth: '35%',
+  },
+  {
+    name: 'Téléphone',
+    selector: ({ phoneNumber }) => phoneNumber || '###',
+    minWidth: '250px',
   },
   {
     name: 'Date de création',
@@ -69,6 +80,7 @@ export const patientColumns = () => [
     selector: (row) => {
       const onEditClick = () => {
         setPatient(row)
+        onEditModalOpen()
       }
 
       const onDeleteClick = () => {
