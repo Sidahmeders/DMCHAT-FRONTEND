@@ -185,9 +185,9 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         events={events}
         date={selectedDate}
         onNavigate={(date) => setSelectedDate(date)}
-        min={new Date(1972, 0, 1, 8, 0, 59)}
-        max={new Date(1972, 0, 1, 18, 30, 59)}
-        step={15}
+        min={new Date(1972, 0, 1, 9, 0, 59)}
+        max={new Date(1972, 0, 1, 17, 30, 59)}
+        step={30}
         views={{
           month: true,
           day: true,

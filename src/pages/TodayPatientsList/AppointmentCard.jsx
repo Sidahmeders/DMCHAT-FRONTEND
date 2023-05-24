@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Text, IconButton, Button, Box, Flex, Heading, Stack, Skeleton } from '@chakra-ui/react'
+import { IconButton, Button, Box, Flex, Heading, Stack, Skeleton } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { isBoolean } from 'lodash'
@@ -22,7 +22,7 @@ export const LoadingCards = () => (
 let socket
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
-  const { fullName, motif, state, diagnostic, treatmentPlan, history } = appointment
+  const { fullName, motif, state, diagnostic, treatmentPlan, history, payment } = appointment
   const { user } = ChatState()
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
@@ -93,19 +93,13 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
 
   return (
     <Card className={`card-container ${withConfirm && isConfirmed && 'confirmed'} ${withPresence && isLeft && 'left'}`}>
-      <CardHeader p="2">
+      <CardHeader p="1">
         <Flex spacing="4">
-          <Flex flex="1" gap="2" justifyContent="space-between">
+          <Flex flex="1" gap="2" justifyContent="space-between" alignItems="center">
             <Box pl="2">
               <Heading size="sm">
-                {fullName} ~ {motif}
+                {fullName} ~ {motif} ~ <span style={{ color: 'orange' }}> {payment || '0'} </span>
               </Heading>
-              <Text>
-                versement:
-                <span style={{ fontWeight: 'bold', color: 'orange' }}> 1200 </span>
-                reste:
-                <span style={{ fontWeight: 'bold', color: 'orange' }}> 2800 </span>
-              </Text>
             </Box>
             {withPresence && <Button variant="ghost" leftIcon={isLeft ? 'A' : 'P'} onClick={handlePresence}></Button>}
             {withConfirm && (
