@@ -9,13 +9,15 @@ import { setPatient } from '../../utils'
 
 import DataTable from '../DataTable/DataTable'
 import EditPatientModal from './EditPatientModal'
+import DeletePatientModal from './DeletePatientModal'
 
 import './PatientsListModal.scss'
 
 export default function PatientListModal() {
   const { user } = ChatState()
   const { isOpen: isPatientsModalOpen, onOpen: onPatientsModalOpen, onClose: onPatientsModalClose } = useDisclosure()
-  const { isOpen: isEditModalisOpen, onOpen: onEditModalOpen, onClose: ondEditModalClose } = useDisclosure()
+  const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: ondEditModalClose } = useDisclosure()
+  const { isOpen: isDeleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure()
   const [patientsList, setPatientsList] = useState([])
 
   useEffect(() => {
@@ -43,10 +45,16 @@ export default function PatientListModal() {
           <ModalHeader>Liste des patients</ModalHeader>
           <ModalCloseButton p="6" />
           <ModalBody>
-            <DataTable columns={patientColumns({ onEditModalOpen })} data={patientsList} />
+            <DataTable columns={patientColumns({ onEditModalOpen, onDeleteModalOpen })} data={patientsList} />
             <EditPatientModal
-              isOpen={isEditModalisOpen}
+              isOpen={isEditModalOpen}
               onClose={ondEditModalClose}
+              patientsList={patientsList}
+              setPatientsList={setPatientsList}
+            />
+            <DeletePatientModal
+              isOpen={isDeleteModalOpen}
+              onClose={onDeleteModalClose}
               patientsList={patientsList}
               setPatientsList={setPatientsList}
             />
@@ -57,7 +65,7 @@ export default function PatientListModal() {
   )
 }
 
-const patientColumns = ({ onEditModalOpen }) => [
+const patientColumns = ({ onEditModalOpen, onDeleteModalOpen }) => [
   {
     name: 'Nom',
     selector: ({ fullName }) => fullName,
@@ -85,6 +93,7 @@ const patientColumns = ({ onEditModalOpen }) => [
 
       const onDeleteClick = () => {
         setPatient(row)
+        onDeleteModalOpen()
       }
 
       return (

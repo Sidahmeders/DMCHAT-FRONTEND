@@ -36,10 +36,10 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
   } = useForm()
 
   const [patientAppointments, setPatientAppointments] = useState([])
-  const [isLoadeding, setIsLoadeding] = useState(true)
+  const [isLoading, setIsLoading] = useState(false)
 
   const onSubmit = async (data) => {
-    setIsLoadeding(true)
+    setIsLoading(true)
     const response = await fetch(`/api/patients/${data._id}`, {
       method: 'PUT',
       headers: {
@@ -63,14 +63,14 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
     } else {
       toast()
     }
-    setIsLoadeding(false)
+    setIsLoading(false)
   }
 
   useEffect(() => {
     const patient = getPatient()
     reset(patient)
     ;(async () => {
-      setIsLoadeding(true)
+      setIsLoading(true)
       const response = await fetch(`/api/appointment/${patient._id}`, {
         method: 'GET',
         headers: {
@@ -81,7 +81,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
       if (response.status === 200) {
         setPatientAppointments(await response.json())
       }
-      setIsLoadeding(false)
+      setIsLoading(false)
     })()
   }, [user, reset, isOpen])
 
@@ -157,7 +157,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
                 )}
               />
 
-              <Loader loading={isLoadeding}>
+              <Loader loading={isLoading}>
                 <Stack
                   style={{
                     height: '20rem',
