@@ -67,10 +67,8 @@ const DayEvents = ({ localizer, accessors, events, day }) => {
         {events.length}
         <div style={{ marginLeft: 'auto' }}>{show ? <ChevronUp /> : <ChevronDown />}</div>
       </div>
-      {events.map((event, index) => {
-        const { isDone, patient } = event
-        const { fullName, motif } = patient
-        return (
+      {events.map(
+        ({ motif, patient, isDone }, index) => (
           <div key={index} style={{ display: show ? 'block' : 'none' }}>
             <div
               style={{
@@ -82,13 +80,14 @@ const DayEvents = ({ localizer, accessors, events, day }) => {
                 justifyContent: 'space-between',
               }}>
               <span>
-                {fullName} / {motif}
+                {patient?.fullName} / {motif}
               </span>
               <span>7000 DZD</span>
             </div>
           </div>
-        )
-      }, [])}
+        ),
+        [],
+      )}
     </div>
   )
 }
