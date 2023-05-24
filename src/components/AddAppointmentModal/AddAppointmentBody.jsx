@@ -68,6 +68,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       },
       body: JSON.stringify({
         ...data,
+        isNewTreatment,
         isWaitingList,
         sender: userId,
         patient: patientId,
