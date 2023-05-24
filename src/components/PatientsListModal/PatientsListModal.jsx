@@ -36,12 +36,6 @@ export default function PatientListModal() {
       <Button onClick={onPatientsModalOpen} size="sm">
         Liste des patients
       </Button>
-      <EditPatientModal
-        isOpen={isEditModalisOpen}
-        onClose={ondEditModalClose}
-        patientsList={patientsList}
-        setPatientsList={setPatientsList}
-      />
 
       <Modal size="full" isOpen={isPatientsModalOpen} onClose={onPatientsModalClose}>
         <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
@@ -50,6 +44,12 @@ export default function PatientListModal() {
           <ModalCloseButton p="6" />
           <ModalBody>
             <DataTable columns={patientColumns({ onEditModalOpen })} data={patientsList} />
+            <EditPatientModal
+              isOpen={isEditModalisOpen}
+              onClose={ondEditModalClose}
+              patientsList={patientsList}
+              setPatientsList={setPatientsList}
+            />
           </ModalBody>
         </ModalContent>
       </Modal>
@@ -57,7 +57,7 @@ export default function PatientListModal() {
   )
 }
 
-export const patientColumns = ({ onEditModalOpen }) => [
+const patientColumns = ({ onEditModalOpen }) => [
   {
     name: 'Nom',
     selector: ({ fullName }) => fullName,
