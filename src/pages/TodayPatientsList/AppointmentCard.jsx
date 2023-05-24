@@ -8,8 +8,8 @@ import io from 'socket.io-client'
 import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
 import { ChatState, TodayPatientsListState } from '../../context'
 
-import ConfirmSong from '../../assets/songs/confirmation-tone.wav'
-import DoorBellSong from '../../assets/songs/door-bell.wav'
+import ConfirmSound from '../../assets/songs/confirmation-tone.wav'
+import DoorBellSound from '../../assets/songs/door-bell.wav'
 
 export const LoadingCards = () => (
   <Stack mt="2">
@@ -75,7 +75,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       if (payload._id === appointment._id) {
         setIsConfirmed(payload.isConfirmed)
         fetchTodayAppointments(user)
-        new Audio(ConfirmSong).play()
+        new Audio(ConfirmSound).play()
       }
     })
 
@@ -83,7 +83,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       if (payload._id === appointment._id) {
         setIsLeft(payload.isLeft)
         fetchTodayAppointments(user)
-        new Audio(DoorBellSong).play()
+        new Audio(DoorBellSound).play()
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps

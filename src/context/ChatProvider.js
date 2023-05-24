@@ -5,8 +5,9 @@ import io from 'socket.io-client'
 
 import { ENDPOINT, CHAT_EVENTS, CHAT_LISTENERS } from '../config'
 
-const ChatContext = createContext()
+import ClearAnnounceSound from '../assets/songs/clear-announce.wav'
 
+const ChatContext = createContext()
 let socket, selectedChatCompare
 
 export const ChatProvider = ({ children }) => {
@@ -85,6 +86,7 @@ export const ChatProvider = ({ children }) => {
           notifications.find((notif) => notif.notificationSender === notificationSender),
         )
 
+        new Audio(ClearAnnounceSound).play()
         if (!isSenderNotificationFound) {
           const newNotification = { ...messageRecieved, notificationSender }
           setNotifications([newNotification, ...notifications])
