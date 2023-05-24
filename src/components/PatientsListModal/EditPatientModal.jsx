@@ -23,6 +23,8 @@ import { CREATE_PATIENT_NAMES } from '../../config'
 import { ChatState } from '../../context'
 import { getPatient } from '../../utils'
 
+import Loader from '../Loader/Loader'
+
 export default function EditPatientModal({ isOpen, onClose, patientsList, setPatientsList }) {
   const { user } = ChatState()
   const toast = useToast()
@@ -34,8 +36,10 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
   } = useForm()
 
   const [patientAppointments, setPatientAppointments] = useState([])
+  const [isLoadeding, setIsLoadeding] = useState(true)
 
   const onSubmit = async (data) => {
+    setIsLoadeding(true)
     const response = await fetch(`/api/patients/${data._id}`, {
       method: 'PUT',
       headers: {
@@ -59,12 +63,14 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
     } else {
       toast()
     }
+    setIsLoadeding(false)
   }
 
   useEffect(() => {
     const patient = getPatient()
     reset(patient)
     ;(async () => {
+      setIsLoadeding(true)
       const response = await fetch(`/api/appointment/${patient._id}`, {
         method: 'GET',
         headers: {
@@ -75,6 +81,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
       if (response.status === 200) {
         setPatientAppointments(await response.json())
       }
+      setIsLoadeding(false)
     })()
   }, [user, reset, isOpen])
 
@@ -150,81 +157,83 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
                 )}
               />
 
-              <Stack
-                style={{
-                  height: '20rem',
-                  overflowY: 'auto',
-                  border: '1px solid #ddd',
-                  borderRadius: '0.25rem',
-                }}>
-                {patientAppointments.map((appointment) => {
-                  const {
-                    _id,
-                    motif,
-                    generalState,
-                    diagnostic,
-                    treatmentPlan,
-                    title,
-                    createdAt,
-                    isNewTreatment,
-                    isDone,
-                    totalPrice,
-                    payment,
-                  } = appointment
-                  const history =
-                    `MOTIF: ${motif}\nETATE: ${generalState}\nDIAG: ${diagnostic}\nPLANT: ${treatmentPlan}\nTitre: ${title}`.trim()
+              <Loader loading={isLoadeding}>
+                <Stack
+                  style={{
+                    height: '20rem',
+                    overflowY: 'auto',
+                    border: '1px solid #ddd',
+                    borderRadius: '0.25rem',
+                  }}>
+                  {patientAppointments.map((appointment) => {
+                    const {
+                      _id,
+                      motif,
+                      generalState,
+                      diagnostic,
+                      treatmentPlan,
+                      title,
+                      createdAt,
+                      isNewTreatment,
+                      isDone,
+                      totalPrice,
+                      payment,
+                    } = appointment
+                    const history =
+                      `MOTIF: ${motif}\nETATE: ${generalState}\nDIAG: ${diagnostic}\nPLANT: ${treatmentPlan}\nTitre: ${title}`.trim()
 
-                  return (
-                    <Controller
-                      key={_id}
-                      control={control}
-                      name={`${CREATE_PATIENT_NAMES.HISTORY}.${_id}`}
-                      shouldUnregister={isSubmitted}
-                      render={({ field: { onChange, value } }) => (
-                        <InputGroup>
-                          <div style={{ width: '6rem' }}>
-                            {isNewTreatment && <hr />}
-                            <div style={{ padding: '0 0.25rem', color: isNewTreatment ? 'blue' : 'gray' }}>
-                              <span style={{ borderBottom: isNewTreatment ? '1px solid blue' : '' }}>
-                                {format(parseISO(createdAt), 'yy.MM.dd')}
-                              </span>
-                              {isNewTreatment && (
-                                <>
-                                  <br />
-                                  T: {totalPrice}
-                                  <br />
-                                  V: {payment}
-                                  <br />
-                                  {isDone ? 'F' : 'DF'}
-                                </>
-                              )}
+                    return (
+                      <Controller
+                        key={_id}
+                        control={control}
+                        name={`${CREATE_PATIENT_NAMES.HISTORY}.${_id}`}
+                        shouldUnregister={isSubmitted}
+                        render={({ field: { onChange, value } }) => (
+                          <InputGroup>
+                            <div style={{ width: '6rem' }}>
+                              {isNewTreatment && <hr />}
+                              <div style={{ padding: '0 0.25rem', color: isNewTreatment ? 'blue' : 'gray' }}>
+                                <span style={{ borderBottom: isNewTreatment ? '1px solid blue' : '' }}>
+                                  {format(parseISO(createdAt), 'yy.MM.dd')}
+                                </span>
+                                {isNewTreatment && (
+                                  <>
+                                    <br />
+                                    T: {totalPrice}
+                                    <br />
+                                    V: {payment}
+                                    <br />
+                                    {isDone ? 'F' : 'DF'}
+                                  </>
+                                )}
+                              </div>
                             </div>
-                          </div>
-                          {isNewTreatment ? (
-                            <Textarea
-                              p="0.5"
-                              pl="2"
-                              height="24"
-                              borderRadius="0"
-                              borderLeft="0"
-                              borderRight="0"
-                              borderBottom="0"
-                              placeholder="Historique"
-                              defaultValue={history}
-                              value={value}
-                              onChange={onChange}
-                            />
-                          ) : (
-                            <div>
-                              Titre: {title} / V: {payment || '0'} / {isDone ? 'F' : 'DF'}
-                            </div>
-                          )}
-                        </InputGroup>
-                      )}
-                    />
-                  )
-                })}
-              </Stack>
+                            {isNewTreatment ? (
+                              <Textarea
+                                p="0.5"
+                                pl="2"
+                                height="24"
+                                borderRadius="0"
+                                borderLeft="0"
+                                borderRight="0"
+                                borderBottom="0"
+                                placeholder="Historique"
+                                defaultValue={history}
+                                value={value}
+                                onChange={onChange}
+                              />
+                            ) : (
+                              <div>
+                                Titre: {title} / V: {payment || '0'} / {isDone ? 'F' : 'DF'}
+                              </div>
+                            )}
+                          </InputGroup>
+                        )}
+                      />
+                    )
+                  })}
+                </Stack>
+              </Loader>
             </Stack>
           </ModalBody>
           <ModalFooter>
