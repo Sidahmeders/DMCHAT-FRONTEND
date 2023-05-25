@@ -78,8 +78,6 @@ export const ChatProvider = ({ children, socket }) => {
         const isSenderNotificationFound = Boolean(
           notifications.find((notif) => notif.notificationSender === notificationSender),
         )
-
-        new Audio(ChatMessageSound).play()
         if (!isSenderNotificationFound) {
           const newNotification = { ...messageRecieved, notificationSender }
           setNotifications([newNotification, ...notifications])
@@ -88,6 +86,7 @@ export const ChatProvider = ({ children, socket }) => {
       } else {
         setMessages([...messages, messageRecieved])
       }
+      new Audio(ChatMessageSound).play()
     })
   })
 
