@@ -4,7 +4,7 @@ import { useToast } from '@chakra-ui/react'
 
 import { CHAT_EVENTS, CHAT_LISTENERS } from '../config'
 
-import ClearAnnounceSound from '../assets/songs/clear-announce.wav'
+import ChatMessageSound from '../assets/songs/chat-message.wav'
 
 const ChatContext = createContext()
 let selectedChatCompare
@@ -79,7 +79,7 @@ export const ChatProvider = ({ children, socket }) => {
           notifications.find((notif) => notif.notificationSender === notificationSender),
         )
 
-        new Audio(ClearAnnounceSound).play()
+        new Audio(ChatMessageSound).play()
         if (!isSenderNotificationFound) {
           const newNotification = { ...messageRecieved, notificationSender }
           setNotifications([newNotification, ...notifications])
