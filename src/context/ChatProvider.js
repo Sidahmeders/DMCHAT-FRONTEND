@@ -1,16 +1,15 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
-import io from 'socket.io-client'
 
-import { ENDPOINT, CHAT_EVENTS, CHAT_LISTENERS } from '../config'
+import { CHAT_EVENTS, CHAT_LISTENERS } from '../config'
 
 import ClearAnnounceSound from '../assets/songs/clear-announce.wav'
 
 const ChatContext = createContext()
-let socket, selectedChatCompare
+let selectedChatCompare
 
-export const ChatProvider = ({ children }) => {
+export const ChatProvider = ({ children, socket }) => {
   const [user, setUser] = useState() // If 'userInfo' is available, else set '{}'
   const [selectedChat, setSelectedChat] = useState()
   const [selectedChatAppointmentModal, setSelectedChatAppointmentModal] = useState({})
@@ -50,12 +49,6 @@ export const ChatProvider = ({ children }) => {
     }
     setIsLoadingMessages(false)
   }
-
-  useEffect(() => {
-    if (socket === undefined) {
-      socket = io(ENDPOINT)
-    }
-  }, [])
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))

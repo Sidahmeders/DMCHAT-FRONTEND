@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { useLocation } from 'react-router-dom'
-import io from 'socket.io-client'
 
-import { ENDPOINT, APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
+import { APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
 import { flattenAppointment } from '../../utils'
 import { ChatState, TodayPatientsListState } from '../../context'
 
@@ -23,10 +22,8 @@ export const DragWrap = ({ id, index, children }) => (
   </Draggable>
 )
 
-let socket
-
 export default function TodayPatientsList() {
-  const { user } = ChatState()
+  const { user, socket } = ChatState()
   const { pathname } = useLocation()
   const { appointmentsList, setAppointmentsList, fetchTodayAppointments } = TodayPatientsListState()
   const [isLoading, setIsLoading] = useState(false)
@@ -79,10 +76,6 @@ export default function TodayPatientsList() {
   }, [user, pathname])
 
   useEffect(() => {
-    if (socket === undefined) {
-      socket = io(ENDPOINT)
-    }
-
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_DROPPED, (payload) => {
       const { draggableId, sourceDroppableId, destinationDroppableId, updatedAppointment } = payload
       setAppointmentsList({
@@ -93,6 +86,7 @@ export default function TodayPatientsList() {
         [destinationDroppableId]: [...appointmentsList[destinationDroppableId], flattenAppointment(updatedAppointment)],
       })
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appointmentsList, setAppointmentsList])
 
   return (

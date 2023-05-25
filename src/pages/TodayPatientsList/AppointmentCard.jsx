@@ -3,9 +3,8 @@ import { IconButton, Button, Box, Flex, Heading, Stack, Skeleton } from '@chakra
 import { Card, CardHeader, CardBody } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { isBoolean } from 'lodash'
-import io from 'socket.io-client'
 
-import { ENDPOINT, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
+import { APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
 import { ChatState, TodayPatientsListState } from '../../context'
 
 import ConfirmSound from '../../assets/songs/confirmation-tone.wav'
@@ -19,11 +18,9 @@ export const LoadingCards = () => (
   </Stack>
 )
 
-let socket
-
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
   const { fullName, motif, state, diagnostic, treatmentPlan, history, payment } = appointment
-  const { user } = ChatState()
+  const { user, socket } = ChatState()
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
   const [isLeft, setIsLeft] = useState(appointment.isLeft)
@@ -67,10 +64,6 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
   }
 
   useEffect(() => {
-    if (socket === undefined) {
-      socket = io(ENDPOINT)
-    }
-
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_CONFIRMATION, (payload) => {
       if (payload._id === appointment._id) {
         setIsConfirmed(payload.isConfirmed)

@@ -2,15 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ChakraProvider } from '@chakra-ui/react'
 import { BrowserRouter } from 'react-router-dom'
+import io from 'socket.io-client'
 import App from './App'
 import * as serviceWorker from './serviceWorkerRegistration'
 import { ChatProvider, TodayPatientsListProvider } from './context'
+import { ENDPOINT } from './config'
 
 const root = ReactDOM.createRoot(document.getElementById('root'))
+const socket = io(ENDPOINT)
 
 root.render(
   <BrowserRouter>
-    <ChatProvider>
+    <ChatProvider socket={socket}>
       <TodayPatientsListProvider>
         <ChakraProvider
           toastOptions={{
