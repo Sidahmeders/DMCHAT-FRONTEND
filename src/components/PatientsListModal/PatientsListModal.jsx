@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useDisclosure } from '@chakra-ui/react'
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react'
 import { format, parseISO } from 'date-fns'
@@ -8,6 +8,7 @@ import { ChatState } from '../../context'
 import { setPatient } from '../../utils'
 
 import DataTable from '../DataTable/DataTable'
+import SearchBar from '../Searchbar/Searchbar'
 import EditPatientModal from './EditPatientModal'
 import DeletePatientModal from './DeletePatientModal'
 
@@ -19,6 +20,8 @@ export default function PatientListModal() {
   const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: ondEditModalClose } = useDisclosure()
   const { isOpen: isDeleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure()
   const [patientsList, setPatientsList] = useState([])
+  const [filterText, setFilterText] = useState('')
+  const [resetPaginationToggle, setResetPaginationToggle] = useState(false)
 
   useEffect(() => {
     if (!user) return
@@ -33,6 +36,25 @@ export default function PatientListModal() {
     })()
   }, [user])
 
+  const filteredItems = patientsList.filter((patient) => {
+    const { fullName } = patient
+    const textFiltered = fullName && fullName?.toLowerCase()?.includes(filterText?.toLowerCase())
+    return textFiltered ? patient : false
+  })
+
+  const subHeaderComponent = useMemo(() => {
+    const handleFilter = (e) => setFilterText(e.target.value)
+
+    const handleClear = () => {
+      if (filterText) {
+        setResetPaginationToggle(!resetPaginationToggle)
+        setFilterText('')
+      }
+    }
+
+    return <SearchBar onFilter={handleFilter} onClear={handleClear} filterText={filterText} />
+  }, [filterText, resetPaginationToggle])
+
   return (
     <>
       <Button onClick={onPatientsModalOpen} size="sm">
@@ -45,7 +67,11 @@ export default function PatientListModal() {
           <ModalHeader>Liste des patients</ModalHeader>
           <ModalCloseButton p="6" />
           <ModalBody>
-            <DataTable columns={patientColumns({ onEditModalOpen, onDeleteModalOpen })} data={patientsList} />
+            <DataTable
+              columns={patientColumns({ onEditModalOpen, onDeleteModalOpen })}
+              data={filteredItems}
+              subHeaderComponent={subHeaderComponent}
+            />
             <EditPatientModal
               isOpen={isEditModalOpen}
               onClose={ondEditModalClose}

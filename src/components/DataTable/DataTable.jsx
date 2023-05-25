@@ -22,6 +22,7 @@ export default function DataTable({
   onRowDoubleClicked,
   expandableRowsComponent,
   paginationResetDefaultPage,
+  subHeaderComponent,
 }) {
   const PAGINATION_ROWS_PER_PAGE_OPTIONS = [200, 500, 1000]
   const [currentRow, setCurrentRow] = useState(null)
@@ -35,19 +36,21 @@ export default function DataTable({
         highlightOnHover
         pointerOnHover
         expandableRows
+        subHeader
         className="data-table"
-        customStyles={defaultStyles}
-        progressPending={loading}
-        progressComponent={<PropagateLoader color="#474aff" />}
         data={data}
+        columns={columns}
+        progressPending={loading}
+        customStyles={defaultStyles}
         paginationPerPage={paginationPerPage}
         paginationRowsPerPageOptions={PAGINATION_ROWS_PER_PAGE_OPTIONS}
         onChangeRowsPerPage={(currentRowsPerPage) => setPaginationPerPage(currentRowsPerPage)}
-        columns={columns}
         paginationResetDefaultPage={paginationResetDefaultPage}
         sortIcon={<ChevronDown />}
         expandableRowExpanded={(row) => row === currentRow}
         onRowExpandToggled={(_, row) => setCurrentRow(row)}
+        progressComponent={<PropagateLoader color="#474aff" />}
+        subHeaderComponent={subHeaderComponent}
         expandableRowsComponent={expandableRowsComponent}
         onRowDoubleClicked={onRowDoubleClicked}
       />
@@ -62,6 +65,7 @@ DataTable.propTypes = {
   paginationResetDefaultPage: propTypes.bool,
   onRowDoubleClicked: propTypes.func,
   expandableRowsComponent: propTypes.func,
+  subHeaderComponent: propTypes.node.isRequired,
 }
 
 DataTable.defaultProps = {
