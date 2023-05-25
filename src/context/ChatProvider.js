@@ -2,14 +2,12 @@ import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 
-import { CHAT_EVENTS, CHAT_LISTENERS } from '../config'
-
-import ChatMessageSound from '../assets/songs/chat-message.wav'
+import { CHAT_EVENTS } from '../config'
 
 const ChatContext = createContext()
-let selectedChatCompare
 
 export const ChatProvider = ({ children, socket }) => {
+  const navigate = useNavigate()
   const [user, setUser] = useState() // If 'userInfo' is available, else set '{}'
   const [selectedChat, setSelectedChat] = useState()
   const [selectedChatAppointmentModal, setSelectedChatAppointmentModal] = useState({})
@@ -18,9 +16,9 @@ export const ChatProvider = ({ children, socket }) => {
   const [messages, setMessages] = useState([])
   const [fetchAgain, setFetchAgain] = useState(false)
   const [isLoadingMessages, setIsLoadingMessages] = useState(false)
+  const [selectedChatCompare, setSelectedChatCompare] = useState()
 
   const toast = useToast()
-  const navigate = useNavigate()
 
   const fetchMessages = async () => {
     if (!selectedChat) return
@@ -59,36 +57,16 @@ export const ChatProvider = ({ children, socket }) => {
     }
 
     return () => {
-      selectedChatCompare = undefined
+      setSelectedChatCompare(undefined)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate])
 
   useEffect(() => {
     fetchMessages() // Whenever users switches chat, call the function again
-    selectedChatCompare = selectedChat
+    setSelectedChatCompare(selectedChat)
     // eslint-disable-next-line
   }, [selectedChat])
-
-  useEffect(() => {
-    socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (messageRecieved) => {
-      if (!selectedChatCompare || selectedChatCompare._id !== messageRecieved.chat[0]._id) {
-        const { name: senderName } = messageRecieved.sender
-        const { chatName } = messageRecieved.chat?.[0]
-        const notificationSender = chatName === 'sender' ? senderName : chatName
-        const isSenderNotificationFound = Boolean(
-          notifications.find((notif) => notif.notificationSender === notificationSender),
-        )
-        if (!isSenderNotificationFound) {
-          const newNotification = { ...messageRecieved, notificationSender }
-          setNotifications([newNotification, ...notifications])
-          setFetchAgain(!fetchAgain) // fetch all the chats again
-        }
-      } else {
-        setMessages([...messages, messageRecieved])
-      }
-      new Audio(ChatMessageSound).play()
-    })
-  })
 
   return (
     <ChatContext.Provider
@@ -111,6 +89,8 @@ export const ChatProvider = ({ children, socket }) => {
         setIsLoadingMessages,
         fetchAgain,
         setFetchAgain,
+        selectedChatCompare,
+        setSelectedChatCompare,
       }}>
       {children}
     </ChatContext.Provider>

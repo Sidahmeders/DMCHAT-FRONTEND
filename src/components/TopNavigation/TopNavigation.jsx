@@ -3,8 +3,9 @@ import { Link, useLocation } from 'react-router-dom'
 import { FileText, Calendar, PieChart } from 'react-feather'
 
 import { getPageRoute, setPageRoute } from '../../utils'
-import ChatNotification from '../miscellaneous/ChatNotification'
 import { APP_ROUTES } from '../../config'
+
+import ChatNotification from '../miscellaneous/ChatNotification'
 
 import './TopNavigation.scss'
 
