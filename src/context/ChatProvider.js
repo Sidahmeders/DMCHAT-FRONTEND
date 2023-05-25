@@ -17,6 +17,7 @@ export const ChatProvider = ({ children, socket }) => {
   const [fetchAgain, setFetchAgain] = useState(false)
   const [isLoadingMessages, setIsLoadingMessages] = useState(false)
   const [selectedChatCompare, setSelectedChatCompare] = useState()
+  const [socketConnected, setSocketConnected] = useState(false)
 
   const toast = useToast()
 
@@ -91,6 +92,8 @@ export const ChatProvider = ({ children, socket }) => {
         setFetchAgain,
         selectedChatCompare,
         setSelectedChatCompare,
+        socketConnected,
+        setSocketConnected,
       }}>
       {children}
     </ChatContext.Provider>

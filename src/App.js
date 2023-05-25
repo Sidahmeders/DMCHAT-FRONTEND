@@ -1,16 +1,29 @@
+import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import { Home, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
 
 import { ChatState } from './context'
-import TopNavigation from './components/TopNavigation/TopNavigation'
-
 import { checkIsJWTExpired } from './utils'
-import { APP_ROUTES } from './config'
+import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from './config'
+
+import { Home, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
+import TopNavigation from './components/TopNavigation/TopNavigation'
+import ChatMessageSound from './assets/songs/chat-message.wav'
 
 import './App.css'
 
 const App = () => {
-  const { user } = ChatState()
+  const {
+    user,
+    socket,
+    selectedChatCompare,
+    fetchAgain,
+    setFetchAgain,
+    messages,
+    setMessages,
+    notifications,
+    setNotifications,
+    setSocketConnected,
+  } = ChatState()
 
   if (user && user.token) {
     const isTokenExpired = checkIsJWTExpired(user.token)
@@ -18,6 +31,34 @@ const App = () => {
       localStorage.removeItem('userInfo')
     }
   }
+
+  useEffect(() => {
+    if (!user) return
+    socket.emit(CHAT_EVENTS.SETUP, user)
+    socket.on(CHAT_LISTENERS.CONNECTED, () => setSocketConnected(true))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user, socket])
+
+  useEffect(() => {
+    socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (messageRecieved) => {
+      if (!selectedChatCompare || selectedChatCompare._id !== messageRecieved.chat[0]._id) {
+        const { name: senderName } = messageRecieved.sender
+        const { chatName } = messageRecieved.chat?.[0]
+        const notificationSender = chatName === 'sender' ? senderName : chatName
+        const isSenderNotificationFound = Boolean(
+          notifications.find((notif) => notif.notificationSender === notificationSender),
+        )
+        if (!isSenderNotificationFound) {
+          const newNotification = { ...messageRecieved, notificationSender }
+          setNotifications([newNotification, ...notifications])
+          setFetchAgain(!fetchAgain) // fetch all the chats again
+        }
+      } else {
+        setMessages([...messages, messageRecieved])
+      }
+      new Audio(ChatMessageSound).play()
+    })
+  })
 
   return (
     <div className="App">

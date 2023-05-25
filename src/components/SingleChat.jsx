@@ -11,7 +11,6 @@ import ScrollableChat from './ScrollableChat'
 
 const SingleChat = () => {
   const [newMessage, setNewMessage] = useState('')
-  const [socketConnected, setSocketConnected] = useState(false)
   const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
 
@@ -27,6 +26,7 @@ const SingleChat = () => {
     isLoadingMessages,
     fetchAgain,
     setFetchAgain,
+    socketConnected,
   } = ChatState()
 
   const sendMessage = async (e) => {
@@ -94,9 +94,6 @@ const SingleChat = () => {
   }
 
   useEffect(() => {
-    socket.emit(CHAT_EVENTS.SETUP, user)
-    socket.on(CHAT_LISTENERS.CONNECTED, () => setSocketConnected(true))
-
     socket.on(CHAT_LISTENERS.TYPING, () => setIsTyping(true))
     socket.on(CHAT_LISTENERS.STOP_TYPING, () => setIsTyping(false))
     // eslint-disable-next-line
