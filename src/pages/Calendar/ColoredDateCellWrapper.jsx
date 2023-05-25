@@ -20,14 +20,19 @@ export default function ColoredDateCellWrapper({ children, value }) {
     if (!user) return
     const controller = new AbortController()
     ;(async () => {
-      const response = await fetch(`/api/calendar/${format(new Date(value), 'yyyy/MM/dd')}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user?.token}`,
-        },
-        signal: controller.signal,
-      })
-      setCalendarDay(await response.json())
+      try {
+        const response = await fetch(`/api/calendar/${format(new Date(value), 'yyyy/MM/dd')}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+          signal: controller.signal,
+        })
+        setCalendarDay(await response.json())
+      } catch (error) {
+        if (error.name === 'AbortError') return
+        console.error(error)
+      }
     })()
 
     return () => {
