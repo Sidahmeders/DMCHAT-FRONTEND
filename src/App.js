@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import addNotification, { Notifications } from 'react-push-notifiy'
 import { throttle } from 'lodash'
 
 import { ChatState } from './context'
@@ -14,14 +15,14 @@ import './App.css'
 
 const notify = throttle((messageRecieved) => {
   new Audio(ChatMessageSound).play()
-
-  new Notification(messageRecieved?.sender?.name, {
-    body: messageRecieved?.content,
-    tag: messageRecieved?.sender?.name,
+  addNotification({
+    title: messageRecieved?.sender?.name,
+    message: messageRecieved.content,
+    vibrate: 3,
+    native: true,
   })
-
   navigator.serviceWorker.ready.then((registration) => {
-    registration.showNotification(`${messageRecieved?.sender?.name} / ${messageRecieved?.content}`)
+    registration.showNotification(`${messageRecieved?.sender?.name} / ${messageRecieved.content}`)
   })
 }, 5000)
 
@@ -77,6 +78,7 @@ const App = () => {
   return (
     <div className="App">
       {user && <TopNavigation />}
+      <Notifications />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path={APP_ROUTES.CHATS} element={<Chat />} />
