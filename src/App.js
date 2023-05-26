@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import addNotification, { Notifications } from 'react-push-notifiy'
 
 import { ChatState } from './context'
 import { checkIsJWTExpired } from './utils'
@@ -57,20 +58,25 @@ const App = () => {
         setMessages([...messages, messageRecieved])
       }
       new Audio(ChatMessageSound).play()
+      addNotification({
+        title: messageRecieved?.sender?.name,
+        message: messageRecieved.content,
+        vibrate: 3,
+        native: true,
+      })
     })
   })
 
   return (
     <div className="App">
       {user && <TopNavigation />}
-
+      <Notifications />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path={APP_ROUTES.CHATS} element={<Chat />} />
         <Route path={APP_ROUTES.TODAY_PATIENTS_LIST} element={<TodayPatientsList />} />
         <Route path={APP_ROUTES.CALENDAR} element={<Calendar />} />
         <Route path={APP_ROUTES.STATISTICS} element={<Statistics />} />
-
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </div>
