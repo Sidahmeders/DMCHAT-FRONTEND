@@ -180,7 +180,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
                       payment,
                     } = appointment
                     const history =
-                      `MOTIF: ${motif}\nETATE: ${generalState}\nDIAG: ${diagnostic}\nPLANT: ${treatmentPlan}\nTitre: ${title}`.trim()
+                      `Motif:: ${motif}\nEtate:: ${generalState}\nDiag:: ${diagnostic}\nPlan:: ${treatmentPlan}\nTitre:: ${title}`.trim()
 
                     return (
                       <Controller
@@ -224,7 +224,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
                               />
                             ) : (
                               <div>
-                                Titre: {title} / V: {payment || '0'} / {isDone ? 'F' : 'DF'}
+                                Titre:: {title} / V: {payment || '0'} / {isDone ? 'F' : 'DF'}
                               </div>
                             )}
                           </InputGroup>
