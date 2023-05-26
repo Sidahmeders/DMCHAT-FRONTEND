@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import addNotification, { Notifications } from 'react-push-notifiy'
+import { throttle } from 'lodash'
 
 import { ChatState } from './context'
 import { checkIsJWTExpired } from './utils'
@@ -11,6 +12,20 @@ import TopNavigation from './components/TopNavigation/TopNavigation'
 import ChatMessageSound from './assets/songs/chat-message.wav'
 
 import './App.css'
+
+const notify = throttle((messageRecieved) => {
+  new Audio(ChatMessageSound).play()
+  addNotification({
+    title: messageRecieved?.sender?.name,
+    message: messageRecieved.content,
+    duration: 5000,
+    vibrate: 3,
+    native: true,
+  })
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.showNotification(`${messageRecieved?.sender?.name} / ${messageRecieved.content}`)
+  })
+}, 5000)
 
 const App = () => {
   const {
@@ -57,17 +72,7 @@ const App = () => {
       } else {
         setMessages([...messages, messageRecieved])
       }
-      new Audio(ChatMessageSound).play()
-      addNotification({
-        title: messageRecieved?.sender?.name,
-        message: messageRecieved.content,
-        duration: 5000,
-        vibrate: 3,
-        native: true,
-      })
-      navigator.serviceWorker.ready.then((registration) => {
-        registration.showNotification(`${messageRecieved?.sender?.name} / ${messageRecieved.content}`)
-      })
+      notify(messageRecieved)
     })
   })
 
