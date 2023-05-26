@@ -19,7 +19,7 @@ export const LoadingCards = () => (
 )
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
-  const { fullName, motif, state, diagnostic, treatmentPlan, history, payment } = appointment
+  const { fullName, motif, generalState, diagnostic, treatmentPlan, history, payment } = appointment
   const { user, socket } = ChatState()
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
@@ -111,10 +111,18 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
 
       {showCardBody && (
         <CardBody p="0.25rem 1rem" mr="0">
-          <p>Etate général: {state}</p>
-          <p>diagnostique: {diagnostic}</p>
-          <p>plan: {treatmentPlan}</p>
-          <p>historique: {history}</p>
+          <p>
+            Etate: <span style={{ fontWeight: 'bold' }}>{generalState}</span>
+          </p>
+          <p>
+            Diag: <span style={{ fontWeight: 'bold' }}>{diagnostic}</span>
+          </p>
+          <p>
+            Plan: <span style={{ fontWeight: 'bold' }}>{treatmentPlan}</span>
+          </p>
+          <p>
+            Hist: <span style={{ fontWeight: 'bold' }}>{history}</span>
+          </p>
         </CardBody>
       )}
     </Card>
