@@ -61,8 +61,17 @@ const App = () => {
       addNotification({
         title: messageRecieved?.sender?.name,
         message: messageRecieved.content,
+        duration: 5000,
         vibrate: 3,
         native: true,
+      })
+
+      Notification.requestPermission(function (result) {
+        if (result === 'granted') {
+          navigator.serviceWorker.ready.then(function (registration) {
+            registration.showNotification('Notification with ServiceWorker')
+          })
+        }
       })
     })
   })
