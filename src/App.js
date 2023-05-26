@@ -73,7 +73,8 @@ const App = () => {
       }
       notify(messageRecieved)
     })
-  })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <div className="App">
