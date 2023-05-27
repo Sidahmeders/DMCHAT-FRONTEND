@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { IconButton, Button, Box, Flex, Heading, Stack, Skeleton } from '@chakra-ui/react'
+import { IconButton, Button, Box, Flex, Heading, Stack, Skeleton, InputGroup, Input } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp } from 'react-feather'
 import { isBoolean } from 'lodash'
@@ -19,13 +19,16 @@ export const LoadingCards = () => (
 )
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
-  const { fullName, motif, generalState, diagnostic, treatmentPlan, history, payment } = appointment
+  const { fullName, motif, generalState, diagnostic, treatmentPlan, payment, totalPrice } = appointment
   const { user, socket } = ChatState()
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
   const [isLeft, setIsLeft] = useState(appointment.isLeft)
   const [showCardBody, setShowCardBody] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+
+  const [paymentVal, setPaymentVal] = useState(payment)
+  const [totalPriceVal, setTotalPriceVal] = useState(totalPrice)
 
   const handleConfirmation = async () => {
     setIsLoading(true)
@@ -120,9 +123,30 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
           <p>
             Plan: <span style={{ fontWeight: 'bold' }}>{treatmentPlan}</span>
           </p>
-          <p>
-            Hist: <span style={{ fontWeight: 'bold' }}>{history}</span>
-          </p>
+          <InputGroup gap="2">
+            <InputGroup className="payments-input">
+              <label>T</label>
+              <Input
+                type="number"
+                placeholder="Prix total"
+                value={totalPriceVal}
+                onChange={(e) => setTotalPriceVal(e.target.value)}
+              />
+            </InputGroup>
+            <InputGroup className="payments-input">
+              <label>V</label>
+              <Input
+                type="number"
+                placeholder="versement"
+                value={paymentVal}
+                onChange={(e) => setPaymentVal(e.target.value)}
+              />
+            </InputGroup>
+            <InputGroup className="payments-input">
+              <label>R</label>
+              <Input type="number" readOnly value={totalPriceVal - paymentVal || 0} />
+            </InputGroup>
+          </InputGroup>
         </CardBody>
       )}
     </Card>
