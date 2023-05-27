@@ -13,12 +13,13 @@ import {
   Input,
   useToast,
   Spinner,
+  Stack,
+  Skeleton,
 } from '@chakra-ui/react'
 
 import { ChatState } from '../context'
 
 import UserListItem from './UserAvatar/UserListItem'
-import ChatLoading from './ChatLoading'
 
 export default function SearchUserDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -111,7 +112,11 @@ export default function SearchUserDrawer() {
 
             {/* Polulate Search Results */}
             {loading ? (
-              <ChatLoading />
+              <Stack>
+                <Skeleton height="45px" />
+                <Skeleton height="45px" />
+                <Skeleton height="45px" />
+              </Stack>
             ) : (
               searchResult?.map((user) => (
                 <UserListItem key={user._id} user={user} handleFunction={() => accessChat(user._id)} />

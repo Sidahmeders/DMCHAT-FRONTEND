@@ -4,7 +4,6 @@ import { Box, Button, Stack, Text, useDisclosure, useToast } from '@chakra-ui/re
 import { LogOut } from 'react-feather'
 
 import { ChatState } from '../context'
-import ChatLoading from './ChatLoading'
 import { getSender } from '../utils'
 
 import GroupChatModal from './miscellaneous/GroupChatModal'
@@ -72,25 +71,21 @@ const MyChats = () => {
       </Box>
 
       <Box display="flex" flexDir="column" p={3} bg="#F8F8F8" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
-        {chats ? (
-          <Stack overflowY="scroll">
-            {chats?.map((chat) => (
-              <Box
-                onClick={() => setSelectedChat(chat)}
-                cursor="pointer"
-                bg={selectedChat?._id === chat._id ? '#38B2AC' : '#E8E8E8'}
-                color={selectedChat?._id === chat._id ? 'white' : 'black'}
-                px={3}
-                py={2}
-                borderRadius="lg"
-                key={chat._id}>
-                <Text>{!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}</Text>
-              </Box>
-            ))}
-          </Stack>
-        ) : (
-          <ChatLoading />
-        )}
+        <Stack overflowY="scroll">
+          {chats?.map((chat) => (
+            <Box
+              onClick={() => setSelectedChat(chat)}
+              cursor="pointer"
+              bg={selectedChat?._id === chat._id ? '#38B2AC' : '#E8E8E8'}
+              color={selectedChat?._id === chat._id ? 'white' : 'black'}
+              px={3}
+              py={2}
+              borderRadius="lg"
+              key={chat._id}>
+              <Text>{!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}</Text>
+            </Box>
+          ))}
+        </Stack>
       </Box>
     </Box>
   )
