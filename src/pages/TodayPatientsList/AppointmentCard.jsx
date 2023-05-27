@@ -94,7 +94,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
           <Flex flex="1" gap="2" justifyContent="space-between" alignItems="center">
             <Box pl="2">
               <Heading size="sm">
-                {fullName} ~ {motif} ~ <span style={{ color: 'orange' }}> {payment || '0'} </span>
+                {fullName} ~ {motif}
               </Heading>
             </Box>
             {withPresence && <Button variant="ghost" leftIcon={isLeft ? 'A' : 'P'} onClick={handlePresence}></Button>}
