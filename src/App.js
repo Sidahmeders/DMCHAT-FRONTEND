@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import addNotification, { Notifications } from 'react-push-notifiy'
-import { throttle } from 'lodash'
+import { debounce } from 'lodash'
 
 import { ChatState } from './context'
 import { checkIsJWTExpired } from './utils'
@@ -13,7 +13,7 @@ import ChatMessageSound from './assets/songs/chat-message.wav'
 
 import './App.css'
 
-const notify = throttle((messageRecieved) => {
+const notify = debounce((messageRecieved) => {
   new Audio(ChatMessageSound).play()
   addNotification({
     title: messageRecieved?.sender?.name,
@@ -24,7 +24,7 @@ const notify = throttle((messageRecieved) => {
   navigator.serviceWorker.ready.then((registration) => {
     registration.showNotification(`${messageRecieved?.sender?.name} / ${messageRecieved.content}`)
   })
-}, 5000)
+}, 500)
 
 const App = () => {
   const {
@@ -73,8 +73,7 @@ const App = () => {
       }
       notify(messageRecieved)
     })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  })
 
   return (
     <div className="App">
