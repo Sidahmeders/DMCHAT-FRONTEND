@@ -94,10 +94,17 @@ const SingleChat = () => {
   }
 
   useEffect(() => {
-    socket.on(CHAT_LISTENERS.TYPING, () => setIsTyping(true))
-    socket.on(CHAT_LISTENERS.STOP_TYPING, () => setIsTyping(false))
-    // eslint-disable-next-line
-  }, [])
+    socket.on(CHAT_LISTENERS.TYPING, (chatId) => {
+      if (chatId === selectedChat?._id) {
+        setIsTyping(true)
+      }
+    })
+    socket.on(CHAT_LISTENERS.STOP_TYPING, (chatId) => {
+      if (chatId === selectedChat?._id) {
+        setIsTyping(false)
+      }
+    })
+  }, [selectedChat, socket])
 
   return (
     <>
