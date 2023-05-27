@@ -22,7 +22,7 @@ export const ChatProvider = ({ children, socket }) => {
   const toast = useToast()
 
   const fetchMessages = async () => {
-    if (!selectedChat) return
+    if (!selectedChat || !user) return
     setIsLoadingMessages(true)
     try {
       const response = await fetch(`/api/message/${selectedChat._id}`, {
@@ -40,10 +40,7 @@ export const ChatProvider = ({ children, socket }) => {
         title: 'Error Occured!',
         description: 'Failed to Load the Messages',
         status: 'error',
-        duration: 5000,
-        isClosable: true,
         position: 'bottom-right',
-        variant: 'solid',
       })
     }
     setIsLoadingMessages(false)
@@ -51,11 +48,10 @@ export const ChatProvider = ({ children, socket }) => {
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-    setUser(userInfo)
+    if (!userInfo) navigate('/')
 
-    if (!userInfo) {
-      navigate('/')
-    }
+    setUser(userInfo)
+    fetchMessages()
 
     return () => {
       setSelectedChatCompare(undefined)
@@ -63,8 +59,9 @@ export const ChatProvider = ({ children, socket }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate])
 
+  // Whenever users switches chat, call the function again
   useEffect(() => {
-    fetchMessages() // Whenever users switches chat, call the function again
+    fetchMessages()
     setSelectedChatCompare(selectedChat)
     // eslint-disable-next-line
   }, [selectedChat])

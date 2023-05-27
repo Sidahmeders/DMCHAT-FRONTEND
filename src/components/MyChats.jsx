@@ -6,6 +6,7 @@ import { LogOut } from 'react-feather'
 import { ChatState } from '../context'
 import ChatLoading from './ChatLoading'
 import { getSender } from '../utils'
+
 import GroupChatModal from './miscellaneous/GroupChatModal'
 import SearchUserDrawer from './SearchUserDrawer'
 
@@ -77,8 +78,8 @@ const MyChats = () => {
               <Box
                 onClick={() => setSelectedChat(chat)}
                 cursor="pointer"
-                bg={selectedChat === chat ? '#38B2AC' : '#E8E8E8'}
-                color={selectedChat === chat ? 'white' : 'black'}
+                bg={selectedChat?._id === chat._id ? '#38B2AC' : '#E8E8E8'}
+                color={selectedChat?._id === chat._id ? 'white' : 'black'}
                 px={3}
                 py={2}
                 borderRadius="lg"
