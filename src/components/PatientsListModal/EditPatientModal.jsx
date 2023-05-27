@@ -183,53 +183,44 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
                       `Motif:: ${motif}\nEtate:: ${generalState}\nDiag:: ${diagnostic}\nPlan:: ${treatmentPlan}\nTitre:: ${title}`.trim()
 
                     return (
-                      <Controller
-                        key={_id}
-                        control={control}
-                        name={`${CREATE_PATIENT_NAMES.HISTORY}.${_id}`}
-                        shouldUnregister={isSubmitted}
-                        render={({ field: { onChange, value } }) => (
-                          <InputGroup>
-                            <div style={{ width: '6rem' }}>
-                              {isNewTreatment && <hr />}
-                              <div style={{ padding: '0 0.25rem', color: isNewTreatment ? 'blue' : 'gray' }}>
-                                <span style={{ borderBottom: isNewTreatment ? '1px solid blue' : '' }}>
-                                  {format(parseISO(createdAt), 'yy.MM.dd')}
-                                </span>
-                                {isNewTreatment && (
-                                  <>
-                                    <br />
-                                    T: {totalPrice}
-                                    <br />
-                                    V: {payment}
-                                    <br />
-                                    {isDone ? 'F' : 'DF'}
-                                  </>
-                                )}
-                              </div>
-                            </div>
-                            {isNewTreatment ? (
-                              <Textarea
-                                p="0.5"
-                                pl="2"
-                                height="24"
-                                borderRadius="0"
-                                borderLeft="0"
-                                borderRight="0"
-                                borderBottom="0"
-                                placeholder="Historique"
-                                defaultValue={history}
-                                value={value}
-                                onChange={onChange}
-                              />
-                            ) : (
-                              <div>
-                                Titre:: {title} / V: {payment || '0'} / {isDone ? 'F' : 'DF'}
-                              </div>
+                      <InputGroup key={_id}>
+                        <div style={{ width: '6rem' }}>
+                          {isNewTreatment && <hr />}
+                          <div style={{ padding: '0 0.25rem', color: isNewTreatment ? 'blue' : 'gray' }}>
+                            <span style={{ borderBottom: isNewTreatment ? '1px solid blue' : '' }}>
+                              {format(parseISO(createdAt), 'yy.MM.dd')}
+                            </span>
+                            {isNewTreatment && (
+                              <>
+                                <br />
+                                T: {totalPrice}
+                                <br />
+                                V: {payment}
+                                <br />
+                                {isDone ? 'F' : 'DF'}
+                              </>
                             )}
-                          </InputGroup>
+                          </div>
+                        </div>
+                        {isNewTreatment ? (
+                          <Textarea
+                            p="0.5"
+                            pl="2"
+                            height="24"
+                            borderRadius="0"
+                            borderLeft="0"
+                            borderRight="0"
+                            borderBottom="0"
+                            placeholder="Historique"
+                            value={history}
+                            onChange={() => {}}
+                          />
+                        ) : (
+                          <div>
+                            Titre:: {title} / V: {payment || '0'} / {isDone ? 'F' : 'DF'}
+                          </div>
                         )}
-                      />
+                      </InputGroup>
                     )
                   })}
                 </Stack>
