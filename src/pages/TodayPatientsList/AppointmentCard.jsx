@@ -19,7 +19,18 @@ export const LoadingCards = () => (
 )
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
-  const { fullName, motif, generalState, diagnostic, treatmentPlan, payment, totalPrice, paymentLeft } = appointment
+  const {
+    isNewTreatment,
+    fullName,
+    title,
+    motif,
+    generalState,
+    diagnostic,
+    treatmentPlan,
+    payment,
+    totalPrice,
+    paymentLeft,
+  } = appointment
   const { user, socket } = ChatState()
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
@@ -27,6 +38,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
   const [showCardBody, setShowCardBody] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
+  const [canUpdatePayments, setCanUpdatePayments] = useState(false)
   const [paymentVal, setPaymentVal] = useState(payment)
   const [totalPriceVal, setTotalPriceVal] = useState(totalPrice)
 
@@ -64,6 +76,10 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENT, leftPatient)
     }
     setIsLoading(false)
+  }
+
+  const handlePaymentsUpdate = () => {
+    // TODO: update payment
   }
 
   useEffect(() => {
@@ -114,15 +130,14 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
 
       {showCardBody && (
         <CardBody p="0.25rem 1rem" mr="0">
-          <p>
-            Etate: <span style={{ fontWeight: 'bold' }}>{generalState}</span>
-          </p>
-          <p>
-            Diag: <span style={{ fontWeight: 'bold' }}>{diagnostic}</span>
-          </p>
-          <p>
-            Plan: <span style={{ fontWeight: 'bold' }}>{treatmentPlan}</span>
-          </p>
+          Titre: <span style={{ fontWeight: 'bold' }}>{title}</span>
+          <br />
+          Etate: <span style={{ fontWeight: 'bold' }}>{generalState}</span>
+          <br />
+          Diag: <span style={{ fontWeight: 'bold' }}>{diagnostic}</span>
+          <br />
+          Plan: <span style={{ fontWeight: 'bold' }}>{treatmentPlan}</span>
+          <br />
           <InputGroup gap="2">
             <InputGroup className="payments-input">
               <label>T</label>
@@ -144,9 +159,21 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
             </InputGroup>
             <InputGroup className="payments-input">
               <label>R</label>
-              <Input type="number" readOnly value={paymentLeft || 0} />
+              <Input type="number" readOnly value={isNewTreatment ? totalPrice - payment : paymentLeft} />
             </InputGroup>
           </InputGroup>
+          {canUpdatePayments ? (
+            <Box mt="2" mb="2">
+              <Button mr="2" colorScheme="orange" onClick={handlePaymentsUpdate}>
+                Confirmer modification
+              </Button>
+              <Button onClick={() => setCanUpdatePayments(false)}>Annuler</Button>
+            </Box>
+          ) : (
+            <Button colorScheme="purple" mt="2" mb="2" onClick={() => setCanUpdatePayments(true)}>
+              Enregistrer les modifications de paiement
+            </Button>
+          )}
         </CardBody>
       )}
     </Card>
