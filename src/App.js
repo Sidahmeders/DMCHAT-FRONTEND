@@ -21,6 +21,13 @@ const notify = debounce((messageRecieved) => {
     vibrate: 3,
     native: true,
   })
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.showNotification(`${messageRecieved?.sender?.name} / ${messageRecieved.content}`, {
+      icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
+      tag: messageRecieved?.sender?.name,
+      vibrate: 3,
+    })
+  })
 }, 500)
 
 const App = () => {
