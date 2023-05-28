@@ -14,7 +14,7 @@ export const TodayPatientsListProvider = ({ children }) => {
   })
 
   const fetchTodayAppointments = async (user) => {
-    const response = await fetch('api/appointment/2023/05/31', {
+    const response = await fetch('api/appointment/2023/06/01', {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${user.token}`,

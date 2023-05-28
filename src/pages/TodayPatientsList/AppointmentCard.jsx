@@ -19,7 +19,7 @@ export const LoadingCards = () => (
 )
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
-  const { fullName, motif, generalState, diagnostic, treatmentPlan, payment, totalPrice } = appointment
+  const { fullName, motif, generalState, diagnostic, treatmentPlan, payment, totalPrice, paymentLeft } = appointment
   const { user, socket } = ChatState()
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
@@ -144,7 +144,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
             </InputGroup>
             <InputGroup className="payments-input">
               <label>R</label>
-              <Input type="number" readOnly value={totalPriceVal - paymentVal || 0} />
+              <Input type="number" readOnly value={paymentLeft || 0} />
             </InputGroup>
           </InputGroup>
         </CardBody>
