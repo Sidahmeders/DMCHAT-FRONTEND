@@ -104,7 +104,7 @@ export default function AddPatientModal() {
                           )
                         }
                       />
-                      <Input type="number" placeholder="Age" value={value} onChange={onChange} />
+                      <Input type="number" min={1} max={120} placeholder="Age" value={value} onChange={onChange} />
                     </InputGroup>
                   )}
                 />

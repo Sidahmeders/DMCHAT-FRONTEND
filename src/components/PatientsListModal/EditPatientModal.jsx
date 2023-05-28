@@ -131,7 +131,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
                         )
                       }
                     />
-                    <Input type="number" placeholder="Age" value={value} onChange={onChange} />
+                    <Input type="number" min={1} max={120} placeholder="Age" value={value} onChange={onChange} />
                   </InputGroup>
                 )}
               />
