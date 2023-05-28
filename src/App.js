@@ -19,8 +19,9 @@ const notify = debounce((messageRecieved) => {
     title: messageRecieved?.sender?.name,
     message: messageRecieved.content,
     vibrate: 3,
-    native: true,
-    serviceWorker: navigator.serviceWorker,
+  })
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.showNotification(`${messageRecieved?.sender?.name} / ${messageRecieved.content}`)
   })
 }, 500)
 
