@@ -20,6 +20,7 @@ const notify = debounce((messageRecieved) => {
     message: messageRecieved.content,
     vibrate: 3,
     native: true,
+    serviceWorker: navigator.serviceWorker,
   })
 }, 500)
 
