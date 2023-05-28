@@ -185,7 +185,14 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                 render={({ field: { onChange, value } }) => (
                   <InputGroup>
                     <InputLeftElement pointerEvents="none" children={<DollarSign size="1.25rem" color="gray" />} />
-                    <Input type="number" placeholder="versement" value={value} onChange={onChange} />
+                    <Input
+                      type="number"
+                      min={0}
+                      step={1000}
+                      placeholder="versement"
+                      value={value}
+                      onChange={onChange}
+                    />
                   </InputGroup>
                 )}
               />
@@ -283,7 +290,14 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                             pointerEvents="none"
                             children={<DollarSign size="1.25rem" color={value >= 1000 ? 'green' : 'red'} />}
                           />
-                          <Input type="number" placeholder="Prix total" value={value} onChange={onChange} />
+                          <Input
+                            type="number"
+                            min={0}
+                            step={1000}
+                            placeholder="Prix total"
+                            value={value}
+                            onChange={onChange}
+                          />
                         </InputGroup>
                       )}
                     />
@@ -299,7 +313,14 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                             pointerEvents="none"
                             children={<DollarSign size="1.25rem" color="gray" />}
                           />
-                          <Input type="number" placeholder="versement" value={value} onChange={onChange} />
+                          <Input
+                            type="number"
+                            min={0}
+                            step={1000}
+                            placeholder="versement"
+                            value={value}
+                            onChange={onChange}
+                          />
                         </InputGroup>
                       )}
                     />

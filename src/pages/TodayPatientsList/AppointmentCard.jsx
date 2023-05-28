@@ -144,6 +144,8 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
               <Input
                 type="number"
                 placeholder="Prix total"
+                min={0}
+                step={1000}
                 value={totalPriceVal}
                 onChange={(e) => setTotalPriceVal(e.target.value)}
               />
@@ -154,6 +156,8 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
                 type="number"
                 placeholder="versement"
                 value={paymentVal}
+                min={0}
+                step={1000}
                 onChange={(e) => setPaymentVal(e.target.value)}
               />
             </InputGroup>
