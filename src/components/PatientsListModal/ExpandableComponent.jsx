@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Textarea, InputGroup, Box } from '@chakra-ui/react'
+import { Textarea, InputGroup, Box, Skeleton } from '@chakra-ui/react'
 import { format, parseISO } from 'date-fns'
 
 import Loader from '../Loader/Loader'
@@ -25,9 +25,7 @@ export default function ExpandableComponent({ data, user }) {
     })()
   }, [data, user])
 
-  console.log(patientAppointments, 'patientAppointments')
-
-  if (isLoading) return <h1>Loading...</h1>
+  if (isLoading) return <Skeleton mt="2" mb="2" height="100" />
 
   return (
     <Loader loading={isLoading}>
