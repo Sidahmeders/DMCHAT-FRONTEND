@@ -1,6 +1,5 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import addNotification, { Notifications } from 'react-push-notifiy'
 import { debounce } from 'lodash'
 
 import { ChatState } from './context'
@@ -12,15 +11,30 @@ import TopNavigation from './components/TopNavigation/TopNavigation'
 
 import './App.css'
 
-const notify = debounce((messageRecieved) => {
-  addNotification({
-    title: messageRecieved?.sender?.name,
-    message: messageRecieved.content,
-    tag: messageRecieved?.sender?.name,
-    icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
-    vibrate: 3,
-    native: true,
-  })
+const notify = debounce(async (messageRecieved) => {
+  if (Notification.permission === 'default' || Notification.permission === 'denied') {
+    await Notification.requestPermission()
+  }
+
+  if (Notification.permission === 'granted') {
+    const options = {
+      tag: messageRecieved?.sender?.name,
+      icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
+      vibrate: 3,
+    }
+
+    // web notification
+    const notification = new Notification(messageRecieved?.sender?.name, {
+      body: messageRecieved.content,
+      ...options,
+    })
+    setTimeout(notification.close.bind(notification), 4500)
+
+    // mobile notification
+    navigator.serviceWorker.ready.then((registration) => {
+      registration.showNotification(messageRecieved.content, options)
+    })
+  }
 }, 500)
 
 const App = () => {
@@ -75,7 +89,6 @@ const App = () => {
   return (
     <div className="App">
       {user && <TopNavigation />}
-      <Notifications />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path={APP_ROUTES.CHATS} element={<Chat />} />
