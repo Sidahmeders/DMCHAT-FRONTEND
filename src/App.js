@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import addNotification, { Notifications } from 'react-push-notifiy'
+import addNotification, { Notifications } from './_notif/index'
 import { debounce } from 'lodash'
 
 import { ChatState } from './context'
@@ -9,24 +9,17 @@ import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from './config'
 
 import { Home, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
 import TopNavigation from './components/TopNavigation/TopNavigation'
-import ChatMessageSound from './assets/songs/chat-message.wav'
 
 import './App.css'
 
 const notify = debounce((messageRecieved) => {
-  new Audio(ChatMessageSound).play()
   addNotification({
     title: messageRecieved?.sender?.name,
     message: messageRecieved.content,
+    tag: messageRecieved?.sender?.name,
+    icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
     vibrate: 3,
     native: true,
-  })
-  navigator.serviceWorker.ready.then((registration) => {
-    registration.showNotification(`${messageRecieved?.sender?.name} / ${messageRecieved.content}`, {
-      icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
-      tag: messageRecieved?.sender?.name,
-      vibrate: 3,
-    })
   })
 }, 500)
 
