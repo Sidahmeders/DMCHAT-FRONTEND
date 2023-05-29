@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
-import addNotification, { Notifications } from './_notif/index'
+import addNotification, { Notifications } from 'react-push-notifiy'
 import { debounce } from 'lodash'
 
 import { ChatState } from './context'
