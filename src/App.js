@@ -12,28 +12,27 @@ import TopNavigation from './components/TopNavigation/TopNavigation'
 import './App.css'
 
 const notify = debounce(async (messageRecieved) => {
+  const options = {
+    tag: messageRecieved?.sender?.name,
+    icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
+    vibrate: 3,
+  }
+
+  // mobile notification
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.showNotification(messageRecieved.content, options)
+  })
+
   if (Notification.permission === 'default' || Notification.permission === 'denied') {
     await Notification.requestPermission()
   }
-
   if (Notification.permission === 'granted') {
-    const options = {
-      tag: messageRecieved?.sender?.name,
-      icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
-      vibrate: 3,
-    }
-
     // web notification
     const notification = new Notification(messageRecieved?.sender?.name, {
       body: messageRecieved.content,
       ...options,
     })
     setTimeout(notification.close.bind(notification), 4500)
-
-    // mobile notification
-    navigator.serviceWorker.ready.then((registration) => {
-      registration.showNotification(messageRecieved.content, options)
-    })
   }
 }, 500)
 
