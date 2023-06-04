@@ -22,7 +22,7 @@ import {
 import Select from 'react-select'
 
 import { ChatState } from '../../context'
-import { ADD_APPOINTMENT_NAME } from '../../config'
+import { ADD_APPOINTMENT_NAMES } from '../../config'
 import { getMotifTemplateButtons } from '../../utils'
 
 import Loader from '../Loader/Loader'
@@ -34,36 +34,18 @@ const resolvePatientOptions = (patients) => {
   }))
 }
 
-const initialValues = Object.values(ADD_APPOINTMENT_NAME).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
-
-const RadioGroup = () => {
-  const options = getMotifTemplateButtons()
-  const [value, setValue] = useState()
-
-  return (
-    <HStack>
-      {options.map((option) => (
-        <Button
-          colorScheme={value?.id === option.id ? 'messenger' : 'gray'}
-          onClick={() => setValue(option)}
-          key={option.id}
-          size="sm">
-          {option.name}
-        </Button>
-      ))}
-    </HStack>
-  )
-}
+const initialValues = Object.values(ADD_APPOINTMENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
 
 export default function AddAppointmentBody({ selectedSlotInfo, handleClose, events, setEvents }) {
   const { user } = ChatState()
   const toast = useToast()
   const { start, end } = selectedSlotInfo
-
+  const motifRadioOptions = getMotifTemplateButtons()
   const {
     handleSubmit,
     control,
     reset,
+    getValues,
     formState: { isSubmitted },
   } = useForm({ defaultValues: initialValues })
 
@@ -72,6 +54,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [isMounted, setIsMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isNewTreatment, setIsNewTreatment] = useState(false)
+  const [radioValue, setRadioValue] = useState('')
 
   const onSubmit = async (data) => {
     if (!user) return
@@ -155,7 +138,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
           <Stack spacing={4}>
             <Controller
               control={control}
-              name={ADD_APPOINTMENT_NAME.FULL_NAME}
+              name={ADD_APPOINTMENT_NAMES.FULL_NAME}
               rules={{ required: true }}
               shouldUnregister={isSubmitted}
               render={({ field: { onChange, value } }) => (
@@ -176,7 +159,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
 
             <Controller
               control={control}
-              name={ADD_APPOINTMENT_NAME.MOTIF}
+              name={ADD_APPOINTMENT_NAMES.MOTIF}
               shouldUnregister={isSubmitted}
               render={({ field: { onChange, value } }) => (
                 <InputGroup>
@@ -195,11 +178,27 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               )}
             />
 
-            <RadioGroup />
+            <HStack>
+              {motifRadioOptions.map((option) => (
+                <Button
+                  colorScheme={radioValue?.id === option.id ? 'messenger' : 'gray'}
+                  onClick={() => {
+                    setRadioValue(option)
+                    reset({
+                      ...getValues(),
+                      [ADD_APPOINTMENT_NAMES.MOTIF]: option.name,
+                    })
+                  }}
+                  key={option.id}
+                  size="sm">
+                  {option.name}
+                </Button>
+              ))}
+            </HStack>
 
             <Controller
               control={control}
-              name={ADD_APPOINTMENT_NAME.TITLE}
+              name={ADD_APPOINTMENT_NAMES.TITLE}
               rules={{ required: true }}
               shouldUnregister={isSubmitted}
               render={({ field: { onChange, value } }) => (
@@ -222,7 +221,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
             {!isNewTreatment && (
               <Controller
                 control={control}
-                name={ADD_APPOINTMENT_NAME.PAYMENT}
+                name={ADD_APPOINTMENT_NAMES.PAYMENT}
                 shouldUnregister={isSubmitted}
                 render={({ field: { onChange, value } }) => (
                   <InputGroup>
@@ -256,7 +255,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               <>
                 <Controller
                   control={control}
-                  name={ADD_APPOINTMENT_NAME.DIAGNOSTIC}
+                  name={ADD_APPOINTMENT_NAMES.DIAGNOSTIC}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
@@ -268,7 +267,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
 
                 <Controller
                   control={control}
-                  name={ADD_APPOINTMENT_NAME.TREATMENT_PLAN}
+                  name={ADD_APPOINTMENT_NAMES.TREATMENT_PLAN}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
@@ -282,7 +281,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   <GridItem>
                     <Controller
                       control={control}
-                      name={ADD_APPOINTMENT_NAME.TOTAL_PRICE}
+                      name={ADD_APPOINTMENT_NAMES.TOTAL_PRICE}
                       shouldUnregister={isSubmitted}
                       render={({ field: { onChange, value } }) => (
                         <InputGroup>
@@ -305,7 +304,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   <GridItem>
                     <Controller
                       control={control}
-                      name={ADD_APPOINTMENT_NAME.PAYMENT}
+                      name={ADD_APPOINTMENT_NAMES.PAYMENT}
                       shouldUnregister={isSubmitted}
                       render={({ field: { onChange, value } }) => (
                         <InputGroup>

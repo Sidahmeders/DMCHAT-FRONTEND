@@ -9,11 +9,10 @@ export const CREATE_PATIENT_NAMES = {
   FULL_NAME: 'fullName',
   AGE: 'age',
   PHONE_NUMBER: 'phoneNumber',
-  APPOINTMENT: 'appointment',
   GENERAL_STATE: 'generalState',
 }
 
-export const ADD_APPOINTMENT_NAME = {
+export const ADD_APPOINTMENT_NAMES = {
   FULL_NAME: 'fullName',
   TITLE: 'title',
   MOTIF: 'motif',
