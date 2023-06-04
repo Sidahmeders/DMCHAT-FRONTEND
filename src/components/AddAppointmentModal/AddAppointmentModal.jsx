@@ -1,23 +1,23 @@
 import { useState } from 'react'
 import { Modal, ModalContent, ModalOverlay, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react'
 
-import { getEventTemplateButtons, addEventTemplateButtons, dropEventTemplateButton } from '../../utils'
+import { getMotifTemplateButtons, addMotifTemplateButtons, dropMotifTemplateButton } from '../../utils'
 
 import AddAppointmentBody from './AddAppointmentBody'
 import EditableButtons from '../EditableButtons/EditableButtons'
 import ConfigureCalendarAvailabilityBody from './ConfigureCalendarAvailabilityBody'
 
 export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose, events, setEvents }) {
-  const [templateButtons, setTemplateButtons] = useState(getEventTemplateButtons())
+  const [templateButtons, setTemplateButtons] = useState(getMotifTemplateButtons())
 
   return (
     <Modal size="xl" isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+      <ModalOverlay bg="blackAlpha.300" />
       <ModalContent>
         <Tabs>
           <TabList>
             <Tab>Ajouter rendez-vous</Tab>
-            <Tab onClick={() => setTemplateButtons(getEventTemplateButtons())}>modifier boutons</Tab>
+            <Tab onClick={() => setTemplateButtons(getMotifTemplateButtons())}>modifier boutons</Tab>
             <Tab>définir la disponibilité</Tab>
           </TabList>
 
@@ -33,11 +33,11 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
             </TabPanel>
             <TabPanel>
               <EditableButtons
-                label="Mettre événement (btn modifiable)"
+                label="Motif de consultation (btn modifiable)"
                 handleClose={onClose}
-                getTemplateButtons={getEventTemplateButtons}
-                addTemplateButtons={addEventTemplateButtons}
-                dropTemplateButton={dropEventTemplateButton}
+                getTemplateButtons={getMotifTemplateButtons}
+                addTemplateButtons={addMotifTemplateButtons}
+                dropTemplateButton={dropMotifTemplateButton}
               />
             </TabPanel>
             <TabPanel>

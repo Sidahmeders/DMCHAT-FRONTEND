@@ -60,8 +60,8 @@ export default function PatientListModal() {
         Liste des patients
       </Button>
 
-      <Modal size="full" isOpen={isPatientsModalOpen} onClose={onPatientsModalClose}>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+      <Modal size="5xl" isOpen={isPatientsModalOpen} onClose={onPatientsModalClose}>
+        <ModalOverlay bg="blackAlpha.300" />
         <ModalContent>
           <ModalHeader>Liste des patients</ModalHeader>
           <ModalCloseButton p="6" />

@@ -16,12 +16,14 @@ import {
   InputLeftElement,
   Grid,
   GridItem,
+  HStack,
 } from '@chakra-ui/react'
 
 import Select from 'react-select'
 
-import { ADD_APPOINTMENT_NAME } from '../../config'
 import { ChatState } from '../../context'
+import { ADD_APPOINTMENT_NAME } from '../../config'
+import { getMotifTemplateButtons } from '../../utils'
 
 import Loader from '../Loader/Loader'
 
@@ -33,6 +35,25 @@ const resolvePatientOptions = (patients) => {
 }
 
 const initialValues = Object.values(ADD_APPOINTMENT_NAME).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
+
+const RadioGroup = () => {
+  const options = getMotifTemplateButtons()
+  const [value, setValue] = useState()
+
+  return (
+    <HStack>
+      {options.map((option) => (
+        <Button
+          colorScheme={value?.id === option.id ? 'messenger' : 'gray'}
+          onClick={() => setValue(option)}
+          key={option.id}
+          size="sm">
+          {option.name}
+        </Button>
+      ))}
+    </HStack>
+  )
+}
 
 export default function AddAppointmentBody({ selectedSlotInfo, handleClose, events, setEvents }) {
   const { user } = ChatState()
@@ -50,7 +71,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [searchName, setSearchName] = useState('')
   const [isMounted, setIsMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [isWaitingList, setIsWaitingList] = useState(false)
   const [isNewTreatment, setIsNewTreatment] = useState(false)
 
   const onSubmit = async (data) => {
@@ -69,7 +89,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       body: JSON.stringify({
         ...data,
         isNewTreatment,
-        isWaitingList,
         sender: userId,
         patient: patientId,
         startDate: start,
@@ -157,6 +176,29 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
 
             <Controller
               control={control}
+              name={ADD_APPOINTMENT_NAME.MOTIF}
+              shouldUnregister={isSubmitted}
+              render={({ field: { onChange, value } }) => (
+                <InputGroup>
+                  <InputLeftElement
+                    pointerEvents="none"
+                    children={
+                      value?.length >= 2 ? (
+                        <CheckCircle size="1.25rem" color="green" />
+                      ) : (
+                        <AlertCircle size="1.25rem" color="red" />
+                      )
+                    }
+                  />
+                  <Input type="text" placeholder="Motif de consultation" value={value} onChange={onChange} />
+                </InputGroup>
+              )}
+            />
+
+            <RadioGroup />
+
+            <Controller
+              control={control}
               name={ADD_APPOINTMENT_NAME.TITLE}
               rules={{ required: true }}
               shouldUnregister={isSubmitted}
@@ -212,48 +254,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
 
             {isNewTreatment && (
               <>
-                <Controller
-                  control={control}
-                  name={ADD_APPOINTMENT_NAME.MOTIF}
-                  shouldUnregister={isSubmitted}
-                  render={({ field: { onChange, value } }) => (
-                    <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        children={
-                          value?.length >= 2 ? (
-                            <CheckCircle size="1.25rem" color="green" />
-                          ) : (
-                            <AlertCircle size="1.25rem" color="red" />
-                          )
-                        }
-                      />
-                      <Input type="text" placeholder="Motif de consultation" value={value} onChange={onChange} />
-                    </InputGroup>
-                  )}
-                />
-
-                <Controller
-                  control={control}
-                  name={ADD_APPOINTMENT_NAME.GENERAL_STATE}
-                  shouldUnregister={isSubmitted}
-                  render={({ field: { onChange, value } }) => (
-                    <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        children={
-                          value?.length >= 2 ? (
-                            <CheckCircle size="1.25rem" color="green" />
-                          ) : (
-                            <AlertCircle size="1.25rem" color="red" />
-                          )
-                        }
-                      />
-                      <Input type="text" placeholder="Etate général" value={value} onChange={onChange} />
-                    </InputGroup>
-                  )}
-                />
-
                 <Controller
                   control={control}
                   name={ADD_APPOINTMENT_NAME.DIAGNOSTIC}
@@ -328,18 +328,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                 </Grid>
               </>
             )}
-
-            <FormControl display="flex" alignItems="center">
-              <FormLabel htmlFor="awaiting-list" ml="1" mb="0">
-                Ajouter à la liste d'attente?
-              </FormLabel>
-              <Switch
-                id="awaiting-list"
-                colorScheme="orange"
-                checked={isWaitingList}
-                onChange={() => setIsWaitingList(!isWaitingList)}
-              />
-            </FormControl>
           </Stack>
         </ModalBody>
         <ModalFooter pb="0">

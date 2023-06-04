@@ -1,6 +1,6 @@
 const PATIENT = 'patient'
 const PAGE_ROUTE = 'pageRoute'
-const TEMPLATE_BUTTONS = 'templateButtons'
+const MOTIF_TEMPLATE_BUTTONS = 'motifTemplateButtons'
 
 export const getPatient = () => JSON.parse(localStorage.getItem(PATIENT)) || {}
 export const setPatient = (patient) => localStorage.setItem(PATIENT, JSON.stringify(patient))
@@ -8,11 +8,11 @@ export const setPatient = (patient) => localStorage.setItem(PATIENT, JSON.string
 export const getPageRoute = () => localStorage.getItem(PAGE_ROUTE) || ''
 export const setPageRoute = (route) => localStorage.setItem(PAGE_ROUTE, route)
 
-export const getEventTemplateButtons = () => JSON.parse(localStorage.getItem(TEMPLATE_BUTTONS)) || []
-export const addEventTemplateButtons = (template) => {
-  localStorage.setItem(TEMPLATE_BUTTONS, JSON.stringify([...getEventTemplateButtons(), template]))
+export const getMotifTemplateButtons = () => JSON.parse(localStorage.getItem(MOTIF_TEMPLATE_BUTTONS)) || []
+export const addMotifTemplateButtons = (button) => {
+  localStorage.setItem(MOTIF_TEMPLATE_BUTTONS, JSON.stringify([...getMotifTemplateButtons(), button]))
 }
-export const dropEventTemplateButton = (templateId) => {
-  const filteredTemplateButtons = getEventTemplateButtons().filter(({ id }) => templateId !== id)
-  localStorage.setItem(TEMPLATE_BUTTONS, JSON.stringify(filteredTemplateButtons))
+export const dropMotifTemplateButton = (buttonId) => {
+  const filteredTemplateButtons = getMotifTemplateButtons().filter(({ id }) => buttonId !== id)
+  localStorage.setItem(MOTIF_TEMPLATE_BUTTONS, JSON.stringify(filteredTemplateButtons))
 }
