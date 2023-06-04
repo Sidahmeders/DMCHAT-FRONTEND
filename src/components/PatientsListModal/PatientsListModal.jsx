@@ -1,6 +1,14 @@
 import { useEffect, useState, useMemo } from 'react'
-import { useDisclosure } from '@chakra-ui/react'
-import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react'
+import {
+  useDisclosure,
+  Button,
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalBody,
+  ModalCloseButton,
+} from '@chakra-ui/react'
 
 import { ChatState } from '../../context'
 import { setPatient } from '../../utils'

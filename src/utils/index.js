@@ -15,6 +15,7 @@ export const guid = () => {
 
 export const flattenAppointment = (appointment) => ({
   id: appointment._id,
+  patientId: appointment.patient._id,
   ...appointment.patient,
   ...omit(appointment, 'patient'),
 })

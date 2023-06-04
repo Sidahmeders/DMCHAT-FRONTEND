@@ -5,7 +5,7 @@ import { ChevronDown, ChevronUp } from 'react-feather'
 
 import { ChatState } from '../../context'
 import { getPatient } from '../../utils'
-
+import Loader from '../Loader/Loader'
 import PatientEditBody from './PatientEditBody'
 
 import './PatientFollowupsModal.scss'
@@ -16,9 +16,11 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
 
   const [appointments, setAppointments] = useState([])
   const [isEditPatientOpen, setIsEditPatientOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     ;(async () => {
+      setIsLoading(true)
       const response = await fetch(`/api/appointment/${patient._id}`, {
         method: 'GET',
         headers: {
@@ -32,12 +34,13 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
           if (appointment.isNewTreatment) {
             return [...prevAppointments, [appointment]]
           }
-          const lastGroup = prevAppointments[prevAppointments.length - 1]
+          const lastGroup = prevAppointments[prevAppointments.length - 1] || []
           return [...prevAppointments.slice(0, -1), [...lastGroup, appointment]]
         }, [])
 
         setAppointments(groupedAppointments)
       }
+      setIsLoading(false)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, isOpen])
@@ -59,75 +62,77 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
         </ModalHeader>
         <ModalCloseButton p="6" />
         <ModalBody className="patient-followups-modal-body">
-          {appointments.map((appointmentsGroup, index) => (
-            <table key={index}>
-              <caption>
-                Motif: <span>{appointmentsGroup[0].motif}</span>
-                <br />
-                Plan: <span>{appointmentsGroup[0].treatmentPlan}</span>
-              </caption>
-              <thead>
-                <tr>
-                  <th>date de création</th>
-                  <th>titre</th>
-                  <th>versement</th>
-                  <th>est fini</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <th
-                    contentEditable
-                    suppressContentEditableWarning
-                    onInput={(e) => console.log(e.target.innerText, '1')}>
-                    {format(parseISO(appointmentsGroup[0].createdAt), 'yyyy-MM-dd')}
-                  </th>
-                  <th
-                    contentEditable
-                    suppressContentEditableWarning
-                    onInput={(e) => console.log(e.target.innerText, '2')}>
-                    {appointmentsGroup[0].title}
-                  </th>
-                  <th
-                    contentEditable
-                    suppressContentEditableWarning
-                    onInput={(e) => console.log(e.target.innerText, '3')}>
-                    {appointmentsGroup[0].totalPrice}
-                  </th>
-                  <th>
-                    {appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)}
-                  </th>
-                </tr>
+          <Loader loading={isLoading}>
+            {appointments.map((appointmentsGroup, index) => (
+              <table key={index}>
+                <caption>
+                  Motif: <span>{appointmentsGroup[0].motif}</span>
+                  <br />
+                  Plan: <span>{appointmentsGroup[0].treatmentPlan}</span>
+                </caption>
+                <thead>
+                  <tr>
+                    <th>date de création</th>
+                    <th>titre</th>
+                    <th>versement</th>
+                    <th>est fini</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th
+                      contentEditable
+                      suppressContentEditableWarning
+                      onInput={(e) => console.log(e.target.innerText, '1')}>
+                      {format(parseISO(appointmentsGroup[0].createdAt), 'yyyy-MM-dd')}
+                    </th>
+                    <th
+                      contentEditable
+                      suppressContentEditableWarning
+                      onInput={(e) => console.log(e.target.innerText, '2')}>
+                      {appointmentsGroup[0].title}
+                    </th>
+                    <th
+                      contentEditable
+                      suppressContentEditableWarning
+                      onInput={(e) => console.log(e.target.innerText, '3')}>
+                      {appointmentsGroup[0].totalPrice}
+                    </th>
+                    <th>
+                      {appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)}
+                    </th>
+                  </tr>
 
-                {appointmentsGroup.map((appointment) => {
-                  const { _id, createdAt, title, payment, isDone } = appointment
-                  return (
-                    <tr key={_id}>
-                      <td
-                        contentEditable
-                        suppressContentEditableWarning
-                        onInput={(e) => console.log(e.target.innerText, '4')}>
-                        {format(parseISO(createdAt), 'yyyy-MM-dd')}
-                      </td>
-                      <td
-                        contentEditable
-                        suppressContentEditableWarning
-                        onInput={(e) => console.log(e.target.innerText, '5')}>
-                        {title}
-                      </td>
-                      <td
-                        contentEditable
-                        suppressContentEditableWarning
-                        onInput={(e) => console.log(e.target.innerText, '6')}>
-                        {payment}
-                      </td>
-                      <td>{isDone ? 'Oui' : 'No'}</td>
-                    </tr>
-                  )
-                })}
-              </tbody>
-            </table>
-          ))}
+                  {appointmentsGroup.map((appointment) => {
+                    const { _id, createdAt, title, payment, isDone } = appointment
+                    return (
+                      <tr key={_id}>
+                        <td
+                          contentEditable
+                          suppressContentEditableWarning
+                          onInput={(e) => console.log(e.target.innerText, '4')}>
+                          {format(parseISO(createdAt), 'yyyy-MM-dd')}
+                        </td>
+                        <td
+                          contentEditable
+                          suppressContentEditableWarning
+                          onInput={(e) => console.log(e.target.innerText, '5')}>
+                          {title}
+                        </td>
+                        <td
+                          contentEditable
+                          suppressContentEditableWarning
+                          onInput={(e) => console.log(e.target.innerText, '6')}>
+                          {payment}
+                        </td>
+                        <td>{isDone ? 'Oui' : 'No'}</td>
+                      </tr>
+                    )
+                  })}
+                </tbody>
+              </table>
+            ))}
+          </Loader>
         </ModalBody>
       </ModalContent>
     </Modal>
