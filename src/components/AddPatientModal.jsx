@@ -1,5 +1,5 @@
 import { useForm, Controller } from 'react-hook-form'
-import { useDisclosure } from '@chakra-ui/react'
+import { Textarea, useDisclosure } from '@chakra-ui/react'
 import { AlertCircle, CheckCircle } from 'react-feather'
 import {
   Button,
@@ -60,7 +60,7 @@ export default function AddPatientModal() {
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+        <ModalOverlay bg="blackAlpha.300" />
         <ModalContent>
           <ModalHeader>Ajouter un patient avec rendez-vous</ModalHeader>
           <ModalCloseButton p="6" />
@@ -126,6 +126,27 @@ export default function AddPatientModal() {
                         }
                       />
                       <Input type="tel" placeholder="numéro de téléphone" value={value} onChange={onChange} />
+                    </InputGroup>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name={CREATE_PATIENT_NAMES.GENERAL_STATE}
+                  shouldUnregister={isSubmitted}
+                  render={({ field: { onChange, value } }) => (
+                    <InputGroup>
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={
+                          value?.length >= 2 ? (
+                            <CheckCircle size="1.25rem" color="green" />
+                          ) : (
+                            <AlertCircle size="1.25rem" color="red" />
+                          )
+                        }
+                      />
+                      <Textarea pl="10" placeholder="Etate général" value={value} onChange={onChange} />
                     </InputGroup>
                   )}
                 />

@@ -19,18 +19,7 @@ export const LoadingCards = () => (
 )
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
-  const {
-    isNewTreatment,
-    fullName,
-    title,
-    motif,
-    generalState,
-    diagnostic,
-    treatmentPlan,
-    payment,
-    totalPrice,
-    paymentLeft,
-  } = appointment
+  const { isNewTreatment, fullName, motif, payment, totalPrice, paymentLeft } = appointment
   const { user, socket } = ChatState()
   const { fetchTodayAppointments } = TodayPatientsListState()
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
@@ -130,14 +119,6 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
 
       {showCardBody && (
         <CardBody p="0.25rem 1rem" mr="0">
-          Titre: <span style={{ fontWeight: 'bold' }}>{title}</span>
-          <br />
-          Etate: <span style={{ fontWeight: 'bold' }}>{generalState}</span>
-          <br />
-          Diag: <span style={{ fontWeight: 'bold' }}>{diagnostic}</span>
-          <br />
-          Plan: <span style={{ fontWeight: 'bold' }}>{treatmentPlan}</span>
-          <br />
           <InputGroup gap="2">
             <InputGroup className="payments-input">
               <label>T</label>
@@ -175,7 +156,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
             </Box>
           ) : (
             <Button colorScheme="purple" mt="2" mb="2" onClick={() => setCanUpdatePayments(true)}>
-              Enregistrer les modifications de paiement
+              Enregistrer les modifications
             </Button>
           )}
         </CardBody>

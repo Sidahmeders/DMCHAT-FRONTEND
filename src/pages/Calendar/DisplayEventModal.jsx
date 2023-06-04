@@ -19,7 +19,7 @@ import Loader from '../../components/Loader/Loader'
 const textStyles = { fontWeight: 'bold', paddingLeft: '6px' }
 
 export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose, events, setEvents }) {
-  const { id, start, end, title, motif, generalState, diagnostic, treatmentPlan, isWaitingList } = selectedEvent
+  const { id, start, end, title, motif, diagnostic, treatmentPlan } = selectedEvent
   const toast = useToast()
 
   const [isLoading, setIsLoading] = useState(false)
@@ -87,17 +87,11 @@ export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose
                 <span style={textStyles}>{motif}</span>
               </Text>
               <Text>
-                État: <span style={textStyles}>{generalState}</span>
-              </Text>
-              <Text>
                 Diagnostique:
                 <span style={textStyles}>{diagnostic}</span>
               </Text>
               <Text display="flex">
                 Plan: <span style={textStyles}>{treatmentPlan}</span>
-              </Text>
-              <Text>
-                Sur la liste d'attente <span style={textStyles}>{isWaitingList ? 'Oui' : 'No'}</span>
               </Text>
             </Stack>
           </ModalBody>
