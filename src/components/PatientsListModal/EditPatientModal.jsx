@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { AlertCircle, CheckCircle } from 'react-feather'
 import {
@@ -17,13 +17,10 @@ import {
   InputLeftElement,
   Textarea,
 } from '@chakra-ui/react'
-import { format, parseISO } from 'date-fns'
 
 import { CREATE_PATIENT_NAMES } from '../../config'
 import { ChatState } from '../../context'
 import { getPatient } from '../../utils'
-
-import Loader from '../Loader/Loader'
 
 export default function EditPatientModal({ isOpen, onClose, patientsList, setPatientsList }) {
   const { user } = ChatState()
@@ -35,11 +32,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
     formState: { isSubmitted },
   } = useForm()
 
-  const [patientAppointments, setPatientAppointments] = useState([])
-  const [isLoading, setIsLoading] = useState(false)
-
   const onSubmit = async (data) => {
-    setIsLoading(true)
     const response = await fetch(`/api/patients/${data._id}`, {
       method: 'PUT',
       headers: {
@@ -63,26 +56,11 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
     } else {
       toast()
     }
-    setIsLoading(false)
   }
 
   useEffect(() => {
     const patient = getPatient()
     reset(patient)
-    ;(async () => {
-      setIsLoading(true)
-      const response = await fetch(`/api/appointment/${patient._id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-
-      if (response.status === 200) {
-        setPatientAppointments(await response.json())
-      }
-      setIsLoading(false)
-    })()
   }, [user, reset, isOpen])
 
   return (
@@ -156,75 +134,26 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
                   </InputGroup>
                 )}
               />
-
-              <Loader loading={isLoading}>
-                <Stack
-                  style={{
-                    height: '20rem',
-                    overflowY: 'auto',
-                    border: '1px solid #ddd',
-                    borderRadius: '0.25rem',
-                  }}>
-                  {patientAppointments.map((appointment) => {
-                    const {
-                      _id,
-                      motif,
-                      generalState,
-                      diagnostic,
-                      treatmentPlan,
-                      title,
-                      createdAt,
-                      isNewTreatment,
-                      isDone,
-                      totalPrice,
-                      payment,
-                    } = appointment
-                    const history =
-                      `Motif:: ${motif}\nEtate:: ${generalState}\nDiag:: ${diagnostic}\nPlan:: ${treatmentPlan}\nTitre:: ${title}`.trim()
-
-                    return (
-                      <InputGroup key={_id}>
-                        <div style={{ width: '6rem' }}>
-                          {isNewTreatment && <hr />}
-                          <div style={{ padding: '0 0.25rem', color: isNewTreatment ? 'blue' : 'gray' }}>
-                            <span style={{ borderBottom: isNewTreatment ? '1px solid blue' : '' }}>
-                              {format(parseISO(createdAt), 'yy.MM.dd')}
-                            </span>
-                            {isNewTreatment && (
-                              <>
-                                <br />
-                                T: {totalPrice}
-                                <br />
-                                V: {payment}
-                                <br />
-                                {isDone ? 'F' : 'DF'}
-                              </>
-                            )}
-                          </div>
-                        </div>
-                        {isNewTreatment ? (
-                          <Textarea
-                            p="0.5"
-                            pl="2"
-                            height="24"
-                            borderRadius="0"
-                            borderLeft="0"
-                            borderRight="0"
-                            borderBottom="0"
-                            placeholder="Historique"
-                            value={history}
-                            onChange={() => {}}
-                          />
+              <Controller
+                control={control}
+                name={CREATE_PATIENT_NAMES.GENERAL_STATE}
+                shouldUnregister={isSubmitted}
+                render={({ field: { onChange, value } }) => (
+                  <InputGroup>
+                    <InputLeftElement
+                      pointerEvents="none"
+                      children={
+                        value?.length >= 2 ? (
+                          <CheckCircle size="1.25rem" color="green" />
                         ) : (
-                          <div>
-                            Titre:: {title} / V: {payment || '0'} / {isDone ? 'F' : 'DF'}
-                          </div>
-                        )}
-                      </InputGroup>
-                    )
-                  })}
-                </Stack>
-              </Loader>
+                          <AlertCircle size="1.25rem" color="red" />
+                        )
+                      }
+                    />
+                    <Textarea pl="10" placeholder="Etate général" value={value} onChange={onChange} />
+                  </InputGroup>
+                )}
+              />
             </Stack>
           </ModalBody>
           <ModalFooter>

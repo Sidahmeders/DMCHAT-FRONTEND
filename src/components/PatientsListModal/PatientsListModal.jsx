@@ -3,10 +3,12 @@ import { useDisclosure } from '@chakra-ui/react'
 import { Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton } from '@chakra-ui/react'
 
 import { ChatState } from '../../context'
+import { setPatient } from '../../utils'
 
 import DataTable from '../DataTable/DataTable'
 import { patientColumns } from './patientColumns'
 import SearchBar from '../Searchbar/Searchbar'
+import PatientFollowupsModal from '../PatientFollowupsModal/PatientFollowupsModal'
 import EditPatientModal from './EditPatientModal'
 import DeletePatientModal from './DeletePatientModal'
 import ExpandableComponent from './ExpandableComponent'
@@ -18,6 +20,12 @@ export default function PatientListModal() {
   const { isOpen: isPatientsModalOpen, onOpen: onPatientsModalOpen, onClose: onPatientsModalClose } = useDisclosure()
   const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: ondEditModalClose } = useDisclosure()
   const { isOpen: isDeleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure()
+  const {
+    isOpen: isPatientFollowupsModalOpen,
+    onOpen: onPatientFollowupsModalOpen,
+    onClose: onPatientFollowupsModalClose,
+  } = useDisclosure()
+
   const [patientsList, setPatientsList] = useState([])
   const [filterText, setFilterText] = useState('')
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false)
@@ -71,7 +79,12 @@ export default function PatientListModal() {
               data={filteredItems}
               subHeaderComponent={subHeaderComponent}
               expandableRowsComponent={(props) => <ExpandableComponent user={user} {...props} />}
+              onRowDoubleClicked={(row) => {
+                onPatientFollowupsModalOpen()
+                setPatient(row)
+              }}
             />
+            <PatientFollowupsModal isOpen={isPatientFollowupsModalOpen} onClose={onPatientFollowupsModalClose} />
             <EditPatientModal
               isOpen={isEditModalOpen}
               onClose={ondEditModalClose}

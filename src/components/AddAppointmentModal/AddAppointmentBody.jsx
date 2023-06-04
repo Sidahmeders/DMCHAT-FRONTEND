@@ -213,7 +213,12 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                       )
                     }
                   />
-                  <Input type="text" placeholder="Mettre rendez-vous" value={value} onChange={(val) => onChange(val)} />
+                  <Input
+                    type="text"
+                    placeholder="Titre du rendez-vous"
+                    value={value}
+                    onChange={(val) => onChange(val)}
+                  />
                 </InputGroup>
               )}
             />
