@@ -25,16 +25,16 @@
 
     tbody tr {
       :nth-child(1) {
-        width: 20%;
-      }
-      :nth-child(2) {
         width: 50%;
       }
+      :nth-child(2) {
+        width: 20%;
+      }
       :nth-child(3) {
-        color: 20%;
+        color: 10%;
       }
       :nth-child(4) {
-        color: 10%;
+        color: 20%;
       }
     }
 

@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Box } from '@chakra-ui/react'
+import {
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Box,
+  Button,
+} from '@chakra-ui/react'
 import { format, parseISO } from 'date-fns'
 import { ChevronDown, ChevronUp } from 'react-feather'
 
@@ -72,20 +81,14 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
                 </caption>
                 <thead>
                   <tr>
-                    <th>date de création</th>
                     <th>titre</th>
                     <th>versement</th>
                     <th>est fini</th>
+                    <th>date de création</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <th
-                      contentEditable
-                      suppressContentEditableWarning
-                      onInput={(e) => console.log(e.target.innerText, '1')}>
-                      {format(parseISO(appointmentsGroup[0].createdAt), 'yyyy-MM-dd')}
-                    </th>
                     <th
                       contentEditable
                       suppressContentEditableWarning
@@ -101,18 +104,18 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
                     <th>
                       {appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)}
                     </th>
+                    <th
+                      contentEditable
+                      suppressContentEditableWarning
+                      onInput={(e) => console.log(e.target.innerText, '1')}>
+                      {format(parseISO(appointmentsGroup[0].createdAt), 'yyyy-MM-dd')}
+                    </th>
                   </tr>
 
                   {appointmentsGroup.map((appointment) => {
                     const { _id, createdAt, title, payment, isDone } = appointment
                     return (
                       <tr key={_id}>
-                        <td
-                          contentEditable
-                          suppressContentEditableWarning
-                          onInput={(e) => console.log(e.target.innerText, '4')}>
-                          {format(parseISO(createdAt), 'yyyy-MM-dd')}
-                        </td>
                         <td
                           contentEditable
                           suppressContentEditableWarning
@@ -126,10 +129,28 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
                           {payment}
                         </td>
                         <td>{isDone ? 'Oui' : 'No'}</td>
+                        <td
+                          contentEditable
+                          suppressContentEditableWarning
+                          onInput={(e) => console.log(e.target.innerText, '4')}>
+                          {format(parseISO(createdAt), 'yyyy-MM-dd')}
+                        </td>
                       </tr>
                     )
                   })}
                 </tbody>
+                <tfoot>
+                  <tr>
+                    <td>
+                      <Button type="submit" colorScheme="orange" mr={3}>
+                        Sauvegarder rendez-vous
+                      </Button>
+                      <Button variant="ghost" onClick={() => {}}>
+                        Annuler
+                      </Button>
+                    </td>
+                  </tr>
+                </tfoot>
               </table>
             ))}
           </Loader>
