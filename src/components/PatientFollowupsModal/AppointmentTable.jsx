@@ -7,6 +7,7 @@ import { ADD_APPOINTMENT_NAMES } from '../../config'
 export default function AppointmentTable({ appointmentsGroup }) {
   const [baseAppointment] = appointmentsGroup
   const totalPayments = appointmentsGroup.reduce((total, appointment) => total + appointment.payment, 0)
+  const doneAppointments = appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)
   const [canShowSaveBtn, setCanShowSaveBtn] = useState(false)
 
   const onInputHandler = (e, appointmentId, name) => {
@@ -56,7 +57,9 @@ export default function AppointmentTable({ appointmentsGroup }) {
               {baseAppointment.totalPrice}
             </span>
           </th>
-          <th>{appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)}</th>
+          <th>
+            {doneAppointments} / {appointmentsGroup.length}
+          </th>
           <th>{format(parseISO(baseAppointment.createdAt), 'yyyy-MM-dd')}</th>
         </tr>
 

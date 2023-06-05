@@ -4,7 +4,7 @@ import { HStack, Button, Textarea, Input, Stack, InputGroup, InputLeftElement, G
 
 import { CREATE_PATIENT_NAMES } from '../../config'
 
-export default function PatientEditBody({ patient }) {
+export default function PatientEditBody({ patient, setIsEditPatientOpen }) {
   const {
     handleSubmit,
     control,
@@ -111,7 +111,7 @@ export default function PatientEditBody({ patient }) {
         <Button type="submit" colorScheme="orange" mr={3}>
           Sauvegarder patient
         </Button>
-        <Button variant="ghost" onClick={() => {}}>
+        <Button variant="ghost" onClick={() => setIsEditPatientOpen(false)}>
           Annuler
         </Button>
       </HStack>
