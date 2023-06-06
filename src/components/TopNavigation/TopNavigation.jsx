@@ -6,6 +6,7 @@ import { getPageRoute, setPageRoute } from '../../utils'
 import { APP_ROUTES } from '../../config'
 
 import ChatNotification from '../miscellaneous/ChatNotification'
+import PatientListModal from '../PatientsListModal/PatientsListModal'
 
 import './TopNavigation.scss'
 
@@ -45,6 +46,10 @@ export default function TopNavigation() {
         onClick={() => setPageRoute(APP_ROUTES.STATISTICS)}
         to={APP_ROUTES.STATISTICS}>
         <PieChart />
+      </Link>
+
+      <Link>
+        <PatientListModal />
       </Link>
     </div>
   )

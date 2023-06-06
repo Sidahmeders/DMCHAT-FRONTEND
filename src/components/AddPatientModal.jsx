@@ -1,6 +1,6 @@
 import { useForm, Controller } from 'react-hook-form'
 import { Textarea, useDisclosure } from '@chakra-ui/react'
-import { AlertCircle, CheckCircle } from 'react-feather'
+import { AlertCircle, CheckCircle, Clipboard } from 'react-feather'
 import {
   Button,
   Modal,
@@ -136,16 +136,7 @@ export default function AddPatientModal() {
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
-                      <InputLeftElement
-                        pointerEvents="none"
-                        children={
-                          value?.length >= 2 ? (
-                            <CheckCircle size="1.25rem" color="green" />
-                          ) : (
-                            <AlertCircle size="1.25rem" color="red" />
-                          )
-                        }
-                      />
+                      <InputLeftElement pointerEvents="none" children={<Clipboard size="1.25rem" color="gray" />} />
                       <Textarea pl="10" placeholder="Etate général" value={value} onChange={onChange} />
                     </InputGroup>
                   )}

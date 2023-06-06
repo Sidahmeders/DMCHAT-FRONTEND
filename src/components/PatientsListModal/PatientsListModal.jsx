@@ -1,7 +1,6 @@
 import { useEffect, useState, useMemo } from 'react'
 import {
   useDisclosure,
-  Button,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -9,6 +8,7 @@ import {
   ModalBody,
   ModalCloseButton,
 } from '@chakra-ui/react'
+import { Users } from 'react-feather'
 
 import { ChatState } from '../../context'
 import { setPatient } from '../../utils'
@@ -72,9 +72,7 @@ export default function PatientListModal() {
 
   return (
     <>
-      <Button onClick={onPatientsModalOpen} size="sm">
-        Liste des patients
-      </Button>
+      <Users onClick={onPatientsModalOpen} color="orange" />
 
       <Modal size="5xl" isOpen={isPatientsModalOpen} onClose={onPatientsModalClose}>
         <ModalOverlay bg="blackAlpha.300" />

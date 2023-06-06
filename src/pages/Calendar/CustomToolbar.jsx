@@ -6,7 +6,6 @@ import { CALENDAR_NAVIGATION } from '../../config'
 
 import DatePicker from '../../components/DatePicker/DatePicker'
 import AddPatientModal from '../../components/AddPatientModal'
-import PatientsListModal from '../../components/PatientsListModal/PatientsListModal'
 
 function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
   return viewNames.map((name) => (
@@ -45,12 +44,11 @@ export default function CustomToolbar({
           <DatePicker
             showMonthYearPicker
             className="calendar-date-picker"
-            dateFormat="yyyy/MM/dd"
+            dateFormat="yyyy/MM/dd EEEE"
             value={date}
             onChange={(value) => (isValid(value) ? setSelectedDate(value) : '')}
           />
         </div>
-        <PatientsListModal />
         <AddPatientModal />
       </span>
 

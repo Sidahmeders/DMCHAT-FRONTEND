@@ -26,7 +26,7 @@ export default function AppointmentTable({ appointmentsGroup }) {
       </caption>
       <thead>
         <tr>
-          <th>titre</th>
+          <th>acte</th>
           <th>versement / prix-total</th>
           <th>est fini</th>
           <th>date de création</th>

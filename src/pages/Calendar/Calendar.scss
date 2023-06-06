@@ -13,7 +13,6 @@
   input {
     outline: none;
     border: 1px solid #ddd;
-    width: 8rem;
     padding: 0.25rem 1rem;
     border-radius: 0.25rem;
   }
@@ -44,6 +43,16 @@
   .rbc-btn-group {
     button:nth-child(2) {
       display: none;
+    }
+  }
+
+  .rbc-day-bg.rbc-today {
+    &::after {
+      content: '/__***__/';
+      color: rgb(7, 22, 158);
+      background-color: #93fdfd;
+      width: 100%;
+      display: inline-block;
     }
   }
 
