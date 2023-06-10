@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Button } from '@chakra-ui/react'
+import { Button, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react'
 import { format, parseISO } from 'date-fns'
 
 import { ADD_APPOINTMENT_NAMES } from '../../config'
@@ -7,6 +7,7 @@ import { ADD_APPOINTMENT_NAMES } from '../../config'
 export default function AppointmentTable({ appointmentsGroup }) {
   const [baseAppointment] = appointmentsGroup
   const totalPayments = appointmentsGroup.reduce((total, appointment) => total + appointment.payment, 0)
+  const paymentLeft = baseAppointment.totalPrice - totalPayments || '0'
   const doneAppointments = appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)
   const [canShowSaveBtn, setCanShowSaveBtn] = useState(false)
 
@@ -18,11 +19,30 @@ export default function AppointmentTable({ appointmentsGroup }) {
   return (
     <table>
       <caption>
-        Motif: <span>{baseAppointment.motif}</span>
-        <br />
-        Plan: <span>{baseAppointment.treatmentPlan}</span>
-        <br />
-        Reste: <span>{baseAppointment.totalPrice - totalPayments || '0'}</span>
+        <p style={{ padding: '0.25rem 1rem' }}>
+          Reste: <span>{paymentLeft}</span> / Motif: <span>{baseAppointment.motif}</span>
+        </p>
+        <Accordion allowMultiple display="flex">
+          <AccordionItem width="50%" borderRight="1px solid #ddd">
+            <AccordionButton>
+              Diagnostic
+              <AccordionIcon ml="auto" />
+            </AccordionButton>
+            <AccordionPanel>
+              <span style={{ whiteSpace: 'pre-line' }}>{baseAppointment.diagnostic}</span>
+            </AccordionPanel>
+          </AccordionItem>
+
+          <AccordionItem width="50%" borderRight="1px solid #ddd" borderBottom="0">
+            <AccordionButton>
+              Plan de traitement
+              <AccordionIcon ml="auto" />
+            </AccordionButton>
+            <AccordionPanel>
+              <span style={{ whiteSpace: 'pre-line' }}>{baseAppointment.treatmentPlan}</span>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </caption>
       <thead>
         <tr>
