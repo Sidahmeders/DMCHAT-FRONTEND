@@ -26,6 +26,7 @@ import { ADD_APPOINTMENT_NAMES } from '../../config'
 import { getMotifTemplateButtons } from '../../utils'
 
 import Loader from '../Loader/Loader'
+import PatientHistory from './PatientHistory'
 
 const resolvePatientOptions = (patients) => {
   return patients.map(({ _id, fullName, age }) => ({
@@ -50,6 +51,8 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   } = useForm({ defaultValues: initialValues })
 
   const [matchedPatients, setMatchedPatients] = useState([])
+  const [patientOptions, setPatientOptions] = useState([])
+  const [selectedPatient, setSelectedPatient] = useState({})
   const [searchName, setSearchName] = useState('')
   const [isMounted, setIsMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
@@ -120,7 +123,9 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
           })
 
           if (response.status === 200) {
-            setMatchedPatients(resolvePatientOptions(await response.json()))
+            const patients = await response.json()
+            setMatchedPatients(patients)
+            setPatientOptions(resolvePatientOptions(patients))
           }
         } catch (error) {
           console.error(error.message)
@@ -144,9 +149,14 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               render={({ field: { onChange, value } }) => (
                 <Select
                   placeholder="Nom du patient..."
-                  options={matchedPatients}
-                  value={matchedPatients.find((option) => option.value === value)}
-                  onChange={(val) => onChange(val.value)}
+                  options={patientOptions}
+                  value={patientOptions.find((option) => option.value === value)}
+                  onChange={(option) => {
+                    const { value } = option
+                    const [patientId] = value.split('-')
+                    onChange(value)
+                    setSelectedPatient(matchedPatients.find((patient) => patient._id === patientId))
+                  }}
                   onKeyDown={(e) => {
                     const { value } = e.target
                     if (value.length >= 2) {
@@ -223,6 +233,8 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               )}
             />
 
+            <PatientHistory show={!isNewTreatment} user={user} patient={selectedPatient} />
+
             {!isNewTreatment && (
               <Controller
                 control={control}
@@ -265,7 +277,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
                       <InputLeftElement pointerEvents="none" children={<File size="1.25rem" color="gray" />} />
-                      <Input type="text" placeholder="Diagnostique" value={value} onChange={onChange} />
+                      <Textarea pl="10" placeholder="Diagnostique" value={value} onChange={onChange} />
                     </InputGroup>
                   )}
                 />
