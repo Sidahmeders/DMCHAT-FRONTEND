@@ -1,19 +1,47 @@
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 import { Button, Accordion, AccordionItem, AccordionButton, AccordionPanel, AccordionIcon } from '@chakra-ui/react'
 import { format, parseISO } from 'date-fns'
+import { X } from 'react-feather'
 
 import { ADD_APPOINTMENT_NAMES } from '../../config'
+
+import SubAppointment from './SubAppointment'
 
 export default function AppointmentTable({ appointmentsGroup }) {
   const [baseAppointment] = appointmentsGroup
   const totalPayments = appointmentsGroup.reduce((total, appointment) => total + appointment.payment, 0)
   const paymentLeft = baseAppointment.totalPrice - totalPayments || '0'
   const doneAppointments = appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)
-  const [canShowSaveBtn, setCanShowSaveBtn] = useState(false)
 
-  const onInputHandler = (e, appointmentId, name) => {
+  const [canShowSaveBtn, setCanShowSaveBtn] = useState(false)
+  const [canShowResetBtn, setCanShowResetBtn] = useState(false)
+  const [treatmentUpdate, setTreatmentUpdate] = useState({})
+
+  const baseTitleRef = useRef(baseAppointment.title)
+  const basePaymentRef = useRef(baseAppointment.payment || '0')
+  const baseTotalPriceRef = useRef(baseAppointment.totalPrice)
+
+  const onInputEditHandler = (e, appointmentId, name) => {
     setCanShowSaveBtn(true)
-    console.log(name, appointmentId, e.target.innerText)
+    setTreatmentUpdate({
+      ...treatmentUpdate,
+      [appointmentId]: {
+        ...treatmentUpdate[appointmentId],
+        [name]: e.target.innerText,
+      },
+    })
+  }
+
+  const cancelUpdateHandler = () => {
+    setCanShowSaveBtn(false)
+    setTreatmentUpdate({})
+  }
+
+  const resetContentEditable = () => {
+    setCanShowResetBtn(false)
+    baseTitleRef.current.innerText = baseAppointment.title
+    basePaymentRef.current.innerText = baseAppointment.payment || '0'
+    baseTotalPriceRef.current.innerText = baseAppointment.totalPrice
   }
 
   return (
@@ -57,23 +85,33 @@ export default function AppointmentTable({ appointmentsGroup }) {
           <th
             contentEditable
             suppressContentEditableWarning
-            onInput={(e) => onInputHandler(e, baseAppointment._id, ADD_APPOINTMENT_NAMES.TITLE)}>
+            onInput={(e) => {
+              setCanShowResetBtn(true)
+              onInputEditHandler(e, baseAppointment._id, ADD_APPOINTMENT_NAMES.TITLE)
+            }}
+            ref={baseTitleRef}>
             {baseAppointment.title}
           </th>
           <th>
             <span
               contentEditable
               suppressContentEditableWarning
-              onInput={(e) => onInputHandler(e, baseAppointment._id, ADD_APPOINTMENT_NAMES.PAYMENT)}
-              style={{ minWidth: '', padding: '2px 8px', outlineColor: '#587ee9' }}>
+              onInput={(e) => {
+                setCanShowResetBtn(true)
+                onInputEditHandler(e, baseAppointment._id, ADD_APPOINTMENT_NAMES.PAYMENT)
+              }}
+              ref={basePaymentRef}>
               {baseAppointment.payment}
             </span>
             /
             <span
               contentEditable
               suppressContentEditableWarning
-              onInput={(e) => onInputHandler(e, baseAppointment._id, ADD_APPOINTMENT_NAMES.TOTAL_PRICE)}
-              style={{ minWidth: '', padding: '2px 8px', outlineColor: '#587ee9' }}>
+              onInput={(e) => {
+                setCanShowResetBtn(true)
+                onInputEditHandler(e, baseAppointment._id, ADD_APPOINTMENT_NAMES.TOTAL_PRICE)
+              }}
+              ref={baseTotalPriceRef}>
               {baseAppointment.totalPrice}
             </span>
           </th>
@@ -81,31 +119,20 @@ export default function AppointmentTable({ appointmentsGroup }) {
             {doneAppointments} / {appointmentsGroup.length}
           </th>
           <th>{format(parseISO(baseAppointment.createdAt), 'yyyy-MM-dd')}</th>
+          {canShowResetBtn && (
+            <th style={{ padding: '0', width: '35px' }}>
+              <Button variant="ghost" p="0" onClick={resetContentEditable}>
+                <X color="orange" size="1.5rem" />
+              </Button>
+            </th>
+          )}
         </tr>
 
-        {appointmentsGroup.map((appointment, index) => {
-          if (index === 0) return null
-          const { _id, createdAt, title, payment, isDone } = appointment
-
-          return (
-            <tr key={_id}>
-              <td
-                contentEditable
-                suppressContentEditableWarning
-                onInput={(e) => onInputHandler(e, _id, ADD_APPOINTMENT_NAMES.TITLE)}>
-                {title}
-              </td>
-              <td
-                contentEditable
-                suppressContentEditableWarning
-                onInput={(e) => onInputHandler(e, _id, ADD_APPOINTMENT_NAMES.PAYMENT)}>
-                {payment || '0'}
-              </td>
-              <td>{isDone ? 'Oui' : 'No'}</td>
-              <td>{format(parseISO(createdAt), 'yyyy-MM-dd')}</td>
-            </tr>
-          )
-        })}
+        {appointmentsGroup.map((appointment, index) =>
+          index > 0 ? (
+            <SubAppointment key={index} appointment={appointment} onInputEditHandler={onInputEditHandler} />
+          ) : null,
+        )}
       </tbody>
       {canShowSaveBtn && (
         <tfoot>
@@ -114,7 +141,7 @@ export default function AppointmentTable({ appointmentsGroup }) {
               <Button type="submit" colorScheme="orange" mr={3}>
                 Sauvegarder rendez-vous
               </Button>
-              <Button variant="ghost" onClick={() => setCanShowSaveBtn(false)}>
+              <Button variant="ghost" onClick={cancelUpdateHandler}>
                 Annuler
               </Button>
             </td>
