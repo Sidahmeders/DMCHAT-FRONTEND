@@ -32,6 +32,10 @@ export default function AppointmentTable({ appointmentsGroup }) {
     })
   }
 
+  const saveUpdateHandler = () => {
+    console.log(treatmentUpdate, 'treatmentUpdate')
+  }
+
   const cancelUpdateHandler = () => {
     setCanShowSaveBtn(false)
     setTreatmentUpdate({})
@@ -39,6 +43,17 @@ export default function AppointmentTable({ appointmentsGroup }) {
 
   const resetContentEditable = () => {
     setCanShowResetBtn(false)
+
+    const { _id: baseAppointmentId } = baseAppointment
+    setTreatmentUpdate({
+      ...treatmentUpdate,
+      [baseAppointmentId]: {
+        [ADD_APPOINTMENT_NAMES.TITLE]: baseAppointment.title,
+        [ADD_APPOINTMENT_NAMES.TOTAL_PRICE]: baseAppointment.totalPrice,
+        [ADD_APPOINTMENT_NAMES.PAYMENT]: baseAppointment.payment,
+      },
+    })
+
     baseTitleRef.current.innerText = baseAppointment.title
     basePaymentRef.current.innerText = baseAppointment.payment || '0'
     baseTotalPriceRef.current.innerText = baseAppointment.totalPrice
@@ -132,7 +147,13 @@ export default function AppointmentTable({ appointmentsGroup }) {
 
         {appointmentsGroup.map((appointment, index) =>
           index > 0 ? (
-            <SubAppointment key={index} appointment={appointment} onInputEditHandler={onInputEditHandler} />
+            <SubAppointment
+              key={index}
+              appointment={appointment}
+              onInputEditHandler={onInputEditHandler}
+              treatmentUpdate={treatmentUpdate}
+              setTreatmentUpdate={setTreatmentUpdate}
+            />
           ) : null,
         )}
       </tbody>
@@ -140,7 +161,7 @@ export default function AppointmentTable({ appointmentsGroup }) {
         <tfoot>
           <tr>
             <td style={{ border: 'none', padding: '1rem 0' }}>
-              <Button type="submit" colorScheme="orange" mr={3}>
+              <Button type="submit" colorScheme="orange" mr={3} onClick={saveUpdateHandler}>
                 Sauvegarder rendez-vous
               </Button>
               <Button variant="ghost" onClick={cancelUpdateHandler}>

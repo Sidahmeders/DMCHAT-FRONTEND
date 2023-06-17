@@ -5,7 +5,7 @@ import { X } from 'react-feather'
 
 import { ADD_APPOINTMENT_NAMES } from '../../config'
 
-const SubAppointment = ({ appointment, onInputEditHandler }) => {
+const SubAppointment = ({ appointment, onInputEditHandler, treatmentUpdate, setTreatmentUpdate }) => {
   const { _id, title, payment, createdAt, isDone } = appointment
   const [canShowResetBtn, setCanShowResetBtn] = useState(false)
   const titleRef = useRef(title)
@@ -13,6 +13,12 @@ const SubAppointment = ({ appointment, onInputEditHandler }) => {
 
   const resetContentEditable = () => {
     setCanShowResetBtn(false)
+
+    setTreatmentUpdate({
+      ...treatmentUpdate,
+      [_id]: { title, payment },
+    })
+
     titleRef.current.innerText = appointment.title
     paymentRef.current.innerText = appointment.payment || '0'
   }
