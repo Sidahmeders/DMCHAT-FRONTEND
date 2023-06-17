@@ -94,6 +94,7 @@ export default function AppointmentTable({ appointmentsGroup }) {
           </th>
           <th>
             <span
+              style={{ display: 'inline-block', width: '65px', outlineColor: '#587ee9' }}
               contentEditable
               suppressContentEditableWarning
               onInput={(e) => {
@@ -102,9 +103,10 @@ export default function AppointmentTable({ appointmentsGroup }) {
               }}
               ref={basePaymentRef}>
               {baseAppointment.payment}
-            </span>
-            /
+            </span>{' '}
+            /{' '}
             <span
+              style={{ display: 'inline-block', width: '85px', outlineColor: '#587ee9' }}
               contentEditable
               suppressContentEditableWarning
               onInput={(e) => {
