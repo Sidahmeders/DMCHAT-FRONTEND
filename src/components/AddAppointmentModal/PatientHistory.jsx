@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { ChevronUp, ChevronDown } from 'react-feather'
 import { format, parseISO } from 'date-fns'
-import { RadioGroup, Radio, Table, Tbody, Tr, Td, TableContainer } from '@chakra-ui/react'
+import { RadioGroup, Radio, Table, Tbody, Tr, Td, TableContainer, Button } from '@chakra-ui/react'
 
 export default function PatientHistory({ show, user, patient }) {
   const [appointments, setAppointments] = useState([])
@@ -33,8 +32,6 @@ export default function PatientHistory({ show, user, patient }) {
     })()
   }, [user, patient])
 
-  console.log(appointments, 'appointments')
-
   return (
     <RadioGroup value={treatmentValue} onChange={setTreatmentValue}>
       {appointments.map((appointmentsGroup, index) => (
@@ -47,7 +44,7 @@ export default function PatientHistory({ show, user, patient }) {
             borderRadius: '6px',
             marginBottom: '6px',
           }}>
-          <Radio value={appointmentsGroup[0]?._id} style={{ marginRight: '6px' }}></Radio>
+          <Radio value={appointmentsGroup[0]?._id} size="lg" ml="1" mr="3"></Radio>
           <TreatmentSummary appointmentsGroup={appointmentsGroup} />
         </div>
       ))}
@@ -68,19 +65,26 @@ const TreatmentSummary = ({ appointmentsGroup }) => {
         <br />
         <span>{baseAppointment.treatmentPlan?.slice(0, 45)}..</span>
         <br />
-        <span>Prix total: {baseAppointment.totalPrice} DA</span>
+        <span>
+          Prix total: <strong>{baseAppointment.totalPrice} DA</strong>
+        </span>
 
-        <span style={{ position: 'absolute', top: '0', right: '0' }}>
+        <span style={{ fontWeight: 'bold', position: 'absolute', top: '0', right: '0' }}>
           {doneAppointments} / {appointmentsGroup.length}
         </span>
-        <span style={{ position: 'absolute', top: '24px', right: '0' }}>
-          {show ? <ChevronUp onClick={() => setShow(false)} /> : <ChevronDown onClick={() => setShow(true)} />}
-        </span>
+        <Button
+          variant="link"
+          p="0"
+          onClick={() => setShow(!show)}
+          style={{ position: 'absolute', top: '48px', right: '0' }}>
+          {show ? 'voir moins..' : 'voir plus..'}
+        </Button>
       </div>
+
       <TableContainer>
         <Table>
           <Tbody>
-            {appointmentsGroup.map((appointment, index) => {
+            {appointmentsGroup.map((appointment) => {
               const { _id, startDate, motif, title, payment } = appointment
 
               return (
