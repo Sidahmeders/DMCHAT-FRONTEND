@@ -30,16 +30,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
       })
 
       if (response.status === 200) {
-        const appointmenstData = await response.json()
-        const groupedAppointments = appointmenstData.reduce((prevAppointments, appointment) => {
-          if (appointment.isNewTreatment) {
-            return [...prevAppointments, [appointment]]
-          }
-          const lastGroup = prevAppointments[prevAppointments.length - 1] || []
-          return [...prevAppointments.slice(0, -1), [...lastGroup, appointment]]
-        }, [])
-
-        setAppointments(groupedAppointments)
+        setAppointments(await response.json())
       }
       setIsLoading(false)
     })()
@@ -64,9 +55,22 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
         <ModalCloseButton p="6" />
         <ModalBody className="patient-followups-modal-body">
           <Loader loading={isLoading}>
-            {appointments.map((appointmentsGroup, index) => (
-              <AppointmentTable key={index} appointmentsGroup={appointmentsGroup} />
-            ))}
+            {appointments
+              .reduce((prevAppointments, appointment) => {
+                if (appointment.isNewTreatment) {
+                  return [...prevAppointments, [appointment]]
+                }
+                const lastGroup = prevAppointments[prevAppointments.length - 1] || []
+                return [...prevAppointments.slice(0, -1), [...lastGroup, appointment]]
+              }, [])
+              .map((appointmentsGroup, index) => (
+                <AppointmentTable
+                  key={index}
+                  appointments={appointments}
+                  setAppointments={setAppointments}
+                  appointmentsGroup={appointmentsGroup}
+                />
+              ))}
           </Loader>
         </ModalBody>
       </ModalContent>
