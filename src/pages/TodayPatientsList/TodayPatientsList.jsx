@@ -39,7 +39,7 @@ export default function TodayPatientsList() {
         const droppedAppointment = appointmentsList[sourceDroppableId].find(
           (appointment) => appointment.id === draggableId,
         )
-        const response = await fetch(`/api/appointment/${droppedAppointment.id}/update`, {
+        const response = await fetch(`/api/appointments/${droppedAppointment.id}/update`, {
           method: 'PUT',
           headers: {
             Authorization: `Bearer ${user.token}`,

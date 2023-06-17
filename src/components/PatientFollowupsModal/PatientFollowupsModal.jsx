@@ -22,7 +22,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
-      const response = await fetch(`/api/appointment/${patient._id}`, {
+      const response = await fetch(`/api/appointments/${patient._id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user.token}`,

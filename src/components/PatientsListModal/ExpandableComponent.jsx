@@ -11,7 +11,7 @@ export default function ExpandableComponent({ data, user }) {
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
-      const response = await fetch(`/api/appointment/${data._id}`, {
+      const response = await fetch(`/api/appointments/${data._id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user.token}`,

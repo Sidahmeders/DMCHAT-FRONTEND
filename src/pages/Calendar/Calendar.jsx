@@ -106,7 +106,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   )
 
   const onEventDrop = async ({ event, start, end }) => {
-    const response = await fetch(`/api/appointment/${event.id}/update`, {
+    const response = await fetch(`/api/appointments/${event.id}/update`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -142,7 +142,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   useEffect(() => {
     if (!user) return
     ;(async () => {
-      const response = await fetch(`/api/appointment/${format(selectedDate, 'yyyy/MM')}`, {
+      const response = await fetch(`/api/appointments/${format(selectedDate, 'yyyy/MM')}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user.token}`,

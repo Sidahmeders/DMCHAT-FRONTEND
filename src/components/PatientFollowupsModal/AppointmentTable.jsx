@@ -3,19 +3,22 @@ import { Button, Accordion, AccordionItem, AccordionButton, AccordionPanel, Acco
 import { format, parseISO } from 'date-fns'
 import { X } from 'react-feather'
 
+import { ChatState } from '../../context'
 import { ADD_APPOINTMENT_NAMES } from '../../config'
 
 import SubAppointment from './SubAppointment'
 
 export default function AppointmentTable({ appointmentsGroup }) {
+  const { user } = ChatState()
   const [baseAppointment] = appointmentsGroup
   const totalPayments = appointmentsGroup.reduce((total, appointment) => total + appointment.payment, 0)
   const paymentLeft = baseAppointment.totalPrice - totalPayments || '0'
   const doneAppointments = appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)
 
+  const [treatmentUpdate, setTreatmentUpdate] = useState({})
   const [canShowSaveBtn, setCanShowSaveBtn] = useState(false)
   const [canShowResetBtn, setCanShowResetBtn] = useState(false)
-  const [treatmentUpdate, setTreatmentUpdate] = useState({})
+  const [canShowConfirmUpdate, setCanShowConfirmUpdate] = useState(false)
 
   const baseTitleRef = useRef(baseAppointment.title)
   const basePaymentRef = useRef(baseAppointment.payment || '0')
@@ -32,12 +35,27 @@ export default function AppointmentTable({ appointmentsGroup }) {
     })
   }
 
-  const saveUpdateHandler = () => {
-    console.log(treatmentUpdate, 'treatmentUpdate')
+  const saveUpdateHandler = async () => {
+    const data = Object.entries(treatmentUpdate).map(([key, values]) => ({ _id: key, ...values }))
+
+    const response = await fetch('/api/appointments/history', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${user.token}`,
+      },
+      body: JSON.stringify(data),
+    })
+
+    console.log(response, 'response')
+
+    setCanShowSaveBtn(false)
+    setCanShowConfirmUpdate(false)
   }
 
   const cancelUpdateHandler = () => {
     setCanShowSaveBtn(false)
+    setCanShowConfirmUpdate(false)
     setTreatmentUpdate({})
   }
 
@@ -160,10 +178,20 @@ export default function AppointmentTable({ appointmentsGroup }) {
       {canShowSaveBtn && (
         <tfoot>
           <tr>
-            <td style={{ border: 'none', padding: '1rem 0' }}>
-              <Button type="submit" colorScheme="orange" mr={3} onClick={saveUpdateHandler}>
-                Sauvegarder rendez-vous
-              </Button>
+            <td style={{ border: 'none', padding: '0.75rem 0' }}>
+              {canShowConfirmUpdate ? (
+                <>
+                  <Button type="submit" colorScheme="red" mr={3} onClick={saveUpdateHandler}>
+                    Confirmer les modifications
+                  </Button>
+                </>
+              ) : (
+                <>
+                  <Button type="submit" colorScheme="orange" mr={3} onClick={() => setCanShowConfirmUpdate(true)}>
+                    Sauvegarder modifications
+                  </Button>
+                </>
+              )}
               <Button variant="ghost" onClick={cancelUpdateHandler}>
                 Annuler
               </Button>

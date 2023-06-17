@@ -66,7 +66,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
     const [patientId] = fullName.split('-')
     const { _id: userId } = user
 
-    const response = await fetch('/api/appointment', {
+    const response = await fetch('/api/appointments', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${user.token}`,

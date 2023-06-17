@@ -31,7 +31,7 @@ export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose
 
   const deleteEvent = async () => {
     setIsLoading(true)
-    const response = await fetch(`/api/appointment/${id}`, {
+    const response = await fetch(`/api/appointments/${id}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${user.token}`,
