@@ -8,6 +8,7 @@ export default function PatientHistory({ show, user, patient }) {
 
   useEffect(() => {
     ;(async () => {
+      if (!patient._id) return
       const response = await fetch(`/api/appointments/${patient._id}`, {
         method: 'GET',
         headers: {

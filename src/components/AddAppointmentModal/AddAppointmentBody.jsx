@@ -59,14 +59,14 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [isNewTreatment, setIsNewTreatment] = useState(false)
   const [radioValue, setRadioValue] = useState('')
 
-  const onSubmit = async (data) => {
+  const submitNewAppointment = async (data) => {
     if (!user) return
     setIsLoading(true)
     const { fullName } = data
     const [patientId] = fullName.split('-')
     const { _id: userId } = user
 
-    const response = await fetch('/api/appointments', {
+    const response = await fetch('/api/appointments/new', {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -109,6 +109,14 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   useEffect(() => {
     reset({})
   }, [isSubmitted, reset])
+
+  const relateNewAppointment = async (data) => {
+    if (!user) return
+
+    console.log(data, 'relateNewAppointment')
+  }
+
+  const onSubmit = (data) => (isNewTreatment ? submitNewAppointment(data) : relateNewAppointment(data))
 
   useEffect(() => {
     if (!isMounted && searchName.trim().length >= 2) {
