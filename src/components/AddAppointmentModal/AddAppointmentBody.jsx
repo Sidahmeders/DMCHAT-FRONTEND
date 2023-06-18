@@ -58,29 +58,50 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [isLoading, setIsLoading] = useState(false)
   const [isNewTreatment, setIsNewTreatment] = useState(false)
   const [radioValue, setRadioValue] = useState('')
+  const [baseAppointmentRadioValue, setBaseAppointmentRadioValue] = useState()
 
-  const submitNewAppointment = async (data) => {
+  const onSubmit = async (data) => {
     if (!user) return
     setIsLoading(true)
     const { fullName } = data
     const [patientId] = fullName.split('-')
     const { _id: userId } = user
 
-    const response = await fetch('/api/appointments/new', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        ...data,
-        isNewTreatment,
-        sender: userId,
-        patient: patientId,
-        startDate: start,
-        endDate: end,
-      }),
-    })
+    let response = null
+
+    if (isNewTreatment) {
+      response = await fetch('/api/appointments/new', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          [ADD_APPOINTMENT_NAMES.IS_NEW_TREATMENT]: isNewTreatment,
+          sender: userId,
+          patient: patientId,
+          startDate: start,
+          endDate: end,
+        }),
+      })
+    } else {
+      response = await fetch('/api/appointments/relate', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...data,
+          [ADD_APPOINTMENT_NAMES.BASE_APPOINTMENT_ID]: baseAppointmentRadioValue,
+          sender: userId,
+          patient: patientId,
+          startDate: start,
+          endDate: end,
+        }),
+      })
+    }
 
     if (response.status === 200) {
       const createdAppointment = await response.json()
@@ -109,14 +130,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   useEffect(() => {
     reset({})
   }, [isSubmitted, reset])
-
-  const relateNewAppointment = async (data) => {
-    if (!user) return
-
-    console.log(data, 'relateNewAppointment')
-  }
-
-  const onSubmit = (data) => (isNewTreatment ? submitNewAppointment(data) : relateNewAppointment(data))
 
   useEffect(() => {
     if (!isMounted && searchName.trim().length >= 2) {
@@ -241,7 +254,13 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               )}
             />
 
-            <PatientHistory show={!isNewTreatment} user={user} patient={selectedPatient} />
+            <PatientHistory
+              show={!isNewTreatment}
+              user={user}
+              patient={selectedPatient}
+              baseAppointmentRadioValue={baseAppointmentRadioValue}
+              setBaseAppointmentRadioValue={setBaseAppointmentRadioValue}
+            />
 
             {!isNewTreatment && (
               <Controller

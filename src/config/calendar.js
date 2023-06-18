@@ -20,7 +20,8 @@ export const ADD_APPOINTMENT_NAMES = {
   TREATMENT_PLAN: 'treatmentPlan',
   TOTAL_PRICE: 'totalPrice',
   PAYMENT: 'payment',
-  IS_WAITING_LIST: 'isWaitingList',
+  IS_NEW_TREATMENT: 'isNewTreatment',
+  BASE_APPOINTMENT_ID: 'baseAppointmentId',
 }
 
 export const CALENDAR_DAY_AVAILABILITY = {

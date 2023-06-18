@@ -2,9 +2,16 @@ import { useEffect, useState } from 'react'
 import { format, parseISO } from 'date-fns'
 import { RadioGroup, Radio, Table, Tbody, Tr, Td, TableContainer, Button } from '@chakra-ui/react'
 
-export default function PatientHistory({ show, user, patient }) {
+import { groupAppointments } from './utils'
+
+export default function PatientHistory({
+  show,
+  user,
+  patient,
+  baseAppointmentRadioValue,
+  setBaseAppointmentRadioValue,
+}) {
   const [appointments, setAppointments] = useState([])
-  const [treatmentValue, setTreatmentValue] = useState()
 
   useEffect(() => {
     ;(async () => {
@@ -18,24 +25,16 @@ export default function PatientHistory({ show, user, patient }) {
 
       if (response.status === 200) {
         const appointmenstData = await response.json()
-
-        setTreatmentValue(appointmenstData[0]?._id)
-
-        const groupedAppointments = appointmenstData.reduce((prevAppointments, appointment) => {
-          if (appointment.isNewTreatment) {
-            return [...prevAppointments, [appointment]]
-          }
-          const lastGroup = prevAppointments[prevAppointments.length - 1] || []
-          return [...prevAppointments.slice(0, -1), [...lastGroup, appointment]]
-        }, [])
-        setAppointments(groupedAppointments)
+        setBaseAppointmentRadioValue(appointmenstData[0]?._id)
+        setAppointments(groupAppointments(appointmenstData))
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, patient])
 
   return (
-    <RadioGroup value={treatmentValue} onChange={setTreatmentValue}>
-      {appointments.map((appointmentsGroup, index) => (
+    <RadioGroup value={baseAppointmentRadioValue} onChange={setBaseAppointmentRadioValue}>
+      {appointments.map(({ group: appointmentsGroup }, index) => (
         <div
           key={index}
           style={{
