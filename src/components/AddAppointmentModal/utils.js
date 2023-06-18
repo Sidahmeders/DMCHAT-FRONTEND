@@ -18,6 +18,14 @@ export const groupAppointments = (appointments) => {
           })
         }
       }
+    } else {
+      const existingGroup = groupedAppointments.find((group) => group._id === appointment._id)
+      if (!existingGroup) {
+        groupedAppointments.push({
+          _id: appointment._id,
+          group: [appointment],
+        })
+      }
     }
   })
 
