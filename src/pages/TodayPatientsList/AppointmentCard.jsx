@@ -52,7 +52,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
 
   const handleConfirmation = async () => {
     setIsLoading(true)
-    const response = await fetch(`/api/appointments/${appointment.id}/confirm`, {
+    const response = await fetch(`/api/appointments/${appointment.id}/toggle-confirmation`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${user.token}`,
@@ -70,7 +70,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
 
   const handlePresence = async () => {
     setIsLoading(true)
-    const response = await fetch(`/api/appointments/${appointment.id}/leave`, {
+    const response = await fetch(`/api/appointments/${appointment.id}/toggle-leave`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${user.token}`,
