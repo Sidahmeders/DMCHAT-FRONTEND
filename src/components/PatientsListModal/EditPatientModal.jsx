@@ -22,7 +22,7 @@ import { CREATE_PATIENT_NAMES } from '../../config'
 import { ChatState } from '../../context'
 import { getPatient } from '../../utils'
 
-export default function EditPatientModal({ isOpen, onClose, patientsList, setPatientsList }) {
+export default function EditPatientModal({ isOpen, onClose, patientsData, setPatientsData }) {
   const { user } = ChatState()
   const toast = useToast()
   const {
@@ -44,10 +44,13 @@ export default function EditPatientModal({ isOpen, onClose, patientsList, setPat
 
     if (response.status === 200) {
       const updatedPatient = await response.json()
-      const updatedPatientList = patientsList.map((patient) =>
+      const updatedPatientList = patientsData.patients.map((patient) =>
         updatedPatient._id === patient._id ? updatedPatient : patient,
       )
-      setPatientsList(updatedPatientList)
+      setPatientsData({
+        ...patientsData,
+        patients: updatedPatientList,
+      })
       toast({
         title: 'le profil du patient a été mis à jour avec succès',
         status: 'success',

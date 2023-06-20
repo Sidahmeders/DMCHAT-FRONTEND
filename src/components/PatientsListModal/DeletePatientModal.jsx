@@ -16,7 +16,7 @@ import { getPatient } from '../../utils'
 
 import Loader from '../Loader/Loader'
 
-export default function DeletePatientModal({ isOpen, onClose, patientsList, setPatientsList }) {
+export default function DeletePatientModal({ isOpen, onClose, patientsData, setPatientsData }) {
   const { user } = ChatState()
   const toast = useToast()
 
@@ -37,7 +37,11 @@ export default function DeletePatientModal({ isOpen, onClose, patientsList, setP
         title: `${patient.fullName} / ${patient.age} ans a été supprimé avec succès`,
         status: 'warning',
       })
-      setPatientsList(patientsList.filter((item) => patient._id !== item._id))
+      setPatientsData({
+        ...patientsData,
+        totalCount: patientsData.totalCount - 1,
+        patients: patientsData.patients.filter((item) => patient._id !== item._id),
+      })
       onClose()
     } else {
       toast()

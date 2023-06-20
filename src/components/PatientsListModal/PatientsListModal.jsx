@@ -12,6 +12,7 @@ import { Users } from 'react-feather'
 
 import { ChatState } from '../../context'
 import { setPatient } from '../../utils'
+import { PAGINATION_ROWS_PER_PAGE_OPTIONS } from '../../config'
 
 import DataTable from '../DataTable/DataTable'
 import { patientColumns } from './patientColumns'
@@ -34,24 +35,32 @@ export default function PatientListModal() {
     onClose: onPatientFollowupsModalClose,
   } = useDisclosure()
 
-  const [patientsList, setPatientsList] = useState([])
+  const [patientsData, setPatientsData] = useState([])
+  const [pageNumber, setPageNumber] = useState(1)
+  const [pageSize, setPageSize] = useState(PAGINATION_ROWS_PER_PAGE_OPTIONS[0])
   const [filterText, setFilterText] = useState('')
   const [resetPaginationToggle, setResetPaginationToggle] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     if (!user) return
     ;(async () => {
-      const response = await fetch('/api/patients', {
+      setIsLoading(true)
+      const response = await fetch(`/api/patients?page=${pageNumber}&pageSize=${pageSize}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user.token}`,
         },
       })
-      setPatientsList(await response.json())
-    })()
-  }, [user])
 
-  const filteredItems = patientsList.filter((patient) => {
+      if (response.status === 200) {
+        setPatientsData(await response.json())
+      }
+      setIsLoading(false)
+    })()
+  }, [pageNumber, pageSize, user])
+
+  const filteredItems = patientsData.patients?.filter((patient) => {
     const { fullName } = patient
     const textFiltered = fullName && fullName?.toLowerCase()?.includes(filterText?.toLowerCase())
     return textFiltered ? patient : false
@@ -81,10 +90,17 @@ export default function PatientListModal() {
           <ModalCloseButton p="6" />
           <ModalBody>
             <DataTable
+              paginationServer
+              loading={isLoading}
               columns={patientColumns({ onEditModalOpen, onDeleteModalOpen })}
               data={filteredItems}
               subHeaderComponent={subHeaderComponent}
               expandableRowsComponent={(props) => <ExpandableComponent user={user} {...props} />}
+              paginationTotalRows={patientsData.totalCount}
+              paginationRowsPerPageOptions={PAGINATION_ROWS_PER_PAGE_OPTIONS}
+              onChangePage={(page) => setPageNumber(page)}
+              onChangeRowsPerPage={(currentRowsPerPage) => setPageSize(currentRowsPerPage)}
+              paginationPerPage={pageSize}
               onRowDoubleClicked={(row) => {
                 onPatientFollowupsModalOpen()
                 setPatient(row)
@@ -94,14 +110,14 @@ export default function PatientListModal() {
             <EditPatientModal
               isOpen={isEditModalOpen}
               onClose={ondEditModalClose}
-              patientsList={patientsList}
-              setPatientsList={setPatientsList}
+              patientsData={patientsData}
+              setPatientsData={setPatientsData}
             />
             <DeletePatientModal
               isOpen={isDeleteModalOpen}
               onClose={onDeleteModalClose}
-              patientsList={patientsList}
-              setPatientsList={setPatientsList}
+              patientsData={patientsData}
+              setPatientsData={setPatientsData}
             />
           </ModalBody>
         </ModalContent>
