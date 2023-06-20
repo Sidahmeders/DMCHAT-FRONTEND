@@ -7,6 +7,7 @@ import {
   ModalHeader,
   ModalBody,
   ModalCloseButton,
+  HStack,
 } from '@chakra-ui/react'
 import { Users } from 'react-feather'
 
@@ -21,6 +22,7 @@ import PatientFollowupsModal from '../PatientFollowupsModal/PatientFollowupsModa
 import EditPatientModal from './EditPatientModal'
 import DeletePatientModal from './DeletePatientModal'
 import ExpandableComponent from './ExpandableComponent'
+import AddPatientModal from '../AddPatientModal'
 
 import './PatientsListModal.scss'
 
@@ -76,7 +78,12 @@ export default function PatientListModal() {
       }
     }
 
-    return <SearchBar onFilter={handleFilter} onClear={handleClear} filterText={filterText} />
+    return (
+      <HStack width="100%">
+        <SearchBar onFilter={handleFilter} onClear={handleClear} filterText={filterText} />
+        <AddPatientModal />
+      </HStack>
+    )
   }, [filterText, resetPaginationToggle])
 
   return (

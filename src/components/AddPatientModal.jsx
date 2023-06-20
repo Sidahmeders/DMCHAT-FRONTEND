@@ -55,14 +55,21 @@ export default function AddPatientModal() {
 
   return (
     <>
-      <Button onClick={onOpen} size="sm">
-        Ajouter patient
+      <Button
+        _hover={{
+          backgroundColor: '#6568f8',
+        }}
+        p="6"
+        bg="#474aff"
+        color="#fff"
+        onClick={onOpen}>
+        Créer patient
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay bg="blackAlpha.300" />
+        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
         <ModalContent>
-          <ModalHeader>Ajouter un patient avec rendez-vous</ModalHeader>
+          <ModalHeader>Ajouter un nouveau patient</ModalHeader>
           <ModalCloseButton p="6" />
           <form className="create-profile-form" onSubmit={handleSubmit(onSubmit)}>
             <ModalBody>
