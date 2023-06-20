@@ -25,9 +25,9 @@ import DoorBellSound from '../../assets/songs/door-bell.wav'
 
 export const LoadingCards = () => (
   <Stack mt="2">
-    <Skeleton height="4rem" />
-    <Skeleton height="4rem" />
-    <Skeleton height="4rem" />
+    <Skeleton height="3rem" />
+    <Skeleton height="3rem" />
+    <Skeleton height="3rem" />
   </Stack>
 )
 
@@ -109,7 +109,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (isLoading) return <Skeleton mt="2" height="4rem" />
+  if (isLoading) return <Skeleton mt="2" height="3rem" />
 
   return (
     <>
