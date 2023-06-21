@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import {
   Box,
   Button,
@@ -10,17 +11,18 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Tooltip,
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
-import { useState } from 'react'
+import { Plus } from 'react-feather'
 
 import { ChatState } from '@context'
 
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem'
 
-const GroupChatModal = ({ children }) => {
+const GroupChatModal = () => {
   const [groupChatName, setGroupChatName] = useState('')
   const [selectedUsers, setSelectedUsers] = useState([])
   const [search, setSearch] = useState('')
@@ -54,13 +56,9 @@ const GroupChatModal = ({ children }) => {
       setSearchResults(data)
     } catch (error) {
       return toast({
-        title: 'Error Occured!',
-        description: 'Failed to Load the Search Results',
+        title: 'Erreur est survenue!',
+        description: 'Impossible de charger les résultats de la recherche',
         status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-left',
-        variant: 'solid',
       })
     }
   }
@@ -68,12 +66,8 @@ const GroupChatModal = ({ children }) => {
   const handleSubmit = async () => {
     if (!groupChatName || !selectedUsers) {
       return toast({
-        title: 'Please fill all the fields',
+        title: 'Veuillez remplir tous les champs obligatoires',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-left',
-        variant: 'solid',
       })
     }
 
@@ -95,22 +89,14 @@ const GroupChatModal = ({ children }) => {
       onClose() // Close the modal
 
       return toast({
-        title: 'New Group Chat Created!',
+        title: 'Nouvelle discussion de groupe créée!',
         status: 'success',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
       })
     } catch (error) {
       return toast({
-        title: 'Error Occured!',
-        description: 'Failed to create the chat!',
+        title: 'Erreur est survenue!',
+        description: 'Échec de la création du chat!',
         status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
       })
     }
   }
@@ -122,12 +108,8 @@ const GroupChatModal = ({ children }) => {
   const handleGroup = (userToAdd) => {
     if (selectedUsers.includes(userToAdd)) {
       return toast({
-        title: 'User already added',
+        title: 'Utilisateur déjà ajouté',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'top',
-        variant: 'left-accent',
       })
     }
 
@@ -136,25 +118,23 @@ const GroupChatModal = ({ children }) => {
 
   return (
     <>
-      <span onClick={onOpen}>{children}</span>
+      <Tooltip label="Créer une groupe" hasArrow>
+        <Button p="0" onClick={onOpen}>
+          <Plus />
+        </Button>
+      </Tooltip>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader display="flex" justifyContent="center" fontSize="35px">
-            Create Group Chat
-          </ModalHeader>
+          <ModalHeader>Créer une discussion de groupe</ModalHeader>
           <ModalCloseButton />
           <ModalBody display="flex" flexDir="column" alignItems="center">
             <FormControl>
-              <Input placeholder="Chat Name" mb={3} onChange={(e) => setGroupChatName(e.target.value)} />
+              <Input placeholder="Nom du chat" mb={3} onChange={(e) => setGroupChatName(e.target.value)} />
             </FormControl>
             <FormControl>
-              <Input
-                placeholder="Add Users eg: Rohit, Piyush, Aman"
-                mb={3}
-                onChange={(e) => handleSearch(e.target.value)}
-              />
+              <Input placeholder="Rechercher des utilisateurs" mb={3} onChange={(e) => handleSearch(e.target.value)} />
             </FormControl>
 
             {/* Selected users */}
@@ -175,7 +155,7 @@ const GroupChatModal = ({ children }) => {
 
           <ModalFooter>
             <Button colorScheme="blue" onClick={handleSubmit}>
-              Create Chat
+              Créer un groupe
             </Button>
           </ModalFooter>
         </ModalContent>

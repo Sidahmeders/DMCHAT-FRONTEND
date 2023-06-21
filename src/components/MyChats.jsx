@@ -1,16 +1,14 @@
 import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Box, Button, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
-import { LogOut } from 'react-feather'
+import { Box, HStack, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
 
 import { ChatState } from '@context'
 import { getSender } from '@utils'
 
 import GroupChatModal from './miscellaneous/GroupChatModal'
+import LogoutButton from './miscellaneous/LogoutButton'
 import SearchUserDrawer from './SearchUserDrawer'
 
 const MyChats = () => {
-  const navigate = useNavigate()
   const toast = useToast()
   const { onClose } = useDisclosure()
   const { selectedChat, setSelectedChat, user, chats, setChats, fetchAgain } = ChatState()
@@ -49,28 +47,17 @@ const MyChats = () => {
       display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
       flexDir="column"
       alignItems="center"
-      p={3}
-      bg="white"
+      p="2"
       w={{ base: '100%', md: '30%' }}
       borderRadius="lg"
       borderWidth="1px">
-      <Box pb={3} px={3} display="flex" w="100%" justifyContent="space-between" alignItems="center">
-        <GroupChatModal>
-          <Button display="flex">nouveau group</Button>
-        </GroupChatModal>
-
+      <HStack p="5" gap="2" width="100%" justifyContent="space-evenly">
+        <GroupChatModal />
         <SearchUserDrawer />
+        <LogoutButton />
+      </HStack>
 
-        <LogOut
-          style={{ cursor: 'pointer' }}
-          onClick={() => {
-            localStorage.removeItem('userInfo')
-            navigate('/')
-          }}
-        />
-      </Box>
-
-      <Box display="flex" flexDir="column" p={3} bg="#F8F8F8" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
+      <Box display="flex" flexDir="column" p="4" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
         <Stack overflowY="scroll">
           {chats?.map((chat) => (
             <Box

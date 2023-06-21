@@ -16,6 +16,7 @@ import {
   Stack,
   Skeleton,
 } from '@chakra-ui/react'
+import { Search } from 'react-feather'
 
 import { ChatState } from '@context'
 
@@ -88,8 +89,10 @@ export default function SearchUserDrawer() {
 
   return (
     <>
-      <Tooltip label="Search users to chat" hasArrow placement="bottom-end">
-        <Button onClick={onOpen}>trouver utilisateur</Button>
+      <Tooltip label="Rechercher des utilisateurs" hasArrow>
+        <Button p="0" onClick={onOpen}>
+          <Search />
+        </Button>
       </Tooltip>
 
       <Drawer placement="left" isOpen={isOpen} onClose={onClose}>
