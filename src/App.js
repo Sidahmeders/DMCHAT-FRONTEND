@@ -9,7 +9,7 @@ import { checkIsJWTExpired } from '@utils'
 import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
-import { Home, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
+import { Auth, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
 
 import './App.css'
 
@@ -129,7 +129,7 @@ const App = () => {
     <div className="App">
       {user && <TopNavigation />}
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Auth />} />
         <Route path={APP_ROUTES.CHATS} element={<Chat />} />
         <Route path={APP_ROUTES.TODAY_PATIENTS_LIST} element={<TodayPatientsList />} />
         <Route path={APP_ROUTES.CALENDAR} element={<Calendar />} />

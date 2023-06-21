@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import Signup from '@components/Authentication/Signup'
 import Login from '@components/Authentication/Login'
 
-const Home = () => {
+export default function Auth() {
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -51,5 +51,3 @@ const Home = () => {
     </Container>
   )
 }
-
-export default Home

@@ -5,7 +5,7 @@ import { ChatState } from '@context'
 import ChatBox from '@components/ChatBox'
 import MyChats from '@components/MyChats'
 
-const Chat = () => {
+export default function Chat() {
   const { user } = ChatState()
 
   return (
@@ -19,5 +19,3 @@ const Chat = () => {
     </div>
   )
 }
-
-export default Chat
