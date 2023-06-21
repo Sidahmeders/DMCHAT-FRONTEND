@@ -1,6 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
+import { useToast } from '@chakra-ui/react'
 import { debounce } from 'lodash'
+import { Wifi, WifiOff } from 'react-feather'
 
 import { ChatState } from '@context'
 import { checkIsJWTExpired } from '@utils'
@@ -49,6 +51,7 @@ const App = () => {
     setNotifications,
     setSocketConnected,
   } = ChatState()
+  const toast = useToast()
 
   if (user && user.token) {
     const isTokenExpired = checkIsJWTExpired(user.token)
@@ -56,6 +59,43 @@ const App = () => {
       localStorage.removeItem('userInfo')
     }
   }
+
+  const toastIdRef = useRef()
+
+  const updateToast = () => {
+    if (toastIdRef.current) {
+      toast.update(toastIdRef.current, {
+        title: 'tu es de retour en ligne',
+        status: 'success',
+        icon: <Wifi />,
+        position: 'bottom',
+        isClosable: false,
+        variant: 'solid',
+      })
+    }
+  }
+
+  const addToast = () => {
+    toastIdRef.current = toast({
+      title: 'tu es hors ligne!',
+      description: "S'il vous plait, vérifiez votre connexion internet",
+      status: 'error',
+      duration: 1000 * 60 * 60,
+      icon: <WifiOff />,
+      position: 'bottom',
+      isClosable: false,
+      variant: 'solid',
+    })
+  }
+
+  useEffect(() => {
+    const handleOnlineStatus = () => updateToast()
+    const handleOfflineStatus = () => addToast()
+
+    window.ononline = handleOnlineStatus
+    window.onoffline = handleOfflineStatus
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (!user) return

@@ -24,8 +24,8 @@ root.render(
               status: 'error',
               duration: 5000,
               isClosable: true,
-              position: 'bottom-right',
-              variant: 'solid',
+              position: 'top-right',
+              variant: 'left-accent',
             },
           }}>
           <App />
