@@ -55,7 +55,7 @@ export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+      <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />
       <ModalContent>
         <Loader loading={isLoading}>
           <ModalHeader>

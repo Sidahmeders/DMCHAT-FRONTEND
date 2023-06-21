@@ -55,7 +55,7 @@ export default function DeletePatientModal({ isOpen, onClose, patientsData, setP
 
   return (
     <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+      <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />
       <ModalContent>
         <ModalHeader>êtes-vous sûr de vouloir supprimer ce patient</ModalHeader>
         <ModalCloseButton p="6" />

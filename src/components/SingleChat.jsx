@@ -6,7 +6,7 @@ import { ChatState } from '@context'
 import { getSender, getSenderFull } from '@utils'
 import { CHAT_EVENTS, CHAT_LISTENERS } from '@config'
 
-import ProfileModal from './miscellaneous/ProfileModal'
+import PeerProfileModal from './miscellaneous/PeerProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat'
 
@@ -127,7 +127,7 @@ const SingleChat = () => {
             {!selectedChat.isGroupChat ? (
               <>
                 {getSender(user, selectedChat.users)}
-                <ProfileModal user={getSenderFull(user, selectedChat.users)} />
+                <PeerProfileModal sender={getSenderFull(user, selectedChat.users)} />
               </>
             ) : (
               <>

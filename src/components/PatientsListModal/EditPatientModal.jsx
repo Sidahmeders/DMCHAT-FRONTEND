@@ -68,7 +68,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
 
   return (
     <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+      <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />
       <ModalContent>
         <ModalHeader>Modifier un patient</ModalHeader>
         <ModalCloseButton p="6" />

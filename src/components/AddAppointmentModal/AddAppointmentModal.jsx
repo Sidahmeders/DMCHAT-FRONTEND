@@ -12,7 +12,7 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
 
   return (
     <Modal size="xl" isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay bg="blackAlpha.300" />
+      <ModalOverlay bg="blackAlpha.400" />
       <ModalContent>
         <Tabs>
           <TabList>

@@ -39,7 +39,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
 
   return (
     <Modal size="5xl" isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+      <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />
       <ModalContent className="patient-followups-modal-container">
         <ModalHeader>
           <Box display="flex" alignItems="center">

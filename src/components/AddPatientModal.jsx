@@ -67,7 +67,7 @@ export default function AddPatientModal() {
       </Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay bg="blackAlpha.300" backdropFilter="blur(10px)" />
+        <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />
         <ModalContent>
           <ModalHeader>Ajouter un nouveau patient</ModalHeader>
           <ModalCloseButton p="6" />
