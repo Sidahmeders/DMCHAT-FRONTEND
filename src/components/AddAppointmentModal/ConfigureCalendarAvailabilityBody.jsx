@@ -2,8 +2,8 @@ import { useState } from 'react'
 import { ModalBody, ModalFooter, Stack, RadioGroup, Radio, Button } from '@chakra-ui/react'
 import { format } from 'date-fns'
 
-import { ChatState } from '../../context'
-import { CALENDAR_DAY_AVAILABILITY } from '../../config'
+import { ChatState } from '@context'
+import { CALENDAR_DAY_AVAILABILITY } from '@config'
 
 import Loader from '../Loader/Loader'
 

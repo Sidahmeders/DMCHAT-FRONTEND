@@ -2,9 +2,10 @@ import { useEffect, useState } from 'react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
 import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
 
-import { CHAT_EVENTS, CHAT_LISTENERS } from '../config'
-import { getSender, getSenderFull } from '../utils'
-import { ChatState } from '../context'
+import { ChatState } from '@context'
+import { getSender, getSenderFull } from '@utils'
+import { CHAT_EVENTS, CHAT_LISTENERS } from '@config'
+
 import ProfileModal from './miscellaneous/ProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat'

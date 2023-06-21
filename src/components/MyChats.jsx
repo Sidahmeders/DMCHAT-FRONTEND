@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { Box, Button, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
 import { LogOut } from 'react-feather'
 
-import { ChatState } from '../context'
-import { getSender } from '../utils'
+import { ChatState } from '@context'
+import { getSender } from '@utils'
 
 import GroupChatModal from './miscellaneous/GroupChatModal'
 import SearchUserDrawer from './SearchUserDrawer'

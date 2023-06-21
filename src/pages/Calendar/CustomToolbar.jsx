@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { ChevronLeft, ChevronRight } from 'react-feather'
 import { isValid } from 'date-fns'
-import { CALENDAR_NAVIGATION } from '../../config'
+import { CALENDAR_NAVIGATION } from '@config'
 
-import DatePicker from '../../components/DatePicker/DatePicker'
+import DatePicker from '@components/DatePicker/DatePicker'
 
 function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
   return viewNames.map((name) => (

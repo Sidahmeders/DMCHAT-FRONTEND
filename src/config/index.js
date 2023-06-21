@@ -1,5 +1,6 @@
 export * from './chat'
 export * from './calendar'
+export * from './patient'
 export * from './todayPatientsList'
 
 export const ENDPOINT = 'https://dnmchat-backend.onrender.com'

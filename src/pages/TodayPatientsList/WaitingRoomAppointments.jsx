@@ -1,7 +1,7 @@
 import { Circle } from '@chakra-ui/react'
 import { Droppable } from 'react-beautiful-dnd'
 
-import { APPOINTMENTS_IDS } from '../../config'
+import { APPOINTMENTS_IDS } from '@config'
 
 import AppointmentCard, { LoadingCards } from './AppointmentCard'
 import { DragWrap } from './TodayPatientsList'

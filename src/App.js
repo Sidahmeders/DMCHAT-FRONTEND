@@ -2,12 +2,12 @@ import { useEffect } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { debounce } from 'lodash'
 
-import { ChatState } from './context'
-import { checkIsJWTExpired } from './utils'
-import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from './config'
+import { ChatState } from '@context'
+import { checkIsJWTExpired } from '@utils'
+import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
+import TopNavigation from '@components/TopNavigation/TopNavigation'
 import { Home, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
-import TopNavigation from './components/TopNavigation/TopNavigation'
 
 import './App.css'
 

@@ -3,7 +3,7 @@ import { format, parseISO } from 'date-fns'
 import { Button } from '@chakra-ui/react'
 import { X } from 'react-feather'
 
-import { ADD_APPOINTMENT_NAMES } from '../../config'
+import { ADD_APPOINTMENT_NAMES } from '@config'
 
 const SubAppointment = ({ appointment, onInputEditHandler, treatmentUpdate, setTreatmentUpdate }) => {
   const { _id, title, payment, createdAt, isDone } = appointment

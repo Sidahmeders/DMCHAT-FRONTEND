@@ -11,9 +11,9 @@ import {
 } from '@chakra-ui/react'
 import { Users } from 'react-feather'
 
-import { ChatState } from '../../context'
-import { setPatient } from '../../utils'
-import { PAGINATION_ROWS_PER_PAGE_OPTIONS } from '../../config'
+import { ChatState } from '@context'
+import { setPatient } from '@utils'
+import { PAGINATION_ROWS_PER_PAGE_OPTIONS } from '@config'
 
 import DataTable from '../DataTable/DataTable'
 import { patientColumns } from './patientColumns'

@@ -8,9 +8,9 @@ import { registerLocale } from 'react-datepicker'
 import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
-import { ChatState } from '../../context'
+import { ChatState } from '@context'
 
-import AddAppointmentModal from '../../components/AddAppointmentModal/AddAppointmentModal'
+import AddAppointmentModal from '@components/AddAppointmentModal/AddAppointmentModal'
 import DisplayEventModal from './DisplayEventModal'
 import CustomToolbar from './CustomToolbar'
 import ColoredDateCellWrapper from './ColoredDateCellWrapper'

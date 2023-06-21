@@ -17,8 +17,8 @@ import {
   InputLeftElement,
 } from '@chakra-ui/react'
 
-import { CREATE_PATIENT_NAMES } from '../config'
-import { ChatState } from '../context'
+import { CREATE_PATIENT_NAMES } from '@config'
+import { ChatState } from '@context'
 
 const initialValues = Object.values(CREATE_PATIENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
 

@@ -11,8 +11,8 @@ import {
   useToast,
 } from '@chakra-ui/react'
 
-import { ChatState } from '../../context'
-import { getPatient } from '../../utils'
+import { ChatState } from '@context'
+import { getPatient } from '@utils'
 
 import Loader from '../Loader/Loader'
 

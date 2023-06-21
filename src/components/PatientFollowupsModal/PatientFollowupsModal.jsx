@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Box } from '@chakra-ui/react'
 import { ChevronDown, ChevronUp } from 'react-feather'
 
-import { ChatState } from '../../context'
-import { getPatient } from '../../utils'
+import { ChatState } from '@context'
+import { getPatient } from '@utils'
 
 import Loader from '../Loader/Loader'
 import PatientEditBody from './PatientEditBody'

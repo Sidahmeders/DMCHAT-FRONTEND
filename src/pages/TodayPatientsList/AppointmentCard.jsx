@@ -15,11 +15,11 @@ import { Card, CardHeader, CardBody } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, Edit2 } from 'react-feather'
 import { isBoolean } from 'lodash'
 
-import { setPatient } from '../../utils'
-import { APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
-import { ChatState, TodayPatientsListState } from '../../context'
+import { setPatient } from '@utils'
+import { APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
+import { ChatState, TodayPatientsListState } from '@context'
 
-import PatientFollowupsModal from '../../components/PatientFollowupsModal/PatientFollowupsModal'
+import PatientFollowupsModal from '@components/PatientFollowupsModal/PatientFollowupsModal'
 import ConfirmSound from '../../assets/songs/confirmation-tone.wav'
 import DoorBellSound from '../../assets/songs/door-bell.wav'
 

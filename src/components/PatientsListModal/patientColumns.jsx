@@ -1,7 +1,7 @@
 import { format, parseISO } from 'date-fns'
 import { Trash2, Edit3 } from 'react-feather'
 
-import { setPatient } from '../../utils'
+import { setPatient } from '@utils'
 
 export const patientColumns = ({ onEditModalOpen, onDeleteModalOpen }) => [
   {

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { Modal, ModalContent, ModalOverlay, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react'
 
-import { getMotifTemplateButtons, addMotifTemplateButtons, dropMotifTemplateButton } from '../../utils'
+import { getMotifTemplateButtons, addMotifTemplateButtons, dropMotifTemplateButton } from '@utils'
 
 import AddAppointmentBody from './AddAppointmentBody'
 import EditableButtons from '../EditableButtons/EditableButtons'

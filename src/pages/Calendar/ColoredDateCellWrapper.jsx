@@ -1,8 +1,8 @@
 import { useState, useEffect, Children, cloneElement } from 'react'
 import { format } from 'date-fns'
 
-import { ChatState } from '../../context'
-import { CALENDAR_DAY_AVAILABILITY } from '../../config'
+import { ChatState } from '@context'
+import { CALENDAR_DAY_AVAILABILITY } from '@config'
 
 export default function ColoredDateCellWrapper({ children, value }) {
   const { user } = ChatState()

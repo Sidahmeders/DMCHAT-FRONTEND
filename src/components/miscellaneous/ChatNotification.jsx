@@ -2,9 +2,9 @@ import { useNavigate } from 'react-router-dom'
 import { Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import { MessageCircle } from 'react-feather'
 
-import { ChatState } from '../../context'
-import { getSender } from '../../utils'
-import { APP_ROUTES } from '../../config'
+import { ChatState } from '@context'
+import { getSender } from '@utils'
+import { APP_ROUTES } from '@config'
 
 const ChatNotification = () => {
   const { user, setSelectedChat, notifications, setNotifications, setSelectedChatAppointmentModal } = ChatState()

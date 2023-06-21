@@ -17,7 +17,7 @@ import {
   Skeleton,
 } from '@chakra-ui/react'
 
-import { ChatState } from '../context'
+import { ChatState } from '@context'
 
 import UserListItem from './UserAvatar/UserListItem'
 

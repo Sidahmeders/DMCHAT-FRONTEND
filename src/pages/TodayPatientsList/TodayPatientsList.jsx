@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { useLocation } from 'react-router-dom'
 
-import { APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '../../config'
-import { flattenAppointment } from '../../utils'
-import { ChatState, TodayPatientsListState } from '../../context'
+import { APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
+import { flattenAppointment } from '@utils'
+import { ChatState, TodayPatientsListState } from '@context'
 
 import ExpectedAppointments from './ExpectedAppointments'
 import WaitingRoomAppointments from './WaitingRoomAppointments'

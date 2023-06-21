@@ -18,7 +18,8 @@ import {
   useToast,
 } from '@chakra-ui/react'
 
-import { ChatState } from '../../context'
+import { ChatState } from '@context'
+
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem'
 

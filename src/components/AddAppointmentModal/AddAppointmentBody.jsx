@@ -21,9 +21,9 @@ import {
 
 import Select from 'react-select'
 
-import { ChatState } from '../../context'
-import { ADD_APPOINTMENT_NAMES } from '../../config'
-import { getMotifTemplateButtons } from '../../utils'
+import { ChatState } from '@context'
+import { ADD_APPOINTMENT_NAMES } from '@config'
+import { getMotifTemplateButtons } from '@utils'
 
 import Loader from '../Loader/Loader'
 import PatientHistory from './PatientHistory'

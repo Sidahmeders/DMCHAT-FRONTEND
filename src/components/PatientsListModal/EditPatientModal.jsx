@@ -18,9 +18,9 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 
-import { CREATE_PATIENT_NAMES } from '../../config'
-import { ChatState } from '../../context'
-import { getPatient } from '../../utils'
+import { CREATE_PATIENT_NAMES } from '@config'
+import { ChatState } from '@context'
+import { getPatient } from '@utils'
 
 export default function EditPatientModal({ isOpen, onClose, patientsData, setPatientsData }) {
   const { user } = ChatState()

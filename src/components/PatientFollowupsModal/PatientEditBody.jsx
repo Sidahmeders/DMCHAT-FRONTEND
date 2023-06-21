@@ -2,7 +2,7 @@ import { useForm, Controller } from 'react-hook-form'
 import { AlertCircle, CheckCircle } from 'react-feather'
 import { HStack, Button, Textarea, Input, Stack, InputGroup, InputLeftElement, Grid, GridItem } from '@chakra-ui/react'
 
-import { CREATE_PATIENT_NAMES } from '../../config'
+import { CREATE_PATIENT_NAMES } from '@config'
 
 export default function PatientEditBody({ patient, setIsEditPatientOpen }) {
   const {

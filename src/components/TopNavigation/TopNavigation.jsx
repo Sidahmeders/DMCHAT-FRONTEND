@@ -2,8 +2,8 @@ import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { FileText, Calendar, PieChart } from 'react-feather'
 
-import { getPageRoute, setPageRoute } from '../../utils'
-import { APP_ROUTES } from '../../config'
+import { getPageRoute, setPageRoute } from '@utils'
+import { APP_ROUTES } from '@config'
 
 import ChatNotification from '../miscellaneous/ChatNotification'
 import PatientListModal from '../PatientsListModal/PatientsListModal'

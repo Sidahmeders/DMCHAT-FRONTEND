@@ -11,8 +11,8 @@ import {
 import { format, parseISO } from 'date-fns'
 import { X } from 'react-feather'
 
-import { ChatState } from '../../context'
-import { ADD_APPOINTMENT_NAMES } from '../../config'
+import { ChatState } from '@context'
+import { ADD_APPOINTMENT_NAMES } from '@config'
 
 import SubAppointment from './SubAppointment'
 

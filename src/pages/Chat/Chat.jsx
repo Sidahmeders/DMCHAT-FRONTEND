@@ -1,7 +1,7 @@
 import { Box } from '@chakra-ui/react'
 
-import { ChatState } from '../../context'
-import { ChatBox, MyChats } from '../../components'
+import { ChatState } from '@context'
+import { ChatBox, MyChats } from '@components'
 
 const Chat = () => {
   const { user } = ChatState()

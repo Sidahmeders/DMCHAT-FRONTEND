@@ -3,7 +3,7 @@ import propTypes from 'prop-types'
 import { ModalBody, ModalFooter, Button, Input, Stack, StackItem } from '@chakra-ui/react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
-import { guid } from '../../utils'
+import { guid } from '@utils'
 
 import './EditableButtons.scss'
 

@@ -14,7 +14,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { format } from 'date-fns'
-import Loader from '../../components/Loader/Loader'
+import Loader from '@components/Loader/Loader'
 
 const textStyles = { fontWeight: 'bold', paddingLeft: '6px' }
 
