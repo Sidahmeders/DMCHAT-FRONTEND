@@ -51,7 +51,7 @@ const MyChats = () => {
       alignItems="center"
       p={3}
       bg="white"
-      w={{ base: '100%', md: '31%' }}
+      w={{ base: '100%', md: '30%' }}
       borderRadius="lg"
       borderWidth="1px">
       <Box pb={3} px={3} display="flex" w="100%" justifyContent="space-between" alignItems="center">

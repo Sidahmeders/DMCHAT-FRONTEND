@@ -1,5 +1,5 @@
-import { CloseIcon } from "@chakra-ui/icons";
-import { Badge } from "@chakra-ui/react";
+import { CloseIcon } from '@chakra-ui/icons'
+import { Badge } from '@chakra-ui/react'
 
 const UserBadgeItem = ({ user, handleFunction }) => {
   return (
@@ -13,12 +13,11 @@ const UserBadgeItem = ({ user, handleFunction }) => {
       fontSize={12}
       colorScheme="purple"
       cursor="pointer"
-      onClick={handleFunction}
-    >
+      onClick={handleFunction}>
       {user.name}
       <CloseIcon pl="1" />
     </Badge>
-  );
-};
+  )
+}
 
-export default UserBadgeItem;
+export default UserBadgeItem
