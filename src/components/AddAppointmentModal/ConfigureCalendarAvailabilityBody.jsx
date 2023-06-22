@@ -14,7 +14,7 @@ export default function ConfigureCalendarAvailabilityBody({ selectedSlotInfo, ha
   const { user } = ChatState()
 
   const updateDayAvailability = async (date) => {
-    const response = await fetch(`/api/calendar/${format(date, 'yyyy/MM/dd')}`, {
+    const response = await fetch(`/api/calendar/${format(date, 'yyyy/MM/dd')}/availability`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
