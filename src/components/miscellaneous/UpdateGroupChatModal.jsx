@@ -191,7 +191,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
     try {
       setLoading(true)
 
-      const response = await fetch(`/api/user?search=${search}`, {
+      const response = await fetch(`/api/users?search=${search}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user.token}`,

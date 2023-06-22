@@ -41,7 +41,7 @@ export default function SearchUserDrawer() {
     }
     setLoading(true)
 
-    const response = await fetch(`/api/user?search=${search}`, {
+    const response = await fetch(`/api/users?search=${search}`, {
       method: 'GET',
       headers: {
         Authorization: `Bearer ${user.token}`,
