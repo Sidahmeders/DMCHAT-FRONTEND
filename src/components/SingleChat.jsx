@@ -111,11 +111,10 @@ const SingleChat = () => {
     <>
       {selectedChat ? (
         <>
-          <Text
+          <Box
             fontSize={{ base: '28px', md: '30px' }}
-            pb="3"
-            px="2"
             w="100%"
+            pb="3"
             display="flex"
             justifyContent={{ base: 'space-between' }}
             alignItems="center">
@@ -139,7 +138,7 @@ const SingleChat = () => {
                 />
               </>
             )}
-          </Text>
+          </Box>
 
           <Box
             display="flex"

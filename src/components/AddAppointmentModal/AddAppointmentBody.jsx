@@ -136,7 +136,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       ;(async () => {
         setIsMounted(true)
         try {
-          const response = await fetch(`/api/patients/fullname/${searchName}`, {
+          const response = await fetch(`/api/patients?fullName=${searchName}`, {
             method: 'GET',
             headers: {
               Authorization: `Bearer ${user.token}`,
@@ -144,7 +144,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
           })
 
           if (response.status === 200) {
-            const patients = await response.json()
+            const { patients } = await response.json()
             setMatchedPatients(patients)
             setPatientOptions(resolvePatientOptions(patients))
           }

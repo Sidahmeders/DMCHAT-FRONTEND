@@ -9,13 +9,13 @@ export default function Chat() {
   const { user } = ChatState()
 
   return (
-    <div style={{ width: '100%', marginTop: '3rem' }}>
+    <>
       {user && (
-        <Box display="flex" justifyContent="space-between" w="100%" h="91.5vh" p="10px">
+        <Box display="flex" justifyContent="space-between" w="100%" mt="16" h="90vh" p="1rem" pb="0">
           <MyChats />
           <ChatBox />
         </Box>
       )}
-    </div>
+    </>
   )
 }
