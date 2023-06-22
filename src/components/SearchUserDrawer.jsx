@@ -66,9 +66,7 @@ export default function SearchUserDrawer() {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${user.token}`,
         },
-        body: JSON.stringify({
-          userId,
-        }),
+        body: JSON.stringify({ userId }),
       })
       const data = await response.json()
 

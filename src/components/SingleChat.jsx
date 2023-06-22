@@ -37,7 +37,7 @@ const SingleChat = () => {
       try {
         setNewMessage('') // Clear message field before making API call (won't affect API call as the function is asynchronous)
 
-        const response = await fetch('/api/message', {
+        const response = await fetch('/api/messages', {
           method: 'POST',
           headers: {
             Authorization: `Bearer ${user.token}`,
@@ -126,7 +126,12 @@ const SingleChat = () => {
             {!selectedChat.isGroupChat ? (
               <>
                 {getSender(user, selectedChat.users)}
-                <PeerProfileModal sender={getSenderFull(user, selectedChat.users)} />
+                <PeerProfileModal
+                  user={user}
+                  chatId={selectedChat._id}
+                  sender={getSenderFull(user, selectedChat.users)}
+                  setMessages={setMessages}
+                />
               </>
             ) : (
               <>

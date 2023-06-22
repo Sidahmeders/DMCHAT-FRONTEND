@@ -12,10 +12,12 @@ import {
   ModalOverlay,
   Text,
   useDisclosure,
+  useToast,
 } from '@chakra-ui/react'
 import { Eye, Trash, AlertTriangle } from 'react-feather'
 
-export default function PeerProfileModal({ sender }) {
+export default function PeerProfileModal({ sender, chatId, user, setMessages }) {
+  const toast = useToast()
   const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure()
   const { isOpen: isDeleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure()
 
@@ -24,6 +26,29 @@ export default function PeerProfileModal({ sender }) {
   const cancelDeleteMessage = () => {
     setCanDeleteMessages(false)
     onDeleteModalClose()
+  }
+
+  const deleteChatMessages = async () => {
+    try {
+      const response = await fetch(`/api/messages/${chatId}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      })
+
+      if (response.status === 200) {
+        toast({
+          title: 'Chat supprimé avec succès',
+          status: 'warning',
+        })
+        onDeleteModalClose()
+        setMessages([])
+      }
+    } catch (error) {
+      toast()
+      console.log(error)
+    }
   }
 
   return (
@@ -53,7 +78,7 @@ export default function PeerProfileModal({ sender }) {
                 Supprimer
               </Button>
             ) : (
-              <Button colorScheme="red" mr="4">
+              <Button colorScheme="red" mr="4" onClick={deleteChatMessages}>
                 Confirmer la suppression
               </Button>
             )}

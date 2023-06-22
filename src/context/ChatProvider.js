@@ -25,7 +25,7 @@ export const ChatProvider = ({ children, socket }) => {
     if (!selectedChat || !user) return
     setIsLoadingMessages(true)
     try {
-      const response = await fetch(`/api/message/${selectedChat._id}`, {
+      const response = await fetch(`/api/messages/${selectedChat._id}`, {
         method: 'GET',
         headers: {
           Authorization: `Bearer ${user.token}`,
