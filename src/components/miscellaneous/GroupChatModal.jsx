@@ -72,7 +72,7 @@ const GroupChatModal = () => {
     }
 
     try {
-      const response = await fetch('/api/chat/group', {
+      const response = await fetch('/api/chat/groups', {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${user.token}`,

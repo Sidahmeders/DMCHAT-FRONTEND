@@ -60,7 +60,7 @@ export default function SearchUserDrawer() {
     try {
       setLoadingChat(true)
 
-      const response = await fetch(`/api/chat`, {
+      const response = await fetch(`/api/chat/access`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
