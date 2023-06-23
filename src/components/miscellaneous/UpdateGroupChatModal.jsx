@@ -19,6 +19,8 @@ import {
 } from '@chakra-ui/react'
 
 import { ChatState } from '@context'
+import { joinGroup, leaveGroup, removeGroup } from '@services/chats'
+import { searchUsers } from '@services/users'
 
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem'
@@ -45,20 +47,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
     try {
       setLoading(true)
-
-      const response = await fetch('/api/chat/groups/leave', {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chatId: selectedChat._id,
-          userId: removeUser._id,
-        }),
-      })
-      const data = await response.json()
-
+      const data = await leaveGroup(selectedChat, removeUser)
       // If logged in user removed himself or left the group
       removeUser._id === user._id ? setSelectedChat() : setSelectedChat(data)
       setFetchAgain(!fetchAgain) // Fetching all the chat again
@@ -89,20 +78,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
     try {
       setLoading(true)
-
-      const response = await fetch('/api/chat/groups/join', {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chatId: selectedChat._id,
-          userId: addUser._id,
-        }),
-      })
-      const data = await response.json()
-
+      const data = await joinGroup(selectedChat, addUser)
       setSelectedChat(data)
       setFetchAgain(!fetchAgain) // Fetching all the chat again
       setLoading(false)
@@ -113,26 +89,10 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
   }
 
   const handleRename = async () => {
-    if (!groupChatName) {
-      return
-    }
-
+    if (!groupChatName) return
     try {
       setRenameLoading(true)
-
-      const response = await fetch('/api/chat/groups/rename', {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          chatId: selectedChat._id,
-          chatName: groupChatName,
-        }),
-      })
-      const data = await response.json()
-
+      const data = await removeGroup(selectedChat, groupChatName)
       setSelectedChat(data)
       setFetchAgain(!fetchAgain) // Fetching all the chat again
       setRenameLoading(false)
@@ -140,7 +100,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       toast({ description: 'Failed to rename group chat!' })
       setRenameLoading(false)
     }
-
     setGroupChatName('')
   }
 
@@ -154,15 +113,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
     try {
       setLoading(true)
-
-      const response = await fetch(`/api/users?search=${search}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-      const data = await response.json()
-
+      const data = await searchUsers(search)
       setLoading(false)
       setSearchResults(data)
     } catch (error) {
