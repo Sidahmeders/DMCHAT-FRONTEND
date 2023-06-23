@@ -1,8 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
+import { isEmpty } from 'lodash'
 
-import { CHAT_EVENTS } from '../config'
+import { getUser } from '@utils'
+import { CHAT_EVENTS } from '@config'
 
 const ChatContext = createContext()
 
@@ -47,8 +49,8 @@ export const ChatProvider = ({ children, socket }) => {
   }
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-    if (!userInfo) navigate('/')
+    const userInfo = getUser()
+    if (isEmpty(userInfo)) navigate('/')
 
     setUser(userInfo)
     fetchMessages()

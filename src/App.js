@@ -5,7 +5,7 @@ import { debounce } from 'lodash'
 import { Wifi, WifiOff } from 'react-feather'
 
 import { ChatState } from '@context'
-import { checkIsJWTExpired } from '@utils'
+import { checkIsJWTExpired, removeUser } from '@utils'
 import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
@@ -56,7 +56,7 @@ const App = () => {
   if (user && user.token) {
     const isTokenExpired = checkIsJWTExpired(user.token)
     if (isTokenExpired) {
-      localStorage.removeItem('userInfo')
+      removeUser()
     }
   }
 

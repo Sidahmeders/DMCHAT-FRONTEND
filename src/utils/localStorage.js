@@ -5,6 +5,7 @@ const MOTIF_TEMPLATE_BUTTONS = 'motifTemplateButtons'
 
 export const getUser = () => JSON.parse(localStorage.getItem(USER)) || {}
 export const setUser = (userData) => localStorage.setItem(USER, JSON.stringify(userData))
+export const removeUser = () => localStorage.removeItem(USER)
 
 export const getPatient = () => JSON.parse(localStorage.getItem(PATIENT)) || {}
 export const setPatient = (patient) => localStorage.setItem(PATIENT, JSON.stringify(patient))

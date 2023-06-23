@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Box, HStack, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
 
 import { ChatState } from '@context'
-import { getSender } from '@utils'
+import { getSender, getUser } from '@utils'
 
 import SearchUserDrawer from '@components/SearchUserDrawer'
 import GroupChatModal from '@components/miscellaneous/GroupChatModal'
@@ -37,7 +37,7 @@ const MyChats = () => {
   }
 
   useEffect(() => {
-    setLoggedUser(JSON.parse(localStorage.getItem('userInfo')))
+    setLoggedUser(getUser())
     fetchChats()
     // eslint-disable-next-line
   }, [fetchAgain])

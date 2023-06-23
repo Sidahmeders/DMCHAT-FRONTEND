@@ -1,6 +1,9 @@
-import { Container, Box, Text, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { Container, Box, Text, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
+import { isEmpty } from 'lodash'
+
+import { getUser } from '@utils'
 
 import Signup from './Signup'
 import Login from './Login'
@@ -9,9 +12,7 @@ export default function Auth() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-
-    if (!userInfo) {
+    if (isEmpty(getUser())) {
       navigate('/')
     }
   }, [navigate])
