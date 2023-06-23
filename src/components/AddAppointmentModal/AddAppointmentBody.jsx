@@ -24,9 +24,11 @@ import Select from 'react-select'
 import { ChatState } from '@context'
 import { ADD_APPOINTMENT_NAMES } from '@config'
 import { getMotifTemplateButtons } from '@utils'
+import { createAppointment, relateAppointment } from '@services/appointments'
 
 import Loader from '../Loader/Loader'
 import PatientHistory from './PatientHistory'
+import { fetchPatients } from '@services/patients'
 
 const resolvePatientOptions = (patients) => {
   return patients.map(({ _id, fullName, age }) => ({
@@ -63,48 +65,33 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const onSubmit = async (data) => {
     if (!user) return
     setIsLoading(true)
-    const { fullName } = data
-    const [patientId] = fullName.split('-')
-    const { _id: userId } = user
 
-    let response = null
+    try {
+      const { fullName } = data
+      const [patientId] = fullName.split('-')
+      const { _id: userId } = user
 
-    if (isNewTreatment) {
-      response = await fetch('/api/appointments/new', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+      let createdAppointment
+
+      if (isNewTreatment) {
+        createdAppointment = await createAppointment({
           ...data,
-          [ADD_APPOINTMENT_NAMES.IS_NEW_TREATMENT]: isNewTreatment,
           sender: userId,
           patient: patientId,
           startDate: start,
           endDate: end,
-        }),
-      })
-    } else {
-      response = await fetch('/api/appointments/relate', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
+        })
+      } else {
+        createdAppointment = await relateAppointment({
           ...data,
           [ADD_APPOINTMENT_NAMES.BASE_APPOINTMENT_ID]: baseAppointmentRadioValue,
           sender: userId,
           patient: patientId,
           startDate: start,
           endDate: end,
-        }),
-      })
-    }
+        })
+      }
 
-    if (response.status === 200) {
-      const createdAppointment = await response.json()
       setEvents([
         ...events,
         {
@@ -119,11 +106,10 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
         title: 'nouveau rendez-vous créé avec succès',
         status: 'success',
       })
-    } else {
+      handleClose()
+    } catch (error) {
       toast()
     }
-
-    handleClose()
     setIsLoading(false)
   }
 
@@ -136,20 +122,11 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       ;(async () => {
         setIsMounted(true)
         try {
-          const response = await fetch(`/api/patients?fullName=${searchName}`, {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${user.token}`,
-            },
-          })
-
-          if (response.status === 200) {
-            const { patients } = await response.json()
-            setMatchedPatients(patients)
-            setPatientOptions(resolvePatientOptions(patients))
-          }
+          const { patients } = await fetchPatients({ searchName })
+          setMatchedPatients(patients)
+          setPatientOptions(resolvePatientOptions(patients))
         } catch (error) {
-          console.error(error.message)
+          toast()
         }
         setIsMounted(false)
       })()
@@ -256,7 +233,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
 
             <PatientHistory
               show={!isNewTreatment}
-              user={user}
               patient={selectedPatient}
               baseAppointmentRadioValue={baseAppointmentRadioValue}
               setBaseAppointmentRadioValue={setBaseAppointmentRadioValue}

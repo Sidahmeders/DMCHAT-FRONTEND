@@ -2,8 +2,16 @@ const { getUser } = require('@utils')
 
 const user = getUser()
 
-const fetchPatients = async (pageNumber, pageSize) => {
-  const response = await fetch(`/api/patients?page=${pageNumber}&pageSize=${pageSize}`, {
+const fetchPatients = async ({ pageNumber, pageSize, searchName }) => {
+  let searchQuery = [
+    pageNumber && `page=${pageNumber}`,
+    pageSize && `pageSize=${pageSize}`,
+    searchName && `fullName=${searchName}`,
+  ]
+    .filter((query) => query)
+    .join('&')
+
+  const response = await fetch(`/api/patients?${searchQuery}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${user.token}`,

@@ -52,7 +52,7 @@ export default function PatientListModal() {
     ;(async () => {
       setIsLoading(true)
       try {
-        const patientData = await fetchPatients(pageNumber, pageSize)
+        const patientData = await fetchPatients({ pageNumber, pageSize })
         setPatientsData(patientData)
       } catch (error) {
         toast()

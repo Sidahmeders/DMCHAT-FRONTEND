@@ -3,34 +3,20 @@ import { format, parseISO } from 'date-fns'
 import { RadioGroup, Radio, Table, Tbody, Tr, Td, TableContainer, Button } from '@chakra-ui/react'
 
 import { groupAppointments } from './utils'
+import { fetchPatientAppointments } from '@services/appointments'
 
-export default function PatientHistory({
-  show,
-  user,
-  patient,
-  baseAppointmentRadioValue,
-  setBaseAppointmentRadioValue,
-}) {
+export default function PatientHistory({ show, patient, baseAppointmentRadioValue, setBaseAppointmentRadioValue }) {
   const [appointments, setAppointments] = useState([])
 
   useEffect(() => {
     ;(async () => {
       if (!patient._id) return
-      const response = await fetch(`/api/appointments/${patient._id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-
-      if (response.status === 200) {
-        const appointmenstData = await response.json()
-        setBaseAppointmentRadioValue(appointmenstData[0]?._id)
-        setAppointments(groupAppointments(appointmenstData))
-      }
+      const patientAppointments = await fetchPatientAppointments(patient._id)
+      setBaseAppointmentRadioValue(patientAppointments[0]?._id)
+      setAppointments(groupAppointments(patientAppointments))
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, patient])
+  }, [patient])
 
   return (
     <RadioGroup value={baseAppointmentRadioValue} onChange={setBaseAppointmentRadioValue}>
