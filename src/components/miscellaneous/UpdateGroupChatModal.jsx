@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { ViewIcon } from '@chakra-ui/icons'
 import {
   Box,
   Button,
   FormControl,
+  HStack,
   IconButton,
   Input,
   Modal,
@@ -17,6 +17,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
+import { Eye } from 'react-feather'
 
 import { ChatState } from '@context'
 import { joinGroup, leaveGroup, removeGroup } from '@services/chats'
@@ -24,8 +25,9 @@ import { searchUsers } from '@services/users'
 
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem'
+import DeleteChatModal from './DeleteChatModal'
 
-const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
+const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages, sender, chatId, setMessages }) => {
   const [groupChatName, setGroupChatName] = useState('')
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState([])
@@ -123,7 +125,10 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
   return (
     <>
-      <IconButton display={{ base: 'flex' }} icon={<ViewIcon />} onClick={onOpen} />
+      <HStack>
+        <DeleteChatModal sender={sender} chatId={chatId} setMessages={setMessages} />
+        <IconButton icon={<Eye />} onClick={onOpen} />
+      </HStack>
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>
         <ModalOverlay />

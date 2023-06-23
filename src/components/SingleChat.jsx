@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { ArrowBackIcon } from '@chakra-ui/icons'
 import {
   Box,
   FormControl,
@@ -11,7 +10,7 @@ import {
   Text,
   useToast,
 } from '@chakra-ui/react'
-import { Send } from 'react-feather'
+import { Send, ArrowLeft } from 'react-feather'
 
 import { ChatState } from '@context'
 import { getSender, getSenderFull } from '@utils'
@@ -102,14 +101,13 @@ const SingleChat = () => {
           <Box fontSize="1.5rem" w="100%" pb="3" display="flex" justifyContent="space-between" alignItems="center">
             <IconButton
               display={{ base: 'flex', md: 'none' }}
-              icon={<ArrowBackIcon />}
+              icon={<ArrowLeft />}
               onClick={() => setSelectedChat('')}
             />
             {!selectedChat.isGroupChat ? (
               <>
                 {getSender(user, selectedChat.users)}
                 <PeerProfileModal
-                  user={user}
                   chatId={selectedChat._id}
                   sender={getSenderFull(user, selectedChat.users)}
                   setMessages={setMessages}
@@ -122,6 +120,9 @@ const SingleChat = () => {
                   fetchAgain={fetchAgain}
                   setFetchAgain={setFetchAgain}
                   fetchMessages={fetchMessages}
+                  chatId={selectedChat._id}
+                  sender={getSenderFull(user, selectedChat.users)}
+                  setMessages={setMessages}
                 />
               </>
             )}
