@@ -19,6 +19,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
+    if (!patient._id) return
     ;(async () => {
       setIsLoading(true)
       const patientAppointments = await fetchPatientAppointments(patient._id)
