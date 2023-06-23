@@ -1,3 +1,4 @@
+import { format } from 'date-fns'
 const { getUser } = require('@utils')
 
 const user = getUser()
@@ -39,6 +40,19 @@ const relateAppointment = async (appointmentData) => {
   return await response.json()
 }
 
+const updateAppointment = async (appointmentId, appointmentData) => {
+  const response = await fetch(`/api/appointments/${appointmentId}/update`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(appointmentData),
+  })
+
+  return await response.json()
+}
+
 const updateAppointmentsHistory = async (appointmentData) => {
   const response = await fetch('/api/appointments/history', {
     method: 'PUT',
@@ -52,4 +66,34 @@ const updateAppointmentsHistory = async (appointmentData) => {
   return await response.json()
 }
 
-export { fetchPatientAppointments, createAppointment, relateAppointment, updateAppointmentsHistory }
+const fetchMonthAppointments = async (date) => {
+  const response = await fetch(`/api/appointments/${format(date, 'yyyy/MM')}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  })
+
+  return await response.json()
+}
+
+const deleteAppointment = async (appointmentId) => {
+  const response = await fetch(`/api/appointments/${appointmentId}`, {
+    method: 'DELETE',
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  })
+
+  return response.status
+}
+
+export {
+  fetchPatientAppointments,
+  createAppointment,
+  relateAppointment,
+  updateAppointment,
+  updateAppointmentsHistory,
+  fetchMonthAppointments,
+  deleteAppointment,
+}

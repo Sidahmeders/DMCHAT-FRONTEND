@@ -14,11 +14,14 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { format } from 'date-fns'
+
+import { deleteAppointment } from '@services/appointments'
+
 import Loader from '@components/Loader/Loader'
 
 const textStyles = { fontWeight: 'bold', paddingLeft: '6px' }
 
-export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose, events, setEvents }) {
+export default function DisplayEventModal({ selectedEvent, isOpen, onClose, events, setEvents }) {
   const { id, start, end, title, motif, diagnostic, treatmentPlan } = selectedEvent
   const toast = useToast()
 
@@ -31,26 +34,20 @@ export default function DisplayEventModal({ user, selectedEvent, isOpen, onClose
 
   const deleteEvent = async () => {
     setIsLoading(true)
-    const response = await fetch(`/api/appointments/${id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
-
-    if (response.status === 200) {
-      const deletedAppointment = await response.json()
-      const updatedEvents = events.filter((event) => event.id !== deletedAppointment._id)
+    try {
+      await deleteAppointment(id)
+      const updatedEvents = events.filter((event) => event.id !== id)
       setEvents(updatedEvents)
       toast({
-        title: `${deletedAppointment.title} a été supprimé avec succès`,
+        title: `${title} a été supprimé avec succès`,
         status: 'warning',
       })
+      onClose()
+    } catch (error) {
+      toast()
     }
-
     setCanDeleteEvent(false)
     setIsLoading(false)
-    onClose()
   }
 
   return (

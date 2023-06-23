@@ -9,6 +9,7 @@ import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-f
 import { fr } from 'date-fns/locale'
 
 import { ChatState } from '@context'
+import { fetchMonthAppointments, updateAppointment } from '@services/appointments'
 
 import AddAppointmentModal from '@components/AddAppointmentModal/AddAppointmentModal'
 import DisplayEventModal from './DisplayEventModal'
@@ -106,15 +107,8 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   )
 
   const onEventDrop = async ({ event, start, end }) => {
-    const response = await fetch(`/api/appointments/${event.id}/update`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ startDate: start, endDate: end }),
-    })
-    const updatedAppointment = await response.json()
+    const updatedAppointment = await updateAppointment(event._id, { startDate: start, endDate: end })
+
     const updatedEvents = events.map((appointment) => {
       if (appointment.id === updatedAppointment._id) {
         return {
@@ -142,13 +136,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   useEffect(() => {
     if (!user) return
     ;(async () => {
-      const response = await fetch(`/api/appointments/${format(selectedDate, 'yyyy/MM')}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-      const monthAppointments = await response.json()
+      const monthAppointments = await fetchMonthAppointments(selectedDate)
       const eventsList = monthAppointments.map((event) => ({
         ...event,
         id: event._id,

@@ -3,6 +3,7 @@ import { Box, HStack, Stack, Text, useDisclosure, useToast } from '@chakra-ui/re
 
 import { ChatState } from '@context'
 import { getSender, getUser } from '@utils'
+import { fetchUserChats } from '@services/chats'
 
 import SearchUserDrawer from '@components/SearchUserDrawer'
 import GroupChatModal from '@components/miscellaneous/GroupChatModal'
@@ -11,28 +12,17 @@ import LogoutButton from '@components/miscellaneous/LogoutButton'
 const MyChats = () => {
   const toast = useToast()
   const { onClose } = useDisclosure()
-  const { selectedChat, setSelectedChat, user, chats, setChats, fetchAgain } = ChatState()
+  const { selectedChat, setSelectedChat, chats, setChats, fetchAgain } = ChatState()
 
   const [loggedUser, setLoggedUser] = useState()
 
   const fetchChats = async () => {
     try {
-      const response = await fetch(`/api/chat`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-
-      if (response.status === 200) {
-        setChats(await response.json())
-        onClose()
-      }
+      const allchats = await fetchUserChats()
+      setChats(allchats)
+      onClose()
     } catch (error) {
-      return toast({
-        title: 'Error Occured!',
-        description: 'Failed to Load the Search Results',
-      })
+      toast({ description: error.message })
     }
   }
 

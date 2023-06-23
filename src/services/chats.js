@@ -79,4 +79,15 @@ const accessChat = async (userId) => {
   return await response.json()
 }
 
-export { createGroupChat, leaveGroup, joinGroup, removeGroup, accessChat }
+const fetchUserChats = async () => {
+  const response = await fetch(`/api/chat`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  })
+
+  return await response.json()
+}
+
+export { createGroupChat, leaveGroup, joinGroup, removeGroup, accessChat, fetchUserChats }
