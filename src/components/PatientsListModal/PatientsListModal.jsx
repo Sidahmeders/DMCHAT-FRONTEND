@@ -8,12 +8,14 @@ import {
   ModalBody,
   ModalCloseButton,
   HStack,
+  useToast,
 } from '@chakra-ui/react'
 import { Users } from 'react-feather'
 
 import { ChatState } from '@context'
 import { setPatient } from '@utils'
 import { PAGINATION_ROWS_PER_PAGE_OPTIONS } from '@config'
+import { fetchPatients } from '@services/patients'
 
 import DataTable from '../DataTable/DataTable'
 import { patientColumns } from './patientColumns'
@@ -28,6 +30,7 @@ import './PatientsListModal.scss'
 
 export default function PatientListModal() {
   const { user } = ChatState()
+  const toast = useToast()
   const { isOpen: isPatientsModalOpen, onOpen: onPatientsModalOpen, onClose: onPatientsModalClose } = useDisclosure()
   const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: ondEditModalClose } = useDisclosure()
   const { isOpen: isDeleteModalOpen, onOpen: onDeleteModalOpen, onClose: onDeleteModalClose } = useDisclosure()
@@ -48,18 +51,15 @@ export default function PatientListModal() {
     if (!user) return
     ;(async () => {
       setIsLoading(true)
-      const response = await fetch(`/api/patients?page=${pageNumber}&pageSize=${pageSize}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-
-      if (response.status === 200) {
-        setPatientsData(await response.json())
+      try {
+        const patientData = await fetchPatients(pageNumber, pageSize)
+        setPatientsData(patientData)
+      } catch (error) {
+        toast()
       }
       setIsLoading(false)
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber, pageSize, user])
 
   const filteredItems = patientsData.patients?.filter((patient) => {

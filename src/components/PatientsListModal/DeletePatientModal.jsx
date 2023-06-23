@@ -13,6 +13,7 @@ import {
 
 import { ChatState } from '@context'
 import { getPatient } from '@utils'
+import { deletePatientById } from '@services/patients'
 
 import Loader from '../Loader/Loader'
 
@@ -25,14 +26,8 @@ export default function DeletePatientModal({ isOpen, onClose, patientsData, setP
 
   const deletePatient = async () => {
     setIsLoading(true)
-    const response = await fetch(`/api/patients/${patient._id}`, {
-      method: 'DELETE',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
-
-    if (response.status === 200) {
+    try {
+      await deletePatientById(patient._id)
       toast({
         title: `${patient.fullName} / ${patient.age} ans a été supprimé avec succès`,
         status: 'warning',
@@ -43,7 +38,7 @@ export default function DeletePatientModal({ isOpen, onClose, patientsData, setP
         patients: patientsData.patients.filter((item) => patient._id !== item._id),
       })
       onClose()
-    } else {
+    } catch (error) {
       toast()
     }
     setIsLoading(false)

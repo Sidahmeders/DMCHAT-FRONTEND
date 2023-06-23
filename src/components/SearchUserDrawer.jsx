@@ -19,6 +19,7 @@ import {
 import { Search } from 'react-feather'
 
 import { ChatState } from '@context'
+import { searchUsers } from '@services/users'
 
 import UserListItem from './UserAvatar/UserListItem'
 
@@ -30,7 +31,7 @@ export default function SearchUserDrawer() {
   const [searchResult, setSearchResult] = useState([])
   const [loading, setLoading] = useState(false)
   const [loadingChat, setLoadingChat] = useState(false)
-  const { user, setSelectedChat, chats, setChats } = ChatState()
+  const { setSelectedChat, chats, setChats } = ChatState()
 
   const handleSearch = async () => {
     if (!search.trim()) {
@@ -40,49 +41,30 @@ export default function SearchUserDrawer() {
       })
     }
     setLoading(true)
-
-    const response = await fetch(`/api/users?search=${search}`, {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
-
-    if (response.status !== 200) {
-      return toast()
-    } else {
-      setSearchResult(await response.json())
+    try {
+      const users = await searchUsers(search)
+      setSearchResult(users)
+    } catch (error) {
+      toast()
     }
     setLoading(false)
   }
 
   const accessChat = async (userId) => {
+    setLoadingChat(true)
     try {
-      setLoadingChat(true)
-
-      const response = await fetch(`/api/chat/access`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify({ userId }),
-      })
-      const data = await response.json()
-
+      const chatData = await accessChat(userId)
       // If the chat already inside 'chat' state, append it
-      if (!chats.find((c) => c._id === data._id)) setChats([data, ...chats])
-
-      setSelectedChat(data)
-      setLoadingChat(false)
-      onClose() // Close the side drawer
+      if (!chats.find((c) => c._id === chatData._id)) setChats([chatData, ...chats])
+      setSelectedChat(chatData)
+      onClose()
     } catch (error) {
-      setLoadingChat(false)
       return toast({
         title: 'Erreur lors de la récupération du chat',
         description: error.message,
       })
     }
+    setLoadingChat(false)
   }
 
   return (

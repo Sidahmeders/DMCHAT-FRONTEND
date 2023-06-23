@@ -39,6 +39,7 @@ export default function PeerProfileModal({ sender, chatId, user, setMessages }) 
       })
       onDeleteModalClose()
       setMessages([])
+      setCanDeleteMessages(false)
     } catch (error) {
       toast()
       console.log(error)

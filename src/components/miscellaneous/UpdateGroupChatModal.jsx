@@ -47,7 +47,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
     try {
       setLoading(true)
-      const data = await leaveGroup(selectedChat, removeUser)
+      const data = await leaveGroup(selectedChat._id, removeUser)
       // If logged in user removed himself or left the group
       removeUser._id === user._id ? setSelectedChat() : setSelectedChat(data)
       setFetchAgain(!fetchAgain) // Fetching all the chat again
@@ -78,7 +78,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
 
     try {
       setLoading(true)
-      const data = await joinGroup(selectedChat, addUser)
+      const data = await joinGroup(selectedChat._id, addUser)
       setSelectedChat(data)
       setFetchAgain(!fetchAgain) // Fetching all the chat again
       setLoading(false)
@@ -92,7 +92,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
     if (!groupChatName) return
     try {
       setRenameLoading(true)
-      const data = await removeGroup(selectedChat, groupChatName)
+      const data = await removeGroup(selectedChat._id, groupChatName)
       setSelectedChat(data)
       setFetchAgain(!fetchAgain) // Fetching all the chat again
       setRenameLoading(false)

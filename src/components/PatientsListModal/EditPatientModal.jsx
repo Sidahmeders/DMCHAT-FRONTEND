@@ -18,9 +18,10 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 
-import { CREATE_PATIENT_NAMES } from '@config'
 import { ChatState } from '@context'
 import { getPatient } from '@utils'
+import { CREATE_PATIENT_NAMES } from '@config'
+import { updatePatientById } from '@services/patients'
 
 export default function EditPatientModal({ isOpen, onClose, patientsData, setPatientsData }) {
   const { user } = ChatState()
@@ -33,30 +34,18 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
   } = useForm()
 
   const onSubmit = async (data) => {
-    const response = await fetch(`/api/patients/${data._id}`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-
-    if (response.status === 200) {
-      const updatedPatient = await response.json()
+    try {
+      const updatedPatient = await updatePatientById(data)
       const updatedPatientList = patientsData.patients.map((patient) =>
         updatedPatient._id === patient._id ? updatedPatient : patient,
       )
-      setPatientsData({
-        ...patientsData,
-        patients: updatedPatientList,
-      })
+      setPatientsData({ ...patientsData, patients: updatedPatientList })
       toast({
         title: 'le profil du patient a été mis à jour avec succès',
         status: 'success',
       })
       onClose()
-    } else {
+    } catch (error) {
       toast()
     }
   }

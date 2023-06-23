@@ -18,7 +18,7 @@ const createGroupChat = async (groupChatName, selectedUsers) => {
   return await response.json()
 }
 
-const leaveGroup = async (selectedChat, removeUser) => {
+const leaveGroup = async (chatId, removeUser) => {
   const response = await fetch('/api/chat/groups/leave', {
     method: 'PUT',
     headers: {
@@ -26,7 +26,7 @@ const leaveGroup = async (selectedChat, removeUser) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      chatId: selectedChat._id,
+      chatId: chatId,
       userId: removeUser._id,
     }),
   })
@@ -34,7 +34,7 @@ const leaveGroup = async (selectedChat, removeUser) => {
   return await response.json()
 }
 
-const joinGroup = async (selectedChat, addUser) => {
+const joinGroup = async (chatId, addUser) => {
   const response = await fetch('/api/chat/groups/join', {
     method: 'PUT',
     headers: {
@@ -42,7 +42,7 @@ const joinGroup = async (selectedChat, addUser) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      chatId: selectedChat._id,
+      chatId: chatId,
       userId: addUser._id,
     }),
   })
@@ -50,7 +50,7 @@ const joinGroup = async (selectedChat, addUser) => {
   return await response.json()
 }
 
-const removeGroup = async (selectedChat, groupChatName) => {
+const removeGroup = async (chatId, groupChatName) => {
   const response = await fetch('/api/chat/groups/rename', {
     method: 'PUT',
     headers: {
@@ -58,7 +58,7 @@ const removeGroup = async (selectedChat, groupChatName) => {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      chatId: selectedChat._id,
+      chatId: chatId,
       chatName: groupChatName,
     }),
   })
@@ -66,4 +66,17 @@ const removeGroup = async (selectedChat, groupChatName) => {
   return await response.json()
 }
 
-export { createGroupChat, leaveGroup, joinGroup, removeGroup }
+const accessChat = async (userId) => {
+  const response = await fetch(`/api/chat/access`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${user.token}`,
+    },
+    body: JSON.stringify({ userId }),
+  })
+
+  return await response.json()
+}
+
+export { createGroupChat, leaveGroup, joinGroup, removeGroup, accessChat }

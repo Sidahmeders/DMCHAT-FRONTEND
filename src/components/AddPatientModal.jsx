@@ -18,13 +18,12 @@ import {
 } from '@chakra-ui/react'
 
 import { CREATE_PATIENT_NAMES } from '@config'
-import { ChatState } from '@context'
+import { createPatient } from '@services/patients'
 
 const initialValues = Object.values(CREATE_PATIENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
 
 export default function AddPatientModal() {
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { user } = ChatState()
   const toast = useToast()
   const {
     handleSubmit,
@@ -33,22 +32,11 @@ export default function AddPatientModal() {
   } = useForm({ defaultValues: initialValues })
 
   const onSubmit = async (data) => {
-    const response = await fetch('/api/patients', {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    })
-
-    if (response.status === 200) {
-      toast({
-        title: 'nouveau patient créé avec succès',
-        status: 'success',
-      })
+    try {
+      await createPatient(data)
+      toast({ title: 'nouveau patient créé avec succès', status: 'success' })
       onClose()
-    } else {
+    } catch (error) {
       toast()
     }
   }

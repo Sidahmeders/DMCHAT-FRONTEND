@@ -16,6 +16,7 @@ import { Send } from 'react-feather'
 import { ChatState } from '@context'
 import { getSender, getSenderFull } from '@utils'
 import { CHAT_EVENTS, CHAT_LISTENERS } from '@config'
+import { createMessage } from '@services/messages'
 
 import PeerProfileModal from './miscellaneous/PeerProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
@@ -48,27 +49,12 @@ const SingleChat = () => {
     socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
 
     try {
-      const response = await fetch('/api/messages', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          content: newMessage,
-          chatId: selectedChat._id,
-        }),
-      })
-
-      if (response.status === 200) {
-        const data = await response.json()
-        socket.emit(CHAT_EVENTS.NEW_MESSAGE, data)
-        setNewMessage('')
-        setMessages([...messages, data])
-      }
+      const createdMessage = await createMessage(newMessage, selectedChat._id)
+      socket.emit(CHAT_EVENTS.NEW_MESSAGE, createdMessage)
+      setNewMessage('')
+      setMessages([...messages, createdMessage])
     } catch (error) {
       toast()
-      console.error(error)
     }
   }
 

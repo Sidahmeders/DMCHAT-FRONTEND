@@ -1,28 +1,28 @@
 import { useEffect, useState } from 'react'
-import { Textarea, InputGroup, Box, Skeleton } from '@chakra-ui/react'
+import { Textarea, InputGroup, Box, Skeleton, useToast } from '@chakra-ui/react'
 import { format, parseISO } from 'date-fns'
+
+import { fetchPatientAppointments } from '@services/appointments'
 
 import Loader from '../Loader/Loader'
 
 export default function ExpandableComponent({ data, user }) {
+  const toast = useToast()
   const [patientAppointments, setPatientAppointments] = useState([])
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
-      const response = await fetch(`/api/appointments/${data._id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-
-      if (response.status === 200) {
-        setPatientAppointments(await response.json())
+      try {
+        const patientAppointments = await fetchPatientAppointments(data._id)
+        setPatientAppointments(patientAppointments)
+      } catch (error) {
+        toast()
       }
       setIsLoading(false)
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data, user])
 
   if (isLoading) return <Skeleton mt="2" mb="2" height="100" />
