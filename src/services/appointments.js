@@ -1,5 +1,4 @@
-import { format } from 'date-fns'
-const { getUser } = require('@utils')
+const { getUser, formatDate } = require('@utils')
 
 const user = getUser()
 
@@ -67,7 +66,7 @@ const updateAppointmentsHistory = async (appointmentData) => {
 }
 
 const fetchMonthAppointments = async (date) => {
-  const response = await fetch(`/api/appointments/${format(date, 'yyyy/MM')}`, {
+  const response = await fetch(`/api/appointments/${formatDate(date, 'yyyy/MM')}`, {
     method: 'GET',
     headers: {
       Authorization: `Bearer ${user.token}`,

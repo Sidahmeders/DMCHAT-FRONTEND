@@ -1,10 +1,20 @@
-const { format } = require('date-fns')
-const { getUser } = require('@utils')
+const { getUser, formatDate } = require('@utils')
 
 const user = getUser()
 
+const fetchCalendarAvailabilities = async (date) => {
+  const response = await fetch(`/api/calendar/${formatDate(date, 'yyyy/MM')}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${user?.token}`,
+    },
+  })
+
+  return await response.json()
+}
+
 const setCalendarAvailability = async (date, availability) => {
-  const response = await fetch(`/api/calendar/${format(date, 'yyyy/MM/dd')}/availability`, {
+  const response = await fetch(`/api/calendar/${formatDate(date, 'yyyy/MM/dd')}/availability`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -16,4 +26,4 @@ const setCalendarAvailability = async (date, availability) => {
   return await response.json()
 }
 
-export { setCalendarAvailability }
+export { fetchCalendarAvailabilities, setCalendarAvailability }

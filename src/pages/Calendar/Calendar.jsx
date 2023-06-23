@@ -8,17 +8,19 @@ import { registerLocale } from 'react-datepicker'
 import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
-import { ChatState } from '@context'
+import { getUser, formatDate } from '@utils'
+import { AVAILABILITY_BG_COLORS } from '@config'
 import { fetchMonthAppointments, updateAppointment } from '@services/appointments'
+import { fetchCalendarAvailabilities } from '@services/calendar'
 
 import AddAppointmentModal from '@components/AddAppointmentModal/AddAppointmentModal'
 import DisplayEventModal from './DisplayEventModal'
 import CustomToolbar from './CustomToolbar'
-import ColoredDateCellWrapper from './ColoredDateCellWrapper'
 import CustomAgenda from './CustomAgenda'
 
 import './Calendar.scss'
 
+const user = getUser()
 const DnDCalendar = withDragAndDrop(BigCalendar)
 
 const messages = {
@@ -42,7 +44,6 @@ const fnslocalizer = dateFnsLocalizer({
 registerLocale(fr)
 
 export default function Calendar({ localizer = fnslocalizer, ...props }) {
-  const { user } = ChatState()
   const {
     isOpen: isAddAppointmentModalOpen,
     onOpen: onAddAppointmentModalOpen,
@@ -59,6 +60,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedSlotInfo, setSelectedSlotInfo] = useState({})
   const [selectedEvent, setSelectedEvent] = useState({})
+  const [availabilities, setAvailabilities] = useState({})
 
   const swipeHandlers = useSwipeable({
     onSwipedLeft: () => setSelectedDate(addMonths(selectedDate, 1)),
@@ -145,8 +147,12 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         end: new Date(event.endDate),
       }))
       setEvents(eventsList)
+      const monthAvailabilities = await fetchCalendarAvailabilities(selectedDate)
+      setAvailabilities(
+        monthAvailabilities.reduce((acc, item) => ({ ...acc, [formatDate(item.date)]: item.availability }), {}),
+      )
     })()
-  }, [selectedDate, user])
+  }, [selectedDate])
 
   return (
     <div {...swipeHandlers} className="calendar-container" {...props}>
@@ -176,20 +182,14 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         min={new Date(1972, 0, 1, 9, 0, 59)}
         max={new Date(1972, 0, 1, 17, 30, 59)}
         step={30}
-        views={{
-          month: true,
-          day: true,
-          agenda: CustomAgenda,
-        }}
         messages={messages}
         onSelectEvent={onSelectEvent}
         onDoubleClickEvent={onDoubleClickEvent}
         onSelectSlot={onSelectSlot}
         onEventDrop={onEventDrop}
-        components={{
-          toolbar: (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} />,
-          dateCellWrapper: ColoredDateCellWrapper,
-        }}
+        views={{ month: true, day: true, agenda: CustomAgenda }}
+        dayPropGetter={(date) => ({ style: { background: AVAILABILITY_BG_COLORS[availabilities[formatDate(date)]] } })}
+        components={{ toolbar: (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} /> }}
       />
     </div>
   )
