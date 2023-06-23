@@ -18,9 +18,11 @@ import {
 import { Plus } from 'react-feather'
 
 import { ChatState } from '@context'
+import { createGroupChat } from '@services/chats'
 
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem'
+import { searchUsers } from '@services/users'
 
 const GroupChatModal = () => {
   const [groupChatName, setGroupChatName] = useState('')
@@ -31,35 +33,25 @@ const GroupChatModal = () => {
 
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
-  const { user, chats, setChats } = ChatState()
+  const { chats, setChats } = ChatState()
 
   const handleSearch = async (query) => {
     setSearch(query)
-
     if (!query || query === '') {
       setSearchResults([])
       return
     }
-
+    setLoading(true)
     try {
-      setLoading(true)
-
-      const response = await fetch(`/api/users?search=${search}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-      const data = await response.json()
-
-      setLoading(false)
+      const data = await searchUsers(search)
       setSearchResults(data)
     } catch (error) {
-      return toast({
+      toast({
         title: 'Erreur est survenue!',
         description: 'Impossible de charger les résultats de la recherche',
         status: 'error',
       })
+      setLoading(false)
     }
   }
 
@@ -72,28 +64,15 @@ const GroupChatModal = () => {
     }
 
     try {
-      const response = await fetch('/api/chat/groups', {
-        method: 'POST',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: groupChatName,
-          users: JSON.stringify(selectedUsers.map((user) => user._id)),
-        }),
-      })
-      const data = await response.json()
-
+      const data = await createGroupChat(groupChatName, selectedUsers)
       setChats([data, ...chats])
-      onClose() // Close the modal
-
-      return toast({
+      onClose()
+      toast({
         title: 'Nouvelle discussion de groupe créée!',
         status: 'success',
       })
     } catch (error) {
-      return toast({
+      toast({
         title: 'Erreur est survenue!',
         description: 'Échec de la création du chat!',
         status: 'error',
@@ -112,7 +91,6 @@ const GroupChatModal = () => {
         status: 'warning',
       })
     }
-
     setSelectedUsers([...selectedUsers, userToAdd])
   }
 

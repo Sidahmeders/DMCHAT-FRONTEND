@@ -16,6 +16,8 @@ import {
 } from '@chakra-ui/react'
 import { Eye, Trash, AlertTriangle } from 'react-feather'
 
+import { deleteMessages } from '@services/messages'
+
 export default function PeerProfileModal({ sender, chatId, user, setMessages }) {
   const toast = useToast()
   const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure()
@@ -30,21 +32,13 @@ export default function PeerProfileModal({ sender, chatId, user, setMessages }) 
 
   const deleteChatMessages = async () => {
     try {
-      const response = await fetch(`/api/messages/${chatId}`, {
-        method: 'DELETE',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
+      await deleteMessages(chatId)
+      toast({
+        title: 'Chat supprimé avec succès',
+        status: 'warning',
       })
-
-      if (response.status === 200) {
-        toast({
-          title: 'Chat supprimé avec succès',
-          status: 'warning',
-        })
-        onDeleteModalClose()
-        setMessages([])
-      }
+      onDeleteModalClose()
+      setMessages([])
     } catch (error) {
       toast()
       console.log(error)

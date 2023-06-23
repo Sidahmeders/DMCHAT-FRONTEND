@@ -2,6 +2,22 @@ import { getUser } from '@utils'
 
 const user = getUser()
 
+const createGroupChat = async (groupChatName, selectedUsers) => {
+  const response = await fetch('/api/chat/groups', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: groupChatName,
+      users: JSON.stringify(selectedUsers.map((user) => user._id)),
+    }),
+  })
+
+  return await response.json()
+}
+
 const leaveGroup = async (selectedChat, removeUser) => {
   const response = await fetch('/api/chat/groups/leave', {
     method: 'PUT',
@@ -50,4 +66,4 @@ const removeGroup = async (selectedChat, groupChatName) => {
   return await response.json()
 }
 
-export { leaveGroup, joinGroup, removeGroup }
+export { createGroupChat, leaveGroup, joinGroup, removeGroup }
