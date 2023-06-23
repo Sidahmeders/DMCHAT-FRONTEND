@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react'
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Box } from '@chakra-ui/react'
 import { ChevronDown, ChevronUp } from 'react-feather'
 
-import { ChatState } from '@context'
 import { getPatient } from '@utils'
 
 import Loader from '../Loader/Loader'
@@ -10,9 +9,9 @@ import PatientEditBody from './PatientEditBody'
 import AppointmentTable from './AppointmentTable'
 
 import './PatientFollowupsModal.scss'
+import { fetchPatientAppointments } from '@services/appointments'
 
 export default function PatientFollowupsModal({ isOpen, onClose }) {
-  const { user } = ChatState()
   const patient = getPatient()
 
   const [appointments, setAppointments] = useState([])
@@ -22,20 +21,12 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
-      const response = await fetch(`/api/appointments/${patient._id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-
-      if (response.status === 200) {
-        setAppointments(await response.json())
-      }
+      const patientAppointments = await fetchPatientAppointments(patient._id)
+      setAppointments(patientAppointments)
       setIsLoading(false)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, isOpen])
+  }, [isOpen])
 
   return (
     <Modal size="5xl" isOpen={isOpen} onClose={onClose}>

@@ -11,7 +11,9 @@ export default function PatientEditBody({ patient, setIsEditPatientOpen }) {
     formState: { isSubmitted },
   } = useForm({ defaultValues: patient })
 
-  const onSubmit = (data) => {}
+  const onSubmit = (data) => {
+    // TODO: handle patient update
+  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

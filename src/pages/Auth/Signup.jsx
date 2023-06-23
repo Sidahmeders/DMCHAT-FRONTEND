@@ -63,7 +63,7 @@ const Signup = () => {
         })
         setLoading(false)
       } catch (error) {
-        console.error(error.message)
+        toast()
         setLoading(false)
       }
     } else {

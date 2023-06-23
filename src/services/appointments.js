@@ -39,4 +39,17 @@ const relateAppointment = async (appointmentData) => {
   return await response.json()
 }
 
-export { fetchPatientAppointments, createAppointment, relateAppointment }
+const updateAppointmentsHistory = async (appointmentData) => {
+  const response = await fetch('/api/appointments/history', {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${user.token}`,
+    },
+    body: JSON.stringify(appointmentData),
+  })
+
+  return await response.json()
+}
+
+export { fetchPatientAppointments, createAppointment, relateAppointment, updateAppointmentsHistory }

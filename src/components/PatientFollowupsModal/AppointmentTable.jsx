@@ -11,13 +11,12 @@ import {
 import { format, parseISO } from 'date-fns'
 import { X } from 'react-feather'
 
-import { ChatState } from '@context'
 import { ADD_APPOINTMENT_NAMES } from '@config'
+import { updateAppointmentsHistory } from '@services/appointments'
 
 import SubAppointment from './SubAppointment'
 
 export default function AppointmentTable({ appointmentsGroup, appointments, setAppointments }) {
-  const { user } = ChatState()
   const toast = useToast()
   const [baseAppointment] = appointmentsGroup
   const totalPayments = appointmentsGroup.reduce((total, appointment) => total + appointment.payment, 0)
@@ -46,47 +45,28 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
 
   const saveUpdateHandler = async () => {
     try {
-      const data = Object.entries(treatmentUpdate).map(([key, values]) => ({ _id: key, ...values }))
+      const appointmentsUpdate = Object.entries(treatmentUpdate).map(([key, values]) => ({ _id: key, ...values }))
+      const appointmentsData = await updateAppointmentsHistory(appointmentsUpdate)
 
-      const response = await fetch('/api/appointments/history', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${user.token}`,
-        },
-        body: JSON.stringify(data),
-      })
-
-      if (response.status === 200) {
-        const appointmentsData = await response.json()
-
-        setAppointments(
-          appointments.map((appointment) => {
-            const indexOfAppointment = appointmentsData.findIndex((item) => item._id === appointment._id)
-            if (indexOfAppointment >= 0) {
-              return {
-                ...appointment,
-                ...appointmentsData[indexOfAppointment],
-              }
+      setAppointments(
+        appointments.map((appointment) => {
+          const indexOfAppointment = appointmentsData.findIndex((item) => item._id === appointment._id)
+          if (indexOfAppointment >= 0) {
+            return {
+              ...appointment,
+              ...appointmentsData[indexOfAppointment],
             }
-            return appointment
-          }),
-        )
+          }
+          return appointment
+        }),
+      )
 
-        toast({
-          title: 'rendez-vous mis à jour avec succès!',
-          status: 'success',
-        })
-      } else {
-        const { message } = await response.json()
-        toast({
-          title: message,
-          status: 'error',
-        })
-      }
+      toast({
+        title: 'rendez-vous mis à jour avec succès!',
+        status: 'success',
+      })
     } catch (error) {
       toast()
-      console.log(error)
     }
 
     setCanShowSaveBtn(false)
