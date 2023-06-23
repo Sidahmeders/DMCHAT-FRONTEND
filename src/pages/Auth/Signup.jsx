@@ -1,3 +1,5 @@
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Button,
   FormControl,
@@ -9,8 +11,8 @@ import {
   Stack,
   useToast,
 } from '@chakra-ui/react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+
+import { setUser } from '@utils'
 
 const Signup = () => {
   const [show, setShow] = useState(false)
@@ -38,10 +40,6 @@ const Signup = () => {
       return toast({
         title: 'Please select an image',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'left-accent',
       })
     }
 
@@ -73,10 +71,6 @@ const Signup = () => {
       return toast({
         title: 'Please select an image',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'left-accent',
       })
     }
   }
@@ -90,10 +84,6 @@ const Signup = () => {
       return toast({
         title: 'Veuillez remplir tous les champs obligatoires',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'left-accent',
       })
     }
 
@@ -103,10 +93,6 @@ const Signup = () => {
       return toast({
         title: 'Passwords Do Not Match',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'left-accent',
       })
     }
 
@@ -129,14 +115,10 @@ const Signup = () => {
       toast({
         title: data.message,
         status: !data.success ? 'error' : 'success',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: !data.success ? 'left-accent' : 'solid',
       })
 
       if (data.success) {
-        localStorage.setItem('userInfo', JSON.stringify(data))
+        setUser(data)
         setLoading(false)
         navigate('/chats')
       } else {
@@ -144,14 +126,7 @@ const Signup = () => {
       }
     } catch (error) {
       setLoading(false)
-      return toast({
-        title: 'Internal server error',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
-      })
+      toast()
     }
   }
 

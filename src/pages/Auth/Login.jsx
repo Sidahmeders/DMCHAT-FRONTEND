@@ -2,17 +2,15 @@ import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, S
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
+import { setUser } from '@utils'
+
 const Login = () => {
   const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [credentials, setCredentials] = useState({ email: '', password: '' })
 
   const toast = useToast()
   const navigate = useNavigate()
-
-  const [credentials, setCredentials] = useState({
-    email: '',
-    password: '',
-  })
 
   const handleCredentials = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value })
@@ -26,10 +24,6 @@ const Login = () => {
       toast({
         title: 'Veuillez remplir tous les champs obligatoires',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'left-accent',
       })
       setLoading(false)
       return
@@ -51,29 +45,18 @@ const Login = () => {
       toast({
         title: data.message,
         status: !data.success ? 'error' : 'success',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: !data.success ? 'left-accent' : 'solid',
       })
 
       if (data.success) {
-        localStorage.setItem('userInfo', JSON.stringify(data))
+        setUser(data)
         setLoading(false)
         navigate('/chats')
       } else {
         setLoading(false)
       }
     } catch (error) {
+      toast()
       setLoading(false)
-      return toast({
-        title: 'Internal server error',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
-      })
     }
   }
 
@@ -120,9 +103,7 @@ const Login = () => {
         variant="solid"
         colorScheme="red"
         width="100%"
-        onClick={() => {
-          setCredentials({ email: 'guest@example.com', password: '12345678' })
-        }}>
+        onClick={() => setCredentials({ email: 'guest@example.com', password: '12345678' })}>
         <i className="fas fa-user-alt" style={{ fontSize: '15px', marginRight: 8 }} />
         Obtenir informations d'identification
       </Button>
