@@ -1,6 +1,17 @@
 import { useEffect, useState } from 'react'
 import { ArrowBackIcon } from '@chakra-ui/icons'
-import { Box, FormControl, IconButton, Input, Spinner, Text, useToast } from '@chakra-ui/react'
+import {
+  Box,
+  FormControl,
+  IconButton,
+  Input,
+  InputRightElement,
+  InputGroup,
+  Spinner,
+  Text,
+  useToast,
+} from '@chakra-ui/react'
+import { Send } from 'react-feather'
 
 import { ChatState } from '@context'
 import { getSender, getSenderFull } from '@utils'
@@ -31,48 +42,39 @@ const SingleChat = () => {
   } = ChatState()
 
   const sendMessage = async (e) => {
-    // Check if 'Enter' key is pressed and we have something inside 'newMessage'
-    if (e.key === 'Enter' && newMessage) {
-      socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
-      try {
-        setNewMessage('') // Clear message field before making API call (won't affect API call as the function is asynchronous)
+    if (newMessage.trim().length < 1) return
+    if (e.key !== 'Enter' && e.type !== 'click') return
 
-        const response = await fetch('/api/messages', {
-          method: 'POST',
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            content: newMessage,
-            chatId: selectedChat._id,
-          }),
-        })
+    socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
 
-        if (response.status === 200) {
-          const data = await response.json()
-          socket.emit(CHAT_EVENTS.NEW_MESSAGE, data)
-          setNewMessage('')
-          setMessages([...messages, data])
-        }
-      } catch (error) {
-        return toast({
-          title: 'Error Occured!',
-          description: 'Failed to send the Message',
-          status: 'error',
-          duration: 5000,
-          isClosable: true,
-          position: 'bottom-right',
-          variant: 'solid',
-        })
+    try {
+      const response = await fetch('/api/messages', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          content: newMessage,
+          chatId: selectedChat._id,
+        }),
+      })
+
+      if (response.status === 200) {
+        const data = await response.json()
+        socket.emit(CHAT_EVENTS.NEW_MESSAGE, data)
+        setNewMessage('')
+        setMessages([...messages, data])
       }
+    } catch (error) {
+      toast()
+      console.error(error)
     }
   }
 
   const typingHandler = (e) => {
     setNewMessage(e.target.value)
 
-    // Typing Indicator Logic
     if (!socketConnected) return
 
     if (!typing) {
@@ -111,13 +113,7 @@ const SingleChat = () => {
     <>
       {selectedChat ? (
         <>
-          <Box
-            fontSize={{ base: '28px', md: '30px' }}
-            w="100%"
-            pb="3"
-            display="flex"
-            justifyContent={{ base: 'space-between' }}
-            alignItems="center">
+          <Box fontSize="1.5rem" w="100%" pb="3" display="flex" justifyContent="space-between" alignItems="center">
             <IconButton
               display={{ base: 'flex', md: 'none' }}
               icon={<ArrowBackIcon />}
@@ -169,14 +165,17 @@ const SingleChat = () => {
               </div>
             )}
 
-            <FormControl mt="3" onKeyDown={(e) => sendMessage(e)} isRequired>
-              <Input
-                variant="filled"
-                bg="#E0E0E0"
-                placeholder="entrer des messages.."
-                value={newMessage}
-                onChange={(e) => typingHandler(e)}
-              />
+            <FormControl mt="3" onKeyDown={sendMessage} isRequired>
+              <InputGroup>
+                <Input
+                  variant="filled"
+                  bg="#E0E0E0"
+                  placeholder="entrer des messages.."
+                  value={newMessage}
+                  onChange={(e) => typingHandler(e)}
+                />
+                <InputRightElement cursor="pointer" mr="2" children={<Send color="#48f" />} onClick={sendMessage} />
+              </InputGroup>
             </FormControl>
           </Box>
         </>

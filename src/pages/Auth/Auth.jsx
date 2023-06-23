@@ -2,8 +2,8 @@ import { Container, Box, Text, Tab, TabList, TabPanel, TabPanels, Tabs } from '@
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Signup from '@components/Authentication/Signup'
-import Login from '@components/Authentication/Login'
+import Signup from './Signup'
+import Login from './Login'
 
 export default function Auth() {
   const navigate = useNavigate()

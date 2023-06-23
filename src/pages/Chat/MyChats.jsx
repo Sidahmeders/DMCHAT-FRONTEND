@@ -4,9 +4,9 @@ import { Box, HStack, Stack, Text, useDisclosure, useToast } from '@chakra-ui/re
 import { ChatState } from '@context'
 import { getSender } from '@utils'
 
-import GroupChatModal from './miscellaneous/GroupChatModal'
-import LogoutButton from './miscellaneous/LogoutButton'
-import SearchUserDrawer from './SearchUserDrawer'
+import SearchUserDrawer from '@components/SearchUserDrawer'
+import GroupChatModal from '@components/miscellaneous/GroupChatModal'
+import LogoutButton from '@components/miscellaneous/LogoutButton'
 
 const MyChats = () => {
   const toast = useToast()
@@ -47,10 +47,9 @@ const MyChats = () => {
       display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
       flexDir="column"
       alignItems="center"
-      p="2"
-      w={{ base: '100%', md: '30%' }}
+      boxShadow="inner"
       borderRadius="lg"
-      borderWidth="1px">
+      w={{ base: '100%', md: '30%' }}>
       <HStack p="5" gap="2" width="100%" justifyContent="space-evenly">
         <GroupChatModal />
         <SearchUserDrawer />
