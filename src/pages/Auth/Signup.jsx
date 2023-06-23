@@ -13,6 +13,8 @@ import {
 } from '@chakra-ui/react'
 
 import { setUser } from '@utils'
+import { signUpUser } from '@services/users'
+import { uploadImage } from '@services/cloud'
 
 const Signup = () => {
   const [show, setShow] = useState(false)
@@ -33,101 +35,56 @@ const Signup = () => {
   }
 
   const handleUploadPicture = async (e) => {
+    const { name, files } = e.target
+    if (files[0] === undefined) {
+      return toast({
+        title: 'Please select an image',
+        status: 'warning',
+      })
+    }
     setLoading(true)
-
-    // If no image selected
-    if (e.target.files[0] === undefined) {
-      return toast({
-        title: 'Please select an image',
-        status: 'warning',
+    try {
+      const uploadedImage = await uploadImage(files)
+      setCredentials({
+        ...credentials,
+        [name]: uploadedImage.secure_url.toString(),
       })
-    }
-
-    // Check if the type of image is jpeg or png
-    if (e.target.files[0].type === 'image/jpeg' || e.target.files[0].type === 'image/png') {
-      try {
-        const data = new FormData()
-        data.append('file', e.target.files[0]) // Contains the file
-        data.append('upload_preset', 'chat-app') // Upload preset in Cloudinary
-        data.append('cloud_name', 'devcvus7v') // Cloud name in Cloudinary
-
-        const response = await fetch('https://api.cloudinary.com/v1_1/devcvus7v/image/upload', {
-          method: 'POST',
-          body: data,
-        })
-        const json = await response.json()
-
-        setCredentials({
-          ...credentials,
-          [e.target.name]: json.secure_url.toString(),
-        })
-        setLoading(false)
-      } catch (error) {
-        toast()
-        setLoading(false)
-      }
-    } else {
       setLoading(false)
-      return toast({
-        title: 'Please select an image',
-        status: 'warning',
-      })
+    } catch (error) {
+      toast({ description: error.message })
     }
+    setLoading(false)
   }
 
   const submitHandler = async () => {
-    setLoading(true)
-
-    // If anything is missing
     if (!credentials.name || !credentials.email || !credentials.password || !credentials.confirmPassword) {
-      setLoading(false)
       return toast({
         title: 'Veuillez remplir tous les champs obligatoires',
         status: 'warning',
       })
     }
-
-    // If password and confirm password doesn't match
     if (credentials.password !== credentials.confirmPassword) {
-      setLoading(false)
       return toast({
         title: 'Passwords Do Not Match',
         status: 'warning',
       })
     }
-
-    // Now submit the data
+    setLoading(true)
     try {
-      const response = await fetch('/api/users', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: credentials.name,
-          email: credentials.email,
-          password: credentials.password,
-          pic: credentials.pic,
-        }),
-      })
-      const data = await response.json()
-
-      toast({
-        title: data.message,
-        status: !data.success ? 'error' : 'success',
-      })
-
+      const data = await signUpUser(credentials)
       if (data.success) {
         setUser(data)
         setLoading(false)
         navigate('/chats')
-      } else {
-        setLoading(false)
       }
+      toast({
+        title: data.message,
+        status: !data.success ? 'error' : 'success',
+      })
     } catch (error) {
-      setLoading(false)
       toast()
     }
+    setLoading(false)
   }
 
   return (

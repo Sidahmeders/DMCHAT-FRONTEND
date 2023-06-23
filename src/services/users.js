@@ -13,4 +13,36 @@ const searchUsers = async (searchQuery) => {
   return await response.json()
 }
 
-export { searchUsers }
+const signInUser = async (credentials) => {
+  const response = await fetch('/api/users/login', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      email: credentials.email,
+      password: credentials.password,
+    }),
+  })
+
+  return await response.json()
+}
+
+const signUpUser = async (credentials) => {
+  const response = await fetch('/api/users', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      name: credentials.name,
+      email: credentials.email,
+      password: credentials.password,
+      pic: credentials.pic,
+    }),
+  })
+
+  return await response.json()
+}
+
+export { searchUsers, signInUser, signUpUser }

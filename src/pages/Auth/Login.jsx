@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { setUser } from '@utils'
+import { signInUser } from '@services/users'
 
 const Login = () => {
   const [show, setShow] = useState(false)
@@ -17,47 +18,28 @@ const Login = () => {
   }
 
   const submitHandler = async () => {
-    setLoading(true)
-
-    // If email or password is missing
     if (!credentials.email || !credentials.password) {
-      toast({
+      return toast({
         title: 'Veuillez remplir tous les champs obligatoires',
         status: 'warning',
       })
-      setLoading(false)
-      return
     }
-
+    setLoading(true)
     try {
-      const response = await fetch('/api/users/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: credentials.email,
-          password: credentials.password,
-        }),
-      })
-      const data = await response.json()
-
-      toast({
-        title: data.message,
-        status: !data.success ? 'error' : 'success',
-      })
-
+      const data = await signInUser(credentials)
       if (data.success) {
         setUser(data)
         setLoading(false)
         navigate('/chats')
-      } else {
-        setLoading(false)
       }
+      toast({
+        title: data.message,
+        status: !data.success ? 'error' : 'success',
+      })
     } catch (error) {
       toast()
-      setLoading(false)
     }
+    setLoading(false)
   }
 
   return (

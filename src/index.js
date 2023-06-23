@@ -22,7 +22,7 @@ root.render(
             defaultOptions: {
               title: "quelque chose s'est mal passé. veuillez réessayer plus tard",
               status: 'error',
-              duration: 5000,
+              duration: 7500,
               isClosable: true,
               position: 'top-right',
               variant: 'left-accent',
