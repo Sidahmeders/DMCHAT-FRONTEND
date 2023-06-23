@@ -1,10 +1,12 @@
 import { useEffect, useState } from 'react'
 import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { useLocation } from 'react-router-dom'
+import { useToast } from '@chakra-ui/react'
 
-import { APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
-import { flattenAppointment } from '@utils'
 import { ChatState, TodayPatientsListState } from '@context'
+import { flattenAppointment } from '@utils'
+import { APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
+import { updateAppointment } from '@services/appointments'
 
 import ExpectedAppointments from './ExpectedAppointments'
 import WaitingRoomAppointments from './WaitingRoomAppointments'
@@ -25,34 +27,26 @@ export const DragWrap = ({ id, index, children }) => (
 export default function TodayPatientsList() {
   const { user, socket } = ChatState()
   const { pathname } = useLocation()
+  const toast = useToast()
   const { appointmentsList, setAppointmentsList, fetchTodayAppointments } = TodayPatientsListState()
   const [isLoading, setIsLoading] = useState(false)
 
   const onDragEnd = (props) => {
-    const { draggableId, destination, source } = props
-    const { droppableId: sourceDroppableId } = source || {}
-    const { droppableId: destinationDroppableId } = destination || {}
+    setIsLoading(true)
+    try {
+      const { draggableId, destination, source } = props
+      const { droppableId: sourceDroppableId } = source || {}
+      const { droppableId: destinationDroppableId } = destination || {}
 
-    Object.values(APPOINTMENTS_IDS).forEach(async (key) => {
-      if (sourceDroppableId && destinationDroppableId === key && sourceDroppableId !== destinationDroppableId) {
-        setIsLoading(true)
-        const droppedAppointment = appointmentsList[sourceDroppableId].find(
-          (appointment) => appointment.id === draggableId,
-        )
-        const response = await fetch(`/api/appointments/${droppedAppointment.id}/update`, {
-          method: 'PUT',
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+      Object.values(APPOINTMENTS_IDS).forEach(async (key) => {
+        if (sourceDroppableId && destinationDroppableId === key && sourceDroppableId !== destinationDroppableId) {
+          const droppedAppointment = appointmentsList[sourceDroppableId].find(
+            (appointment) => appointment.id === draggableId,
+          )
+          const updatedAppointment = await updateAppointment(droppedAppointment.id, {
             [sourceDroppableId]: false,
             [destinationDroppableId]: true,
-          }),
-        })
-
-        if (droppedAppointment && response.status === 200) {
-          const updatedAppointment = await response.json()
+          })
           socket.emit(APPOINTMENTS_EVENTS.DROP_APPOINTMENT, {
             draggableId,
             sourceDroppableId,
@@ -60,9 +54,11 @@ export default function TodayPatientsList() {
             updatedAppointment,
           })
         }
-        setIsLoading(false)
-      }
-    })
+      })
+    } catch (error) {
+      toast({ message: error.message })
+    }
+    setIsLoading(false)
   }
 
   useEffect(() => {

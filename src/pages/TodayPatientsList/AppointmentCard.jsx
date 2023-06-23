@@ -10,14 +10,16 @@ import {
   Skeleton,
   InputGroup,
   Input,
+  useToast,
 } from '@chakra-ui/react'
 import { Card, CardHeader, CardBody } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, Edit2 } from 'react-feather'
 import { isBoolean } from 'lodash'
 
+import { ChatState, TodayPatientsListState } from '@context'
 import { setPatient } from '@utils'
 import { APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
-import { ChatState, TodayPatientsListState } from '@context'
+import { toggleAppointmentConfirmation, toggleAppointmentLeave } from '@services/appointments'
 
 import PatientFollowupsModal from '@components/PatientFollowupsModal/PatientFollowupsModal'
 import ConfirmSound from '../../assets/songs/confirmation-tone.wav'
@@ -40,6 +42,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     onOpen: onPatientFollowupsModalOpen,
     onClose: onPatientFollowupsModalClose,
   } = useDisclosure()
+  const toast = useToast()
 
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
   const [isLeft, setIsLeft] = useState(appointment.isLeft)
@@ -52,36 +55,26 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
 
   const handleConfirmation = async () => {
     setIsLoading(true)
-    const response = await fetch(`/api/appointments/${appointment.id}/toggle-confirmation`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ isConfirmed }),
-    })
-    const confirmedPatient = await response.json()
-
-    if (isBoolean(confirmedPatient.isConfirmed)) {
-      socket.emit(APPOINTMENTS_EVENTS.CONFIRM_APPOINTMENT, confirmedPatient)
+    try {
+      const confirmedPatient = await toggleAppointmentConfirmation(appointment.id, isConfirmed)
+      if (isBoolean(confirmedPatient.isConfirmed)) {
+        socket.emit(APPOINTMENTS_EVENTS.CONFIRM_APPOINTMENT, confirmedPatient)
+      }
+    } catch (error) {
+      toast({ message: error.message })
     }
     setIsLoading(false)
   }
 
   const handlePresence = async () => {
     setIsLoading(true)
-    const response = await fetch(`/api/appointments/${appointment.id}/toggle-leave`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ isLeft }),
-    })
-    const leftPatient = await response.json()
-
-    if (isBoolean(leftPatient.isLeft)) {
-      socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENT, leftPatient)
+    try {
+      const leftPatient = await toggleAppointmentLeave(appointment.id, isLeft)
+      if (isBoolean(leftPatient.isLeft)) {
+        socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENT, leftPatient)
+      }
+    } catch (error) {
+      toast({ message: error.message })
     }
     setIsLoading(false)
   }

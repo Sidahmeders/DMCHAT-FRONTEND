@@ -88,6 +88,32 @@ const deleteAppointment = async (appointmentId) => {
   return response.status
 }
 
+const toggleAppointmentConfirmation = async (appointmentId, isConfirmed) => {
+  const response = await fetch(`/api/appointments/${appointmentId}/toggle-confirmation`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ isConfirmed }),
+  })
+
+  return await response.json()
+}
+
+const toggleAppointmentLeave = async (appointmentId, isLeft) => {
+  const response = await fetch(`/api/appointments/${appointmentId}/toggle-leave`, {
+    method: 'PUT',
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ isLeft }),
+  })
+
+  return await response.json()
+}
+
 export {
   fetchPatientAppointments,
   createAppointment,
@@ -96,4 +122,6 @@ export {
   updateAppointmentsHistory,
   fetchMonthAppointments,
   deleteAppointment,
+  toggleAppointmentConfirmation,
+  toggleAppointmentLeave,
 }
