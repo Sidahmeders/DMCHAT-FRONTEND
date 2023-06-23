@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
-import { debounce } from 'lodash'
+import { debounce, isEmpty } from 'lodash'
 import { Wifi, WifiOff } from 'react-feather'
 
 import { ChatState } from '@context'
@@ -127,7 +127,7 @@ const App = () => {
 
   return (
     <div className="App">
-      {user && <TopNavigation />}
+      {!isEmpty(user) && <TopNavigation />}
       <Routes>
         <Route path="/" element={<Auth />} />
         <Route path={APP_ROUTES.CHATS} element={<Chat />} />
