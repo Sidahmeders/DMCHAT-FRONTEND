@@ -40,10 +40,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       return toast({
         title: 'Only admins can remove someone!',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
       })
     }
 
@@ -69,16 +65,8 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       fetchMessages() // All the messages will be refreshed
       setLoading(false)
     } catch (error) {
+      toast({ description: 'Failed to remove the user!' })
       setLoading(false)
-      return toast({
-        title: 'Error Occured!',
-        description: 'Failed to remove the user!',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
-      })
     }
   }
 
@@ -88,10 +76,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       return toast({
         title: 'User Already in group!',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
       })
     }
 
@@ -100,10 +84,6 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       return toast({
         title: 'Only admins can add someone!',
         status: 'warning',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
       })
     }
 
@@ -127,16 +107,8 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       setFetchAgain(!fetchAgain) // Fetching all the chat again
       setLoading(false)
     } catch (error) {
+      toast({ description: 'Failed to add the user!' })
       setLoading(false)
-      return toast({
-        title: 'Error Occured!',
-        description: 'Failed to add the user!',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
-      })
     }
   }
 
@@ -165,16 +137,8 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       setFetchAgain(!fetchAgain) // Fetching all the chat again
       setRenameLoading(false)
     } catch (error) {
+      toast({ description: 'Failed to rename group chat!' })
       setRenameLoading(false)
-      return toast({
-        title: 'Error Occured!',
-        description: 'Failed to rename group chat!',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-right',
-        variant: 'solid',
-      })
     }
 
     setGroupChatName('')
@@ -202,15 +166,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages }) => {
       setLoading(false)
       setSearchResults(data)
     } catch (error) {
-      return toast({
-        title: 'Error Occured!',
-        description: 'Failed to Load the Search Results',
-        status: 'error',
-        duration: 5000,
-        isClosable: true,
-        position: 'bottom-left',
-        variant: 'solid',
-      })
+      toast({ description: 'Failed to Load the Search Results' })
     }
   }
 
