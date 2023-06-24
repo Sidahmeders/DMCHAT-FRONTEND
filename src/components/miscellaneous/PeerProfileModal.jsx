@@ -1,3 +1,4 @@
+import propTypes from 'prop-types'
 import {
   Button,
   HStack,
@@ -47,4 +48,16 @@ export default function PeerProfileModal({ sender, chatId, setMessages }) {
       </Modal>
     </>
   )
+}
+
+PeerProfileModal.propTypes = {
+  sender: propTypes.object,
+  chatId: propTypes.string,
+  setMessages: propTypes.func,
+}
+
+PeerProfileModal.defaultProps = {
+  sender: {},
+  chatId: '',
+  setMessages: () => {},
 }

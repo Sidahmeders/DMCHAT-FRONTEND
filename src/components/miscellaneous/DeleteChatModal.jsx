@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import propTypes from 'prop-types'
 import {
   Button,
   HStack,
@@ -77,6 +78,18 @@ const DeleteChatModal = ({ sender, chatId, setMessages }) => {
       </Modal>
     </>
   )
+}
+
+DeleteChatModal.propTypes = {
+  sender: propTypes.object,
+  chatId: propTypes.string,
+  setMessages: propTypes.func,
+}
+
+DeleteChatModal.defaultProps = {
+  sender: {},
+  chatId: '',
+  setMessages: () => {},
 }
 
 export default DeleteChatModal

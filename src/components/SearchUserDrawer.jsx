@@ -20,6 +20,7 @@ import { Search } from 'react-feather'
 
 import { ChatState } from '@context'
 import { searchUsers } from '@services/users'
+import { accessChat } from '@services/chats'
 
 import UserListItem from './UserAvatar/UserListItem'
 
@@ -50,7 +51,7 @@ export default function SearchUserDrawer() {
     setLoading(false)
   }
 
-  const accessChat = async (userId) => {
+  const accessUserChat = async (userId) => {
     setLoadingChat(true)
     try {
       const chatData = await accessChat(userId)
@@ -102,7 +103,7 @@ export default function SearchUserDrawer() {
               </Stack>
             ) : (
               searchResult?.map((user) => (
-                <UserListItem key={user._id} user={user} handleFunction={() => accessChat(user._id)} />
+                <UserListItem key={user._id} user={user} handleFunction={() => accessUserChat(user._id)} />
               ))
             )}
 
