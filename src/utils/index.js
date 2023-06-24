@@ -1,8 +1,8 @@
-import { omit } from 'lodash'
-import { format, isValid, parseISO } from 'date-fns'
+import { omit, debounce } from 'lodash'
 
 export * from './localStorage'
 export * from './ChatLogics'
+export * from './date'
 
 export const guid = () => {
   const s4 = () => {
@@ -13,6 +13,31 @@ export const guid = () => {
   // return id of format 'aaaaaaaa'-'aaaa'-'aaaa'-'aaaa'-'aaaaaaaaaaaa'
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 }
+
+export const notify = debounce(async (messageRecieved) => {
+  const options = {
+    tag: messageRecieved?.sender?.name,
+    icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
+    vibrate: 3,
+  }
+
+  // mobile notification
+  navigator.serviceWorker.ready.then((registration) => {
+    registration.showNotification(messageRecieved.content, options)
+  })
+
+  if (Notification.permission === 'default' || Notification.permission === 'denied') {
+    await Notification.requestPermission()
+  }
+  if (Notification.permission === 'granted') {
+    // web notification
+    const notification = new Notification(messageRecieved?.sender?.name, {
+      body: messageRecieved.content,
+      ...options,
+    })
+    setTimeout(notification.close.bind(notification), 4500)
+  }
+}, 500)
 
 export const flattenAppointment = (appointment) => ({
   id: appointment._id,
@@ -28,30 +53,4 @@ export const checkIsJWTExpired = (token = '') => {
     return true
   }
   return false
-}
-
-/**
- * Formats a date input into the specified format using the date-fns library.
- *
- * @param {string} dateInput - The date input to be formatted. Should be in ISO 8601 format.
- * @param {string} [dateFormat='yyyy-MM-dd'] - The desired format of the formatted date. Defaults to 'yyyy-MM-dd'.
- * @returns {string | null} The formatted date string in the specified format, or null if an error occurs.
- * @throws {Error} If the date input is invalid or cannot be parsed.
- */
-export const formatDate = (date, dateFormat = 'yyyy-MM-dd') => {
-  try {
-    if (isValid(date)) {
-      return format(date, dateFormat)
-    }
-
-    const parsedDate = parseISO(date)
-    if (isNaN(parsedDate.getTime())) {
-      throw new Error('Invalid date')
-    }
-
-    return format(parsedDate, dateFormat)
-  } catch (error) {
-    console.error('Error formatting date:', error.message)
-    return null
-  }
 }

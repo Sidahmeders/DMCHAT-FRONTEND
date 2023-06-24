@@ -1,42 +1,17 @@
 import { useEffect, useRef } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
-import { debounce, isEmpty } from 'lodash'
+import { isEmpty } from 'lodash'
 import { Wifi, WifiOff } from 'react-feather'
 
 import { ChatState } from '@context'
-import { checkIsJWTExpired, removeUser } from '@utils'
+import { checkIsJWTExpired, removeUser, notify } from '@utils'
 import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
 import { Auth, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
 
 import './App.css'
-
-const notify = debounce(async (messageRecieved) => {
-  const options = {
-    tag: messageRecieved?.sender?.name,
-    icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
-    vibrate: 3,
-  }
-
-  // mobile notification
-  navigator.serviceWorker.ready.then((registration) => {
-    registration.showNotification(messageRecieved.content, options)
-  })
-
-  if (Notification.permission === 'default' || Notification.permission === 'denied') {
-    await Notification.requestPermission()
-  }
-  if (Notification.permission === 'granted') {
-    // web notification
-    const notification = new Notification(messageRecieved?.sender?.name, {
-      body: messageRecieved.content,
-      ...options,
-    })
-    setTimeout(notification.close.bind(notification), 4500)
-  }
-}, 500)
 
 const App = () => {
   const {
