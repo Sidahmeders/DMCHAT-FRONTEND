@@ -2,6 +2,7 @@ import { createContext, useContext, useState } from 'react'
 
 import { APPOINTMENTS_IDS } from '../config'
 import { flattenAppointment } from '../utils'
+import { fetchDayAppointments } from '@services/appointments'
 
 const AppointmentsContext = createContext()
 
@@ -13,15 +14,8 @@ export const AppointmentsProvider = ({ children }) => {
     [APPOINTMENTS_IDS.DONE]: [],
   })
 
-  const fetchTodayAppointments = async (user) => {
-    const response = await fetch('/api/appointments/2023/06/07', {
-      method: 'GET',
-      headers: {
-        Authorization: `Bearer ${user.token}`,
-      },
-    })
-
-    const todayAppointments = await response.json()
+  const fetchTodayAppointments = async () => {
+    const todayAppointments = await fetchDayAppointments(new Date('2023-06-07'))
 
     const { expected, awaitingRoom, inProgress, doneList } = todayAppointments.reduce(
       (prev, appointment) => {

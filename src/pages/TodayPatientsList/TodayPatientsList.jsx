@@ -25,7 +25,7 @@ export const DragWrap = ({ id, index, children }) => (
 )
 
 export default function TodayPatientsList() {
-  const { user, socket } = ChatState()
+  const { socket } = ChatState()
   const { pathname } = useLocation()
   const toast = useToast()
   const { appointmentsList, setAppointmentsList, fetchTodayAppointments } = AppointmentsState()
@@ -62,14 +62,13 @@ export default function TodayPatientsList() {
   }
 
   useEffect(() => {
-    if (!user) return
     ;(async () => {
       setIsLoading(true)
-      await fetchTodayAppointments(user)
+      await fetchTodayAppointments()
       setIsLoading(false)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, pathname])
+  }, [pathname])
 
   useEffect(() => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_DROPPED, (payload) => {

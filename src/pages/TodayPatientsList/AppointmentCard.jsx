@@ -24,7 +24,7 @@ export const LoadingCards = () => (
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
   const { fullName, motif } = appointment
-  const { user, socket } = ChatState()
+  const { socket } = ChatState()
   const { fetchTodayAppointments } = AppointmentsState()
   const {
     isOpen: isPatientFollowupsModalOpen,
@@ -68,7 +68,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_CONFIRMATION, (payload) => {
       if (payload._id === appointment._id) {
         setIsConfirmed(payload.isConfirmed)
-        fetchTodayAppointments(user)
+        fetchTodayAppointments()
         new Audio(ConfirmSound).play()
       }
     })
@@ -76,7 +76,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_LEFT, (payload) => {
       if (payload._id === appointment._id) {
         setIsLeft(payload.isLeft)
-        fetchTodayAppointments(user)
+        fetchTodayAppointments()
         new Audio(DoorBellSound).play()
       }
     })

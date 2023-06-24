@@ -76,6 +76,17 @@ const fetchMonthAppointments = async (date) => {
   return await response.json()
 }
 
+const fetchDayAppointments = async (date) => {
+  const response = await fetch(`/api/appointments/${formatDate(date, 'yyyy/MM/dd')}`, {
+    method: 'GET',
+    headers: {
+      Authorization: `Bearer ${user.token}`,
+    },
+  })
+
+  return await response.json()
+}
+
 const deleteAppointment = async (appointmentId) => {
   const response = await fetch(`/api/appointments/${appointmentId}`, {
     method: 'DELETE',
@@ -120,6 +131,7 @@ export {
   updateAppointment,
   updateAppointmentsHistory,
   fetchMonthAppointments,
+  fetchDayAppointments,
   deleteAppointment,
   toggleAppointmentConfirmation,
   toggleAppointmentLeave,
