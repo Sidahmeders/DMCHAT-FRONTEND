@@ -11,7 +11,7 @@ import {
 import { format, parseISO } from 'date-fns'
 import { X } from 'react-feather'
 
-import { ADD_APPOINTMENT_NAMES } from '@config'
+import { CREATE_APPOINTMENT_NAMES } from '@config'
 import { updateAppointmentsHistory } from '@services/appointments'
 
 import SubAppointment from './SubAppointment'
@@ -86,9 +86,9 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
     setTreatmentUpdate({
       ...treatmentUpdate,
       [baseAppointmentId]: {
-        [ADD_APPOINTMENT_NAMES.TITLE]: baseAppointment.title,
-        [ADD_APPOINTMENT_NAMES.TOTAL_PRICE]: baseAppointment.totalPrice,
-        [ADD_APPOINTMENT_NAMES.PAYMENT]: baseAppointment.payment,
+        [CREATE_APPOINTMENT_NAMES.TITLE]: baseAppointment.title,
+        [CREATE_APPOINTMENT_NAMES.TOTAL_PRICE]: baseAppointment.totalPrice,
+        [CREATE_APPOINTMENT_NAMES.PAYMENT]: baseAppointment.payment,
       },
     })
 
@@ -140,7 +140,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
             suppressContentEditableWarning
             onInput={(e) => {
               setCanShowResetBtn(true)
-              onInputEditHandler(e, baseAppointment._id, ADD_APPOINTMENT_NAMES.TITLE)
+              onInputEditHandler(e, baseAppointment._id, CREATE_APPOINTMENT_NAMES.TITLE)
             }}
             ref={baseTitleRef}>
             {baseAppointment.title}
@@ -152,7 +152,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
               suppressContentEditableWarning
               onInput={(e) => {
                 setCanShowResetBtn(true)
-                onInputEditHandler(e, baseAppointment._id, ADD_APPOINTMENT_NAMES.PAYMENT)
+                onInputEditHandler(e, baseAppointment._id, CREATE_APPOINTMENT_NAMES.PAYMENT)
               }}
               ref={basePaymentRef}>
               {baseAppointment.payment}
@@ -164,7 +164,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
               suppressContentEditableWarning
               onInput={(e) => {
                 setCanShowResetBtn(true)
-                onInputEditHandler(e, baseAppointment._id, ADD_APPOINTMENT_NAMES.TOTAL_PRICE)
+                onInputEditHandler(e, baseAppointment._id, CREATE_APPOINTMENT_NAMES.TOTAL_PRICE)
               }}
               ref={baseTotalPriceRef}>
               {baseAppointment.totalPrice}

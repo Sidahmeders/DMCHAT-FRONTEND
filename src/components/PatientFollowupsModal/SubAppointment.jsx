@@ -3,7 +3,7 @@ import { format, parseISO } from 'date-fns'
 import { Button } from '@chakra-ui/react'
 import { X } from 'react-feather'
 
-import { ADD_APPOINTMENT_NAMES } from '@config'
+import { CREATE_APPOINTMENT_NAMES } from '@config'
 
 const SubAppointment = ({ appointment, onInputEditHandler, treatmentUpdate, setTreatmentUpdate }) => {
   const { _id, title, payment, createdAt, isDone } = appointment
@@ -31,7 +31,7 @@ const SubAppointment = ({ appointment, onInputEditHandler, treatmentUpdate, setT
         ref={titleRef}
         onInput={(e) => {
           setCanShowResetBtn(true)
-          onInputEditHandler(e, _id, ADD_APPOINTMENT_NAMES.TITLE)
+          onInputEditHandler(e, _id, CREATE_APPOINTMENT_NAMES.TITLE)
         }}>
         {title}
       </td>
@@ -41,7 +41,7 @@ const SubAppointment = ({ appointment, onInputEditHandler, treatmentUpdate, setT
         ref={paymentRef}
         onInput={(e) => {
           setCanShowResetBtn(true)
-          onInputEditHandler(e, _id, ADD_APPOINTMENT_NAMES.PAYMENT)
+          onInputEditHandler(e, _id, CREATE_APPOINTMENT_NAMES.PAYMENT)
         }}>
         {payment || '0'}
       </td>
