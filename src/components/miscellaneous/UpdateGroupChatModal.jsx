@@ -17,7 +17,7 @@ import {
   useDisclosure,
   useToast,
 } from '@chakra-ui/react'
-import { Eye } from 'react-feather'
+import { Sliders } from 'react-feather'
 
 import { ChatState } from '@context'
 import { joinGroup, leaveGroup, removeGroup } from '@services/chats'
@@ -71,7 +71,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages, sender
     }
 
     // Check if the user admin or not
-    if (selectedChat.groupAdmin._id !== user._id) {
+    if (selectedChat?.groupAdmin?._id !== user._id) {
       return toast({
         title: 'Only admins can add someone!',
         status: 'warning',
@@ -127,7 +127,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages, sender
     <>
       <HStack>
         <DeleteChatModal sender={sender} chatId={chatId} setMessages={setMessages} />
-        <IconButton icon={<Eye />} onClick={onOpen} />
+        <IconButton icon={<Sliders />} onClick={onOpen} />
       </HStack>
 
       <Modal isOpen={isOpen} onClose={onClose} isCentered>

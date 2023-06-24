@@ -12,7 +12,7 @@ import {
   Text,
   useDisclosure,
 } from '@chakra-ui/react'
-import { Eye } from 'react-feather'
+import { Info } from 'react-feather'
 
 import DeleteChatModal from './DeleteChatModal'
 
@@ -23,7 +23,7 @@ export default function PeerProfileModal({ sender, chatId, setMessages }) {
     <>
       <HStack>
         <DeleteChatModal sender={sender} chatId={chatId} setMessages={setMessages} />
-        <IconButton icon={<Eye />} onClick={onProfileOpen} />
+        <IconButton icon={<Info />} onClick={onProfileOpen} />
       </HStack>
 
       <Modal size="xl" isOpen={isProfileOpen} onClose={onProfileClose} isCentered>
