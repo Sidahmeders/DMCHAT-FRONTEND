@@ -1,18 +1,6 @@
 import { useEffect, useState } from 'react'
-import {
-  useDisclosure,
-  IconButton,
-  Button,
-  Box,
-  Flex,
-  Heading,
-  Stack,
-  Skeleton,
-  InputGroup,
-  Input,
-  useToast,
-} from '@chakra-ui/react'
-import { Card, CardHeader, CardBody } from '@chakra-ui/card'
+import { useDisclosure, IconButton, Button, Box, Flex, Heading, Stack, Skeleton, useToast } from '@chakra-ui/react'
+import { Card, CardHeader } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, Edit2 } from 'react-feather'
 import { isBoolean } from 'lodash'
 
@@ -22,6 +10,7 @@ import { APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
 import { toggleAppointmentConfirmation, toggleAppointmentLeave } from '@services/appointments'
 
 import PatientFollowupsModal from '@components/PatientFollowupsModal/PatientFollowupsModal'
+import PaymentCard from './PaymentCard'
 import ConfirmSound from '../../assets/songs/confirmation-tone.wav'
 import DoorBellSound from '../../assets/songs/door-bell.wav'
 
@@ -34,7 +23,7 @@ export const LoadingCards = () => (
 )
 
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
-  const { isNewTreatment, fullName, motif, payment, totalPrice, paymentLeft } = appointment
+  const { fullName, motif } = appointment
   const { user, socket } = ChatState()
   const { fetchTodayAppointments } = TodayPatientsListState()
   const {
@@ -46,12 +35,8 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
 
   const [isConfirmed, setIsConfirmed] = useState(appointment.isConfirmed)
   const [isLeft, setIsLeft] = useState(appointment.isLeft)
-  const [showCardBody, setShowCardBody] = useState(false)
+  const [showPaymentCard, setShowPaymentCard] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
-  const [canUpdatePayments, setCanUpdatePayments] = useState(false)
-  const [paymentVal, setPaymentVal] = useState(payment)
-  const [totalPriceVal, setTotalPriceVal] = useState(totalPrice)
 
   const handleConfirmation = async () => {
     setIsLoading(true)
@@ -77,10 +62,6 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       toast({ message: error.message })
     }
     setIsLoading(false)
-  }
-
-  const handlePaymentsUpdate = () => {
-    // TODO: update payment
   }
 
   useEffect(() => {
@@ -136,56 +117,12 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
               variant="ghost"
               colorScheme="gray"
               aria-label="See menu"
-              icon={showCardBody ? <ChevronUp /> : <ChevronDown />}
-              onClick={() => setShowCardBody(!showCardBody)}
+              icon={showPaymentCard ? <ChevronUp /> : <ChevronDown />}
+              onClick={() => setShowPaymentCard(!showPaymentCard)}
             />
           </Flex>
         </CardHeader>
-
-        {showCardBody && (
-          <CardBody p="0.25rem 1rem" mr="0">
-            <InputGroup gap="2">
-              <InputGroup className="payments-input">
-                <label>T</label>
-                <Input
-                  type="number"
-                  placeholder="Prix total"
-                  min={0}
-                  step={1000}
-                  value={totalPriceVal}
-                  onChange={(e) => setTotalPriceVal(e.target.value)}
-                />
-              </InputGroup>
-              <InputGroup className="payments-input">
-                <label>V</label>
-                <Input
-                  type="number"
-                  placeholder="versement"
-                  value={paymentVal}
-                  min={0}
-                  step={1000}
-                  onChange={(e) => setPaymentVal(e.target.value)}
-                />
-              </InputGroup>
-              <InputGroup className="payments-input">
-                <label>R</label>
-                <Input type="number" readOnly value={isNewTreatment ? totalPrice - payment : paymentLeft} />
-              </InputGroup>
-            </InputGroup>
-            {canUpdatePayments ? (
-              <Box mt="2" mb="2">
-                <Button mr="2" colorScheme="orange" onClick={handlePaymentsUpdate}>
-                  Confirmer modification
-                </Button>
-                <Button onClick={() => setCanUpdatePayments(false)}>Annuler</Button>
-              </Box>
-            ) : (
-              <Button colorScheme="purple" mt="2" mb="2" onClick={() => setCanUpdatePayments(true)}>
-                Enregistrer les modifications
-              </Button>
-            )}
-          </CardBody>
-        )}
+        <PaymentCard appointment={appointment} showPaymentCard={showPaymentCard} />
       </Card>
     </>
   )
