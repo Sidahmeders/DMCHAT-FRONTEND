@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { FileText, Calendar, PieChart } from 'react-feather'
+import { Cast, Calendar, PieChart } from 'react-feather'
 
 import { getPageRoute, setPageRoute } from '@utils'
 import { APP_ROUTES } from '@config'
@@ -31,7 +31,7 @@ export default function TopNavigation() {
         className={`${selectedRoute === APP_ROUTES.TODAY_PATIENTS_LIST ? 'selected' : ''}`}
         onClick={() => setPageRoute(APP_ROUTES.TODAY_PATIENTS_LIST)}
         to={APP_ROUTES.TODAY_PATIENTS_LIST}>
-        <FileText />
+        <Cast />
       </Link>
 
       <Link
