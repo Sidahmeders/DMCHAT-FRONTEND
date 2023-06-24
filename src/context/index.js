@@ -1,2 +1,2 @@
 export * from './ChatProvider'
-export * from './TodayPatientsListProvider'
+export * from './AppointmentsProvider'

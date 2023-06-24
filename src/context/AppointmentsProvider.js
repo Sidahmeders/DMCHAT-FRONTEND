@@ -3,9 +3,9 @@ import { createContext, useContext, useState } from 'react'
 import { APPOINTMENTS_IDS } from '../config'
 import { flattenAppointment } from '../utils'
 
-const TodayPatientsListContext = createContext()
+const AppointmentsContext = createContext()
 
-export const TodayPatientsListProvider = ({ children }) => {
+export const AppointmentsProvider = ({ children }) => {
   const [appointmentsList, setAppointmentsList] = useState({
     [APPOINTMENTS_IDS.EXPECTED]: [],
     [APPOINTMENTS_IDS.WAITING_ROOM]: [],
@@ -20,6 +20,7 @@ export const TodayPatientsListProvider = ({ children }) => {
         Authorization: `Bearer ${user.token}`,
       },
     })
+
     const todayAppointments = await response.json()
 
     const { expected, awaitingRoom, inProgress, doneList } = todayAppointments.reduce(
@@ -55,15 +56,15 @@ export const TodayPatientsListProvider = ({ children }) => {
   }
 
   return (
-    <TodayPatientsListContext.Provider
+    <AppointmentsContext.Provider
       value={{
         appointmentsList,
         setAppointmentsList,
         fetchTodayAppointments,
       }}>
       {children}
-    </TodayPatientsListContext.Provider>
+    </AppointmentsContext.Provider>
   )
 }
 
-export const TodayPatientsListState = () => useContext(TodayPatientsListContext)
+export const AppointmentsState = () => useContext(AppointmentsContext)

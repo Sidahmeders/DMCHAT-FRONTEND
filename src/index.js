@@ -5,7 +5,7 @@ import { BrowserRouter } from 'react-router-dom'
 import io from 'socket.io-client'
 import * as serviceWorker from './serviceWorkerRegistration'
 
-import { ChatProvider, TodayPatientsListProvider } from '@context'
+import { ChatProvider, AppointmentsProvider } from '@context'
 import { ENDPOINT } from '@config'
 
 import App from './App'
@@ -16,7 +16,7 @@ const socket = io(ENDPOINT)
 root.render(
   <BrowserRouter>
     <ChatProvider socket={socket}>
-      <TodayPatientsListProvider>
+      <AppointmentsProvider>
         <ChakraProvider
           toastOptions={{
             defaultOptions: {
@@ -30,7 +30,7 @@ root.render(
           }}>
           <App />
         </ChakraProvider>
-      </TodayPatientsListProvider>
+      </AppointmentsProvider>
     </ChatProvider>
   </BrowserRouter>,
 )

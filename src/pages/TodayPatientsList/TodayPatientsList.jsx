@@ -3,7 +3,7 @@ import { DragDropContext, Draggable } from 'react-beautiful-dnd'
 import { useLocation } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 
-import { ChatState, TodayPatientsListState } from '@context'
+import { ChatState, AppointmentsState } from '@context'
 import { flattenAppointment } from '@utils'
 import { APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
 import { updateAppointment } from '@services/appointments'
@@ -28,7 +28,7 @@ export default function TodayPatientsList() {
   const { user, socket } = ChatState()
   const { pathname } = useLocation()
   const toast = useToast()
-  const { appointmentsList, setAppointmentsList, fetchTodayAppointments } = TodayPatientsListState()
+  const { appointmentsList, setAppointmentsList, fetchTodayAppointments } = AppointmentsState()
   const [isLoading, setIsLoading] = useState(false)
 
   const onDragEnd = (props) => {

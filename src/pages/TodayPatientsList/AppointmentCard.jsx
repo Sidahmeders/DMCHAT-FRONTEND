@@ -4,7 +4,7 @@ import { Card, CardHeader } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, Edit2 } from 'react-feather'
 import { isBoolean } from 'lodash'
 
-import { ChatState, TodayPatientsListState } from '@context'
+import { ChatState, AppointmentsState } from '@context'
 import { setPatient } from '@utils'
 import { APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
 import { toggleAppointmentConfirmation, toggleAppointmentLeave } from '@services/appointments'
@@ -25,7 +25,7 @@ export const LoadingCards = () => (
 export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
   const { fullName, motif } = appointment
   const { user, socket } = ChatState()
-  const { fetchTodayAppointments } = TodayPatientsListState()
+  const { fetchTodayAppointments } = AppointmentsState()
   const {
     isOpen: isPatientFollowupsModalOpen,
     onOpen: onPatientFollowupsModalOpen,
