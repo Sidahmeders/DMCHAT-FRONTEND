@@ -3,16 +3,17 @@ import { Button, InputGroup, Input, useToast } from '@chakra-ui/react'
 import { CardBody } from '@chakra-ui/card'
 
 import { ChatState } from '@context'
+import { notify } from '@utils'
 import { CREATE_APPOINTMENT_NAMES, APPOINTMENTS_EVENTS, APPOINTMENTS_LISTENERS } from '@config'
 import { updateAppointment } from '@services/appointments'
 
-const PaymentCard = ({ appointment, showPaymentCard }) => {
+const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   const toast = useToast()
   const { socket } = ChatState()
-  const { payment, totalPrice, paymentLeft } = appointment
-  const [paymentVal, setPaymentVal] = useState(payment)
-  const [totalPriceVal, setTotalPriceVal] = useState(totalPrice)
-  const [paymentLeftVal, setPaymentLeftVal] = useState(paymentLeft)
+  const [appointment, setAppointmentData] = useState(appointmentData)
+  const [paymentVal, setPaymentVal] = useState(appointment.payment || 0)
+  const [totalPriceVal, setTotalPriceVal] = useState(appointment.totalPrice || 0)
+  const [paymentLeftVal, setPaymentLeftVal] = useState(appointment.paymentLeft || 0)
   const [canUpdatePayments, setCanUpdatePayments] = useState(false)
   const [canShowUpdateBtn, setCanShowUpdateBtn] = useState(false)
 
@@ -47,16 +48,22 @@ const PaymentCard = ({ appointment, showPaymentCard }) => {
   }
 
   const cancelPaymentUpdate = () => {
-    setTotalPriceVal(totalPrice)
-    setPaymentVal(payment)
-    setPaymentLeftVal(paymentLeft)
+    setTotalPriceVal(appointment.totalPrice)
+    setPaymentVal(appointment.payment)
+    setPaymentLeftVal(appointment.paymentLeft)
     setCanUpdatePayments(false)
     setCanShowUpdateBtn(false)
   }
 
   useEffect(() => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_PAID, (payload) => {
-      // TODO: make payment update
+      const { patient, totalPrice, payment, paymentLeft } = payload || {}
+      setAppointmentData(payload)
+      setTotalPriceVal(totalPrice)
+      setPaymentVal(payment)
+      setPaymentLeftVal(paymentLeft)
+      const description = `${patient.fullName} V: ${payment} / R: ${paymentLeft}`
+      notify({ title: 'Transaction Effectué!', description })
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

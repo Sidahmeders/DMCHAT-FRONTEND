@@ -14,16 +14,16 @@ export const guid = () => {
   return s4() + s4() + '-' + s4() + '-' + s4() + '-' + s4() + '-' + s4() + s4() + s4()
 }
 
-export const notify = debounce(async (messageRecieved) => {
+export const notify = debounce(async ({ title, description }) => {
   const options = {
-    tag: messageRecieved?.sender?.name,
+    tag: title, // messageRecieved?.sender?.name
     icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
     vibrate: 3,
   }
 
   // mobile notification
   navigator.serviceWorker.ready.then((registration) => {
-    registration.showNotification(messageRecieved.content, options)
+    registration.showNotification(description, options)
   })
 
   if (Notification.permission === 'default' || Notification.permission === 'denied') {
@@ -31,8 +31,8 @@ export const notify = debounce(async (messageRecieved) => {
   }
   if (Notification.permission === 'granted') {
     // web notification
-    const notification = new Notification(messageRecieved?.sender?.name, {
-      body: messageRecieved.content,
+    const notification = new Notification(title, {
+      body: description,
       ...options,
     })
     setTimeout(notification.close.bind(notification), 4500)

@@ -122,7 +122,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
             />
           </Flex>
         </CardHeader>
-        <PaymentCard appointment={appointment} showPaymentCard={showPaymentCard} />
+        <PaymentCard appointmentData={appointment} showPaymentCard={showPaymentCard} />
       </Card>
     </>
   )

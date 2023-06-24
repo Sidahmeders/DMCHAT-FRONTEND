@@ -96,7 +96,8 @@ const App = () => {
       } else {
         setMessages([...messages, messageRecieved])
       }
-      notify(messageRecieved)
+      const { sender, content } = messageRecieved || {}
+      notify({ title: sender?.name, description: content })
     })
   })
 
