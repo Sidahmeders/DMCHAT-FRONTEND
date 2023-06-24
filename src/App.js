@@ -1,11 +1,11 @@
 import { useEffect, useRef } from 'react'
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 import { Wifi, WifiOff } from 'react-feather'
 
 import { ChatState } from '@context'
-import { checkIsJWTExpired, removeUser, notify } from '@utils'
+import { checkIsJWTExpired, removeUser, notify, getPageRoute } from '@utils'
 import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
@@ -27,11 +27,12 @@ const App = () => {
     setSocketConnected,
   } = ChatState()
   const toast = useToast()
+  const navigation = useNavigate()
 
   if (user && user.token) {
-    const isTokenExpired = checkIsJWTExpired(user.token)
-    if (isTokenExpired) {
+    if (checkIsJWTExpired(user.token)) {
       removeUser()
+      navigation('/')
     }
   }
 
@@ -105,12 +106,12 @@ const App = () => {
     <div className="App">
       {!isEmpty(user) && <TopNavigation />}
       <Routes>
-        <Route path="/" element={<Auth />} />
+        {isEmpty(user) && <Route path="/" element={<Auth />} />}
         <Route path={APP_ROUTES.CHATS} element={<Chat />} />
         <Route path={APP_ROUTES.TODAY_PATIENTS_LIST} element={<TodayPatientsList />} />
         <Route path={APP_ROUTES.CALENDAR} element={<Calendar />} />
         <Route path={APP_ROUTES.STATISTICS} element={<Statistics />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to={getPageRoute()} replace />} />
       </Routes>
     </div>
   )

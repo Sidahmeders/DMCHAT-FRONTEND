@@ -10,7 +10,7 @@ export const removeUser = () => localStorage.removeItem(USER)
 export const getPatient = () => JSON.parse(localStorage.getItem(PATIENT)) || {}
 export const setPatient = (patient) => localStorage.setItem(PATIENT, JSON.stringify(patient))
 
-export const getPageRoute = () => localStorage.getItem(PAGE_ROUTE) || ''
+export const getPageRoute = () => localStorage.getItem(PAGE_ROUTE) || '/'
 export const setPageRoute = (route) => localStorage.setItem(PAGE_ROUTE, route)
 
 export const getMotifTemplateButtons = () => JSON.parse(localStorage.getItem(MOTIF_TEMPLATE_BUTTONS)) || []
