@@ -1,48 +1,23 @@
-import { getUser } from '@utils'
+import Fetch from './_fetch'
 
-const user = getUser()
+const _fetch = new Fetch()
 
-const searchUsers = async (searchQuery) => {
-  const response = await fetch(`/api/users?search=${searchQuery}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  })
-
-  return await response.json()
-}
+const searchUsers = async (searchQuery) => await _fetch.GET(`/api/users?search=${searchQuery}`)
 
 const signInUser = async (credentials) => {
-  const response = await fetch('/api/users/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      email: credentials.email,
-      password: credentials.password,
-    }),
+  return await _fetch.POST('/api/users/login', {
+    email: credentials.email,
+    password: credentials.password,
   })
-
-  return await response.json()
 }
 
 const signUpUser = async (credentials) => {
-  const response = await fetch('/api/users', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      name: credentials.name,
-      email: credentials.email,
-      password: credentials.password,
-      pic: credentials.pic,
-    }),
+  return await _fetch.POST('/api/users', {
+    name: credentials.name,
+    email: credentials.email,
+    password: credentials.password,
+    pic: credentials.pic,
   })
-
-  return await response.json()
 }
 
 export { searchUsers, signInUser, signUpUser }

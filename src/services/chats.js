@@ -1,93 +1,37 @@
-import { getUser } from '@utils'
+import Fetch from './_fetch'
 
-const user = getUser()
+const _fetch = new Fetch()
+
+const fetchUserChats = async () => await _fetch.GET(`/api/chat`)
+
+const accessChat = async (userId) => await _fetch.POST(`/api/chat/access`, { userId })
 
 const createGroupChat = async (groupChatName, selectedUsers) => {
-  const response = await fetch('/api/chat/groups', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      name: groupChatName,
-      users: JSON.stringify(selectedUsers.map((user) => user._id)),
-    }),
+  return await _fetch.POST('/api/chat/groups', {
+    name: groupChatName,
+    users: JSON.stringify(selectedUsers.map((user) => user._id)),
   })
-
-  return await response.json()
 }
 
 const leaveGroup = async (chatId, removeUser) => {
-  const response = await fetch('/api/chat/groups/leave', {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      chatId: chatId,
-      userId: removeUser._id,
-    }),
+  return await _fetch.PUT('/api/chat/groups/leave', {
+    chatId: chatId,
+    userId: removeUser._id,
   })
-
-  return await response.json()
 }
 
 const joinGroup = async (chatId, addUser) => {
-  const response = await fetch('/api/chat/groups/join', {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      chatId: chatId,
-      userId: addUser._id,
-    }),
+  return await _fetch.PUT('/api/chat/groups/join', {
+    chatId: chatId,
+    userId: addUser._id,
   })
-
-  return await response.json()
 }
 
 const removeGroup = async (chatId, groupChatName) => {
-  const response = await fetch('/api/chat/groups/rename', {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      chatId: chatId,
-      chatName: groupChatName,
-    }),
+  return await _fetch.PUT('/api/chat/groups/rename', {
+    chatId: chatId,
+    chatName: groupChatName,
   })
-
-  return await response.json()
-}
-
-const accessChat = async (userId) => {
-  const response = await fetch(`/api/chat/access`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${user.token}`,
-    },
-    body: JSON.stringify({ userId }),
-  })
-
-  return await response.json()
-}
-
-const fetchUserChats = async () => {
-  const response = await fetch(`/api/chat`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  })
-
-  return await response.json()
 }
 
 export { createGroupChat, leaveGroup, joinGroup, removeGroup, accessChat, fetchUserChats }

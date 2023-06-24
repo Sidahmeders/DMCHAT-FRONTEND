@@ -1,29 +1,12 @@
-const { getUser, formatDate } = require('@utils')
+import { formatDate } from '@utils'
+import Fetch from './_fetch'
 
-const user = getUser()
+const _fetch = new Fetch()
 
-const fetchCalendarAvailabilities = async (date) => {
-  const response = await fetch(`/api/calendar/${formatDate(date, 'yyyy/MM')}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${user?.token}`,
-    },
-  })
-
-  return await response.json()
-}
+const fetchCalendarAvailabilities = async (date) => await _fetch.GET(`/api/calendar/${formatDate(date, 'yyyy/MM')}`)
 
 const setCalendarAvailability = async (date, availability) => {
-  const response = await fetch(`/api/calendar/${formatDate(date, 'yyyy/MM/dd')}/availability`, {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${user.token}`,
-    },
-    body: JSON.stringify({ availability }),
-  })
-
-  return await response.json()
+  return await fetch(`/api/calendar/${formatDate(date, 'yyyy/MM/dd')}/availability`, { availability })
 }
 
 export { fetchCalendarAvailabilities, setCalendarAvailability }

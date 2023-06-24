@@ -1,6 +1,6 @@
-const { getUser } = require('@utils')
+import Fetch from './_fetch'
 
-const user = getUser()
+const _fetch = new Fetch()
 
 const fetchPatients = async ({ pageNumber, pageSize, searchName }) => {
   let searchQuery = [
@@ -11,51 +11,13 @@ const fetchPatients = async ({ pageNumber, pageSize, searchName }) => {
     .filter((query) => query)
     .join('&')
 
-  const response = await fetch(`/api/patients?${searchQuery}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  })
-
-  return await response.json()
+  return await _fetch.GET(`/api/patients?${searchQuery}`)
 }
 
-const createPatient = async (patientData) => {
-  const response = await fetch('/api/patients', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(patientData),
-  })
+const createPatient = async (patientData) => await _fetch.POST('/api/patients', patientData)
 
-  return await response.json()
-}
+const updatePatientById = async (patientData) => await _fetch.PUT(`/api/patients/${patientData._id}`, patientData)
 
-const updatePatientById = async (patientData) => {
-  const response = await fetch(`/api/patients/${patientData._id}`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(patientData),
-  })
-
-  return await response.json()
-}
-
-const deletePatientById = async (patientId) => {
-  const response = await fetch(`/api/patients/${patientId}`, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  })
-
-  return response.status
-}
+const deletePatientById = async (patientId) => await _fetch.DELETE(`/api/patients/${patientId}`)
 
 export { fetchPatients, createPatient, updatePatientById, deletePatientById }

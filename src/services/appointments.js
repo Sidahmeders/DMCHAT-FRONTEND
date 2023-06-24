@@ -1,127 +1,32 @@
-const { getUser, formatDate } = require('@utils')
+import { formatDate } from '@utils'
+import Fetch from './_fetch'
 
-const user = getUser()
+const _fetch = new Fetch()
 
-const fetchPatientAppointments = async (patientId) => {
-  const response = await fetch(`/api/appointments/${patientId}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  })
+const fetchPatientAppointments = async (patientId) => await _fetch.GET(`/api/appointments/${patientId}`)
 
-  return await response.json()
-}
+const fetchMonthAppointments = async (date) => await _fetch.GET(`/api/appointments/${formatDate(date, 'yyyy/MM')}`)
 
-const createAppointment = async (appointmentData) => {
-  const response = await fetch('/api/appointments/new', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(appointmentData),
-  })
+const fetchDayAppointments = async (date) => _fetch.GET(`/api/appointments/${formatDate(date, 'yyyy/MM/dd')}`)
 
-  return await response.json()
-}
+const createAppointment = async (appointmentData) => await _fetch.POST('/api/appointments/new', appointmentData)
 
-const relateAppointment = async (appointmentData) => {
-  const response = await fetch('/api/appointments/relate', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(appointmentData),
-  })
-
-  return await response.json()
-}
+const relateAppointment = async (appointmentData) => await _fetch.POST('/api/appointments/relate', appointmentData)
 
 const updateAppointment = async (appointmentId, appointmentData) => {
-  const response = await fetch(`/api/appointments/${appointmentId}/update`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(appointmentData),
-  })
-
-  return await response.json()
+  return await _fetch.PUT(`/api/appointments/${appointmentId}/update`, appointmentData)
 }
 
-const updateAppointmentsHistory = async (appointmentData) => {
-  const response = await fetch('/api/appointments/history', {
-    method: 'PUT',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${user.token}`,
-    },
-    body: JSON.stringify(appointmentData),
-  })
+const updateAppointmentsHistory = async (appointmentData) => _fetch.PUT('/api/appointments/history', appointmentData)
 
-  return await response.json()
-}
-
-const fetchMonthAppointments = async (date) => {
-  const response = await fetch(`/api/appointments/${formatDate(date, 'yyyy/MM')}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  })
-
-  return await response.json()
-}
-
-const fetchDayAppointments = async (date) => {
-  const response = await fetch(`/api/appointments/${formatDate(date, 'yyyy/MM/dd')}`, {
-    method: 'GET',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  })
-
-  return await response.json()
-}
-
-const deleteAppointment = async (appointmentId) => {
-  const response = await fetch(`/api/appointments/${appointmentId}`, {
-    method: 'DELETE',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-    },
-  })
-
-  return response.status
-}
+const deleteAppointment = async (appointmentId) => await _fetch.DELETE(`/api/appointments/${appointmentId}`)
 
 const toggleAppointmentConfirmation = async (appointmentId, isConfirmed) => {
-  const response = await fetch(`/api/appointments/${appointmentId}/toggle-confirmation`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ isConfirmed }),
-  })
-
-  return await response.json()
+  return await _fetch.PUT(`/api/appointments/${appointmentId}/toggle-confirmation`, { isConfirmed })
 }
 
 const toggleAppointmentLeave = async (appointmentId, isLeft) => {
-  const response = await fetch(`/api/appointments/${appointmentId}/toggle-leave`, {
-    method: 'PUT',
-    headers: {
-      Authorization: `Bearer ${user.token}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ isLeft }),
-  })
-
-  return await response.json()
+  return await _fetch.PUT(`/api/appointments/${appointmentId}/toggle-leave`, { isLeft })
 }
 
 export {
