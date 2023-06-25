@@ -64,7 +64,11 @@ export default function TodayPatientsList() {
   useEffect(() => {
     ;(async () => {
       setIsLoading(true)
-      await fetchTodayAppointments()
+      try {
+        await fetchTodayAppointments()
+      } catch (error) {
+        toast({ description: error.message })
+      }
       setIsLoading(false)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps

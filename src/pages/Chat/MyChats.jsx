@@ -48,19 +48,20 @@ const MyChats = () => {
 
       <Box display="flex" flexDir="column" p="4" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
         <Stack overflowY="scroll">
-          {chats?.map((chat) => (
-            <Box
-              onClick={() => setSelectedChat(chat)}
-              cursor="pointer"
-              bg={selectedChat?._id === chat._id ? '#38B2AC' : '#E8E8E8'}
-              color={selectedChat?._id === chat._id ? 'white' : 'black'}
-              px={3}
-              py={2}
-              borderRadius="lg"
-              key={chat._id}>
-              <Text>{!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}</Text>
-            </Box>
-          ))}
+          {chats.length &&
+            chats.map((chat) => (
+              <Box
+                onClick={() => setSelectedChat(chat)}
+                cursor="pointer"
+                bg={selectedChat?._id === chat._id ? '#38B2AC' : '#E8E8E8'}
+                color={selectedChat?._id === chat._id ? 'white' : 'black'}
+                px={3}
+                py={2}
+                borderRadius="lg"
+                key={chat._id}>
+                <Text>{!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}</Text>
+              </Box>
+            ))}
         </Stack>
       </Box>
     </Box>

@@ -1,5 +1,14 @@
 import { useEffect, useState } from 'react'
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Box } from '@chakra-ui/react'
+import {
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Box,
+  useToast,
+} from '@chakra-ui/react'
 import { ChevronDown, ChevronUp } from 'react-feather'
 
 import { getPatient } from '@utils'
@@ -12,6 +21,7 @@ import './PatientFollowupsModal.scss'
 import { fetchPatientAppointments } from '@services/appointments'
 
 export default function PatientFollowupsModal({ isOpen, onClose }) {
+  const toast = useToast()
   const patient = getPatient()
 
   const [appointments, setAppointments] = useState([])
@@ -19,11 +29,15 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
   const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    if (!patient._id) return
     ;(async () => {
+      if (!patient._id) return
       setIsLoading(true)
-      const patientAppointments = await fetchPatientAppointments(patient._id)
-      setAppointments(patientAppointments)
+      try {
+        const patientAppointments = await fetchPatientAppointments(patient._id)
+        setAppointments(patientAppointments)
+      } catch (error) {
+        toast({ description: error.message })
+      }
       setIsLoading(false)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -46,24 +60,26 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
         </ModalHeader>
         <ModalCloseButton p="6" />
         <ModalBody className="patient-followups-modal-body">
-          <Loader loading={isLoading}>
-            {appointments
-              .reduce((prevAppointments, appointment) => {
-                if (appointment.isNewTreatment) {
-                  return [...prevAppointments, [appointment]]
-                }
-                const lastGroup = prevAppointments[prevAppointments.length - 1] || []
-                return [...prevAppointments.slice(0, -1), [...lastGroup, appointment]]
-              }, [])
-              .map((appointmentsGroup, index) => (
-                <AppointmentTable
-                  key={index}
-                  appointments={appointments}
-                  setAppointments={setAppointments}
-                  appointmentsGroup={appointmentsGroup}
-                />
-              ))}
-          </Loader>
+          {appointments.length && (
+            <Loader loading={isLoading}>
+              {appointments
+                .reduce((prevAppointments, appointment) => {
+                  if (appointment.isNewTreatment) {
+                    return [...prevAppointments, [appointment]]
+                  }
+                  const lastGroup = prevAppointments[prevAppointments.length - 1] || []
+                  return [...prevAppointments.slice(0, -1), [...lastGroup, appointment]]
+                }, [])
+                .map((appointmentsGroup, index) => (
+                  <AppointmentTable
+                    key={index}
+                    appointments={appointments}
+                    setAppointments={setAppointments}
+                    appointmentsGroup={appointmentsGroup}
+                  />
+                ))}
+            </Loader>
+          )}
         </ModalBody>
       </ModalContent>
     </Modal>

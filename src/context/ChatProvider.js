@@ -5,6 +5,7 @@ import { isEmpty } from 'lodash'
 
 import { getUser } from '@utils'
 import { CHAT_EVENTS } from '@config'
+import { fetchMessagesByChatId } from '@services/messages'
 
 const ChatContext = createContext()
 
@@ -27,23 +28,11 @@ export const ChatProvider = ({ children, socket }) => {
     if (!selectedChat || !user) return
     setIsLoadingMessages(true)
     try {
-      const response = await fetch(`/api/messages/${selectedChat._id}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${user.token}`,
-        },
-      })
-      if (response.status === 200) {
-        setMessages(await response.json())
-        socket.emit(CHAT_EVENTS.JOIN_CHAT, selectedChat._id)
-      }
+      const messagesData = await fetchMessagesByChatId(selectedChat._id)
+      setMessages(messagesData)
+      socket.emit(CHAT_EVENTS.JOIN_CHAT, selectedChat._id)
     } catch (error) {
-      toast({
-        title: 'Error Occured!',
-        description: 'Failed to Load the Messages',
-        status: 'error',
-        position: 'bottom-right',
-      })
+      toast({ description: 'Impossible de charger les messages' })
     }
     setIsLoadingMessages(false)
   }

@@ -1,3 +1,4 @@
+import propTypes from 'prop-types'
 import { Avatar, Tooltip } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { BeatLoader } from 'react-spinners'
@@ -17,8 +18,7 @@ const ScrollableChat = ({ messages, isTyping }) => {
   return (
     <>
       <div className="hide-scrollbar" style={{ overflowX: 'hidden', overflowY: 'auto' }}>
-        {/* If something inside the messages, render the messages */}
-        {messages &&
+        {messages.length &&
           messages.map((message, index) => (
             <div ref={scrollRef} key={message._id} style={{ display: 'flex' }}>
               {(isSameSender(messages, message, index, user._id) || isLastMessage(messages, index, user._id)) && (
@@ -54,6 +54,16 @@ const ScrollableChat = ({ messages, isTyping }) => {
       </div>
     </>
   )
+}
+
+ScrollableChat.propTypes = {
+  messages: propTypes.arrayOf(propTypes.any),
+  isTyping: propTypes.bool,
+}
+
+ScrollableChat.defaultProps = {
+  messages: [],
+  isTyping: false,
 }
 
 export default ScrollableChat

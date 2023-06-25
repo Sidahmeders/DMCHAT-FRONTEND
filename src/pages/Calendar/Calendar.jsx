@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState, useEffect } from 'react'
-import { useDisclosure } from '@chakra-ui/react'
+import { useDisclosure, useToast } from '@chakra-ui/react'
 import { useSwipeable } from 'react-swipeable'
 import PropTypes from 'prop-types'
 import { Calendar as BigCalendar, DateLocalizer, dateFnsLocalizer } from 'react-big-calendar'
@@ -53,6 +53,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
     onOpen: onDisplayEventModalOpen,
     onClose: onDisplayEventModalClose,
   } = useDisclosure()
+  const toast = useToast()
   const clickRef = useRef(null)
 
   const [events, setEvents] = useState([])
@@ -108,19 +109,22 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   )
 
   const onEventDrop = async ({ event, start, end }) => {
-    const updatedAppointment = await updateAppointment(event._id, { startDate: start, endDate: end })
-
-    const updatedEvents = events.map((appointment) => {
-      if (appointment.id === updatedAppointment._id) {
-        return {
-          ...appointment,
-          start: new Date(updatedAppointment.startDate),
-          end: new Date(updatedAppointment.endDate),
+    try {
+      const updatedAppointment = await updateAppointment(event._id, { startDate: start, endDate: end })
+      const updatedEvents = events.map((appointment) => {
+        if (appointment.id === updatedAppointment._id) {
+          return {
+            ...appointment,
+            start: new Date(updatedAppointment.startDate),
+            end: new Date(updatedAppointment.endDate),
+          }
         }
-      }
-      return appointment
-    })
-    setEvents(updatedEvents)
+        return appointment
+      })
+      setEvents(updatedEvents)
+    } catch (error) {
+      toast({ description: error.message })
+    }
   }
 
   useEffect(() => {
@@ -136,20 +140,25 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
 
   useEffect(() => {
     ;(async () => {
-      const monthAppointments = await fetchMonthAppointments(selectedDate)
-      const eventsList = monthAppointments.map((event) => ({
-        ...event,
-        id: event._id,
-        title: `${event?.patient?.fullName} / ${event.title} / ${event.payment || '0'}`,
-        start: new Date(event.startDate),
-        end: new Date(event.endDate),
-      }))
-      setEvents(eventsList)
-      const monthAvailabilities = await fetchCalendarAvailabilities(selectedDate)
-      setAvailabilities(
-        monthAvailabilities.reduce((acc, item) => ({ ...acc, [formatDate(item.date)]: item.availability }), {}),
-      )
+      try {
+        const monthAppointments = await fetchMonthAppointments(selectedDate)
+        const eventsList = monthAppointments.map((event) => ({
+          ...event,
+          id: event._id,
+          title: `${event?.patient?.fullName} / ${event.title} / ${event.payment || '0'}`,
+          start: new Date(event.startDate),
+          end: new Date(event.endDate),
+        }))
+        setEvents(eventsList)
+        const monthAvailabilities = await fetchCalendarAvailabilities(selectedDate)
+        setAvailabilities(
+          monthAvailabilities.reduce((acc, item) => ({ ...acc, [formatDate(item.date)]: item.availability }), {}),
+        )
+      } catch (error) {
+        toast({ description: error.message })
+      }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedDate])
 
   return (
