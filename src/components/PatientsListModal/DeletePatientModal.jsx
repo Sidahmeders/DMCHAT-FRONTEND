@@ -9,7 +9,10 @@ import {
   ModalBody,
   ModalCloseButton,
   useToast,
+  HStack,
+  Text,
 } from '@chakra-ui/react'
+import { AlertTriangle } from 'react-feather'
 
 import { ChatState } from '@context'
 import { getPatient } from '@utils'
@@ -22,6 +25,7 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
   const toast = useToast()
 
   const [patient, setPatient] = useState({})
+  const [canDeletePatient, setCanDeletePatient] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
 
   const deletePatient = async () => {
@@ -37,9 +41,10 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
         totalCount: patientsData.totalCount - 1,
         patients: patientsData.patients.filter((item) => patient._id !== item._id),
       }))
+      setCanDeletePatient(false)
       onClose()
     } catch (error) {
-      toast()
+      toast({ description: error.message })
     }
     setIsLoading(false)
   }
@@ -56,18 +61,28 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
         <ModalCloseButton p="6" />
         <Loader loading={isLoading}>
           <ModalBody>
-            <div>
-              Nom: <span style={{ fontWeight: 'bold' }}>{patient.fullName}</span>
-            </div>
-            <div>
-              Age: <span style={{ fontWeight: 'bold' }}>{patient.age}</span>
-            </div>
+            êtes-vous sûr de vouloir supprimer <strong>{patient.fullName}</strong> / <strong>{patient.age}</strong> ans
+            <HStack color="red" mt="4">
+              <AlertTriangle />
+              <Text fontWeight="semibold">veuillez noter que cette action ne peut pas être annulée!</Text>
+            </HStack>
           </ModalBody>
           <ModalFooter>
-            <Button type="submit" colorScheme="red" mr={3} onClick={deletePatient}>
-              Supprimer patient
-            </Button>
-            <Button variant="ghost" onClick={onClose}>
+            {canDeletePatient ? (
+              <Button type="submit" colorScheme="red" mr={3} onClick={deletePatient}>
+                Confirmer la suppression
+              </Button>
+            ) : (
+              <Button colorScheme="orange" mr={3} onClick={() => setCanDeletePatient(true)}>
+                Supprimer
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              onClick={() => {
+                setCanDeletePatient(false)
+                onClose()
+              }}>
               Annuler
             </Button>
           </ModalFooter>
