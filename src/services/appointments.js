@@ -1,7 +1,5 @@
 import { formatDate } from '@utils'
-import Fetch from './_fetch'
-
-const _fetch = new Fetch()
+import _fetch from './_fetch'
 
 const fetchPatientAppointments = async (patientId) => await _fetch.GET(`/api/appointments/${patientId}`)
 

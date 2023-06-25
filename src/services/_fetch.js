@@ -3,7 +3,11 @@ import { getUser } from '@utils'
 class Fetch {
   #user
   constructor(user = getUser()) {
-    this.#user = user
+    if (!Fetch.instance) {
+      this.#user = user
+      Fetch.instance = this
+    }
+    return Fetch.instance
   }
 
   async GET(url) {
@@ -55,4 +59,6 @@ class Fetch {
   }
 }
 
-export default Fetch
+const _fetch = new Fetch()
+
+export default _fetch

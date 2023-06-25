@@ -1,6 +1,4 @@
-import Fetch from './_fetch'
-
-const _fetch = new Fetch()
+import _fetch from './_fetch'
 
 const fetchPatients = async ({ pageNumber, pageSize, searchName }) => {
   let searchQuery = [

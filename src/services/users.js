@@ -1,6 +1,4 @@
-import Fetch from './_fetch'
-
-const _fetch = new Fetch()
+import _fetch from './_fetch'
 
 const searchUsers = async (searchQuery) => await _fetch.GET(`/api/users?search=${searchQuery}`)
 

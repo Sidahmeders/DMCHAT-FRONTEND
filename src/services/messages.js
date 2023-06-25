@@ -1,6 +1,4 @@
-import Fetch from './_fetch'
-
-const _fetch = new Fetch()
+import _fetch from './_fetch'
 
 const createMessage = async (newMessage, chatId) => {
   return await _fetch.POST('/api/messages', {
