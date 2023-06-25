@@ -7,7 +7,14 @@ import AddAppointmentBody from './AddAppointmentBody'
 import EditableButtons from '../EditableButtons/EditableButtons'
 import ConfigureCalendarAvailabilityBody from './ConfigureCalendarAvailabilityBody'
 
-export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose, events, setEvents }) {
+export default function AddAppointmentModal({
+  selectedSlotInfo,
+  isOpen,
+  onClose,
+  events,
+  setEvents,
+  setAvailabilities,
+}) {
   const [templateButtons, setTemplateButtons] = useState(getMotifTemplateButtons())
 
   return (
@@ -41,7 +48,11 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
               />
             </TabPanel>
             <TabPanel>
-              <ConfigureCalendarAvailabilityBody selectedSlotInfo={selectedSlotInfo} handleClose={onClose} />
+              <ConfigureCalendarAvailabilityBody
+                selectedSlotInfo={selectedSlotInfo}
+                setAvailabilities={setAvailabilities}
+                handleClose={onClose}
+              />
             </TabPanel>
           </TabPanels>
         </Tabs>

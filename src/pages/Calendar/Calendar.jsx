@@ -169,6 +169,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         onClose={onAddAppointmentModalClose}
         events={events}
         setEvents={setEvents}
+        setAvailabilities={setAvailabilities}
       />
       <DisplayEventModal
         isOpen={isDisplayEventModalOpen}

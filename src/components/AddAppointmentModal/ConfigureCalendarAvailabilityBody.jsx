@@ -1,28 +1,35 @@
 import { useState } from 'react'
-import { ModalBody, ModalFooter, Stack, RadioGroup, Radio, Button } from '@chakra-ui/react'
+import { ModalBody, ModalFooter, Stack, RadioGroup, Radio, Button, useToast } from '@chakra-ui/react'
 
 import { CALENDAR_DAY_AVAILABILITY } from '@config'
 import { setCalendarAvailability } from '@services/calendar'
 
 import Loader from '../Loader/Loader'
+import { formatDate } from '@utils'
 
-export default function ConfigureCalendarAvailabilityBody({ selectedSlotInfo, handleClose }) {
+export default function ConfigureCalendarAvailabilityBody({ selectedSlotInfo, setAvailabilities, handleClose }) {
+  const toast = useToast()
   const [availability, setAvailability] = useState(CALENDAR_DAY_AVAILABILITY.EMPTY)
   const [isLoading, setIsLoading] = useState(false)
   const { start, slots, action } = selectedSlotInfo
 
   const handleCalendarAvailability = async () => {
     setIsLoading(true)
-    if (action === 'click') {
-      await setCalendarAvailability(start, availability)
-    } else if (action === 'select') {
-      await slots.reduce(async (prevPromise, slot) => {
-        await prevPromise
-        await setCalendarAvailability(slot, availability)
-      }, Promise.resolve())
+    try {
+      if (action === 'click') {
+        const { date, availability: dayAvailability } = await setCalendarAvailability(start, availability)
+        setAvailabilities((prevAvailabilities) => ({ ...prevAvailabilities, [formatDate(date)]: dayAvailability }))
+      } else if (action === 'select') {
+        await slots.reduce(async (prevPromise, slot) => {
+          await prevPromise
+          const { date, availability: dayAvailability } = await setCalendarAvailability(slot, availability)
+          setAvailabilities((prevAvailabilities) => ({ ...prevAvailabilities, [formatDate(date)]: dayAvailability }))
+        }, Promise.resolve())
+      }
+    } catch (error) {
+      toast({ description: error.message })
     }
     setIsLoading(false)
-    handleClose()
   }
 
   return (
