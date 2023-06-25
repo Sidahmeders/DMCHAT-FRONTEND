@@ -133,7 +133,7 @@ const SingleChat = () => {
             flexDir="column"
             justifyContent="flex-end"
             p={3}
-            bg="#E8E8E8"
+            bg="gray.100"
             w="100%"
             h="100%"
             borderRadius="lg"
@@ -156,7 +156,7 @@ const SingleChat = () => {
               <InputGroup>
                 <Input
                   variant="filled"
-                  bg="#E0E0E0"
+                  bg="gray.300"
                   placeholder="entrer des messages.."
                   value={newMessage}
                   onChange={(e) => typingHandler(e)}

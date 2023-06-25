@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { Box, HStack, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
+import { Avatar, Box, HStack, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
 
 import { ChatState } from '@context'
-import { getSender, getUser } from '@utils'
+import { formatDate, getSender, getSenderFull, getUser } from '@utils'
 import { fetchUserChats } from '@services/chats'
 
 import SearchUserDrawer from '@components/SearchUserDrawer'
@@ -49,19 +49,36 @@ const MyChats = () => {
       <Box display="flex" flexDir="column" p="4" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
         <Stack overflowY="scroll">
           {chats.length &&
-            chats.map((chat) => (
-              <Box
-                onClick={() => setSelectedChat(chat)}
-                cursor="pointer"
-                bg={selectedChat?._id === chat._id ? '#38B2AC' : '#E8E8E8'}
-                color={selectedChat?._id === chat._id ? 'white' : 'black'}
-                px={3}
-                py={2}
-                borderRadius="lg"
-                key={chat._id}>
-                <Text>{!chat.isGroupChat ? getSender(loggedUser, chat.users) : chat.chatName}</Text>
-              </Box>
-            ))}
+            chats.map((chat) => {
+              const sender = getSender(loggedUser, chat.users)
+              const { pic } = getSenderFull(loggedUser, chat.users)
+
+              return (
+                <Box
+                  onClick={() => setSelectedChat(chat)}
+                  cursor="pointer"
+                  bg={selectedChat?._id === chat._id ? '#47f9' : 'gray.100'}
+                  color={selectedChat?._id === chat._id ? 'white' : 'black'}
+                  position="relative"
+                  px="3"
+                  py="2"
+                  borderRadius="lg"
+                  key={chat._id}>
+                  <HStack gap="2">
+                    <Avatar src={!chat.isGroupChat && pic} name={chat.chatName} />
+                    <Stack>
+                      <Text>{!chat.isGroupChat ? sender : chat.chatName}</Text>
+                      <Text fontSize="small" color={selectedChat?._id === chat._id ? 'white' : 'blue.500'}>
+                        {String(chat.latestMessage.content).slice(0, 35)}
+                      </Text>
+                      <Text fontSize="sm" position="absolute" right="0.75rem" top="-1">
+                        {formatDate(chat.latestMessage.updatedAt, 'hh:mm')}
+                      </Text>
+                    </Stack>
+                  </HStack>
+                </Box>
+              )
+            })}
         </Stack>
       </Box>
     </Box>
