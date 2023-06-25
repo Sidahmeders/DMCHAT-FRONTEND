@@ -17,8 +17,8 @@ class Fetch {
         Authorization: `Bearer ${this.#user.token}`,
       },
     })
-
-    return await response.json()
+    const { data } = await response.json()
+    return data
   }
 
   async POST(url, body) {
@@ -30,8 +30,8 @@ class Fetch {
       },
       body: JSON.stringify(body),
     })
-
-    return await response.json()
+    const { data } = await response.json()
+    return data
   }
 
   async PUT(url, body) {
@@ -43,8 +43,8 @@ class Fetch {
       },
       body: JSON.stringify(body),
     })
-
-    return await response.json()
+    const { data } = await response.json()
+    return data
   }
 
   async DELETE(url) {

@@ -60,7 +60,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
         </ModalHeader>
         <ModalCloseButton p="6" />
         <ModalBody className="patient-followups-modal-body">
-          {appointments.length && (
+          {appointments.length ? (
             <Loader loading={isLoading}>
               {appointments
                 .reduce((prevAppointments, appointment) => {
@@ -79,7 +79,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
                   />
                 ))}
             </Loader>
-          )}
+          ) : null}
         </ModalBody>
       </ModalContent>
     </Modal>
