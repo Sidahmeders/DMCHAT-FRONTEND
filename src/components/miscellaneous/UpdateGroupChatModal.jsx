@@ -27,7 +27,7 @@ import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem'
 import DeleteChatModal from './DeleteChatModal'
 
-const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages, sender, chatId, setMessages }) => {
+const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, setMessages }) => {
   const [groupChatName, setGroupChatName] = useState('')
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState([])
@@ -52,8 +52,8 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages, sender
       const data = await leaveGroup(selectedChat._id, removeUser)
       // If logged in user removed himself or left the group
       removeUser._id === user._id ? setSelectedChat() : setSelectedChat(data)
-      setFetchAgain(!fetchAgain) // Fetching all the chat again
-      fetchMessages() // All the messages will be refreshed
+      setFetchAgain((prevState) => !prevState)
+      fetchMessages()
       setLoading(false)
     } catch (error) {
       toast({ description: 'Failed to remove the user!' })
@@ -82,7 +82,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages, sender
       setLoading(true)
       const data = await joinGroup(selectedChat._id, addUser)
       setSelectedChat(data)
-      setFetchAgain(!fetchAgain) // Fetching all the chat again
+      setFetchAgain((prevState) => !prevState)
       setLoading(false)
     } catch (error) {
       toast({ description: 'Failed to add the user!' })
@@ -96,7 +96,7 @@ const UpdateGroupChatModal = ({ fetchAgain, setFetchAgain, fetchMessages, sender
       setRenameLoading(true)
       const data = await removeGroup(selectedChat._id, groupChatName)
       setSelectedChat(data)
-      setFetchAgain(!fetchAgain) // Fetching all the chat again
+      setFetchAgain((prevState) => !prevState)
       setRenameLoading(false)
     } catch (error) {
       toast({ description: 'Failed to rename group chat!' })

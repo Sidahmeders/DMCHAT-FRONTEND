@@ -43,7 +43,6 @@ export const ChatProvider = ({ children, socket }) => {
 
     setUser(userInfo)
     fetchMessages()
-
     return () => {
       setSelectedChatCompare(undefined)
     }

@@ -52,6 +52,7 @@ const UserChats = () => {
             chats.map((chat) => {
               const sender = getSender(loggedUser, chat.users)
               const { pic } = getSenderFull(loggedUser, chat.users)
+              const { content, updatedAt } = chat?.latestMessage || {}
 
               return (
                 <Box
@@ -69,11 +70,11 @@ const UserChats = () => {
                     <Box pt="2">
                       <Text>{!chat.isGroupChat ? sender : chat.chatName}</Text>
                       <Text fontSize="small" color={selectedChat?._id === chat._id ? 'white' : 'blue.500'}>
-                        {String(chat.latestMessage.content).slice(0, 35)}
+                        {content && content.slice(0, 35)}
                       </Text>
                     </Box>
-                    <Text fontSize="sm" position="absolute" right="0.75rem" top="1">
-                      {formatDate(chat.latestMessage.updatedAt, 'E hh:mm')}
+                    <Text fontSize="small" position="absolute" right="0.75rem" top="1">
+                      {updatedAt && formatDate(updatedAt, 'E hh:mm')}
                     </Text>
                   </HStack>
                 </Box>

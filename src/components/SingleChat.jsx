@@ -36,7 +36,6 @@ const SingleChat = () => {
     setMessages,
     fetchMessages,
     isLoadingMessages,
-    fetchAgain,
     setFetchAgain,
     socketConnected,
   } = ChatState()
@@ -44,14 +43,13 @@ const SingleChat = () => {
   const sendMessage = async (e) => {
     if (newMessage.trim().length < 1) return
     if (e.key !== 'Enter' && e.type !== 'click') return
-
-    socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
-
     try {
+      socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
+      setNewMessage('')
       const createdMessage = await createMessage(newMessage, selectedChat._id)
       socket.emit(CHAT_EVENTS.NEW_MESSAGE, createdMessage)
-      setNewMessage('')
       setMessages([...messages, createdMessage])
+      setFetchAgain((prevState) => !prevState)
     } catch (error) {
       toast()
     }
@@ -117,7 +115,6 @@ const SingleChat = () => {
               <>
                 {selectedChat.chatName.toUpperCase()}
                 <UpdateGroupChatModal
-                  fetchAgain={fetchAgain}
                   setFetchAgain={setFetchAgain}
                   fetchMessages={fetchMessages}
                   chatId={selectedChat._id}

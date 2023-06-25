@@ -18,7 +18,6 @@ const App = () => {
     user,
     socket,
     selectedChatCompare,
-    fetchAgain,
     setFetchAgain,
     messages,
     setMessages,
@@ -27,12 +26,12 @@ const App = () => {
     setSocketConnected,
   } = ChatState()
   const toast = useToast()
-  const navigation = useNavigate()
+  const navigate = useNavigate()
 
   if (user && user.token) {
     if (checkIsJWTExpired(user.token)) {
       removeUser()
-      navigation('/')
+      navigate('/')
     }
   }
 
@@ -92,7 +91,7 @@ const App = () => {
         if (!isSenderNotificationFound) {
           const newNotification = { ...messageRecieved, notificationSender }
           setNotifications([newNotification, ...notifications])
-          setFetchAgain(!fetchAgain) // fetch all the chats again
+          setFetchAgain((prevState) => !prevState)
         }
       } else {
         setMessages([...messages, messageRecieved])
