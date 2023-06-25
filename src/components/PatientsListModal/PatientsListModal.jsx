@@ -81,7 +81,7 @@ export default function PatientListModal() {
     return (
       <HStack width="100%">
         <SearchBar onFilter={handleFilter} onClear={handleClear} filterText={filterText} />
-        <AddPatientModal />
+        <AddPatientModal setPatientsData={setPatientsData} />
       </HStack>
     )
   }, [filterText, resetPaginationToggle])
@@ -123,7 +123,6 @@ export default function PatientListModal() {
             <DeletePatientModal
               isOpen={isDeleteModalOpen}
               onClose={onDeleteModalClose}
-              patientsData={patientsData}
               setPatientsData={setPatientsData}
             />
           </ModalBody>

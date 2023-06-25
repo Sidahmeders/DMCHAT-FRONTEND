@@ -17,7 +17,7 @@ import { deletePatientById } from '@services/patients'
 
 import Loader from '../Loader/Loader'
 
-export default function DeletePatientModal({ isOpen, onClose, patientsData, setPatientsData }) {
+export default function DeletePatientModal({ isOpen, onClose, setPatientsData }) {
   const { user } = ChatState()
   const toast = useToast()
 
@@ -32,11 +32,11 @@ export default function DeletePatientModal({ isOpen, onClose, patientsData, setP
         title: `${patient.fullName} / ${patient.age} ans a été supprimé avec succès`,
         status: 'warning',
       })
-      setPatientsData({
+      setPatientsData((patientsData) => ({
         ...patientsData,
         totalCount: patientsData.totalCount - 1,
         patients: patientsData.patients.filter((item) => patient._id !== item._id),
-      })
+      }))
       onClose()
     } catch (error) {
       toast()

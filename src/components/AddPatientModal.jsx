@@ -22,19 +22,25 @@ import { createPatient } from '@services/patients'
 
 const initialValues = Object.values(CREATE_PATIENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
 
-export default function AddPatientModal() {
+export default function AddPatientModal({ setPatientsData }) {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
   const {
     handleSubmit,
     control,
+    reset,
     formState: { isSubmitted },
   } = useForm({ defaultValues: initialValues })
 
   const onSubmit = async (data) => {
     try {
       await createPatient(data)
+      setPatientsData((patientsData) => ({
+        ...patientsData,
+        totalCount: patientsData.totalCount + 1,
+      }))
       toast({ title: 'nouveau patient créé avec succès', status: 'success' })
+      reset(initialValues)
       onClose()
     } catch (error) {
       toast()
@@ -43,14 +49,7 @@ export default function AddPatientModal() {
 
   return (
     <>
-      <Button
-        _hover={{
-          backgroundColor: '#6568f8',
-        }}
-        p="6"
-        bg="#474aff"
-        color="#fff"
-        onClick={onOpen}>
+      <Button p="6" bg="#474aff" color="#fff" _hover={{ backgroundColor: '#6568f8' }} onClick={onOpen}>
         Créer patient
       </Button>
 

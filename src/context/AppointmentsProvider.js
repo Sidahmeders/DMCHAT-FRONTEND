@@ -15,7 +15,7 @@ export const AppointmentsProvider = ({ children }) => {
   })
 
   const fetchTodayAppointments = async () => {
-    const todayAppointments = await fetchDayAppointments(new Date('2023-06-07'))
+    const todayAppointments = await fetchDayAppointments(new Date())
 
     const { expected, awaitingRoom, inProgress, doneList } = todayAppointments.reduce(
       (prev, appointment) => {
