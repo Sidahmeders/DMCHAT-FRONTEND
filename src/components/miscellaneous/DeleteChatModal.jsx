@@ -69,7 +69,7 @@ const DeleteChatModal = ({ sender, chatId, setMessages }) => {
               </Button>
             ) : (
               <Button colorScheme="red" mr="4" onClick={deleteChatMessages}>
-                Confirmer la suppression
+                Supprimer définitivement
               </Button>
             )}
             <Button onClick={cancelDeleteMessage}>Annuler</Button>

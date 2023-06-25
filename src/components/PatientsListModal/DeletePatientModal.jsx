@@ -70,7 +70,7 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
           <ModalFooter>
             {canDeletePatient ? (
               <Button type="submit" colorScheme="red" mr={3} onClick={deletePatient}>
-                Confirmer la suppression
+                Supprimer définitivement
               </Button>
             ) : (
               <Button colorScheme="orange" mr={3} onClick={() => setCanDeletePatient(true)}>

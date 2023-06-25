@@ -8,19 +8,18 @@ import { registerLocale } from 'react-datepicker'
 import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
-import { getUser, formatDate } from '@utils'
+import { formatDate } from '@utils'
 import { AVAILABILITY_BG_COLORS } from '@config'
 import { fetchMonthAppointments, updateAppointment } from '@services/appointments'
 import { fetchCalendarAvailabilities } from '@services/calendar'
 
 import AddAppointmentModal from '@components/AddAppointmentModal/AddAppointmentModal'
-import DisplayEventModal from './DisplayEventModal'
+import DisplayEventModal from '@components/DisplayEventModal'
 import CustomToolbar from './CustomToolbar'
 import CustomAgenda from './CustomAgenda'
 
 import './Calendar.scss'
 
-const user = getUser()
 const DnDCalendar = withDragAndDrop(BigCalendar)
 
 const messages = {
@@ -136,7 +135,6 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   }, [])
 
   useEffect(() => {
-    if (!user) return
     ;(async () => {
       const monthAppointments = await fetchMonthAppointments(selectedDate)
       const eventsList = monthAppointments.map((event) => ({
@@ -164,11 +162,9 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         setEvents={setEvents}
       />
       <DisplayEventModal
-        user={user}
         isOpen={isDisplayEventModalOpen}
         onClose={onDisplayEventModalClose}
         selectedEvent={selectedEvent}
-        events={events}
         setEvents={setEvents}
       />
 
