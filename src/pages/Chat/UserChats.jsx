@@ -9,7 +9,7 @@ import SearchUserDrawer from '@components/SearchUserDrawer'
 import GroupChatModal from '@components/miscellaneous/GroupChatModal'
 import LogoutButton from '@components/miscellaneous/LogoutButton'
 
-const MyChats = () => {
+const UserChats = () => {
   const toast = useToast()
   const { onClose } = useDisclosure()
   const { selectedChat, setSelectedChat, chats, setChats, fetchAgain } = ChatState()
@@ -66,15 +66,15 @@ const MyChats = () => {
                   key={chat._id}>
                   <HStack gap="2">
                     <Avatar src={!chat.isGroupChat && pic} name={chat.chatName} />
-                    <Stack>
+                    <Box pt="2">
                       <Text>{!chat.isGroupChat ? sender : chat.chatName}</Text>
                       <Text fontSize="small" color={selectedChat?._id === chat._id ? 'white' : 'blue.500'}>
                         {String(chat.latestMessage.content).slice(0, 35)}
                       </Text>
-                      <Text fontSize="sm" position="absolute" right="0.75rem" top="-1">
-                        {formatDate(chat.latestMessage.updatedAt, 'hh:mm')}
-                      </Text>
-                    </Stack>
+                    </Box>
+                    <Text fontSize="sm" position="absolute" right="0.75rem" top="1">
+                      {formatDate(chat.latestMessage.updatedAt, 'E hh:mm')}
+                    </Text>
                   </HStack>
                 </Box>
               )
@@ -85,4 +85,4 @@ const MyChats = () => {
   )
 }
 
-export default MyChats
+export default UserChats

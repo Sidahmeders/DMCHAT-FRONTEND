@@ -1,4 +1,5 @@
 import { format, isValid, parseISO } from 'date-fns'
+import { fr } from 'date-fns/locale'
 
 /**
  * Formats a date input into the specified format using the date-fns library.
@@ -11,7 +12,7 @@ import { format, isValid, parseISO } from 'date-fns'
 export const formatDate = (date, dateFormat = 'yyyy-MM-dd') => {
   try {
     if (isValid(date)) {
-      return format(date, dateFormat)
+      return format(date, dateFormat, { locale: fr })
     }
 
     const parsedDate = parseISO(date)
@@ -19,7 +20,7 @@ export const formatDate = (date, dateFormat = 'yyyy-MM-dd') => {
       throw new Error('Invalid date')
     }
 
-    return format(parsedDate, dateFormat)
+    return format(parsedDate, dateFormat, { locale: fr })
   } catch (error) {
     console.error('Error formatting date:', error.message)
     return null

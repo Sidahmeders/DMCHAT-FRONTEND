@@ -3,7 +3,7 @@ import { Box } from '@chakra-ui/react'
 import { ChatState } from '@context'
 
 import ChatBox from './ChatBox'
-import MyChats from './MyChats'
+import UserChats from './UserChats'
 
 export default function Chat() {
   const { user } = ChatState()
@@ -12,7 +12,7 @@ export default function Chat() {
     <>
       {user && (
         <Box display="flex" justifyContent="space-between" w="100%" mt="16" h="90vh" p="1rem" pb="0">
-          <MyChats />
+          <UserChats />
           <ChatBox />
         </Box>
       )}
