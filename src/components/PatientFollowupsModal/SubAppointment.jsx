@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react'
-import { format, parseISO } from 'date-fns'
 import { Button } from '@chakra-ui/react'
 import { X } from 'react-feather'
 
+import { formatDate } from '@utils'
 import { CREATE_APPOINTMENT_NAMES } from '@config'
 
 const SubAppointment = ({ appointment, onInputEditHandler, treatmentUpdate, setTreatmentUpdate }) => {
-  const { _id, title, payment, createdAt, isDone } = appointment
+  const { _id, title, payment, startDate, isDone } = appointment
   const [canShowResetBtn, setCanShowResetBtn] = useState(false)
   const titleRef = useRef(title)
   const paymentRef = useRef(payment || '0')
@@ -46,7 +46,7 @@ const SubAppointment = ({ appointment, onInputEditHandler, treatmentUpdate, setT
         {payment || '0'}
       </td>
       <td>{isDone ? 'Oui' : 'No'}</td>
-      <td>{format(parseISO(createdAt), 'yyyy-MM-dd')}</td>
+      <td>{formatDate(startDate)}</td>
       {canShowResetBtn && (
         <td style={{ padding: '0', width: '35px' }}>
           <Button variant="ghost" p="0" onClick={resetContentEditable}>

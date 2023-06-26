@@ -7,10 +7,11 @@ import {
   AccordionPanel,
   AccordionIcon,
   useToast,
+  Textarea,
 } from '@chakra-ui/react'
-import { format, parseISO } from 'date-fns'
 import { X } from 'react-feather'
 
+import { formatDate } from '@utils'
 import { CREATE_APPOINTMENT_NAMES } from '@config'
 import { updateAppointmentsHistory } from '@services/appointments'
 
@@ -23,7 +24,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
   const paymentLeft = baseAppointment.totalPrice - totalPayments || '0'
   const doneAppointments = appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)
 
-  const [treatmentUpdate, setTreatmentUpdate] = useState({})
+  const [treatmentUpdate, setTreatmentUpdate] = useState({ [baseAppointment._id]: baseAppointment })
   const [canShowSaveBtn, setCanShowSaveBtn] = useState(false)
   const [canShowResetBtn, setCanShowResetBtn] = useState(false)
   const [canShowConfirmUpdate, setCanShowConfirmUpdate] = useState(false)
@@ -33,14 +34,15 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
   const baseTotalPriceRef = useRef(baseAppointment.totalPrice)
 
   const onInputEditHandler = (e, appointmentId, name) => {
-    setCanShowSaveBtn(true)
+    const { value, innerText } = e.target
     setTreatmentUpdate({
       ...treatmentUpdate,
       [appointmentId]: {
         ...treatmentUpdate[appointmentId],
-        [name]: e.target.innerText,
+        [name]: value || innerText,
       },
     })
+    setCanShowSaveBtn(true)
   }
 
   const saveUpdateHandler = async () => {
@@ -76,7 +78,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
   const cancelUpdateHandler = () => {
     setCanShowSaveBtn(false)
     setCanShowConfirmUpdate(false)
-    setTreatmentUpdate({})
+    setTreatmentUpdate({ [baseAppointment._id]: baseAppointment })
   }
 
   const resetContentEditable = () => {
@@ -109,8 +111,12 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
               Diagnostic
               <AccordionIcon ml="auto" />
             </AccordionButton>
-            <AccordionPanel>
-              <span style={{ whiteSpace: 'pre-line' }}>{baseAppointment.diagnostic}</span>
+            <AccordionPanel p="0">
+              <Textarea
+                border="none"
+                value={treatmentUpdate[baseAppointment._id]?.[CREATE_APPOINTMENT_NAMES.DIAGNOSTIC]}
+                onChange={(e) => onInputEditHandler(e, baseAppointment._id, CREATE_APPOINTMENT_NAMES.DIAGNOSTIC)}
+              />
             </AccordionPanel>
           </AccordionItem>
 
@@ -119,8 +125,12 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
               Plan de traitement
               <AccordionIcon ml="auto" />
             </AccordionButton>
-            <AccordionPanel>
-              <span style={{ whiteSpace: 'pre-line' }}>{baseAppointment.treatmentPlan}</span>
+            <AccordionPanel p="0">
+              <Textarea
+                border="none"
+                value={treatmentUpdate[baseAppointment._id]?.[CREATE_APPOINTMENT_NAMES.TREATMENT_PLAN]}
+                onChange={(e) => onInputEditHandler(e, baseAppointment._id, CREATE_APPOINTMENT_NAMES.TREATMENT_PLAN)}
+              />
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
@@ -130,7 +140,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
           <th>acte</th>
           <th>versement / prix-total</th>
           <th>est fini</th>
-          <th>date de création</th>
+          <th>rendez-vous date</th>
         </tr>
       </thead>
       <tbody>
@@ -173,7 +183,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
           <th>
             {doneAppointments} / {appointmentsGroup.length}
           </th>
-          <th>{format(parseISO(baseAppointment.createdAt), 'yyyy-MM-dd')}</th>
+          <th>{formatDate(baseAppointment.startDate)}</th>
           {canShowResetBtn && (
             <th style={{ padding: '0', width: '35px' }}>
               <Button variant="ghost" p="0" onClick={resetContentEditable}>
