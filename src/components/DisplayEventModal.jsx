@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Info, FileMinus, FilePlus, FileText, Phone, CheckCircle, MinusCircle } from 'react-feather'
+import { Info, FileMinus, FilePlus, Clipboard, Phone, CheckCircle, MinusCircle } from 'react-feather'
 import {
   Modal,
   ModalContent,
@@ -140,7 +140,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
               <HStack>
                 <InputGroup>
                   <Textarea value={patient.generalState} readOnly />
-                  <InputRightElement children={<FileText color="#9996" />} />
+                  <InputRightElement children={<Clipboard color="#9996" />} />
                 </InputGroup>
               </HStack>
             </Stack>

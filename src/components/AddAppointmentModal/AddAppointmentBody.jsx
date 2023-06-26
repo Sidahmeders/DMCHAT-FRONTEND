@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { AlertCircle, CheckCircle, FileText, File, DollarSign } from 'react-feather'
+import { AlertCircle, CheckCircle, FileMinus, FilePlus, DollarSign } from 'react-feather'
 import {
   ModalBody,
   ModalFooter,
@@ -279,7 +279,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
-                      <InputLeftElement pointerEvents="none" children={<File size="1.25rem" color="gray" />} />
+                      <InputLeftElement pointerEvents="none" children={<FileMinus size="1.25rem" color="gray" />} />
                       <Textarea pl="10" placeholder="Diagnostique" value={value} onChange={onChange} />
                     </InputGroup>
                   )}
@@ -291,7 +291,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
-                      <InputLeftElement pointerEvents="none" children={<FileText size="1.25rem" color="gray" />} />
+                      <InputLeftElement pointerEvents="none" children={<FilePlus size="1.25rem" color="gray" />} />
                       <Textarea pl="10" placeholder="Plan de traitement" value={value} onChange={onChange} />
                     </InputGroup>
                   )}

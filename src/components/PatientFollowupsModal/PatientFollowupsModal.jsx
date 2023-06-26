@@ -8,6 +8,7 @@ import {
   ModalOverlay,
   Box,
   useToast,
+  Button,
 } from '@chakra-ui/react'
 import { ChevronDown, ChevronUp } from 'react-feather'
 
@@ -52,11 +53,11 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
             <span style={{ paddingRight: '1rem' }}>
               {patient.fullName} / {patient.age} ans
             </span>
-            <button className="toggle-edit-patient" onClick={() => setIsEditPatientOpen(!isEditPatientOpen)}>
+            <Button variant="ghost" height="8" mt="0.5" px="3" onClick={() => setIsEditPatientOpen(!isEditPatientOpen)}>
               {isEditPatientOpen ? <ChevronUp /> : <ChevronDown />}
-            </button>
+            </Button>
           </Box>
-          {isEditPatientOpen ? <PatientEditBody patient={patient} setIsEditPatientOpen={setIsEditPatientOpen} /> : null}
+          {isEditPatientOpen ? <PatientEditBody onClose={() => setIsEditPatientOpen(false)} /> : null}
         </ModalHeader>
         <ModalCloseButton p="6" />
         <ModalBody className="patient-followups-modal-body">
