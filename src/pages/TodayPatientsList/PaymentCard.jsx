@@ -69,13 +69,15 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
 
   useEffect(() => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_PAID, (payload) => {
-      const { patient, totalPrice, payment, paymentLeft } = payload || {}
-      setAppointmentData(payload)
-      setTotalPriceVal(totalPrice)
-      setPaymentVal(payment)
-      setPaymentLeftVal(paymentLeft)
-      const description = `${patient.fullName} V: ${payment} / R: ${paymentLeft}`
-      notify({ title: 'Transaction Effectué!', description })
+      if (payload._id === appointment._id) {
+        const { patient, totalPrice, payment, paymentLeft } = payload || {}
+        setAppointmentData(payload)
+        setTotalPriceVal(totalPrice)
+        setPaymentVal(payment)
+        setPaymentLeftVal(paymentLeft)
+        const description = `${patient.fullName} V: ${payment} / R: ${paymentLeft}`
+        notify({ title: 'Transaction Effectué!', description })
+      }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
