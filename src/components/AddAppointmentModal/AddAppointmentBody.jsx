@@ -18,17 +18,16 @@ import {
   GridItem,
   HStack,
 } from '@chakra-ui/react'
-
 import Select from 'react-select'
 
 import { ChatState } from '@context'
 import { CREATE_APPOINTMENT_NAMES } from '@config'
 import { getMotifTemplateButtons } from '@utils'
 import { createAppointment, relateAppointment } from '@services/appointments'
-
-import Loader from '../Loader/Loader'
-import PatientHistory from './PatientHistory'
 import { fetchPatients } from '@services/patients'
+
+import Loader from '@components/Loader/Loader'
+import PatientHistory from './PatientHistory'
 
 const resolvePatientOptions = (patients) => {
   return patients.map(({ _id, fullName, age }) => ({
@@ -44,13 +43,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const toast = useToast()
   const { start, end } = selectedSlotInfo
   const motifRadioOptions = getMotifTemplateButtons()
-  const {
-    handleSubmit,
-    control,
-    reset,
-    getValues,
-    formState: { isSubmitted },
-  } = useForm({ defaultValues: initialValues })
+  const { handleSubmit, control, reset, getValues } = useForm({ defaultValues: initialValues })
 
   const [matchedPatients, setMatchedPatients] = useState([])
   const [patientOptions, setPatientOptions] = useState([])
@@ -62,7 +55,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
   const [radioValue, setRadioValue] = useState('')
   const [baseAppointmentRadioValue, setBaseAppointmentRadioValue] = useState()
 
-  const onSubmit = async (data) => {
+  const submitAppointment = async (data) => {
     if (!user) return
     setIsLoading(true)
 
@@ -108,14 +101,18 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       })
       handleClose()
     } catch (error) {
-      toast()
+      toast({ description: error.message })
     }
+    reset(initialValues)
     setIsLoading(false)
   }
 
-  useEffect(() => {
-    reset({})
-  }, [isSubmitted, reset])
+  const onError = () => {
+    toast({
+      title: 'erreur de validation',
+      description: 'Veuillez remplir tous les champs obligatoires',
+    })
+  }
 
   useEffect(() => {
     if (!isMounted && searchName.trim().length >= 2) {
@@ -136,14 +133,13 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
 
   return (
     <Loader loading={isLoading}>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={handleSubmit(submitAppointment, onError)}>
         <ModalBody>
           <Stack spacing={4}>
             <Controller
               control={control}
               name={CREATE_APPOINTMENT_NAMES.FULL_NAME}
               rules={{ required: true }}
-              shouldUnregister={isSubmitted}
               render={({ field: { onChange, value } }) => (
                 <Select
                   placeholder="Nom du patient..."
@@ -168,7 +164,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
             <Controller
               control={control}
               name={CREATE_APPOINTMENT_NAMES.MOTIF}
-              shouldUnregister={isSubmitted}
+              rules={{ required: true }}
               render={({ field: { onChange, value } }) => (
                 <InputGroup>
                   <InputLeftElement
@@ -208,7 +204,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               control={control}
               name={CREATE_APPOINTMENT_NAMES.TITLE}
               rules={{ required: true }}
-              shouldUnregister={isSubmitted}
               render={({ field: { onChange, value } }) => (
                 <InputGroup>
                   <InputLeftElement
@@ -242,18 +237,10 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               <Controller
                 control={control}
                 name={CREATE_APPOINTMENT_NAMES.PAYMENT}
-                shouldUnregister={isSubmitted}
                 render={({ field: { onChange, value } }) => (
                   <InputGroup>
                     <InputLeftElement pointerEvents="none" children={<DollarSign size="1.25rem" color="gray" />} />
-                    <Input
-                      type="number"
-                      min={0}
-                      step={1000}
-                      placeholder="versement"
-                      value={value}
-                      onChange={onChange}
-                    />
+                    <Input type="number" min={0} step={500} placeholder="versement" value={value} onChange={onChange} />
                   </InputGroup>
                 )}
               />
@@ -276,7 +263,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                 <Controller
                   control={control}
                   name={CREATE_APPOINTMENT_NAMES.DIAGNOSTIC}
-                  shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
                       <InputLeftElement pointerEvents="none" children={<FileMinus size="1.25rem" color="gray" />} />
@@ -288,7 +274,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                 <Controller
                   control={control}
                   name={CREATE_APPOINTMENT_NAMES.TREATMENT_PLAN}
-                  shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
                       <InputLeftElement pointerEvents="none" children={<FilePlus size="1.25rem" color="gray" />} />
@@ -302,7 +287,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                     <Controller
                       control={control}
                       name={CREATE_APPOINTMENT_NAMES.TOTAL_PRICE}
-                      shouldUnregister={isSubmitted}
+                      defaultValue={0}
                       render={({ field: { onChange, value } }) => (
                         <InputGroup>
                           <InputLeftElement
@@ -312,7 +297,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                           <Input
                             type="number"
                             min={0}
-                            step={1000}
+                            step={500}
                             placeholder="Prix total"
                             value={value}
                             onChange={onChange}
@@ -325,7 +310,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                     <Controller
                       control={control}
                       name={CREATE_APPOINTMENT_NAMES.PAYMENT}
-                      shouldUnregister={isSubmitted}
                       render={({ field: { onChange, value } }) => (
                         <InputGroup>
                           <InputLeftElement
@@ -335,7 +319,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                           <Input
                             type="number"
                             min={0}
-                            step={1000}
+                            step={500}
                             placeholder="versement"
                             value={value}
                             onChange={onChange}

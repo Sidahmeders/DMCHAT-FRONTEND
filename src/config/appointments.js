@@ -7,6 +7,5 @@ export const CREATE_APPOINTMENT_NAMES = {
   TOTAL_PRICE: 'totalPrice',
   PAYMENT: 'payment',
   PAYMENT_LEFT: 'paymentLeft',
-  IS_NEW_TREATMENT: 'isNewTreatment',
   BASE_APPOINTMENT_ID: 'baseAppointmentId',
 }
