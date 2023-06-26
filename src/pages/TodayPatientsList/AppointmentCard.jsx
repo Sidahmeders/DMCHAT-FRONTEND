@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useDisclosure, IconButton, Button, Box, Flex, Heading, Stack, Skeleton, useToast } from '@chakra-ui/react'
+import { useDisclosure, IconButton, Box, Flex, Heading, Stack, Skeleton, useToast } from '@chakra-ui/react'
 import { Card, CardHeader } from '@chakra-ui/card'
 import { ChevronDown, ChevronUp, Edit2 } from 'react-feather'
 import { isBoolean } from 'lodash'
@@ -66,6 +66,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
   }
 
   const handleOpenEditPatient = async () => {
+    setIsLoading(true)
     try {
       onPatientFollowupsModalOpen()
       const patientData = await fetchPatientById(appointment.patientId)
@@ -73,6 +74,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     } catch (error) {
       toast({ error: error.message })
     }
+    setIsLoading(false)
   }
 
   useEffect(() => {
@@ -109,22 +111,16 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
                   {fullName} ~ {motif}
                 </Heading>
               </Box>
-              {withPresence && <Button variant="ghost" leftIcon={isLeft ? 'A' : 'P'} onClick={handlePresence}></Button>}
+              {withPresence && (
+                <IconButton variant="ghost" p="0" icon={<>{isLeft ? 'A' : 'P'}</>} onClick={handlePresence} />
+              )}
               {withConfirm && (
-                <Button variant="ghost" leftIcon={isConfirmed ? 'C' : 'NC'} onClick={handleConfirmation}></Button>
+                <IconButton variant="ghost" p="0" icon={<>{isConfirmed ? 'C' : 'NC'}</>} onClick={handleConfirmation} />
               )}
             </Flex>
+            <IconButton variant="ghost" icon={<Edit2 size="1rem" />} onClick={handleOpenEditPatient} />
             <IconButton
               variant="ghost"
-              colorScheme="gray"
-              aria-label="See menu"
-              icon={<Edit2 size="1rem" />}
-              onClick={handleOpenEditPatient}
-            />
-            <IconButton
-              variant="ghost"
-              colorScheme="gray"
-              aria-label="See menu"
               icon={showPaymentCard ? <ChevronUp /> : <ChevronDown />}
               onClick={() => setShowPaymentCard(!showPaymentCard)}
             />
