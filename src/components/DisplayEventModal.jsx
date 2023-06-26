@@ -15,12 +15,12 @@ import {
   InputGroup,
   InputRightElement,
   HStack,
-  Tooltip,
 } from '@chakra-ui/react'
 
 import { formatDate } from '@utils'
 import { deleteAppointment } from '@services/appointments'
 
+import TooltipMobile from '@components/TooltipMobile'
 import Loader from '@components/Loader/Loader'
 
 export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, onClose }) {
@@ -76,24 +76,24 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
                 right: '1rem',
                 display: 'flex',
               }}>
-              <HStack gap="2">
+              <HStack gap="3">
                 {isDone ? (
-                  <Tooltip label="rendez-vous fini" background="green.500" placement="top-end" hasArrow>
+                  <TooltipMobile label="rendez-vous fini" background="green.500" placement="top-end" hasArrow>
                     <CheckCircle color="green" />
-                  </Tooltip>
+                  </TooltipMobile>
                 ) : (
-                  <Tooltip label="rendez-vous en attente" background="orange.400" placement="top-end" hasArrow>
+                  <TooltipMobile label="rendez-vous en attente" background="orange.400" placement="top-end" hasArrow>
                     <MinusCircle color="orange" />
-                  </Tooltip>
+                  </TooltipMobile>
                 )}
                 {isNewTreatment && (
-                  <Tooltip
+                  <TooltipMobile
                     label="Attention, en supprimant ce rendez-vous, le système risque de réagir de manière imprévue par rapport aux autres rendez-vous."
                     background="red.500"
                     placement="bottom-start"
                     hasArrow>
                     <Info color="red" />
-                  </Tooltip>
+                  </TooltipMobile>
                 )}
               </HStack>
             </div>
