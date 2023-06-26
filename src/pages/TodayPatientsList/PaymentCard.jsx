@@ -18,16 +18,28 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   const [canShowUpdateBtn, setCanShowUpdateBtn] = useState(false)
 
   const updatePaymentVal = (e) => {
-    const { value } = e.target
-    setPaymentVal(value)
-    setPaymentLeftVal(totalPriceVal - value)
     setCanShowUpdateBtn(true)
+    const { value } = e.target
+    const difference = paymentVal - value
+
+    setPaymentVal(value)
+    if (difference < 0) {
+      setPaymentLeftVal(paymentLeftVal - Math.abs(difference))
+    } else {
+      setPaymentLeftVal(paymentLeftVal + Math.abs(difference))
+    }
   }
 
   const updateTotalPriceVal = (e) => {
     const { value } = e.target
+    const difference = appointment.totalPrice - value
+
     setTotalPriceVal(value)
-    setPaymentLeftVal(value - paymentVal)
+    if (difference < 0) {
+      setPaymentLeftVal(appointment.paymentLeft + Math.abs(difference))
+    } else {
+      setPaymentLeftVal(appointment.paymentLeft - Math.abs(difference))
+    }
     setCanShowUpdateBtn(true)
   }
 

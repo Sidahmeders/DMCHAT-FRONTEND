@@ -77,7 +77,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
                 display: 'flex',
               }}>
               <HStack gap="2">
-                {!isDone ? (
+                {isDone ? (
                   <Tooltip label="rendez-vous fini" background="green.500" placement="top-end" hasArrow>
                     <CheckCircle color="green" />
                   </Tooltip>
