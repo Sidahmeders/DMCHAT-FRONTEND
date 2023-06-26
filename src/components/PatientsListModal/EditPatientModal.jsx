@@ -35,7 +35,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
 
   const onSubmit = async (data) => {
     try {
-      const updatedPatient = await updatePatientById(data)
+      const updatedPatient = await updatePatientById(data._id, data)
       const updatedPatientList = patientsData.patients.map((patient) =>
         updatedPatient._id === patient._id ? updatedPatient : patient,
       )

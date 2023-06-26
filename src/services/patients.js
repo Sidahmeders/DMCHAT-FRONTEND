@@ -12,10 +12,12 @@ const fetchPatients = async ({ pageNumber, pageSize, searchName }) => {
   return await _fetch.GET(`/api/patients?${searchQuery}`)
 }
 
+const fetchPatientById = async (patientId) => await _fetch.GET(`/api/patients/${patientId}`)
+
 const createPatient = async (patientData) => await _fetch.POST('/api/patients', patientData)
 
-const updatePatientById = async (patientData) => await _fetch.PUT(`/api/patients/${patientData._id}`, patientData)
+const updatePatientById = async (patientId, patientData) => await _fetch.PUT(`/api/patients/${patientId}`, patientData)
 
 const deletePatientById = async (patientId) => await _fetch.DELETE(`/api/patients/${patientId}`)
 
-export { fetchPatients, createPatient, updatePatientById, deletePatientById }
+export { fetchPatients, fetchPatientById, createPatient, updatePatientById, deletePatientById }

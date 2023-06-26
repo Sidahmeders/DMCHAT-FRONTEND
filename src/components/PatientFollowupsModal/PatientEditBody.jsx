@@ -19,7 +19,7 @@ import { CREATE_PATIENT_NAMES } from '@config'
 import { updatePatientById } from '@services/patients'
 import Loader from '@components/Loader/Loader'
 
-export default function PatientEditBody({ onClose }) {
+export default function PatientEditBody() {
   const {
     handleSubmit,
     control,
@@ -34,7 +34,7 @@ export default function PatientEditBody({ onClose }) {
   const onSubmit = async (data) => {
     setIsLoading(true)
     try {
-      const updatedPatient = await updatePatientById(data) // FIXME: should include patient id as the first argument
+      const updatedPatient = await updatePatientById(data._id, data)
       reset(updatedPatient)
       setPatient(updatedPatient)
       toast({
@@ -42,7 +42,6 @@ export default function PatientEditBody({ onClose }) {
         status: 'success',
       })
       setCanShowUpdateBtn(false)
-      onClose()
     } catch (error) {
       toast({ description: error.message })
     }

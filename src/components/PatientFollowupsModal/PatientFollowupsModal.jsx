@@ -57,7 +57,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
               {isEditPatientOpen ? <ChevronUp /> : <ChevronDown />}
             </Button>
           </Box>
-          {isEditPatientOpen ? <PatientEditBody onClose={() => setIsEditPatientOpen(false)} /> : null}
+          {isEditPatientOpen ? <PatientEditBody /> : null}
         </ModalHeader>
         <ModalCloseButton p="6" />
         <ModalBody className="patient-followups-modal-body">

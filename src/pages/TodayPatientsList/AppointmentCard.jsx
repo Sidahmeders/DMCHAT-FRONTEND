@@ -8,6 +8,7 @@ import { ChatState, AppointmentsState } from '@context'
 import { setPatient } from '@utils'
 import { APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
 import { toggleAppointmentConfirmation, toggleAppointmentLeave } from '@services/appointments'
+import { fetchPatientById } from '@services/patients'
 
 import PatientFollowupsModal from '@components/PatientFollowupsModal/PatientFollowupsModal'
 import PaymentCard from './PaymentCard'
@@ -64,6 +65,16 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     setIsLoading(false)
   }
 
+  const handleOpenEditPatient = async () => {
+    try {
+      onPatientFollowupsModalOpen()
+      const patientData = await fetchPatientById(appointment.patientId)
+      setPatient(patientData)
+    } catch (error) {
+      toast({ error: error.message })
+    }
+  }
+
   useEffect(() => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_CONFIRMATION, (payload) => {
       if (payload._id === appointment._id) {
@@ -108,10 +119,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
               colorScheme="gray"
               aria-label="See menu"
               icon={<Edit2 size="1rem" />}
-              onClick={() => {
-                onPatientFollowupsModalOpen()
-                setPatient({ ...appointment, _id: appointment.patientId })
-              }}
+              onClick={handleOpenEditPatient}
             />
             <IconButton
               variant="ghost"
