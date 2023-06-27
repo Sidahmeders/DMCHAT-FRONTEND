@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useDisclosure, IconButton, Box, Flex, Heading, Stack, Skeleton, useToast } from '@chakra-ui/react'
 import { Card, CardHeader } from '@chakra-ui/card'
-import { ChevronDown, ChevronUp, Edit2 } from 'react-feather'
+import { Activity, ChevronDown, ChevronUp, Edit2 } from 'react-feather'
 import { isBoolean } from 'lodash'
 
 import { ChatState, AppointmentsState } from '@context'
@@ -107,8 +107,8 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
           <Flex spacing="4">
             <Flex flex="1" gap="2" justifyContent="space-between" alignItems="center">
               <Box pl="2">
-                <Heading size="sm">
-                  {fullName} ~ {motif}
+                <Heading size="sm" display="flex">
+                  {fullName} <Activity /> {motif}
                 </Heading>
               </Box>
               {withPresence && (

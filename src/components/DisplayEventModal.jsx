@@ -107,7 +107,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
             )}
             <HStack color="Highlight" gap="2" mt="2">
               <Text fontSize="1rem">
-                {patient.fullName} / {patient.age} ans
+                {patient?.fullName} / {patient?.age} ans
               </Text>
             </HStack>
             <HStack color="Highlight" gap="2" mt="2">
@@ -119,7 +119,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
             </HStack>
             <HStack color="Highlight" gap="1" mt="2">
               <Phone size="1rem" />
-              <Text fontSize="1rem">{patient.phoneNumber} / #### </Text>
+              <Text fontSize="1rem">{patient?.phoneNumber} / #### </Text>
             </HStack>
           </ModalHeader>
           <ModalBody>
@@ -139,7 +139,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
               </HStack>
               <HStack>
                 <InputGroup>
-                  <Textarea value={patient.generalState} readOnly />
+                  <Textarea value={patient?.generalState} readOnly />
                   <InputRightElement children={<Clipboard color="#9996" />} />
                 </InputGroup>
               </HStack>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { Avatar, Box, HStack, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
 
 import { ChatState } from '@context'
@@ -10,11 +10,10 @@ import GroupChatModal from '@components/miscellaneous/GroupChatModal'
 import LogoutButton from '@components/miscellaneous/LogoutButton'
 
 const UserChats = () => {
+  const user = getUser()
   const toast = useToast()
   const { onClose } = useDisclosure()
   const { selectedChat, setSelectedChat, chats, setChats, fetchAgain } = ChatState()
-
-  const [loggedUser, setLoggedUser] = useState()
 
   const fetchChats = async () => {
     try {
@@ -27,7 +26,6 @@ const UserChats = () => {
   }
 
   useEffect(() => {
-    setLoggedUser(getUser())
     fetchChats()
     // eslint-disable-next-line
   }, [fetchAgain])
@@ -50,8 +48,8 @@ const UserChats = () => {
         <Stack overflowY="scroll">
           {chats.length &&
             chats.map((chat) => {
-              const sender = getSender(loggedUser, chat.users)
-              const { pic } = getSenderFull(loggedUser, chat.users)
+              const sender = getSender(user, chat.users)
+              const { pic } = getSenderFull(user, chat.users)
               const { content, updatedAt } = chat?.latestMessage || {}
 
               return (
