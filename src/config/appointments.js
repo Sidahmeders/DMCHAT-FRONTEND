@@ -1,5 +1,10 @@
 export const CREATE_APPOINTMENT_NAMES = {
+  SENDER: 'sender',
+  PATIENT: 'patient',
+  BASE_APPOINTMENT_ID: 'baseAppointmentId',
   FULL_NAME: 'fullName',
+  START_DATE: 'startDate',
+  END_DATE: 'endDate',
   TITLE: 'title',
   MOTIF: 'motif',
   DIAGNOSTIC: 'diagnostic',
@@ -7,5 +12,9 @@ export const CREATE_APPOINTMENT_NAMES = {
   TOTAL_PRICE: 'totalPrice',
   PAYMENT: 'payment',
   PAYMENT_LEFT: 'paymentLeft',
-  BASE_APPOINTMENT_ID: 'baseAppointmentId',
+  isNewTreatment: 'isNewTreatment',
+  IS_CONFIRMED: 'isConfirmed',
+  IS_LEFT: 'isLeft',
+  IS_WAITING_ROOM: 'isWaitingRoom',
+  IS_DONE: 'isDone',
 }

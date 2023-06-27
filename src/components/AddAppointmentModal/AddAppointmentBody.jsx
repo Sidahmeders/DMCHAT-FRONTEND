@@ -36,14 +36,12 @@ const resolvePatientOptions = (patients) => {
   }))
 }
 
-const initialValues = Object.values(CREATE_APPOINTMENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
-
 export default function AddAppointmentBody({ selectedSlotInfo, handleClose, events, setEvents }) {
   const { user } = ChatState()
   const toast = useToast()
   const { start, end } = selectedSlotInfo
   const motifRadioOptions = getMotifTemplateButtons()
-  const { handleSubmit, control, reset, getValues } = useForm({ defaultValues: initialValues })
+  const { handleSubmit, control, reset, getValues } = useForm()
 
   const [matchedPatients, setMatchedPatients] = useState([])
   const [patientOptions, setPatientOptions] = useState([])
@@ -69,19 +67,19 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
       if (isNewTreatment) {
         createdAppointment = await createAppointment({
           ...data,
-          sender: userId,
-          patient: patientId,
-          startDate: start,
-          endDate: end,
+          [CREATE_APPOINTMENT_NAMES.SENDER]: userId,
+          [CREATE_APPOINTMENT_NAMES.PATIENT]: patientId,
+          [CREATE_APPOINTMENT_NAMES.START_DATE]: start,
+          [CREATE_APPOINTMENT_NAMES.END_DATE]: end,
         })
       } else {
         createdAppointment = await relateAppointment({
           ...data,
+          [CREATE_APPOINTMENT_NAMES.SENDER]: userId,
+          [CREATE_APPOINTMENT_NAMES.PATIENT]: patientId,
           [CREATE_APPOINTMENT_NAMES.BASE_APPOINTMENT_ID]: baseAppointmentRadioValue,
-          sender: userId,
-          patient: patientId,
-          startDate: start,
-          endDate: end,
+          [CREATE_APPOINTMENT_NAMES.START_DATE]: start,
+          [CREATE_APPOINTMENT_NAMES.END_DATE]: end,
         })
       }
 
@@ -103,7 +101,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
     } catch (error) {
       toast({ description: error.message })
     }
-    reset(initialValues)
+    reset({})
     setIsLoading(false)
   }
 
@@ -140,6 +138,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               control={control}
               name={CREATE_APPOINTMENT_NAMES.FULL_NAME}
               rules={{ required: true }}
+              defaultValue=""
               render={({ field: { onChange, value } }) => (
                 <Select
                   placeholder="Nom du patient..."
@@ -165,6 +164,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               control={control}
               name={CREATE_APPOINTMENT_NAMES.MOTIF}
               rules={{ required: true }}
+              defaultValue=""
               render={({ field: { onChange, value } }) => (
                 <InputGroup>
                   <InputLeftElement
@@ -203,6 +203,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
             <Controller
               control={control}
               name={CREATE_APPOINTMENT_NAMES.TITLE}
+              defaultValue=""
               rules={{ required: true }}
               render={({ field: { onChange, value } }) => (
                 <InputGroup>
@@ -237,6 +238,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
               <Controller
                 control={control}
                 name={CREATE_APPOINTMENT_NAMES.PAYMENT}
+                defaultValue={0}
                 render={({ field: { onChange, value } }) => (
                   <InputGroup>
                     <InputLeftElement pointerEvents="none" children={<DollarSign size="1.25rem" color="gray" />} />
@@ -263,6 +265,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                 <Controller
                   control={control}
                   name={CREATE_APPOINTMENT_NAMES.DIAGNOSTIC}
+                  defaultValue=""
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
                       <InputLeftElement pointerEvents="none" children={<FileMinus size="1.25rem" color="gray" />} />
@@ -274,6 +277,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                 <Controller
                   control={control}
                   name={CREATE_APPOINTMENT_NAMES.TREATMENT_PLAN}
+                  defaultValue=""
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
                       <InputLeftElement pointerEvents="none" children={<FilePlus size="1.25rem" color="gray" />} />
@@ -310,6 +314,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                     <Controller
                       control={control}
                       name={CREATE_APPOINTMENT_NAMES.PAYMENT}
+                      defaultValue={0}
                       render={({ field: { onChange, value } }) => (
                         <InputGroup>
                           <InputLeftElement
