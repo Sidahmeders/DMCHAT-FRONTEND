@@ -68,19 +68,3 @@ self.addEventListener('message', (event) => {
     self.skipWaiting()
   }
 })
-
-// FIXME: experimental notification //
-// Listen for messages from the client and display the notifications
-self.addEventListener('message', (event) => {
-  // Extract the necessary data from the message
-  const { title, icon, vibrate, description } = event.data
-
-  const options = {
-    icon,
-    vibrate,
-    body: description,
-  }
-
-  event.waitUntil(self.registration.showNotification(title, options))
-})
-// FIXME: experimental notification //

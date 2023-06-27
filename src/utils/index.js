@@ -26,14 +26,6 @@ export const notify = debounce(async ({ title, description }) => {
     registration.showNotification(description, options)
   })
 
-  // FIXME: experimental notification //
-  navigator.serviceWorker.controller.postMessage({
-    title,
-    description,
-    ...options,
-  })
-  // FIXME: experimental notification //
-
   // web notification
   if (Notification.permission === 'default' || Notification.permission === 'denied') {
     await Notification.requestPermission()
