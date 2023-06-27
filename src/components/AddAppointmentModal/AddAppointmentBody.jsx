@@ -36,7 +36,7 @@ const resolvePatientOptions = (patients) => {
   }))
 }
 
-export default function AddAppointmentBody({ selectedSlotInfo, handleClose, events, setEvents }) {
+export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setEvents }) {
   const { user } = ChatState()
   const toast = useToast()
   const { start, end } = selectedSlotInfo
@@ -83,14 +83,15 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
         })
       }
 
-      setEvents([
-        ...events,
+      const { patient, title, payment, startDate, endDate } = createdAppointment || {}
+      setEvents((prevEvents) => [
+        ...prevEvents,
         {
           ...createdAppointment,
           id: createdAppointment._id,
-          title: createdAppointment.title,
-          start: new Date(createdAppointment.startDate),
-          end: new Date(createdAppointment.endDate),
+          title: `${patient?.fullName} / ${title} / ${payment || '0'}`,
+          start: new Date(startDate),
+          end: new Date(endDate),
         },
       ])
       toast({
@@ -170,7 +171,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   <InputLeftElement
                     pointerEvents="none"
                     children={
-                      value?.length >= 2 ? (
+                      value?.length >= 5 && value?.length <= 50 ? (
                         <CheckCircle size="1.25rem" color="green" />
                       ) : (
                         <AlertCircle size="1.25rem" color="red" />
@@ -210,7 +211,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   <InputLeftElement
                     pointerEvents="none"
                     children={
-                      value?.length >= 2 ? (
+                      value?.length >= 5 && value?.length <= 50 ? (
                         <CheckCircle size="1.25rem" color="green" />
                       ) : (
                         <AlertCircle size="1.25rem" color="red" />
@@ -268,7 +269,12 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   defaultValue=""
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
-                      <InputLeftElement pointerEvents="none" children={<FileMinus size="1.25rem" color="gray" />} />
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={
+                          <FileMinus size="1.25rem" color={value.length === 0 || value.length > 2 ? 'gray' : 'red'} />
+                        }
+                      />
                       <Textarea pl="10" placeholder="Diagnostique" value={value} onChange={onChange} />
                     </InputGroup>
                   )}
@@ -280,7 +286,12 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, even
                   defaultValue=""
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
-                      <InputLeftElement pointerEvents="none" children={<FilePlus size="1.25rem" color="gray" />} />
+                      <InputLeftElement
+                        pointerEvents="none"
+                        children={
+                          <FilePlus size="1.25rem" color={value.length === 0 || value.length > 2 ? 'gray' : 'red'} />
+                        }
+                      />
                       <Textarea pl="10" placeholder="Plan de traitement" value={value} onChange={onChange} />
                     </InputGroup>
                   )}

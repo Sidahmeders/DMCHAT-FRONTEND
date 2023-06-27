@@ -150,6 +150,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
           end: new Date(event.endDate),
         }))
         setEvents(eventsList)
+
         const monthAvailabilities = await fetchCalendarAvailabilities(selectedDate)
         setAvailabilities(
           monthAvailabilities.reduce((acc, item) => ({ ...acc, [formatDate(item.date)]: item.availability }), {}),
@@ -167,7 +168,6 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         selectedSlotInfo={selectedSlotInfo}
         isOpen={isAddAppointmentModalOpen}
         onClose={onAddAppointmentModalClose}
-        events={events}
         setEvents={setEvents}
         setAvailabilities={setAvailabilities}
       />
@@ -177,7 +177,6 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         selectedEvent={selectedEvent}
         setEvents={setEvents}
       />
-
       <DnDCalendar
         selectable
         culture="fr"
