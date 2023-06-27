@@ -96,7 +96,7 @@ const SingleChat = () => {
     <>
       {selectedChat ? (
         <>
-          <Box fontSize="1.5rem" w="100%" pb="3" display="flex" justifyContent="space-between" alignItems="center">
+          <Box fontSize="1.25rem" w="100%" pb="3" display="flex" justifyContent="space-between" alignItems="center">
             <IconButton
               display={{ base: 'flex', md: 'none' }}
               icon={<ArrowLeft />}
