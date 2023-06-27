@@ -54,3 +54,14 @@ export const checkIsJWTExpired = (token = '') => {
   }
   return false
 }
+
+export const formatMoney = (number) => {
+  let numArray = String(number).split('')
+  let dotCount = Math.floor((numArray.length - 1) / 3)
+
+  for (let i = 1; i <= dotCount; i++) {
+    numArray.splice(-i * 3, 0, ',')
+  }
+
+  return numArray.join('')
+}

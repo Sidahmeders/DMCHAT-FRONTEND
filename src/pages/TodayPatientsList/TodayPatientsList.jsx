@@ -11,6 +11,7 @@ import { updateAppointment } from '@services/appointments'
 import ExpectedAppointments from './ExpectedAppointments'
 import WaitingRoomAppointments from './WaitingRoomAppointments'
 import DoneAppointments from './DoneAppointments'
+import PaymentsHistory from './PaymentsHistory'
 
 import './TodayPatientsList.scss'
 
@@ -100,6 +101,7 @@ export default function TodayPatientsList() {
           <DoneAppointments isLoading={isLoading} appointments={appointmentsList[APPOINTMENTS_IDS.DONE]} />
         </div>
       </DragDropContext>
+      <PaymentsHistory />
     </div>
   )
 }

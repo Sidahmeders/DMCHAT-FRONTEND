@@ -2,6 +2,7 @@ const USER = 'userInfo'
 const PATIENT = 'patient'
 const PAGE_ROUTE = 'pageRoute'
 const MOTIF_TEMPLATE_BUTTONS = 'motifTemplateButtons'
+const TODAY_PAYMENT_HISTORY = 'todayPaymentHistory'
 
 export const getUser = () => JSON.parse(localStorage.getItem(USER)) || {}
 export const setUser = (userData) => localStorage.setItem(USER, JSON.stringify(userData))
@@ -20,4 +21,9 @@ export const addMotifTemplateButtons = (button) => {
 export const dropMotifTemplateButton = (buttonId) => {
   const filteredTemplateButtons = getMotifTemplateButtons().filter(({ id }) => buttonId !== id)
   localStorage.setItem(MOTIF_TEMPLATE_BUTTONS, JSON.stringify(filteredTemplateButtons))
+}
+
+export const getTodayPaymentHistory = () => JSON.parse(localStorage.getItem(TODAY_PAYMENT_HISTORY)) || []
+export const setTodayPaymentHistory = (paymentData) => {
+  localStorage.setItem(TODAY_PAYMENT_HISTORY, JSON.stringify([...getTodayPaymentHistory(), paymentData]))
 }

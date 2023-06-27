@@ -2,14 +2,25 @@ import { useEffect, useState } from 'react'
 import { Button, InputGroup, Input, useToast } from '@chakra-ui/react'
 import { CardBody } from '@chakra-ui/card'
 
-import { ChatState } from '@context'
-import { notify } from '@utils'
+import { AppointmentsState, ChatState } from '@context'
+import { formatMoney, getTodayPaymentHistory, guid, notify, setTodayPaymentHistory } from '@utils'
 import { CREATE_APPOINTMENT_NAMES, APPOINTMENTS_EVENTS, APPOINTMENTS_LISTENERS } from '@config'
 import { updateAppointment } from '@services/appointments'
+
+const commitTodayPayment = (currentPayment, fullName) => {
+  const paymentData = {
+    id: guid(),
+    amount: currentPayment,
+    payer: fullName,
+  }
+  setTodayPaymentHistory(paymentData)
+  return getTodayPaymentHistory()
+}
 
 const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   const toast = useToast()
   const { socket } = ChatState()
+  const { setTodayPaymentHistory } = AppointmentsState()
   const [appointment, setAppointmentData] = useState(appointmentData)
   const [paymentVal, setPaymentVal] = useState(appointment.payment || 0)
   const [totalPriceVal, setTotalPriceVal] = useState(appointment.totalPrice || 0)
@@ -71,12 +82,17 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_PAID, (payload) => {
       if (payload._id === appointment._id) {
         const { patient, totalPrice, payment, paymentLeft } = payload || {}
+        const currentPayment = payment - appointment.payment
         setAppointmentData(payload)
         setTotalPriceVal(totalPrice)
         setPaymentVal(payment)
         setPaymentLeftVal(paymentLeft)
-        const description = `${patient.fullName} V: ${payment} / R: ${paymentLeft}`
-        notify({ title: 'Transaction Effectué!', description })
+        notify({
+          title: `paiement effectué par "${patient.fullName}"`,
+          description: `payé: ${formatMoney(currentPayment)} / reste: ${formatMoney(paymentLeft)}`,
+        })
+        const commitedPayments = commitTodayPayment(currentPayment, patient?.fullName)
+        setTodayPaymentHistory(commitedPayments)
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
