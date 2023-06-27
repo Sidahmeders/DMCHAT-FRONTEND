@@ -50,8 +50,7 @@ registerRoute(
 // precache, in this case same-origin .png requests like those from in public/
 registerRoute(
   // Add in any other file extensions or routing criteria as needed.
-  ({ url }) =>
-    url.origin === self.location.origin && url.pathname.endsWith('.png'), // Customize this strategy as needed, e.g., by changing to CacheFirst.
+  ({ url }) => url.origin === self.location.origin && url.pathname.endsWith('.png'), // Customize this strategy as needed, e.g., by changing to CacheFirst.
   new StaleWhileRevalidate({
     cacheName: 'images',
     plugins: [
@@ -70,4 +69,18 @@ self.addEventListener('message', (event) => {
   }
 })
 
-// Any other custom service worker logic can go here.
+// FIXME: experimental notification //
+// Listen for messages from the client and display the notifications
+self.addEventListener('message', (event) => {
+  // Extract the necessary data from the message
+  const { title, icon, vibrate, description } = event.data
+
+  const options = {
+    icon,
+    vibrate,
+    body: description,
+  }
+
+  event.waitUntil(self.registration.showNotification(title, options))
+})
+// FIXME: experimental notification //

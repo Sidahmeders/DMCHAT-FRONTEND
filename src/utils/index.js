@@ -16,7 +16,7 @@ export const guid = () => {
 
 export const notify = debounce(async ({ title, description }) => {
   const options = {
-    tag: title, // messageRecieved?.sender?.name
+    tag: title,
     icon: 'https://i.ibb.co/vB1mDPv/logo192.png',
     vibrate: 3,
   }
@@ -26,11 +26,19 @@ export const notify = debounce(async ({ title, description }) => {
     registration.showNotification(description, options)
   })
 
+  // FIXME: experimental notification //
+  navigator.serviceWorker.controller.postMessage({
+    title,
+    description,
+    ...options,
+  })
+  // FIXME: experimental notification //
+
+  // web notification
   if (Notification.permission === 'default' || Notification.permission === 'denied') {
     await Notification.requestPermission()
   }
   if (Notification.permission === 'granted') {
-    // web notification
     const notification = new Notification(title, {
       body: description,
       ...options,
