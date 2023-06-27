@@ -17,7 +17,12 @@ class Fetch {
         Authorization: `Bearer ${this.#user.token}`,
       },
     })
-    const { data } = await response.json()
+    const { data, error } = await response.json()
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
     return data
   }
 
@@ -30,7 +35,12 @@ class Fetch {
       },
       body: JSON.stringify(body),
     })
-    const { data } = await response.json()
+    const { data, error } = await response.json()
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
     return data
   }
 
@@ -43,7 +53,12 @@ class Fetch {
       },
       body: JSON.stringify(body),
     })
-    const { data } = await response.json()
+    const { data, error } = await response.json()
+
+    if (error) {
+      throw new Error(error.message)
+    }
+
     return data
   }
 
