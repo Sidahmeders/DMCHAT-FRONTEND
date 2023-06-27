@@ -1,9 +1,9 @@
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Stack, useToast } from '@chakra-ui/react'
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { isEmpty } from 'lodash'
 
 import { setUser } from '@utils'
+import { APP_ROUTES } from '@config'
 import { signInUser } from '@services/users'
 
 const Login = () => {
@@ -12,7 +12,6 @@ const Login = () => {
   const [credentials, setCredentials] = useState({ email: '', password: '' })
 
   const toast = useToast()
-  const navigate = useNavigate()
 
   const handleCredentials = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value })
@@ -31,11 +30,13 @@ const Login = () => {
       if (!isEmpty(userData)) {
         setUser(userData)
         setLoading(false)
-        navigate('/chats')
         toast({
           title: 'utilisateur authentifié avec succès',
           status: 'success',
         })
+        setTimeout(() => {
+          window.location = APP_ROUTES.CHATS
+        }, 1500)
       }
     } catch (error) {
       toast({ title: error.message })

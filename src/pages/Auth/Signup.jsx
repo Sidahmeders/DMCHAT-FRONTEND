@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import {
   Button,
   FormControl,
@@ -13,6 +12,7 @@ import {
 } from '@chakra-ui/react'
 
 import { setUser } from '@utils'
+import { APP_ROUTES } from '@config'
 import { signUpUser } from '@services/users'
 import { uploadImage } from '@services/cloud'
 
@@ -20,7 +20,6 @@ const Signup = () => {
   const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
   const toast = useToast()
-  const navigate = useNavigate()
 
   const [credentials, setCredentials] = useState({
     name: '',
@@ -38,7 +37,7 @@ const Signup = () => {
     const { name, files } = e.target
     if (files[0] === undefined) {
       return toast({
-        title: 'Please select an image',
+        title: 'Veuillez sélectionner une image',
         status: 'warning',
       })
     }
@@ -65,22 +64,22 @@ const Signup = () => {
     }
     if (credentials.password !== credentials.confirmPassword) {
       return toast({
-        title: 'Passwords Do Not Match',
+        title: 'Les mots de passe ne correspondent pas',
         status: 'warning',
       })
     }
     setLoading(true)
     try {
-      const data = await signUpUser(credentials)
-      if (data.success) {
-        setUser(data)
-        setLoading(false)
-        navigate('/chats')
-      }
+      const signedUpUser = await signUpUser(credentials)
+      setUser(signedUpUser)
+      setLoading(false)
       toast({
-        title: data.message,
-        status: !data.success ? 'error' : 'success',
+        title: "l'utilisateur s'est inscrit avec succès",
+        status: 'success',
       })
+      setTimeout(() => {
+        window.location = APP_ROUTES.CHATS
+      }, 1500)
     } catch (error) {
       toast()
     }
