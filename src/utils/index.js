@@ -65,3 +65,10 @@ export const formatMoney = (number) => {
 
   return numArray.join('')
 }
+
+export const formatPhoneNumber = (number = '##########') => {
+  var separatedNumber = String(number)
+    .match(/.{1,2}/g)
+    .join('.')
+  return separatedNumber
+}

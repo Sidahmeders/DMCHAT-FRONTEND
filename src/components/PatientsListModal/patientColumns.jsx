@@ -1,23 +1,28 @@
-import { format, parseISO } from 'date-fns'
 import { Trash2, Edit3 } from 'react-feather'
 
-import { setPatient } from '@utils'
+import { setPatient, formatDate, formatPhoneNumber } from '@utils'
 
 export const patientColumns = ({ onEditModalOpen, onDeleteModalOpen }) => [
   {
     name: 'Nom',
     selector: ({ fullName }) => fullName,
     sortable: true,
-    minWidth: '35%',
+    minWidth: '30%',
+  },
+  {
+    name: 'Age',
+    selector: ({ age }) => age,
+    sortable: true,
+    width: '120px',
   },
   {
     name: 'Téléphone',
-    selector: ({ phoneNumber }) => phoneNumber || '###',
+    selector: ({ phoneNumber }) => formatPhoneNumber(phoneNumber),
     minWidth: '250px',
   },
   {
     name: 'Date de création',
-    selector: ({ createdAt }) => format(parseISO(createdAt), 'yyyy-MM-dd'),
+    selector: ({ createdAt }) => formatDate(createdAt),
     sortable: true,
     minWidth: '120px',
   },

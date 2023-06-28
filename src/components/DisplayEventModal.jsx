@@ -17,7 +17,7 @@ import {
   HStack,
 } from '@chakra-ui/react'
 
-import { formatDate } from '@utils'
+import { formatDate, formatPhoneNumber } from '@utils'
 import { deleteAppointment } from '@services/appointments'
 
 import TooltipMobile from '@components/TooltipMobile'
@@ -111,7 +111,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
               </Text>
             </HStack>
             <HStack color="Highlight" gap="2" mt="2">
-              <HStack gap="4">
+              <HStack gap="6">
                 <Text fontSize="1rem">T: {totalPrice}</Text>
                 <Text fontSize="1rem">V: {payment || '0'}</Text>
                 <Text fontSize="1rem">R: {paymentLeft || '0'}</Text>
@@ -119,7 +119,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
             </HStack>
             <HStack color="Highlight" gap="1" mt="2">
               <Phone size="1rem" />
-              <Text fontSize="1rem">{patient?.phoneNumber} / #### </Text>
+              <Text fontSize="1rem">{formatPhoneNumber(patient?.phoneNumber)} / ##.##.##.##.##</Text>
             </HStack>
           </ModalHeader>
           <ModalBody>

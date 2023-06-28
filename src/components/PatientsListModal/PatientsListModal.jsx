@@ -102,7 +102,7 @@ export default function PatientListModal() {
               columns={patientColumns({ onEditModalOpen, onDeleteModalOpen })}
               data={filteredItems}
               subHeaderComponent={subHeaderComponent}
-              expandableRowsComponent={(props) => <ExpandableComponent user={user} {...props} />}
+              expandableRowsComponent={ExpandableComponent}
               paginationTotalRows={patientsData.totalCount}
               paginationRowsPerPageOptions={PAGINATION_ROWS_PER_PAGE_OPTIONS}
               onChangePage={(page) => setPageNumber(page)}
