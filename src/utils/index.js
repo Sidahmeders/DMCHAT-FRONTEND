@@ -56,14 +56,21 @@ export const checkIsJWTExpired = (token = '') => {
 }
 
 export const formatMoney = (number) => {
-  let numArray = String(number).split('')
-  let dotCount = Math.floor((numArray.length - 1) / 3)
+  const numString = String(number)
+  const isNegative = numString.charAt(0) === '-'
+  const numLength = numString.length
+  let formattedNumber = ''
 
-  for (let i = 1; i <= dotCount; i++) {
-    numArray.splice(-i * 3, 0, ',')
+  for (let i = 0; i < numLength; i++) {
+    if (isNegative && i === 1) {
+      formattedNumber += '-'
+    } else if (i > 0 && (numLength - i) % 3 === 0) {
+      formattedNumber += ','
+    }
+    formattedNumber += numString.charAt(i)
   }
 
-  return numArray.join('')
+  return formattedNumber
 }
 
 export const formatPhoneNumber = (number = '##########') => {
