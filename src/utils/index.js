@@ -79,3 +79,23 @@ export const formatPhoneNumber = (number = '##########') => {
     .join('.')
   return separatedNumber
 }
+
+export const abbreviateNumber = (number) => {
+  // Suffixes for thousand, million, billion, trillion, etc.
+  const suffixes = ['', 'K', 'M', 'B', 'T']
+  // Convert the input number to a floating-point number
+  let abbreviatedValue = parseFloat(number)
+
+  // Determine the appropriate suffix based on the magnitude of the number
+  let suffixIndex = 0
+  while (abbreviatedValue >= 1000 && suffixIndex < suffixes.length - 1) {
+    abbreviatedValue /= 1000
+    suffixIndex++
+  }
+
+  // Format the number with a maximum of 2 decimal places
+  const formattedNumber = Number(abbreviatedValue.toFixed(2))
+
+  // Combine the formatted number with the appropriate suffix
+  return `${formattedNumber}${suffixes[suffixIndex]}`
+}

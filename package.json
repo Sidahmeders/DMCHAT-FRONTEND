@@ -29,6 +29,7 @@
     "react-select": "^5.7.2",
     "react-spinners": "^0.13.8",
     "react-swipeable": "^7.0.0",
+    "recharts": "^2.7.2",
     "sass": "^1.63.5",
     "socket.io-client": "^4.5.3",
     "web-vitals": "^2.1.4",
