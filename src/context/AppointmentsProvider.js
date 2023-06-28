@@ -1,8 +1,9 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 import { APPOINTMENTS_IDS } from '../config'
-import { flattenAppointment, getTodayPaymentHistory } from '../utils'
+import { flattenAppointment } from '../utils'
 import { fetchDayAppointments } from '@services/appointments'
+import { fetchDayPayments } from '@services/payments'
 
 const AppointmentsContext = createContext()
 
@@ -13,8 +14,7 @@ export const AppointmentsProvider = ({ children }) => {
     [APPOINTMENTS_IDS.IN_PROGRESS]: [],
     [APPOINTMENTS_IDS.DONE]: [],
   })
-
-  const [todayPaymentHistory, setTodayPaymentHistory] = useState(getTodayPaymentHistory())
+  const [todayPaymentHistory, setTodayPaymentHistory] = useState([])
 
   const fetchTodayAppointments = async () => {
     const todayAppointments = await fetchDayAppointments(new Date())
@@ -50,6 +50,13 @@ export const AppointmentsProvider = ({ children }) => {
       [APPOINTMENTS_IDS.DONE]: doneList,
     })
   }
+
+  useEffect(() => {
+    ;(async () => {
+      const todayPayments = await fetchDayPayments(new Date())
+      setTodayPaymentHistory(todayPayments)
+    })()
+  }, [])
 
   return (
     <AppointmentsContext.Provider

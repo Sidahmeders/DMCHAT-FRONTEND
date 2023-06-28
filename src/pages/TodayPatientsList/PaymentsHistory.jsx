@@ -36,13 +36,13 @@ export default function PaymentsHistory() {
           </DrawerHeader>
           <DrawerCloseButton fontSize="14" marginTop="7px" color="purple" />
           <DrawerBody>
-            {todayPaymentHistory.map(({ id, payer, amount }, index) => (
-              <HStack key={id} justifyContent="space-between" ml="3">
+            {todayPaymentHistory.map(({ _id, payerName, amount }, index) => (
+              <HStack key={_id} justifyContent="space-between" ml="3">
                 <Box position="relative">
                   <Text position="absolute" top="2px" left="-1.5rem" fontSize="14px" color="purple">
                     {index + 1}.
                   </Text>
-                  {payer.slice(0, 18)}
+                  {payerName?.slice(0, 18)}
                 </Box>
                 <Text fontWeight="bold">{formatMoney(amount)}</Text>
               </HStack>
