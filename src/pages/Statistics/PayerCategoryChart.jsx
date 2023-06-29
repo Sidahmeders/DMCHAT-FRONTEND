@@ -68,15 +68,14 @@ const PayerCategoryChart = () => {
   )
 
   return (
-    <PieChart width={650} height={450}>
+    <PieChart width={500} height={300}>
       <Pie
         activeIndex={activeIndex}
         activeShape={renderActiveShape}
         data={data}
-        // cx={200}
-        // cy={200}
-        innerRadius={100}
-        outerRadius={135}
+        cx={220}
+        innerRadius={90}
+        outerRadius={110}
         fill="#8884d8"
         dataKey="value"
         onMouseEnter={onPieEnter}

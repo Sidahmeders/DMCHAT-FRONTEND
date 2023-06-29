@@ -129,7 +129,7 @@ const CustomLegend = ({ showEmptyDays, setShowEmptyDays, selectedStat, setSelect
 
       <HStack>
         <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="new-treatment" fontSize="xs" mr="1" mb="0">
+          <FormLabel htmlFor="show-empty-days" fontSize="xs" mr="1" mb="0">
             afficher jours vides?
           </FormLabel>
           <Switch
