@@ -27,43 +27,24 @@
   justify-content: center;
 }
 
+/* Width and height of the scrollbar track */
 ::-webkit-scrollbar {
-  width: 0px;
+  width: 0;
+  height: 10px;
 }
 
+/* Background color of the scrollbar track */
+::-webkit-scrollbar-track {
+  background: #f0f0fc;
+}
+
+/* Color of the scrollbar handle */
 ::-webkit-scrollbar-thumb {
-  background: rgba(136, 136, 136, 0.281);
+  background: #9b9bb3;
+  border-radius: 5px;
 }
 
-/* Handle on hover */
+/* Hover color of the scrollbar handle */
 ::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-/* Hide scrollbar for Chrome, Safari and Opera */
-.hide-scrollbar::-webkit-scrollbar {
-  display: none;
-}
-
-/* Hide scrollbar for IE, Edge and Firefox */
-.hide-scrollbar {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-}
-
-.notification-badge-container {
-  position: relative;
-}
-
-.notification-badge {
-  background-color: red;
-  font-size: 12px;
-  color: white;
-  text-align: center;
-  width: 20px;
-  height: 20px;
-  border-radius: 35%;
-  position: absolute;
-  top: 0px;
-  left: 1.5rem;
+  background: #b2b2e2;
 }

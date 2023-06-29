@@ -6,6 +6,8 @@ import { ChatState } from '@context'
 import { getSender } from '@utils'
 import { APP_ROUTES } from '@config'
 
+import './ChatNotification.scss'
+
 const ChatNotification = () => {
   const { user, setSelectedChat, notifications, setNotifications, setSelectedChatAppointmentModal } = ChatState()
   const navigate = useNavigate()
