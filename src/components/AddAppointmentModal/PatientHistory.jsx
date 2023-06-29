@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
-import { format, parseISO } from 'date-fns'
 import { RadioGroup, Radio, Table, Tbody, Tr, Td, TableContainer, Button } from '@chakra-ui/react'
 
 import { groupAppointments } from './utils'
+import { formatDate } from '@utils'
 import { fetchPatientAppointments } from '@services/appointments'
 
 export default function PatientHistory({ show, patient, baseAppointmentRadioValue, setBaseAppointmentRadioValue }) {
@@ -76,7 +76,7 @@ const TreatmentSummary = ({ appointmentsGroup }) => {
               return (
                 <Tr key={_id} style={{ display: show ? 'block' : 'none' }}>
                   <Td p="1" borderRight="1px solid #ddd" width="80px">
-                    {format(parseISO(startDate), 'yy.MM.dd')}
+                    {formatDate(startDate, 'yy.MM.dd')}
                   </Td>
                   <Td p="1" borderRight="1px solid #ddd" width="90px">
                     V: {payment || '0'}
