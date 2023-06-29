@@ -103,7 +103,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
     <table>
       <caption>
         <p style={{ padding: '0.25rem 1rem' }}>
-          Reste: <span>{paymentLeft}</span> / Motif: <span>{baseAppointment.motif}</span>
+          Reste: <span>{paymentLeft}</span> / Motif: <span>{baseAppointment?.motif?.name}</span>
         </p>
         <Accordion allowMultiple display="flex">
           <AccordionItem width="50%" borderRight="1px solid #ddd">

@@ -8,6 +8,11 @@
     font-size: 14px;
     font-weight: bold;
     border-radius: 4px;
+
+    &.required:after {
+      content: ' *';
+      color: #f00;
+    }
   }
 
   .drop-box-container {

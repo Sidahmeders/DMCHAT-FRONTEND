@@ -19,6 +19,19 @@ export const CREATE_APPOINTMENT_NAMES = {
   IS_DONE: 'isDone',
 }
 
+export const MOTIF_ENUM = {
+  PAIN: 'pain',
+  FUNCTIONAL: 'functional',
+  AESTHETIC: 'aesthetic',
+  OTHERS: 'others',
+}
+
+export const MOTIF_TEMPLATE_VALUES = [
+  { id: '#1', name: 'douleur', value: MOTIF_ENUM.PAIN, isRequired: true },
+  { id: '#2', name: 'fonctionnel', value: MOTIF_ENUM.FUNCTIONAL, isRequired: true },
+  { id: '#3', name: 'esthetique', value: MOTIF_ENUM.AESTHETIC, isRequired: true },
+]
+
 export const APPOINTMENTS_IDS = {
   EXPECTED: 'isExpected',
   DONE: 'isDone',

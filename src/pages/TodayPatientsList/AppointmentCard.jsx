@@ -108,7 +108,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
             <Flex flex="1" gap="2" justifyContent="space-between" alignItems="center">
               <Box pl="2">
                 <Heading size="sm" display="flex">
-                  {fullName} <Activity /> {motif}
+                  {fullName} <Activity /> {motif?.name}
                 </Heading>
               </Box>
               {withPresence && (

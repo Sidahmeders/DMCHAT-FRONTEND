@@ -82,7 +82,7 @@ const TreatmentSummary = ({ appointmentsGroup }) => {
                     V: {payment || '0'}
                   </Td>
                   <Td p="1" borderRight="1px solid #ddd" width="120px">
-                    {motif?.slice(0, 10)}..
+                    {motif?.name?.slice(0, 10)}..
                   </Td>
                   <Td p="1">{title?.slice(0, 15)}..</Td>
                 </Tr>

@@ -125,7 +125,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
           <ModalBody>
             <Stack spacing="2">
               <Text pl="1">
-                Motif de consultation: <strong>{motif}</strong>
+                Motif de consultation: <strong>{motif?.name}</strong>
               </Text>
               <HStack>
                 <InputGroup>

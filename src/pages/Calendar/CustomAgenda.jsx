@@ -80,7 +80,7 @@ const DayEvents = ({ localizer, accessors, events, day }) => {
                 justifyContent: 'space-between',
               }}>
               <span>
-                {patient?.fullName} / {motif}
+                {patient?.fullName} / {motif?.name}
               </span>
               <span>7000 DZD</span>
             </div>

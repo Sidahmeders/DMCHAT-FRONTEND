@@ -3,8 +3,6 @@ import propTypes from 'prop-types'
 import { ModalBody, ModalFooter, Button, Input, Stack, StackItem } from '@chakra-ui/react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
-import { guid } from '@utils'
-
 import './EditableButtons.scss'
 
 const BUTTONS_CONTAINER_ID = 'EDITABLE_BUTTONS'
@@ -23,7 +21,7 @@ export default function EditableButtons({
 
   const addNewTemplate = () => {
     if (!value?.trim().length) return
-    addTemplateButtons({ id: guid(), name: value })
+    addTemplateButtons(value)
     setValue('')
     setTemplateButtons(getTemplateButtons())
   }
@@ -62,7 +60,7 @@ export default function EditableButtons({
                       <Draggable key={btn.id} draggableId={btn.id} index={index}>
                         {(provided) => (
                           <div
-                            className="editable-button"
+                            className={`editable-button ${btn.isRequired ? 'required' : ''}`}
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}>

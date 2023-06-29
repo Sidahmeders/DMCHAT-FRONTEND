@@ -19,10 +19,10 @@ import {
   HStack,
 } from '@chakra-ui/react'
 import Select from 'react-select'
+import { isEmpty } from 'lodash'
 
-import { ChatState } from '@context'
 import { CREATE_APPOINTMENT_NAMES } from '@config'
-import { getMotifTemplateButtons } from '@utils'
+import { getMotifTemplateButtons, getUser } from '@utils'
 import { createAppointment, relateAppointment } from '@services/appointments'
 import { fetchPatients } from '@services/patients'
 
@@ -37,9 +37,9 @@ const resolvePatientOptions = (patients) => {
 }
 
 export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setEvents }) {
-  const { user } = ChatState()
-  const toast = useToast()
+  const user = getUser()
   const { start, end } = selectedSlotInfo
+  const toast = useToast()
   const motifRadioOptions = getMotifTemplateButtons()
   const { handleSubmit, control, reset, getValues } = useForm()
 
@@ -50,38 +50,31 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
   const [isMounted, setIsMounted] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
   const [isNewTreatment, setIsNewTreatment] = useState(false)
-  const [radioValue, setRadioValue] = useState('')
-  const [baseAppointmentRadioValue, setBaseAppointmentRadioValue] = useState()
+  const [motifRadioValue, setMotifRadioValue] = useState(null)
+  const [baseAppointmentRadioValue, setBaseAppointmentRadioValue] = useState(null)
 
   const submitAppointment = async (data) => {
-    if (!user) return
+    if (isEmpty(user)) return
     setIsLoading(true)
 
     try {
-      const { fullName } = data
-      const [patientId] = fullName.split('-')
-      const { _id: userId } = user
-
-      let createdAppointment
-
-      if (isNewTreatment) {
-        createdAppointment = await createAppointment({
-          ...data,
-          [CREATE_APPOINTMENT_NAMES.SENDER]: userId,
-          [CREATE_APPOINTMENT_NAMES.PATIENT]: patientId,
-          [CREATE_APPOINTMENT_NAMES.START_DATE]: start,
-          [CREATE_APPOINTMENT_NAMES.END_DATE]: end,
-        })
-      } else {
-        createdAppointment = await relateAppointment({
-          ...data,
-          [CREATE_APPOINTMENT_NAMES.SENDER]: userId,
-          [CREATE_APPOINTMENT_NAMES.PATIENT]: patientId,
-          [CREATE_APPOINTMENT_NAMES.BASE_APPOINTMENT_ID]: baseAppointmentRadioValue,
-          [CREATE_APPOINTMENT_NAMES.START_DATE]: start,
-          [CREATE_APPOINTMENT_NAMES.END_DATE]: end,
-        })
+      const [patientId] = data?.fullName?.split('-') || []
+      const appointmentBody = {
+        ...data,
+        [CREATE_APPOINTMENT_NAMES.SENDER]: user._id,
+        [CREATE_APPOINTMENT_NAMES.PATIENT]: patientId,
+        [CREATE_APPOINTMENT_NAMES.START_DATE]: start,
+        [CREATE_APPOINTMENT_NAMES.END_DATE]: end,
+        [CREATE_APPOINTMENT_NAMES.BASE_APPOINTMENT_ID]: baseAppointmentRadioValue,
+        [CREATE_APPOINTMENT_NAMES.MOTIF]: {
+          name: data[CREATE_APPOINTMENT_NAMES.MOTIF],
+          value: motifRadioValue?.value,
+        },
       }
+
+      const createdAppointment = isNewTreatment
+        ? await createAppointment(appointmentBody)
+        : await relateAppointment(appointmentBody)
 
       const { patient, title, payment, startDate, endDate } = createdAppointment || {}
       setEvents((prevEvents) => [
@@ -98,11 +91,11 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
         title: 'nouveau rendez-vous créé avec succès',
         status: 'success',
       })
+      reset({})
       handleClose()
     } catch (error) {
       toast({ description: error.message })
     }
-    reset({})
     setIsLoading(false)
   }
 
@@ -186,9 +179,9 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
             <HStack>
               {motifRadioOptions.map((option) => (
                 <Button
-                  colorScheme={radioValue?.id === option.id ? 'messenger' : 'gray'}
+                  colorScheme={motifRadioValue?.id === option.id ? 'messenger' : 'gray'}
                   onClick={() => {
-                    setRadioValue(option)
+                    setMotifRadioValue(option)
                     reset({
                       ...getValues(),
                       [CREATE_APPOINTMENT_NAMES.MOTIF]: option.name,
