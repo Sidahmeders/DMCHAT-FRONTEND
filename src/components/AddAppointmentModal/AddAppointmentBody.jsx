@@ -55,8 +55,15 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
 
   const submitAppointment = async (data) => {
     if (isEmpty(user)) return
-    setIsLoading(true)
+    if (!baseAppointmentRadioValue && !isNewTreatment) {
+      return toast({
+        title: "Erreur lors de l'obtention du rendez-vous de base",
+        description: "veuillez créer un nouveau traitement s'il n'y en a pas",
+        status: 'warning',
+      })
+    }
 
+    setIsLoading(true)
     try {
       const [patientId] = data?.fullName?.split('-') || []
       const appointmentBody = {

@@ -30,7 +30,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
     isDone,
     start,
     end,
-    patient = {},
+    patient,
     totalPrice,
     payment,
     paymentLeft,
