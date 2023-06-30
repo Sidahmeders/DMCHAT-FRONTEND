@@ -1,13 +1,31 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
-import { isEmpty } from 'lodash'
+import { isEmpty, debounce } from 'lodash'
 
 import { getUser, notify } from '@utils'
 import { CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
 
 const ChatContext = createContext()
+
+const updateChatMessages = debounce(
+  ({ selectedChat, targetChat, createdMessage, setMessages, notifications, setNotifications, setFetchAgain }) => {
+    if (selectedChat._id === targetChat._id) {
+      setMessages((prevMessages) => [...prevMessages, createdMessage])
+    }
+
+    const { name: senderName } = createdMessage.sender
+    const { chatName } = createdMessage.chat?.[0]
+    const notificationSender = chatName === 'sender' ? senderName : chatName
+    const isSenderNotificationFound = notifications.find((notif) => notif.notificationSender === notificationSender)
+    if (!isSenderNotificationFound) {
+      const newNotification = { ...createdMessage, notificationSender }
+      setNotifications([newNotification, ...notifications])
+      setFetchAgain((prevState) => !prevState)
+    }
+  },
+)
 
 export const ChatProvider = ({ children, socket }) => {
   const navigate = useNavigate()
@@ -55,19 +73,15 @@ export const ChatProvider = ({ children, socket }) => {
     socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (payload) => {
       const { createdMessage, targetChat } = payload
 
-      if (targetChat._id === selectedChat._id) {
-        setMessages([...messages, createdMessage])
-      }
-
-      const { name: senderName } = createdMessage.sender
-      const { chatName } = createdMessage.chat?.[0]
-      const notificationSender = chatName === 'sender' ? senderName : chatName
-      const isSenderNotificationFound = notifications.find((notif) => notif.notificationSender === notificationSender)
-      if (!isSenderNotificationFound) {
-        const newNotification = { ...createdMessage, notificationSender }
-        setNotifications([newNotification, ...notifications])
-        setFetchAgain((prevState) => !prevState)
-      }
+      updateChatMessages({
+        selectedChat,
+        targetChat,
+        createdMessage,
+        setMessages,
+        notifications,
+        setNotifications,
+        setFetchAgain,
+      })
 
       const { sender, content } = createdMessage || {}
       notify({ title: sender?.name, description: content })

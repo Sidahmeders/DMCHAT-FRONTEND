@@ -37,7 +37,7 @@ export const notify = debounce(async ({ title, description }) => {
     })
     setTimeout(notification.close.bind(notification), 4500)
   }
-}, 500)
+})
 
 export const flattenAppointment = (appointment) => ({
   id: appointment._id,
