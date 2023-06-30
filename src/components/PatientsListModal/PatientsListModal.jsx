@@ -12,8 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { Users } from 'react-feather'
 
-import { ChatState } from '@context'
-import { setPatient } from '@utils'
+import { getUser, setPatient } from '@utils'
 import { PAGINATION_ROWS_PER_PAGE_OPTIONS } from '@config'
 import { fetchPatients } from '@services/patients'
 
@@ -29,7 +28,7 @@ import AddPatientModal from '../AddPatientModal'
 import './PatientsListModal.scss'
 
 export default function PatientListModal() {
-  const { user } = ChatState()
+  const user = getUser()
   const toast = useToast()
   const { isOpen: isPatientsModalOpen, onOpen: onPatientsModalOpen, onClose: onPatientsModalClose } = useDisclosure()
   const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: ondEditModalClose } = useDisclosure()
@@ -48,19 +47,19 @@ export default function PatientListModal() {
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) return
     ;(async () => {
+      if (!user) return
       setIsLoading(true)
       try {
-        const patientData = await fetchPatients({ pageNumber, pageSize })
+        const patientData = await fetchPatients({ pageNumber, pageSize, searchName: filterText })
         setPatientsData(patientData)
       } catch (error) {
-        toast()
+        toast({ description: error.message })
       }
       setIsLoading(false)
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pageNumber, pageSize, user])
+  }, [pageNumber, pageSize, filterText])
 
   const filteredItems = patientsData.patients?.filter((patient) => {
     const { fullName } = patient
