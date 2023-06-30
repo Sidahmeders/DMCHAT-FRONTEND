@@ -33,7 +33,7 @@ const updateChatMessages = debounce(
 export const ChatProvider = ({ children, socket }) => {
   const navigate = useNavigate()
   const [user, setUser] = useState()
-  const [selectedChat, setSelectedChat] = useState()
+  const [selectedChat, setSelectedChat] = useState({})
   const [chats, setChats] = useState([])
   const [notifications, setNotifications] = useState([])
   const [messages, setMessages] = useState([])
@@ -44,7 +44,7 @@ export const ChatProvider = ({ children, socket }) => {
   const toast = useToast()
 
   const fetchMessages = async () => {
-    if (!selectedChat || !user) return
+    if (!selectedChat._id) return
     setIsLoadingMessages(true)
     try {
       const messagesData = await fetchMessagesByChatId(selectedChat._id)
@@ -72,7 +72,6 @@ export const ChatProvider = ({ children, socket }) => {
   }, [selectedChat])
 
   useEffect(() => {
-    if (!selectedChat) return
     socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (payload) => {
       const { createdMessage, targetChat } = payload
 

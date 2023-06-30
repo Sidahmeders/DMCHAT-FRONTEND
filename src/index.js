@@ -15,23 +15,23 @@ const socket = io(ENDPOINT)
 
 root.render(
   <BrowserRouter>
-    <ChatProvider socket={socket}>
-      <AppointmentsProvider>
-        <ChakraProvider
-          toastOptions={{
-            defaultOptions: {
-              title: "quelque chose s'est mal passé. veuillez réessayer plus tard",
-              status: 'error',
-              duration: 7500,
-              isClosable: true,
-              position: 'top-right',
-              variant: 'left-accent',
-            },
-          }}>
+    <ChakraProvider
+      toastOptions={{
+        defaultOptions: {
+          title: "quelque chose s'est mal passé. veuillez réessayer plus tard",
+          status: 'error',
+          duration: 7500,
+          isClosable: true,
+          position: 'top-right',
+          variant: 'left-accent',
+        },
+      }}>
+      <ChatProvider socket={socket}>
+        <AppointmentsProvider>
           <App />
-        </ChakraProvider>
-      </AppointmentsProvider>
-    </ChatProvider>
+        </AppointmentsProvider>
+      </ChatProvider>
+    </ChakraProvider>
   </BrowserRouter>,
 )
 
