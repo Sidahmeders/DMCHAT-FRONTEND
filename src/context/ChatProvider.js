@@ -15,14 +15,17 @@ const updateChatMessages = debounce(
       setMessages((prevMessages) => [...prevMessages, createdMessage])
     }
 
-    const { name: senderName } = createdMessage.sender
-    const { chatName } = createdMessage.chat?.[0]
-    const notificationSender = chatName === 'sender' ? senderName : chatName
-    const isSenderNotificationFound = notifications.find((notif) => notif.notificationSender === notificationSender)
-    if (!isSenderNotificationFound) {
-      const newNotification = { ...createdMessage, notificationSender }
-      setNotifications([newNotification, ...notifications])
-      setFetchAgain((prevState) => !prevState)
+    if (selectedChat._id !== targetChat._id) {
+      const { name: senderName } = createdMessage.sender
+      const { chatName } = createdMessage.chat?.[0]
+      const notificationSender = chatName === 'sender' ? senderName : chatName
+      const isSenderNotificationFound = notifications.find((notif) => notif.notificationSender === notificationSender)
+
+      if (!isSenderNotificationFound) {
+        const newNotification = { ...createdMessage, notificationSender }
+        setNotifications([newNotification, ...notifications])
+        setFetchAgain((prevState) => !prevState)
+      }
     }
   },
 )
