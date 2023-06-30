@@ -61,18 +61,21 @@ const PaymentRatio = () => {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontWeight: 'bold' }}>
           <div style={{ width: '100px' }}>Total:</div>
           <div>{formatMoney(TOTAL)}</div>
+          <div style={{ color: 'blue', fontWeight: 'normal', fontSize: '14px', marginLeft: '-5px' }}>(100%)</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontWeight: 'bold' }}>
           <div style={{ width: '100px' }}>Payé:</div>
           <div>{formatMoney(PAID)}</div>
+          <div style={{ color: 'blue', fontWeight: 'normal', fontSize: '14px' }}>({paidPercentage}%)</div>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontWeight: 'bold' }}>
           <div style={{ width: '100px' }}>Reste:</div>
           <div>{formatMoney(REMAINING)}</div>
+          <div style={{ color: 'blue', fontWeight: 'normal', fontSize: '14px' }}>({100 - paidPercentage}%)</div>
         </div>
       </CardBody>
       <CardFooter px="8">
-        <Tooltip label={`${formatMoney(REMAINING)}`} bg="blue.200" placement="bottom-end" hasArrow>
+        <Tooltip defaultIsOpen label={`${formatMoney(REMAINING)}`} bg="blue.200" placement="top-end" hasArrow>
           <div
             style={{
               marginTop: '2rem',
@@ -83,7 +86,7 @@ const PaymentRatio = () => {
               display: 'flex',
               overflow: 'hidden',
             }}>
-            <Tooltip label={`${formatMoney(PAID)}`} bg="orange.400" placement="top-start" hasArrow>
+            <Tooltip defaultIsOpen label={`${formatMoney(PAID)}`} bg="orange.400" placement="top-start" hasArrow>
               <div
                 style={{
                   width: `${paidPercentage}%`,
