@@ -1,12 +1,32 @@
 import { useEffect, useState } from 'react'
 import { Button, InputGroup, Input, useToast } from '@chakra-ui/react'
 import { CardBody } from '@chakra-ui/card'
+import { debounce } from 'lodash'
 
 import { AppointmentsState, ChatState } from '@context'
 import { formatMoney, getUser, notify } from '@utils'
 import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS, APPOINTMENTS_LISTENERS } from '@config'
 import { updateAppointment } from '@services/appointments'
 import { createPayment } from '@services/payments'
+
+const updatePaymentsState = debounce(
+  ({
+    updatedAppointment,
+    createdPayment,
+    setTodayPaymentHistory,
+    setAppointment,
+    setTotalPriceVal,
+    setPaymentVal,
+    setPaymentLeftVal,
+  }) => {
+    const { totalPrice, payment, paymentLeft } = updatedAppointment
+    setAppointment(updatedAppointment)
+    setTotalPriceVal(totalPrice)
+    setPaymentVal(payment)
+    setPaymentLeftVal(paymentLeft)
+    setTodayPaymentHistory((paymentHistory) => [...paymentHistory, createdPayment])
+  },
+)
 
 const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   const { fullName, patientId } = appointmentData
@@ -60,7 +80,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
         [CREATE_PAYMENT_NAMES.PAYER_NAME]: fullName,
       }
 
-      const updatedAppointment = await updateAppointment(appointment.id, appointmentUpdate)
+      const updatedAppointment = await updateAppointment(appointment._id, appointmentUpdate)
       const createdPayment = await createPayment(new Date(), paymentUpdate)
 
       socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { updatedAppointment, createdPayment })
@@ -84,17 +104,21 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_PAID, (payload) => {
       const { updatedAppointment, createdPayment } = payload
       if (updatedAppointment._id === appointment._id) {
-        const { totalPrice, payment, paymentLeft } = updatedAppointment
+        updatePaymentsState({
+          updatedAppointment,
+          createdPayment,
+          setTodayPaymentHistory,
+          setAppointment,
+          setTotalPriceVal,
+          setPaymentVal,
+          setPaymentLeftVal,
+        })
+        const { payment, paymentLeft } = updatedAppointment
         const currentPayment = payment - appointment?.payment
-        setAppointment(payload)
-        setTotalPriceVal(totalPrice)
-        setPaymentVal(payment)
-        setPaymentLeftVal(paymentLeft)
         notify({
           title: `paiement effectué par "${fullName}"`,
           description: `payé: ${formatMoney(currentPayment)} / reste: ${formatMoney(paymentLeft)}`,
         })
-        setTodayPaymentHistory((paymentHistory) => [...paymentHistory, createdPayment])
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
