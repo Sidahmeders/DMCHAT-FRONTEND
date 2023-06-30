@@ -3,11 +3,10 @@ import { Avatar, Tooltip } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { BeatLoader } from 'react-spinners'
 
-import { isLastMessage, isSameSender, isSameSenderMargin, isSameUser } from '@utils'
-import { ChatState } from '@context'
+import { isLastMessage, getUser, isSameSender, isSameSenderMargin, isSameUser } from '@utils'
 
 const ScrollableChat = ({ messages, isTyping }) => {
-  const { user } = ChatState()
+  const user = getUser()
   const scrollRef = useRef()
 
   useEffect(() => {

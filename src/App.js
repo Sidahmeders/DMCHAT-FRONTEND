@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import { Wifi, WifiOff } from 'react-feather'
 
 import { ChatState } from '@context'
-import { checkIsJWTExpired, removeUser, notify, getPageRoute } from '@utils'
+import { checkIsJWTExpired, removeUser, getPageRoute } from '@utils'
 import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
@@ -14,17 +14,7 @@ import { Auth, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
 import './App.css'
 
 const App = () => {
-  const {
-    user,
-    socket,
-    selectedChatCompare,
-    setFetchAgain,
-    messages,
-    setMessages,
-    notifications,
-    setNotifications,
-    setSocketConnected,
-  } = ChatState()
+  const { user, socket, setSocketConnected } = ChatState()
   const toast = useToast()
   const navigate = useNavigate()
 
@@ -78,28 +68,6 @@ const App = () => {
     socket.on(CHAT_LISTENERS.CONNECTED, () => setSocketConnected(true))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, socket])
-
-  useEffect(() => {
-    socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (messageRecieved) => {
-      if (!selectedChatCompare || selectedChatCompare._id !== messageRecieved.chat[0]._id) {
-        const { name: senderName } = messageRecieved.sender
-        const { chatName } = messageRecieved.chat?.[0]
-        const notificationSender = chatName === 'sender' ? senderName : chatName
-        const isSenderNotificationFound = Boolean(
-          notifications.find((notif) => notif.notificationSender === notificationSender),
-        )
-        if (!isSenderNotificationFound) {
-          const newNotification = { ...messageRecieved, notificationSender }
-          setNotifications([newNotification, ...notifications])
-          setFetchAgain((prevState) => !prevState)
-        }
-      } else {
-        setMessages([...messages, messageRecieved])
-      }
-      const { sender, content } = messageRecieved || {}
-      notify({ title: sender?.name, description: content })
-    })
-  })
 
   return (
     <div className="App">

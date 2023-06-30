@@ -54,6 +54,7 @@ const UserChats = () => {
 
               return (
                 <Box
+                  key={chat._id}
                   onClick={() => setSelectedChat(chat)}
                   cursor="pointer"
                   bg={selectedChat?._id === chat._id ? '#47f9' : 'gray.100'}
@@ -61,8 +62,7 @@ const UserChats = () => {
                   position="relative"
                   px="3"
                   py="2"
-                  borderRadius="lg"
-                  key={chat._id}>
+                  borderRadius="lg">
                   <HStack gap="2">
                     <Avatar src={!chat.isGroupChat && pic} name={chat.chatName} />
                     <Box pt="2">

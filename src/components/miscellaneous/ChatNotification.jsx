@@ -9,7 +9,7 @@ import { APP_ROUTES } from '@config'
 import './ChatNotification.scss'
 
 const ChatNotification = () => {
-  const { user, setSelectedChat, notifications, setNotifications, setSelectedChatAppointmentModal } = ChatState()
+  const { user, setSelectedChat, notifications, setNotifications } = ChatState()
   const navigate = useNavigate()
 
   return (
@@ -33,7 +33,6 @@ const ChatNotification = () => {
                 key={_id}
                 onClick={() => {
                   navigate(APP_ROUTES.TODAY_PATIENTS_LIST)
-                  setSelectedChatAppointmentModal(notif)
                   setNotifications(notifications.filter((n) => n !== notif))
                 }}>
                 {`${userName} vous a envoyé un message concernant ${patientName}`}

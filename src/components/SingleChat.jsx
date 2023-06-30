@@ -47,7 +47,7 @@ const SingleChat = () => {
       socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
       setNewMessage('')
       const createdMessage = await createMessage(newMessage, selectedChat._id)
-      socket.emit(CHAT_EVENTS.NEW_MESSAGE, createdMessage)
+      socket.emit(CHAT_EVENTS.NEW_MESSAGE, { createdMessage, targetChat: selectedChat })
       setMessages([...messages, createdMessage])
       setFetchAgain((prevState) => !prevState)
     } catch (error) {

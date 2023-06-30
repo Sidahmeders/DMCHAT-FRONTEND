@@ -3,23 +3,21 @@ import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
-import { getUser } from '@utils'
-import { CHAT_EVENTS } from '@config'
+import { getUser, notify } from '@utils'
+import { CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
 
 const ChatContext = createContext()
 
 export const ChatProvider = ({ children, socket }) => {
   const navigate = useNavigate()
-  const [user, setUser] = useState() // If 'userInfo' is available, else set '{}'
+  const [user, setUser] = useState()
   const [selectedChat, setSelectedChat] = useState()
-  const [selectedChatAppointmentModal, setSelectedChatAppointmentModal] = useState({})
   const [chats, setChats] = useState([])
   const [notifications, setNotifications] = useState([])
   const [messages, setMessages] = useState([])
   const [fetchAgain, setFetchAgain] = useState(false)
   const [isLoadingMessages, setIsLoadingMessages] = useState(false)
-  const [selectedChatCompare, setSelectedChatCompare] = useState()
   const [socketConnected, setSocketConnected] = useState(false)
 
   const toast = useToast()
@@ -43,18 +41,38 @@ export const ChatProvider = ({ children, socket }) => {
 
     setUser(userInfo)
     fetchMessages()
-    return () => {
-      setSelectedChatCompare(undefined)
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate])
 
   // Whenever users switches chat, call the function again
   useEffect(() => {
     fetchMessages()
-    setSelectedChatCompare(selectedChat)
     // eslint-disable-next-line
   }, [selectedChat])
+
+  useEffect(() => {
+    if (!selectedChat) return
+    socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (payload) => {
+      const { createdMessage, targetChat } = payload
+
+      if (targetChat._id === selectedChat._id) {
+        setMessages([...messages, createdMessage])
+      }
+
+      const { name: senderName } = createdMessage.sender
+      const { chatName } = createdMessage.chat?.[0]
+      const notificationSender = chatName === 'sender' ? senderName : chatName
+      const isSenderNotificationFound = notifications.find((notif) => notif.notificationSender === notificationSender)
+      if (!isSenderNotificationFound) {
+        const newNotification = { ...createdMessage, notificationSender }
+        setNotifications([newNotification, ...notifications])
+        setFetchAgain((prevState) => !prevState)
+      }
+
+      const { sender, content } = createdMessage || {}
+      notify({ title: sender?.name, description: content })
+    })
+  })
 
   return (
     <ChatContext.Provider
@@ -64,8 +82,6 @@ export const ChatProvider = ({ children, socket }) => {
         setUser,
         selectedChat,
         setSelectedChat,
-        selectedChatAppointmentModal,
-        setSelectedChatAppointmentModal,
         chats,
         setChats,
         notifications,
@@ -74,11 +90,8 @@ export const ChatProvider = ({ children, socket }) => {
         setMessages,
         fetchMessages,
         isLoadingMessages,
-        setIsLoadingMessages,
         fetchAgain,
         setFetchAgain,
-        selectedChatCompare,
-        setSelectedChatCompare,
         socketConnected,
         setSocketConnected,
       }}>
