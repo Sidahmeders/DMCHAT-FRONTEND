@@ -20,6 +20,7 @@ import {
 import { Sliders } from 'react-feather'
 
 import { ChatState } from '@context'
+import { getUser } from '@utils'
 import { joinGroup, leaveGroup, removeGroup } from '@services/chats'
 import { searchUsers } from '@services/users'
 
@@ -28,15 +29,16 @@ import UserListItem from '../UserAvatar/UserListItem'
 import DeleteChatModal from './DeleteChatModal'
 
 const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, setMessages }) => {
+  const user = getUser()
+  const toast = useToast()
+  const { selectedChat, setSelectedChat } = ChatState()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   const [groupChatName, setGroupChatName] = useState('')
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [loading, setLoading] = useState(false)
   const [renameLoading, setRenameLoading] = useState(false)
-
-  const { user, selectedChat, setSelectedChat } = ChatState()
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const toast = useToast()
 
   const handleRemove = async (removeUser) => {
     // Check if group admin id !== logged in user id and user id who is trying to remove !== logged in user id

@@ -14,14 +14,13 @@ import {
 } from '@chakra-ui/react'
 import { AlertTriangle } from 'react-feather'
 
-import { ChatState } from '@context'
-import { getPatient } from '@utils'
+import { getPatient, getUser } from '@utils'
 import { deletePatientById } from '@services/patients'
 
 import Loader from '../Loader/Loader'
 
 export default function DeletePatientModal({ isOpen, onClose, setPatientsData }) {
-  const { user } = ChatState()
+  const user = getUser()
   const toast = useToast()
 
   const [patient, setPatient] = useState({})

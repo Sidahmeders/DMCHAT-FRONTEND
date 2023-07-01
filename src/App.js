@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import { Wifi, WifiOff } from 'react-feather'
 
 import { ChatState } from '@context'
-import { checkIsJWTExpired, removeUser, getPageRoute } from '@utils'
+import { checkIsJWTExpired, removeUser, getPageRoute, getUser } from '@utils'
 import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
@@ -14,7 +14,8 @@ import { Auth, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
 import './App.css'
 
 const App = () => {
-  const { user, socket, setSocketConnected } = ChatState()
+  const user = getUser()
+  const { socket, setSocketConnected } = ChatState()
   const toast = useToast()
   const navigate = useNavigate()
 

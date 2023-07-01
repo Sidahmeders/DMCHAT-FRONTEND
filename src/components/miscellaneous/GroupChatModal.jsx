@@ -25,15 +25,15 @@ import UserListItem from '../UserAvatar/UserListItem'
 import { searchUsers } from '@services/users'
 
 const GroupChatModal = () => {
+  const toast = useToast()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { chats, setChats } = ChatState()
+
   const [groupChatName, setGroupChatName] = useState('')
   const [selectedUsers, setSelectedUsers] = useState([])
   const [search, setSearch] = useState('')
   const [searchResults, setSearchResults] = useState([])
   const [loading, setLoading] = useState(false)
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const toast = useToast()
-  const { chats, setChats } = ChatState()
 
   const handleSearch = async (query) => {
     setSearch(query)

@@ -32,7 +32,6 @@ const updateChatMessages = debounce(
 
 export const ChatProvider = ({ children, socket }) => {
   const navigate = useNavigate()
-  const [user, setUser] = useState()
   const [selectedChat, setSelectedChat] = useState({})
   const [chats, setChats] = useState([])
   const [notifications, setNotifications] = useState([])
@@ -57,10 +56,7 @@ export const ChatProvider = ({ children, socket }) => {
   }
 
   useEffect(() => {
-    const userInfo = getUser()
-    if (isEmpty(userInfo)) navigate('/')
-
-    setUser(userInfo)
+    if (isEmpty(getUser())) navigate('/')
     fetchMessages()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate])
@@ -93,9 +89,7 @@ export const ChatProvider = ({ children, socket }) => {
   return (
     <ChatContext.Provider
       value={{
-        user,
         socket,
-        setUser,
         selectedChat,
         setSelectedChat,
         chats,

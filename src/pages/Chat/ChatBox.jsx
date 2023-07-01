@@ -1,15 +1,11 @@
 import { Box } from '@chakra-ui/react'
 
-import { ChatState } from '@context'
-
 import SingleChat from '@components/SingleChat'
 
 const ChatBox = () => {
-  const { selectedChat } = ChatState()
-
   return (
     <Box
-      display={{ base: selectedChat ? 'flex' : 'none', md: 'flex' }}
+      display={{ md: 'flex' }}
       alignItems="center"
       flexDir="column"
       p={3}

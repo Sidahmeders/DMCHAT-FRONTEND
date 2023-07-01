@@ -18,13 +18,12 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 
-import { ChatState } from '@context'
-import { getPatient } from '@utils'
+import { getPatient, getUser } from '@utils'
 import { CREATE_PATIENT_NAMES } from '@config'
 import { updatePatientById } from '@services/patients'
 
 export default function EditPatientModal({ isOpen, onClose, patientsData, setPatientsData }) {
-  const { user } = ChatState()
+  const user = getUser()
   const toast = useToast()
   const {
     handleSubmit,

@@ -3,13 +3,14 @@ import { Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import { MessageCircle } from 'react-feather'
 
 import { ChatState } from '@context'
-import { getSender } from '@utils'
+import { getSender, getUser } from '@utils'
 import { APP_ROUTES } from '@config'
 
 import './ChatNotification.scss'
 
 const ChatNotification = () => {
-  const { user, setSelectedChat, notifications, setNotifications } = ChatState()
+  const user = getUser()
+  const { setSelectedChat, notifications, setNotifications } = ChatState()
   const navigate = useNavigate()
 
   return (

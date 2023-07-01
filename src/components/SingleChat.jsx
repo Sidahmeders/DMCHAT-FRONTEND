@@ -13,22 +13,19 @@ import {
 import { Send, ArrowLeft } from 'react-feather'
 
 import { ChatState } from '@context'
-import { getSender, getSenderFull } from '@utils'
+import { getSender, getSenderFull, getUser } from '@utils'
 import { CHAT_EVENTS, CHAT_LISTENERS } from '@config'
 import { createMessage } from '@services/messages'
 
 import PeerProfileModal from './miscellaneous/PeerProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat'
+import { isEmpty } from 'lodash'
 
 const SingleChat = () => {
-  const [newMessage, setNewMessage] = useState('')
-  const [typing, setTyping] = useState(false)
-  const [isTyping, setIsTyping] = useState(false)
-
+  const user = getUser()
   const toast = useToast()
   const {
-    user,
     socket,
     selectedChat,
     setSelectedChat,
@@ -39,6 +36,10 @@ const SingleChat = () => {
     setFetchAgain,
     socketConnected,
   } = ChatState()
+
+  const [newMessage, setNewMessage] = useState('')
+  const [typing, setTyping] = useState(false)
+  const [isTyping, setIsTyping] = useState(false)
 
   const sendMessage = async (e) => {
     if (newMessage.trim().length < 1) return
@@ -94,7 +95,7 @@ const SingleChat = () => {
 
   return (
     <>
-      {selectedChat ? (
+      {!isEmpty(selectedChat) ? (
         <>
           <Box fontSize="1.25rem" w="100%" pb="3" display="flex" justifyContent="space-between" alignItems="center">
             <IconButton
