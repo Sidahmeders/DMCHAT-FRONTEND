@@ -19,10 +19,10 @@ import { Plus } from 'react-feather'
 
 import { ChatState } from '@context'
 import { createGroupChat } from '@services/chats'
+import { searchUsers } from '@services/users'
 
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem'
-import { searchUsers } from '@services/users'
 
 const GroupChatModal = () => {
   const toast = useToast()

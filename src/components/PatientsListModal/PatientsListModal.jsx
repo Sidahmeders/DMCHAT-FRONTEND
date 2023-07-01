@@ -61,12 +61,6 @@ export default function PatientListModal() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pageNumber, pageSize, filterText])
 
-  const filteredItems = patientsData.patients?.filter((patient) => {
-    const { fullName } = patient
-    const textFiltered = fullName && fullName?.toLowerCase()?.includes(filterText?.toLowerCase())
-    return textFiltered ? patient : false
-  })
-
   const subHeaderComponent = useMemo(() => {
     const handleFilter = (e) => setFilterText(e.target.value)
 
@@ -99,7 +93,7 @@ export default function PatientListModal() {
               paginationServer
               loading={isLoading}
               columns={patientColumns({ onEditModalOpen, onDeleteModalOpen })}
-              data={filteredItems}
+              data={patientsData.patients}
               subHeaderComponent={subHeaderComponent}
               expandableRowsComponent={ExpandableComponent}
               paginationTotalRows={patientsData.totalCount}

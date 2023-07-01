@@ -11,6 +11,7 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { Send, ArrowLeft } from 'react-feather'
+import { isEmpty } from 'lodash'
 
 import { ChatState } from '@context'
 import { getSender, getSenderFull, getUser } from '@utils'
@@ -20,7 +21,6 @@ import { createMessage } from '@services/messages'
 import PeerProfileModal from './miscellaneous/PeerProfileModal'
 import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from './ScrollableChat'
-import { isEmpty } from 'lodash'
 
 const SingleChat = () => {
   const user = getUser()

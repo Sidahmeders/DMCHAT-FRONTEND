@@ -14,4 +14,4 @@ export const APP_ROUTES = {
   STATISTICS: '/statistics',
 }
 
-export const PAGINATION_ROWS_PER_PAGE_OPTIONS = [10, 20, 50, 100, 200, 500]
+export const PAGINATION_ROWS_PER_PAGE_OPTIONS = [20, 40, 60, 100, 200]
