@@ -9,6 +9,8 @@ import {
   Input,
   HStack,
   CardFooter,
+  Text,
+  Box,
 } from '@chakra-ui/react'
 import { formatDate, formatMoney } from '@utils'
 
@@ -16,7 +18,6 @@ const PaymentRatio = () => {
   const TOTAL = 25220000
   const PAID = 11220000
   const REMAINING = TOTAL - PAID
-
   const paidPercentage = Math.round((PAID / TOTAL) * 100)
 
   return (
@@ -58,45 +59,35 @@ const PaymentRatio = () => {
         </HStack>
       </CardHeader>
       <CardBody px="8">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontWeight: 'bold' }}>
-          <div style={{ width: '100px' }}>Total:</div>
-          <div>{formatMoney(TOTAL)}</div>
-          <div style={{ color: 'blue', fontWeight: 'normal', fontSize: '14px', marginLeft: '-5px' }}>(100%)</div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontWeight: 'bold' }}>
-          <div style={{ width: '100px' }}>Payé:</div>
-          <div>{formatMoney(PAID)}</div>
-          <div style={{ color: 'blue', fontWeight: 'normal', fontSize: '14px' }}>({paidPercentage}%)</div>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontWeight: 'bold' }}>
-          <div style={{ width: '100px' }}>Reste:</div>
-          <div>{formatMoney(REMAINING)}</div>
-          <div style={{ color: 'blue', fontWeight: 'normal', fontSize: '14px' }}>({100 - paidPercentage}%)</div>
-        </div>
+        <HStack fontWeight="semibold" justify="space-between">
+          <Text>Total:</Text>
+          <Text fontSize="14" fontWeight="normal" color="gray.500">
+            (100%)
+          </Text>
+          <Text>{formatMoney(TOTAL)}</Text>
+        </HStack>
+        <HStack fontWeight="semibold" justify="space-between" color="#ff930f">
+          <Text>Payé:</Text>
+          <Text fontSize="14" fontWeight="normal" color="gray.500">
+            ({paidPercentage}%)
+          </Text>
+          <Text>{formatMoney(PAID)}</Text>
+        </HStack>
+        <HStack fontWeight="semibold" justify="space-between" color="#1f7ea1">
+          <Text>Reste:</Text>
+          <Text fontSize="14" fontWeight="normal" color="gray.500">
+            ({100 - paidPercentage}%)
+          </Text>
+          <Text>{formatMoney(REMAINING)}</Text>
+        </HStack>
       </CardBody>
       <CardFooter px="8">
-        <Tooltip defaultIsOpen label={`${formatMoney(REMAINING)}`} bg="blue.200" placement="top-end" hasArrow>
-          <div
-            style={{
-              marginTop: '2rem',
-              width: '100%',
-              height: '20px',
-              backgroundColor: '#1f7ea166',
-              borderRadius: '10px',
-              display: 'flex',
-              overflow: 'hidden',
-            }}>
-            <Tooltip defaultIsOpen label={`${formatMoney(PAID)}`} bg="orange.400" placement="top-start" hasArrow>
-              <div
-                style={{
-                  width: `${paidPercentage}%`,
-                  height: '100%',
-                  backgroundColor: '#ff930f',
-                  transition: 'width 0.5s',
-                }}
-              />
+        <Tooltip label={`${formatMoney(REMAINING)}`} bg="blue.200" placement="top-end" hasArrow>
+          <Box width="100%" height="6" borderRadius="full" bg="#1f7ea166" overflow="hidden">
+            <Tooltip label={`${formatMoney(PAID)}`} bg="orange.400" placement="top-start" hasArrow>
+              <Box width={`${paidPercentage}%`} height="100%" bg="#ff930f" />
             </Tooltip>
-          </div>
+          </Box>
         </Tooltip>
       </CardFooter>
     </Card>

@@ -1,0 +1,25 @@
+.revenu-stat-container {
+  overflow-x: auto;
+
+  .year-range-picker {
+    color: #474aff;
+    background-color: #474aff22;
+    border: 1px solid #474aff99;
+    border-radius: 6px;
+    padding: 3px 6px;
+  }
+
+  .month-range-picker {
+    input {
+      padding: 2px 6px;
+      padding-left: 3px;
+      border: 1px solid #3277f8;
+      border-radius: 6px;
+      background-color: #3277f822;
+      color: #3277f8;
+      width: 110px;
+      outline: none;
+      text-align: center;
+    }
+  }
+}

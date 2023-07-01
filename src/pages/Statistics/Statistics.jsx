@@ -1,7 +1,7 @@
 import { Card, CardBody, HStack } from '@chakra-ui/react'
 
 import PaymentRatio from './PaymentRatio'
-import RevenuChart from './RevenuChart'
+import RevenuChart from './RevenuChart/RevenuChart'
 import PayerCategoryChart from './PayerCategoryChart'
 import WorkLoadChart from './WorkLoadChart'
 

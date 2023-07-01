@@ -1,8 +1,14 @@
-import { useState } from 'react'
-import { Button, HStack, FormControl, FormLabel, Switch } from '@chakra-ui/react'
+import { useEffect, useState } from 'react'
 import { ComposedChart, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
+import { subDays } from 'date-fns'
 
-import { abbreviateNumber, formatMoney } from '@utils'
+import { abbreviateNumber } from '@utils'
+import { fetchPaymentsByDateRange } from '@services/statistics'
+
+import CustomLegend from './CustomLegend'
+import CustomTooltip from './CustomTooltip'
+
+import './RevenuChart.scss'
 
 const yearData = [
   {
@@ -90,69 +96,23 @@ const mixedMonthData = [
 
 const cleanMonthData = mixedMonthData.filter((day) => day.revenu > 0)
 
-const CustomTooltip = (props) => {
-  const { active, payload, label } = props
-  if (active && payload && payload.length) {
-    return (
-      <div
-        style={{
-          background: '#fff',
-          padding: '10px',
-          borderRadius: '6px',
-        }}>
-        <p className="label">{`${label} : ${formatMoney(payload[0].value)}`}</p>
-      </div>
-    )
-  }
-  return null
-}
-
-const CustomLegend = ({ showEmptyDays, setShowEmptyDays, selectedStat, setSelectedStat }) => {
-  return (
-    <HStack display="flex" justifyContent="space-between" ml="14" mb="4">
-      <HStack>
-        <Button
-          size="sm"
-          colorScheme="twitter"
-          variant={selectedStat.month ? 'solid' : 'ghost'}
-          onClick={() => setSelectedStat({ month: true })}>
-          Mois Revenu
-        </Button>
-        <Button
-          size="sm"
-          colorScheme="purple"
-          variant={selectedStat.year ? 'solid' : 'ghost'}
-          onClick={() => setSelectedStat({ year: true })}>
-          Année Revenu
-        </Button>
-      </HStack>
-
-      <HStack>
-        <FormControl display="flex" alignItems="center">
-          <FormLabel htmlFor="show-empty-days" fontSize="xs" mr="1" mb="0">
-            afficher jours vides?
-          </FormLabel>
-          <Switch
-            size="sm"
-            id="show-empty-days"
-            colorScheme="yellow"
-            checked={showEmptyDays}
-            onChange={() => setShowEmptyDays(!showEmptyDays)}
-          />
-        </FormControl>
-      </HStack>
-    </HStack>
-  )
-}
-
 const RevenuChart = () => {
   const [selectedStat, setSelectedStat] = useState({ year: true, month: false })
   const [showEmptyDays, setShowEmptyDays] = useState(false)
+  const [dateRangeValue, setDateRangeValue] = useState([subDays(new Date(), 30), new Date()])
 
   const monthData = showEmptyDays ? mixedMonthData : cleanMonthData
 
+  useEffect(() => {
+    ;(async () => {
+      const [startDate, endDate] = dateRangeValue
+      const paymentRatioData = await fetchPaymentsByDateRange(startDate, endDate)
+      console.log(paymentRatioData, 'paymentRatioData')
+    })()
+  }, [dateRangeValue])
+
   return (
-    <div style={{ overflowX: 'auto' }}>
+    <div className="revenu-stat-container">
       <ComposedChart width={900} height={400} data={selectedStat.year ? yearData : monthData}>
         <CartesianGrid strokeDasharray="4 4" />
         <Tooltip content={<CustomTooltip />} />
@@ -164,13 +124,15 @@ const RevenuChart = () => {
               setSelectedStat={setSelectedStat}
               showEmptyDays={showEmptyDays}
               setShowEmptyDays={setShowEmptyDays}
+              dateRangeValue={dateRangeValue}
+              setDateRangeValue={setDateRangeValue}
             />
           }
         />
         <YAxis tickFormatter={(value) => abbreviateNumber(value)} />
         <XAxis dataKey="name" scale="revenu" />
-        <Bar dataKey="revenu" barSize={2} fill="#36d" />
-        <Area dataKey="revenu" type="monotone" stroke="#36d" />
+        <Bar dataKey="revenu" barSize={2} fill="#36dd" />
+        <Area dataKey="revenu" type="monotone" fill={selectedStat.year ? '#474aff66' : '#36d9'} stroke="#36d" />
       </ComposedChart>
     </div>
   )
