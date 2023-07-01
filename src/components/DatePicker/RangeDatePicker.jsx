@@ -7,11 +7,11 @@ import './RangeDatePicker.scss'
 
 registerLocale(fr)
 
-export default function RangeDatePicker({ rangeValue, onChange }) {
+export default function RangeDatePicker({ rangeValue, onChange, className }) {
   const [startDate, endDate] = rangeValue || []
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className="date-range-picker" ref={ref} onClick={onClick}>
+    <button className={className ? className : 'date-range-picker'} ref={ref} onClick={onClick}>
       {value}
     </button>
   ))
