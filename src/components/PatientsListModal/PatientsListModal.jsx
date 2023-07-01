@@ -23,7 +23,7 @@ import PatientFollowupsModal from '../PatientFollowupsModal/PatientFollowupsModa
 import EditPatientModal from './EditPatientModal'
 import DeletePatientModal from './DeletePatientModal'
 import ExpandableComponent from './ExpandableComponent'
-import AddPatientModal from '../AddPatientModal'
+import AddPatientModal from './AddPatientModal'
 
 import './PatientsListModal.scss'
 

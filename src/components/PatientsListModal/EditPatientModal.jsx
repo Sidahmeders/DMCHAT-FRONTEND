@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { AlertCircle, CheckCircle } from 'react-feather'
+import { AlertCircle, CheckCircle, Clipboard } from 'react-feather'
 import {
   Button,
   Modal,
@@ -44,13 +44,12 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
       })
       onClose()
     } catch (error) {
-      toast()
+      toast({ description: error.message })
     }
   }
 
   useEffect(() => {
-    const patient = getPatient()
-    reset(patient)
+    reset(getPatient())
   }, [reset, isOpen])
 
   return (
@@ -71,7 +70,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
                     <InputLeftElement
                       pointerEvents="none"
                       children={
-                        String(value).length >= 1 ? (
+                        value?.length >= 8 && value?.length <= 40 ? (
                           <CheckCircle size="1.25rem" color="green" />
                         ) : (
                           <AlertCircle size="1.25rem" color="red" />
@@ -92,7 +91,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
                     <InputLeftElement
                       pointerEvents="none"
                       children={
-                        String(value).length >= 1 ? (
+                        Number(value) >= 3 && Number(value) <= 120 ? (
                           <CheckCircle size="1.25rem" color="green" />
                         ) : (
                           <AlertCircle size="1.25rem" color="red" />
@@ -113,7 +112,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
                     <InputLeftElement
                       pointerEvents="none"
                       children={
-                        String(value).length >= 1 ? (
+                        value?.length >= 8 && value?.length <= 30 ? (
                           <CheckCircle size="1.25rem" color="green" />
                         ) : (
                           <AlertCircle size="1.25rem" color="red" />
@@ -130,16 +129,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
                 shouldUnregister={isSubmitted}
                 render={({ field: { onChange, value } }) => (
                   <InputGroup>
-                    <InputLeftElement
-                      pointerEvents="none"
-                      children={
-                        value?.length >= 2 ? (
-                          <CheckCircle size="1.25rem" color="green" />
-                        ) : (
-                          <AlertCircle size="1.25rem" color="red" />
-                        )
-                      }
-                    />
+                    <InputLeftElement pointerEvents="none" children={<Clipboard size="1.25rem" color="gray" />} />
                     <Textarea pl="10" placeholder="Etate général" value={value} onChange={onChange} />
                   </InputGroup>
                 )}

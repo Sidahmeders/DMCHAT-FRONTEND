@@ -74,7 +74,7 @@ export default function PatientEditBody() {
                     <InputLeftElement
                       pointerEvents="none"
                       children={
-                        String(value).length >= 1 ? (
+                        value?.length >= 8 && value?.length <= 40 ? (
                           <CheckCircle size="1.25rem" color="green" />
                         ) : (
                           <AlertCircle size="1.25rem" color="red" />
@@ -97,7 +97,7 @@ export default function PatientEditBody() {
                     <InputLeftElement
                       pointerEvents="none"
                       children={
-                        String(value).length >= 1 ? (
+                        Number(value) >= 3 && Number(value) <= 120 ? (
                           <CheckCircle size="1.25rem" color="green" />
                         ) : (
                           <AlertCircle size="1.25rem" color="red" />
@@ -119,7 +119,7 @@ export default function PatientEditBody() {
                     <InputLeftElement
                       pointerEvents="none"
                       children={
-                        String(value).length >= 1 ? (
+                        value?.length >= 8 && value?.length <= 30 ? (
                           <CheckCircle size="1.25rem" color="green" />
                         ) : (
                           <AlertCircle size="1.25rem" color="red" />

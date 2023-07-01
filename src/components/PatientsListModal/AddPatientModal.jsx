@@ -73,7 +73,7 @@ export default function AddPatientModal({ setPatientsData }) {
                       <InputLeftElement
                         pointerEvents="none"
                         children={
-                          value.length >= 8 && value.length <= 40 ? (
+                          value?.length >= 8 && value?.length <= 40 ? (
                             <CheckCircle size="1.25rem" color="green" />
                           ) : (
                             <AlertCircle size="1.25rem" color="red" />
@@ -115,7 +115,7 @@ export default function AddPatientModal({ setPatientsData }) {
                       <InputLeftElement
                         pointerEvents="none"
                         children={
-                          value.length >= 8 && value.length <= 30 ? (
+                          value?.length >= 8 && value?.length <= 30 ? (
                             <CheckCircle size="1.25rem" color="green" />
                           ) : (
                             <AlertCircle size="1.25rem" color="red" />
