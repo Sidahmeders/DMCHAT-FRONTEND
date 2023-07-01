@@ -1,8 +1,18 @@
-import React, { useState } from 'react'
 import PropTypes from 'prop-types'
+import {
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  AccordionIcon,
+  HStack,
+  Text,
+} from '@chakra-ui/react'
 import * as dates from 'date-arithmetic'
+import { Calendar, Activity } from 'react-feather'
 import { startOfMonth, toDate } from 'date-fns'
-import { ChevronDown, Calendar, DollarSign, Target, ChevronUp } from 'react-feather'
+
+import { formatDate, formatMoney } from '@utils'
 
 function rangeFunc(start, end, unit = 'day') {
   let current = start
@@ -24,70 +34,60 @@ function inRange(e, start, end, accessors) {
   return startsBeforeEnd && endsAfterStart
 }
 
-export default function CustomAgenda({ accessors, localizer, length, date, events }) {
+export default function CustomAgenda({ accessors, length, date, events }) {
   const end = dates.add(date, length, 'day')
   const range = rangeFunc(date, end, 'day')
   events = events.filter((event) => inRange(event, date, end, accessors))
   events.sort((a, b) => +accessors.start(a) - +accessors.start(b))
 
-  if (events.length === 0) return 'No event dates in range'
+  if (events.length === 0) return "Aucune date d'événement dans la plage"
 
   return (
     <div>
-      {range.map((day, index) => (
-        <DayEvents key={index} localizer={localizer} accessors={accessors} day={day} events={events} />
-      ))}
-    </div>
-  )
-}
+      {range.map((day, index) => {
+        const dayEvents = events.filter((e) =>
+          inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'), accessors),
+        )
 
-const DayEvents = ({ localizer, accessors, events, day }) => {
-  const [show, setShow] = useState(false)
+        const totalPayments = dayEvents.reduce((total, event) => total + event.payment, 0)
+        const doneAppointments = dayEvents.reduce((done, event) => (event.isDone ? done + 1 : done), 0)
 
-  events = events.filter((e) => inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'), accessors))
-
-  if (events.length === 0) return
-
-  return (
-    <div>
-      <div
-        style={{
-          display: 'flex',
-          border: '1px solid gray',
-          margin: '6px 0',
-          padding: '2px 6px',
-          alignItems: 'center',
-        }}
-        onClick={() => setShow(!show)}>
-        <Calendar color="blue" size="1rem" style={{ marginRight: '6px' }} /> {localizer.format(day, 'yyyy MMMM dd')}{' '}
-        <div style={{ width: '1rem' }}></div>
-        <DollarSign color="orange" size="1rem" style={{ marginRight: '6px' }} /> 690000 DZD
-        <div style={{ width: '1rem' }}></div>
-        <Target color="green" size="1rem" style={{ marginRight: '6px' }} /> Fini: {Math.floor(events.length / 2)}/
-        {events.length}
-        <div style={{ marginLeft: 'auto' }}>{show ? <ChevronUp /> : <ChevronDown />}</div>
-      </div>
-      {events.map(
-        ({ motif, patient, isDone }, index) => (
-          <div key={index} style={{ display: show ? 'block' : 'none' }}>
-            <div
-              style={{
-                border: isDone ? '1px solid #0806' : '1px solid #d006',
-                margin: '6px 0',
-                padding: '6px 12px',
-                background: isDone ? '#0801' : '#d0d1',
-                display: 'flex',
-                justifyContent: 'space-between',
-              }}>
-              <span>
-                {patient?.fullName} / {motif?.name}
-              </span>
-              <span>7000 DZD</span>
-            </div>
-          </div>
-        ),
-        [],
-      )}
+        return dayEvents.length > 0 ? (
+          <Accordion key={index} allowToggle>
+            <AccordionItem>
+              <AccordionButton>
+                <HStack width="100%" gap="4">
+                  <HStack>
+                    <Calendar color="#26d" size="1rem" />
+                    <Text>{formatDate(day, 'yyyy MMMM dd')}</Text>
+                  </HStack>
+                  <HStack>
+                    <Text color="green.500">Total:</Text>
+                    <Text>{formatMoney(totalPayments)} DA</Text>
+                  </HStack>
+                  <HStack>
+                    <Text color="orange.500">Fini:</Text>
+                    <Text>
+                      {doneAppointments}/{dayEvents.length}
+                    </Text>
+                  </HStack>
+                </HStack>
+                <AccordionIcon />
+              </AccordionButton>
+              {dayEvents.map(({ _id, motif, patient, isDone, payment }) => (
+                <AccordionPanel key={_id} px="4" py="2" bg={isDone ? 'green.100' : 'orange.100'}>
+                  <HStack justifyContent="space-between">
+                    <Text display="flex">
+                      {patient?.fullName} <Activity color="#3339" /> {motif?.name}
+                    </Text>
+                    <Text>{formatMoney(payment)} DA</Text>
+                  </HStack>
+                </AccordionPanel>
+              ))}
+            </AccordionItem>
+          </Accordion>
+        ) : null
+      })}
     </div>
   )
 }

@@ -26,7 +26,7 @@ const messages = {
   month: 'Mois',
   week: 'Semaine',
   day: 'Jour',
-  agenda: 'Jour Liste',
+  agenda: 'Liste',
   date: 'Date',
   time: 'Heure',
   event: 'Evenement',
