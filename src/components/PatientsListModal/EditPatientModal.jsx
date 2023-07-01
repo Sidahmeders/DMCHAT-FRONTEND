@@ -18,12 +18,11 @@ import {
   Textarea,
 } from '@chakra-ui/react'
 
-import { getPatient, getUser } from '@utils'
+import { getPatient } from '@utils'
 import { CREATE_PATIENT_NAMES } from '@config'
 import { updatePatientById } from '@services/patients'
 
 export default function EditPatientModal({ isOpen, onClose, patientsData, setPatientsData }) {
-  const user = getUser()
   const toast = useToast()
   const {
     handleSubmit,
@@ -52,7 +51,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
   useEffect(() => {
     const patient = getPatient()
     reset(patient)
-  }, [user, reset, isOpen])
+  }, [reset, isOpen])
 
   return (
     <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
