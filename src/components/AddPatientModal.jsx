@@ -18,11 +18,13 @@ import {
 } from '@chakra-ui/react'
 
 import { CREATE_PATIENT_NAMES } from '@config'
+import { getUser } from '@utils'
 import { createPatient } from '@services/patients'
 
 const initialValues = Object.values(CREATE_PATIENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
 
 export default function AddPatientModal({ setPatientsData }) {
+  const user = getUser()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
   const {
@@ -34,16 +36,17 @@ export default function AddPatientModal({ setPatientsData }) {
 
   const onSubmit = async (data) => {
     try {
-      await createPatient(data)
+      const createdPatient = await createPatient({ ...data, [CREATE_PATIENT_NAMES.SENDER]: user._id })
       setPatientsData((patientsData) => ({
         ...patientsData,
+        patients: [...patientsData.patients, createdPatient],
         totalCount: patientsData.totalCount + 1,
       }))
       toast({ title: 'nouveau patient créé avec succès', status: 'success' })
       reset(initialValues)
       onClose()
     } catch (error) {
-      toast()
+      toast({ description: error.message })
     }
   }
 
@@ -70,7 +73,7 @@ export default function AddPatientModal({ setPatientsData }) {
                       <InputLeftElement
                         pointerEvents="none"
                         children={
-                          String(value).length >= 1 ? (
+                          value.length >= 8 && value.length <= 40 ? (
                             <CheckCircle size="1.25rem" color="green" />
                           ) : (
                             <AlertCircle size="1.25rem" color="red" />
@@ -91,7 +94,7 @@ export default function AddPatientModal({ setPatientsData }) {
                       <InputLeftElement
                         pointerEvents="none"
                         children={
-                          String(value).length >= 1 ? (
+                          Number(value) >= 3 && Number(value) <= 120 ? (
                             <CheckCircle size="1.25rem" color="green" />
                           ) : (
                             <AlertCircle size="1.25rem" color="red" />
@@ -112,7 +115,7 @@ export default function AddPatientModal({ setPatientsData }) {
                       <InputLeftElement
                         pointerEvents="none"
                         children={
-                          String(value).length >= 1 ? (
+                          value.length >= 8 && value.length <= 30 ? (
                             <CheckCircle size="1.25rem" color="green" />
                           ) : (
                             <AlertCircle size="1.25rem" color="red" />
