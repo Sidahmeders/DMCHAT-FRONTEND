@@ -7,11 +7,11 @@ import './RangeDatePicker.scss'
 
 registerLocale(fr)
 
-export default function RangeDatePicker({ rangeValue, onChange, dateFormat, className }) {
+export default function RangeDatePicker({ rangeValue, onChange, dateFormat, className, ...props }) {
   const [startDate, endDate] = rangeValue || []
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <button className={className ? className : 'date-range-picker'} ref={ref} onClick={onClick}>
+    <button className={className} ref={ref} onClick={onClick}>
       {value}
     </button>
   ))
@@ -21,8 +21,6 @@ export default function RangeDatePicker({ rangeValue, onChange, dateFormat, clas
       withPortal
       selectsRange
       fixedHeight
-      showMonthDropdown
-      showYearDropdown
       maxDate={new Date()}
       monthsShown={2}
       locale={fr}
@@ -39,6 +37,7 @@ export default function RangeDatePicker({ rangeValue, onChange, dateFormat, clas
           onChange(newValue)
         }
       }}
+      {...props}
     />
   )
 }
@@ -47,10 +46,12 @@ RangeDatePicker.propTypes = {
   rangeValue: propTypes.arrayOf(propTypes.instanceOf(Date)),
   onChange: propTypes.func,
   dateFormat: propTypes.string,
+  className: propTypes.string,
 }
 
 RangeDatePicker.defaultProps = {
   rangeValue: [new Date(), new Date()],
   onChange: () => {},
   dateFormat: 'yyyy/MM/dd',
+  className: 'date-range-picker',
 }
