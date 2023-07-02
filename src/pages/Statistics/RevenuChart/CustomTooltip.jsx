@@ -1,7 +1,7 @@
 import { formatMoney } from '@utils'
 
 const CustomTooltip = (props) => {
-  const { active, payload, label } = props
+  const { active, payload } = props
   if (active && payload && payload.length) {
     return (
       <div
@@ -10,7 +10,7 @@ const CustomTooltip = (props) => {
           padding: '10px',
           borderRadius: '6px',
         }}>
-        <p className="label">{`${label} : ${formatMoney(payload[0].value)}`}</p>
+        <p className="label">{formatMoney(payload[0].value)}</p>
       </div>
     )
   }

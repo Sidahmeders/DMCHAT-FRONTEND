@@ -57,7 +57,7 @@ export default function TodayPatientsList() {
         }
       })
     } catch (error) {
-      toast({ message: error.message })
+      toast({ description: error.message })
     }
     setIsLoading(false)
   }

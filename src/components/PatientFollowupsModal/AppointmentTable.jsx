@@ -11,14 +11,17 @@ import {
 } from '@chakra-ui/react'
 import { X } from 'react-feather'
 
-import { formatDate } from '@utils'
-import { CREATE_APPOINTMENT_NAMES } from '@config'
+import { AppointmentsState } from '@context'
+import { formatDate, getPatient } from '@utils'
+import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES } from '@config'
 import { updateAppointmentsHistory } from '@services/appointments'
+import { createPayment } from '@services/payments'
 
 import SubAppointment from './SubAppointment'
 
 export default function AppointmentTable({ appointmentsGroup, appointments, setAppointments }) {
   const toast = useToast()
+  const { setTodayPaymentHistory } = AppointmentsState()
   const [baseAppointment] = appointmentsGroup
   const totalPayments = appointmentsGroup.reduce((total, appointment) => total + appointment.payment, 0)
   const paymentLeft = baseAppointment.totalPrice - totalPayments || '0'
@@ -33,12 +36,13 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
   const basePaymentRef = useRef(baseAppointment.payment || '0')
   const baseTotalPriceRef = useRef(baseAppointment.totalPrice)
 
-  const onInputEditHandler = (e, appointmentId, name) => {
+  const onInputEditHandler = (e, appointmentId, name, previousPaymentVal) => {
     const { value, innerText } = e.target
     setTreatmentUpdate({
       ...treatmentUpdate,
       [appointmentId]: {
         ...treatmentUpdate[appointmentId],
+        previousPaymentVal,
         [name]: value || innerText,
       },
     })
@@ -62,6 +66,24 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
           return appointment
         }),
       )
+
+      appointmentsUpdate
+        .filter((appointment) => appointment.previousPaymentVal)
+        .reduce(async (prevPromise, appointment) => {
+          try {
+            await prevPromise
+            const paymentUpdate = {
+              [CREATE_PAYMENT_NAMES.SENDER]: baseAppointment.sender,
+              [CREATE_PAYMENT_NAMES.PATIENT]: baseAppointment.patient,
+              [CREATE_PAYMENT_NAMES.AMOUNT]: parseInt(appointment.payment) - parseInt(appointment.previousPaymentVal),
+              [CREATE_PAYMENT_NAMES.PAYER_NAME]: getPatient()?.fullName,
+            }
+            const createdPayment = await createPayment(new Date(), paymentUpdate)
+            setTodayPaymentHistory((paymentHistory) => [...paymentHistory, createdPayment])
+          } catch (error) {
+            toast({ description: error.message })
+          }
+        }, Promise.resolve())
 
       toast({
         title: 'rendez-vous mis à jour avec succès!',
@@ -162,7 +184,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
               suppressContentEditableWarning
               onInput={(e) => {
                 setCanShowResetBtn(true)
-                onInputEditHandler(e, baseAppointment._id, CREATE_APPOINTMENT_NAMES.PAYMENT)
+                onInputEditHandler(e, baseAppointment._id, CREATE_APPOINTMENT_NAMES.PAYMENT, baseAppointment.payment)
               }}
               ref={basePaymentRef}>
               {baseAppointment.payment}

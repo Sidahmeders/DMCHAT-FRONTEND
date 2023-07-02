@@ -47,7 +47,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
         socket.emit(APPOINTMENTS_EVENTS.CONFIRM_APPOINTMENT, confirmedPatient)
       }
     } catch (error) {
-      toast({ message: error.message })
+      toast({ description: error.message })
     }
     setIsLoading(false)
   }
@@ -60,7 +60,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
         socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENT, leftPatient)
       }
     } catch (error) {
-      toast({ message: error.message })
+      toast({ description: error.message })
     }
     setIsLoading(false)
   }
@@ -72,7 +72,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       const patientData = await fetchPatientById(appointment.patientId)
       setPatient(patientData)
     } catch (error) {
-      toast({ error: error.message })
+      toast({ description: error.message })
     }
     setIsLoading(false)
   }

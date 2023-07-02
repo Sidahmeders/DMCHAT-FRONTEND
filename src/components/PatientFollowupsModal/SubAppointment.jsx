@@ -41,7 +41,7 @@ const SubAppointment = ({ appointment, onInputEditHandler, treatmentUpdate, setT
         ref={paymentRef}
         onInput={(e) => {
           setCanShowResetBtn(true)
-          onInputEditHandler(e, _id, CREATE_APPOINTMENT_NAMES.PAYMENT)
+          onInputEditHandler(e, _id, CREATE_APPOINTMENT_NAMES.PAYMENT, appointment.payment)
         }}>
         {payment || '0'}
       </td>
