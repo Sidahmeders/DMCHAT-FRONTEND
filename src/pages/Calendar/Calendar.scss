@@ -10,6 +10,10 @@
 }
 
 .calendar-date-picker {
+  div {
+    z-index: 99;
+  }
+
   input {
     outline: none;
     border: 1px solid #ddd;
