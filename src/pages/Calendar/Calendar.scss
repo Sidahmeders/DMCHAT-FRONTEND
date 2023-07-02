@@ -9,9 +9,13 @@
   justify-content: center;
 }
 
+.rbc-toolbar button {
+  z-index: 10;
+}
+
 .calendar-date-picker {
   div {
-    z-index: 99;
+    z-index: 9 !important;
   }
 
   input {

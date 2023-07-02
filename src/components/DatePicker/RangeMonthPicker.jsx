@@ -7,7 +7,7 @@ import './RangePickers.scss'
 
 registerLocale(fr)
 
-export default function RangeDatePicker({ rangeValue, onChange, dateFormat, className, ...props }) {
+export default function RangeMonthPicker({ rangeValue, onChange, dateFormat, className, ...props }) {
   const [startDate, endDate] = rangeValue || []
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -16,15 +16,18 @@ export default function RangeDatePicker({ rangeValue, onChange, dateFormat, clas
     </button>
   ))
 
+  const monthsOnlyFilter = (date) => date.getDate() === 1
+
   return (
     <ReactDatePicker
       withPortal
       selectsRange
       fixedHeight
-      maxDate={new Date()}
-      monthsShown={2}
+      showMonthYearPicker
+      showFullMonthYearPicker
+      showFourColumnMonthYearPicker
+      filterDate={monthsOnlyFilter}
       locale={fr}
-      calendarStartDay={6}
       dateFormat={dateFormat}
       dropdownMode="select"
       placeholderText="sélectionner une date"
@@ -42,16 +45,16 @@ export default function RangeDatePicker({ rangeValue, onChange, dateFormat, clas
   )
 }
 
-RangeDatePicker.propTypes = {
+RangeMonthPicker.propTypes = {
   rangeValue: propTypes.arrayOf(propTypes.instanceOf(Date)),
   onChange: propTypes.func,
   dateFormat: propTypes.string,
   className: propTypes.string,
 }
 
-RangeDatePicker.defaultProps = {
+RangeMonthPicker.defaultProps = {
   rangeValue: [new Date(), new Date()],
   onChange: () => {},
-  dateFormat: 'yyyy/MM/dd',
-  className: 'date-range-picker',
+  dateFormat: 'yyyy/MM',
+  className: 'month-range-picker',
 }

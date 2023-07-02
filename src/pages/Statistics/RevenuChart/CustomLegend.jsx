@@ -1,6 +1,6 @@
 import { Button, HStack, FormControl, FormLabel, Switch } from '@chakra-ui/react'
 
-import RangeDatePicker from '@components/DatePicker/RangeDatePicker'
+import RangeMonthPicker from '@components/DatePicker/RangeMonthPicker'
 import DatePicker from '@components/DatePicker/DatePicker'
 
 const CustomLegend = ({
@@ -31,9 +31,8 @@ const CustomLegend = ({
       </HStack>
 
       {selectedStat.year ? (
-        <RangeDatePicker
+        <RangeMonthPicker
           className="year-range-picker"
-          dateFormat="yyyy/MM"
           rangeValue={dateRangeValue}
           onChange={(newValue) => setDateRangeValue(newValue)}
         />
