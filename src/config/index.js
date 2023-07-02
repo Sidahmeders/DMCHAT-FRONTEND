@@ -4,8 +4,7 @@ export * from './patient'
 export * from './appointments'
 export * from './payments'
 
-export const ENDPOINT =
-  process.env.NODE_ENV === 'production' ? 'https://dnmchat-backend.onrender.com' : 'http://localhost:5000'
+export const ENDPOINT = 'https://dnmchat-backend.onrender.com'
 
 export const APP_ROUTES = {
   CHATS: '/chats',
