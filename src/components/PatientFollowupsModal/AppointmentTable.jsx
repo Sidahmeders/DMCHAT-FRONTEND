@@ -11,9 +11,9 @@ import {
 } from '@chakra-ui/react'
 import { X } from 'react-feather'
 
-import { AppointmentsState } from '@context'
+import { ChatState } from '@context'
 import { formatDate, getPatient } from '@utils'
-import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES } from '@config'
+import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS } from '@config'
 import { updateAppointmentsHistory } from '@services/appointments'
 import { createPayment } from '@services/payments'
 
@@ -21,7 +21,7 @@ import SubAppointment from './SubAppointment'
 
 export default function AppointmentTable({ appointmentsGroup, appointments, setAppointments }) {
   const toast = useToast()
-  const { setTodayPaymentHistory } = AppointmentsState()
+  const { socket } = ChatState()
   const [baseAppointment] = appointmentsGroup
   const totalPayments = appointmentsGroup.reduce((total, appointment) => total + appointment.payment, 0)
   const paymentLeft = baseAppointment.totalPrice - totalPayments || '0'
@@ -87,7 +87,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
               [CREATE_PAYMENT_NAMES.PAYER_NAME]: getPatient()?.fullName,
             }
             const createdPayment = await createPayment(new Date(), paymentUpdate)
-            setTodayPaymentHistory((paymentHistory) => [...paymentHistory, createdPayment])
+            socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { updatedAppointment: appointment, createdPayment })
           } catch (error) {
             toast({ description: error.message })
           }
