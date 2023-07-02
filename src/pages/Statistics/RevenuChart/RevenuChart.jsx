@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import { ComposedChart, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
-import { subDays } from 'date-fns'
+import { isValid, subDays } from 'date-fns'
 
-import { abbreviateNumber } from '@utils'
-// import { fetchPaymentsByDateRange } from '@services/statistics'
+import { abbreviateNumber, formatDate } from '@utils'
+import { fetchPaymentsByDateRange } from '@services/statistics'
 
 import CustomLegend from './CustomLegend'
 import CustomTooltip from './CustomTooltip'
@@ -12,52 +12,69 @@ import './RevenuChart.scss'
 
 const yearData = [
   {
-    name: 'janv.',
+    name: 'jan',
+    date: '22-01',
     revenu: 650000,
   },
   {
-    name: 'févr.',
+    name: 'fev',
+    date: '22-02',
     revenu: 550000,
   },
   {
-    name: 'mars',
+    name: 'mar',
+    date: '22-03',
     revenu: 880000,
   },
   {
-    name: 'avr.',
+    name: 'avr',
+    date: '22-04',
     revenu: 490000,
   },
   {
     name: 'mai',
+    date: '22-05',
     revenu: 950000,
   },
   {
-    name: 'juin',
+    name: 'jun',
+    date: '22-06',
     revenu: 1430000,
   },
   {
-    name: 'juil.',
+    name: 'jul',
+    date: '22-07',
     revenu: 1030000,
   },
   {
-    name: 'août',
+    name: 'aou',
+    date: '22-08',
     revenu: 430000,
   },
   {
-    name: 'sept.',
+    name: 'sep',
+    date: '22-09',
     revenu: 830000,
   },
   {
-    name: 'oct.',
+    name: 'oct',
+    date: '22-10',
     revenu: 1130000,
   },
   {
-    name: 'nov.',
+    name: 'nov',
+    date: '22-11',
     revenu: 330000,
   },
   {
-    name: 'déc.',
+    name: 'dec',
+    date: '22-12',
     revenu: 530000,
+  },
+  {
+    name: 'jan',
+    date: '23-01',
+    revenu: 650000,
   },
 ]
 
@@ -96,6 +113,22 @@ const mixedMonthData = [
 
 const cleanMonthData = mixedMonthData.filter((day) => day.revenu > 0)
 
+const aggregateYearData = (data) => {
+  const paymentsMap = new Map()
+
+  data.forEach((payment) => {
+    const paymentDate = formatDate(payment.date)
+    if (paymentsMap.has(paymentDate)) {
+      const previousAmount = paymentsMap.get(paymentDate)
+      paymentsMap.set(paymentDate, payment.amount + previousAmount)
+    } else {
+      paymentsMap.set(paymentDate, payment.amount)
+    }
+  })
+
+  return paymentsMap
+}
+
 const RevenuChart = () => {
   const [selectedStat, setSelectedStat] = useState({ year: true, month: false })
   const [showEmptyDays, setShowEmptyDays] = useState(false)
@@ -105,9 +138,10 @@ const RevenuChart = () => {
 
   useEffect(() => {
     ;(async () => {
-      // const [startDate, endDate] = dateRangeValue
-      // const paymentRatioData = await fetchPaymentsByDateRange(startDate, endDate)
-      // console.log(paymentRatioData, 'paymentRatioData')
+      const [startDate, endDate] = dateRangeValue
+      if (!isValid(startDate) || !isValid(endDate)) return
+      const paymentRatioData = await fetchPaymentsByDateRange(startDate, endDate)
+      console.log(aggregateYearData(paymentRatioData))
     })()
   }, [dateRangeValue])
 
@@ -130,7 +164,10 @@ const RevenuChart = () => {
           }
         />
         <YAxis tickFormatter={(value) => abbreviateNumber(value)} />
-        <XAxis dataKey="name" scale="revenu" />
+        <XAxis
+          tickFormatter={(value) => (selectedStat.year ? yearData[value].name : monthData[value].name)}
+          scale="revenu"
+        />
         <Bar dataKey="revenu" barSize={2} fill="#36dd" />
         <Area dataKey="revenu" type="monotone" fill={selectedStat.year ? '#474aff66' : '#36d9'} stroke="#36d" />
       </ComposedChart>

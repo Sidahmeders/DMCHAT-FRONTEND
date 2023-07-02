@@ -52,7 +52,7 @@ const SingleChat = () => {
       setMessages([...messages, createdMessage])
       setFetchAgain((prevState) => !prevState)
     } catch (error) {
-      toast()
+      toast({ description: error.message })
     }
   }
 

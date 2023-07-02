@@ -46,7 +46,7 @@ export default function SearchUserDrawer() {
       const users = await searchUsers(search)
       setSearchResult(users)
     } catch (error) {
-      toast()
+      toast({ description: error.message })
     }
     setLoading(false)
   }

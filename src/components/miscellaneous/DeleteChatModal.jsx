@@ -34,8 +34,7 @@ const DeleteChatModal = ({ sender, chatId, setMessages }) => {
       setMessages([])
       setCanDeleteMessages(false)
     } catch (error) {
-      toast()
-      console.log(error)
+      toast({ description: error.message })
     }
   }
 

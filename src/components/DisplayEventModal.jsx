@@ -58,7 +58,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
       })
       onClose()
     } catch (error) {
-      toast()
+      toast({ description: error.message })
     }
     setCanDeleteEvent(false)
     setIsLoading(false)

@@ -98,7 +98,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
         status: 'success',
       })
     } catch (error) {
-      toast()
+      toast({ description: error.message })
     }
 
     setCanShowSaveBtn(false)

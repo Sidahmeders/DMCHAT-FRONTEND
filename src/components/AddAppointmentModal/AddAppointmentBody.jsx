@@ -124,7 +124,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
           setMatchedPatients(patients)
           setPatientOptions(resolvePatientOptions(patients))
         } catch (error) {
-          toast()
+          toast({ description: error.message })
         }
         setIsMounted(false)
       })()

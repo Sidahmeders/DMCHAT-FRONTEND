@@ -81,7 +81,7 @@ const Signup = () => {
         window.location = APP_ROUTES.CHATS
       }, 1500)
     } catch (error) {
-      toast()
+      toast({ description: error.message })
     }
     setLoading(false)
   }
