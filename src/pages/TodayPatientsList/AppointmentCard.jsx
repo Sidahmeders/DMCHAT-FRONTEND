@@ -11,6 +11,7 @@ import { toggleAppointmentConfirmation, toggleAppointmentLeave } from '@services
 import { fetchPatientById } from '@services/patients'
 
 import PatientFollowupsModal from '@components/PatientFollowupsModal/PatientFollowupsModal'
+import Loader from '@components/Loader/Loader'
 import PaymentCard from './PaymentCard'
 import ConfirmSound from '../../assets/songs/confirmation-tone.wav'
 import DoorBellSound from '../../assets/songs/door-bell.wav'
@@ -66,7 +67,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
   }
 
   const handleOpenEditPatient = async () => {
-    setIsLoading(true)
+    // setIsLoading(true)
     try {
       onPatientFollowupsModalOpen()
       const patientData = await fetchPatientById(appointment.patientId)
@@ -74,7 +75,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     } catch (error) {
       toast({ description: error.message })
     }
-    setIsLoading(false)
+    // setIsLoading(false)
   }
 
   useEffect(() => {
@@ -96,10 +97,8 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  if (isLoading) return <Skeleton mt="2" height="3rem" />
-
   return (
-    <>
+    <Loader loading={isLoading}>
       <PatientFollowupsModal isOpen={isPatientFollowupsModalOpen} onClose={onPatientFollowupsModalClose} />
       <Card
         className={`card-container ${withConfirm && isConfirmed && 'confirmed'} ${withPresence && isLeft && 'left'}`}>
@@ -128,6 +127,6 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
         </CardHeader>
         <PaymentCard appointmentData={appointment} showPaymentCard={showPaymentCard} />
       </Card>
-    </>
+    </Loader>
   )
 }
