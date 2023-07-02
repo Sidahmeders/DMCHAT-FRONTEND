@@ -72,7 +72,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
         [CREATE_APPOINTMENT_NAMES.PATIENT]: patientId,
         [CREATE_APPOINTMENT_NAMES.START_DATE]: start,
         [CREATE_APPOINTMENT_NAMES.END_DATE]: end,
-        [CREATE_APPOINTMENT_NAMES.BASE_APPOINTMENT_ID]: baseAppointmentRadioValue,
         [CREATE_APPOINTMENT_NAMES.MOTIF]: {
           name: data[CREATE_APPOINTMENT_NAMES.MOTIF],
           value: motifRadioValue?.value,
@@ -81,7 +80,10 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
 
       const createdAppointment = isNewTreatment
         ? await createAppointment(appointmentBody)
-        : await relateAppointment(appointmentBody)
+        : await relateAppointment({
+            ...appointmentBody,
+            [CREATE_APPOINTMENT_NAMES.BASE_APPOINTMENT_ID]: baseAppointmentRadioValue,
+          })
 
       const { patient, title, payment, startDate, endDate } = createdAppointment || {}
       setEvents((prevEvents) => [
