@@ -3,7 +3,7 @@ import { ComposedChart, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend 
 import { subDays } from 'date-fns'
 
 import { abbreviateNumber } from '@utils'
-import { fetchPaymentsByDateRange } from '@services/statistics'
+// import { fetchPaymentsByDateRange } from '@services/statistics'
 
 import CustomLegend from './CustomLegend'
 import CustomTooltip from './CustomTooltip'
@@ -105,9 +105,9 @@ const RevenuChart = () => {
 
   useEffect(() => {
     ;(async () => {
-      const [startDate, endDate] = dateRangeValue
-      const paymentRatioData = await fetchPaymentsByDateRange(startDate, endDate)
-      console.log(paymentRatioData, 'paymentRatioData')
+      // const [startDate, endDate] = dateRangeValue
+      // const paymentRatioData = await fetchPaymentsByDateRange(startDate, endDate)
+      // console.log(paymentRatioData, 'paymentRatioData')
     })()
   }, [dateRangeValue])
 

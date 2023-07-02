@@ -7,7 +7,7 @@ import './RangeDatePicker.scss'
 
 registerLocale(fr)
 
-export default function RangeDatePicker({ rangeValue, onChange, className }) {
+export default function RangeDatePicker({ rangeValue, onChange, dateFormat, className }) {
   const [startDate, endDate] = rangeValue || []
 
   const CustomInput = forwardRef(({ value, onClick }, ref) => (
@@ -27,7 +27,7 @@ export default function RangeDatePicker({ rangeValue, onChange, className }) {
       monthsShown={2}
       locale={fr}
       calendarStartDay={6}
-      dateFormat="yyyy-MM-dd"
+      dateFormat={dateFormat}
       dropdownMode="select"
       placeholderText="sélectionner une date"
       todayButton="Aujourd'hui"
@@ -46,9 +46,11 @@ export default function RangeDatePicker({ rangeValue, onChange, className }) {
 RangeDatePicker.propTypes = {
   rangeValue: propTypes.arrayOf(propTypes.instanceOf(Date)),
   onChange: propTypes.func,
+  dateFormat: propTypes.string,
 }
 
 RangeDatePicker.defaultProps = {
   rangeValue: [new Date(), new Date()],
   onChange: () => {},
+  dateFormat: 'yyyy/MM/dd',
 }

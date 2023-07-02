@@ -33,6 +33,7 @@ const CustomLegend = ({
       {selectedStat.year ? (
         <RangeDatePicker
           className="year-range-picker"
+          dateFormat="yyyy/MM"
           rangeValue={dateRangeValue}
           onChange={(newValue) => setDateRangeValue(newValue)}
         />
@@ -50,7 +51,7 @@ const CustomLegend = ({
               onChange={() => setShowEmptyDays(!showEmptyDays)}
             />
           </FormControl>
-          <DatePicker showMonthYearPicker className="month-range-picker" />
+          <DatePicker showMonthYearPicker dateFormat="yyyy/MM" className="month-range-picker" />
         </HStack>
       )}
     </HStack>
