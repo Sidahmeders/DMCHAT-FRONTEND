@@ -51,7 +51,15 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
 
   const saveUpdateHandler = async () => {
     try {
-      const appointmentsUpdate = Object.entries(treatmentUpdate).map(([key, values]) => ({ _id: key, ...values }))
+      const appointmentsUpdate = Object.entries(treatmentUpdate).map(([key, values]) => ({
+        _id: key,
+        ...values,
+        [CREATE_APPOINTMENT_NAMES.PAYMENT_LEFT]: values.previousPaymentVal
+          ? values[CREATE_APPOINTMENT_NAMES.PAYMENT_LEFT] -
+            values[CREATE_APPOINTMENT_NAMES.PAYMENT] +
+            values.previousPaymentVal
+          : values[CREATE_APPOINTMENT_NAMES.PAYMENT_LEFT],
+      }))
       const appointmentsData = await updateAppointmentsHistory(appointmentsUpdate)
 
       setAppointments(
