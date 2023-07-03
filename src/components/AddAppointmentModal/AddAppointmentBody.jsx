@@ -185,13 +185,12 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
               )}
             />
 
-            <HStack display="flex" flexWrap="wrap" justifyContent="flex-end">
+            <HStack display="flex" flexWrap="wrap" justifyContent="flex-end" rowGap="2">
               {motifRadioOptions.map((option) => (
                 <Button
                   colorScheme={motifRadioValue?.id === option.id ? 'messenger' : 'gray'}
                   key={option.id}
                   size="sm"
-                  my="2"
                   onClick={() => {
                     setMotifRadioValue(option)
                     reset({

@@ -76,7 +76,7 @@ export default function SearchUserDrawer() {
         </Button>
       </Tooltip>
 
-      <Drawer placement="left" isOpen={isOpen} onClose={onClose}>
+      <Drawer size="sm" placement="left" isOpen={isOpen} onClose={onClose}>
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />

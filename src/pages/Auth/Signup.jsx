@@ -120,7 +120,7 @@ const Signup = () => {
           <InputGroup>
             <InputRightElement w="4.5rem">
               <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                {show ? 'Hide' : 'Show'}
+                {show ? 'cacher' : 'voir'}
               </Button>
             </InputRightElement>
             <Input
@@ -140,7 +140,7 @@ const Signup = () => {
           <InputGroup>
             <InputRightElement w="4.5rem">
               <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                {show ? 'Hide' : 'Show'}
+                {show ? 'cacher' : 'voir'}
               </Button>
             </InputRightElement>
             <Input

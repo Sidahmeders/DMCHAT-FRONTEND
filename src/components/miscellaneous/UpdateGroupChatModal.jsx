@@ -151,18 +151,22 @@ const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, se
 
             <FormControl display="flex">
               <Input
-                placeholder="Chat Name"
+                placeholder="Nom du chat"
                 mb="3"
                 value={groupChatName}
                 onChange={(e) => setGroupChatName(e.target.value)}
               />
               <Button variant="solid" colorScheme="teal" ml={1} isLoading={renameLoading} onClick={handleRename}>
-                Update
+                Modifier
               </Button>
             </FormControl>
 
             <FormControl>
-              <Input placeholder="Add User to group" mb="1" onChange={(e) => handleSearch(e.target.value)} />
+              <Input
+                mb="1"
+                placeholder="Ajouter un utilisateur au groupe"
+                onChange={(e) => handleSearch(e.target.value)}
+              />
             </FormControl>
 
             {loading ? (
@@ -176,7 +180,7 @@ const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, se
 
           <ModalFooter>
             <Button onClick={() => handleRemove(user)} colorScheme="red">
-              Leave Group
+              Quitter le groupe
             </Button>
           </ModalFooter>
         </ModalContent>

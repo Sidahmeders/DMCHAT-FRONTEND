@@ -40,8 +40,8 @@ const UserChats = () => {
       borderRadius="lg"
       w={{ base: '100%', md: '30%' }}>
       <HStack p="5" gap="2" width="100%" justifyContent="space-evenly">
-        <GroupChatModal />
         <SearchUserDrawer />
+        <GroupChatModal />
         <LogoutButton />
       </HStack>
 
