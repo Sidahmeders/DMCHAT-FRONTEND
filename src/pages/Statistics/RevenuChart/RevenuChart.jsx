@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useToast } from '@chakra-ui/react'
 import { ComposedChart, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import { isValid, subDays } from 'date-fns'
 
@@ -29,6 +30,7 @@ const aggregatePaymentsData = (data, isYearFormat = false) => {
 }
 
 const RevenuChart = () => {
+  const toast = useToast()
   const [selectedStat, setSelectedStat] = useState({ year: true, month: false })
   const [showEmptyDays, setShowEmptyDays] = useState(false)
   const [dateRangeValue, setDateRangeValue] = useState([subDays(new Date(), 30), new Date()])
@@ -41,29 +43,42 @@ const RevenuChart = () => {
 
   useEffect(() => {
     ;(async () => {
-      const [startDate, endDate] = [formatDate(monthDateValue, 'yyyy-MM-01'), formatDate(monthDateValue, 'yyyy-MM-31')]
-      const monthStatData = await fetchPaymentsByDateRange(startDate, endDate)
-      // TODO: should remove this
-      if (useMockData) {
-        setMonthData(MOCK_MONTH_DATA)
-      } else {
+      try {
+        // TODO: should remove this
+        if (useMockData) {
+          setMonthData(MOCK_MONTH_DATA)
+          return
+        }
+        const [startDate, endDate] = [
+          formatDate(monthDateValue, 'yyyy-MM-01'),
+          formatDate(monthDateValue, 'yyyy-MM-31'),
+        ]
+        const monthStatData = await fetchPaymentsByDateRange(startDate, endDate)
         setMonthData(aggregatePaymentsData(monthStatData))
+      } catch (error) {
+        toast({ description: error.message })
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [monthDateValue, useMockData])
 
   useEffect(() => {
     ;(async () => {
-      const [startDate, endDate] = dateRangeValue
-      if (!isValid(startDate) || !isValid(endDate)) return
-      const yearStatData = await fetchPaymentsByDateRange(startDate, endDate)
-      // TODO: should remove this
-      if (useMockData) {
-        setYearData(MOCK_YEAR_DATA)
-      } else {
+      try {
+        // TODO: should remove this
+        if (useMockData) {
+          setYearData(MOCK_YEAR_DATA)
+          return
+        }
+        const [startDate, endDate] = dateRangeValue
+        if (!isValid(startDate) || !isValid(endDate)) return
+        const yearStatData = await fetchPaymentsByDateRange(startDate, endDate)
         setYearData(aggregatePaymentsData(yearStatData, true))
+      } catch (error) {
+        toast({ description: error.message })
       }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dateRangeValue, useMockData])
 
   return (
