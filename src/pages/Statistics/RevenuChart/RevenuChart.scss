@@ -9,6 +9,19 @@
     padding: 3px 6px;
   }
 
+  .react-datepicker__month-container {
+    width: 36rem;
+    font-size: large;
+
+    .react-datepicker__month {
+      .react-datepicker__month-text {
+        width: 8rem;
+        padding: 0.25rem 1.25rem;
+        margin: 0.75rem 0.25rem;
+      }
+    }
+  }
+
   .month-range-picker {
     border: none;
     input {

@@ -24,14 +24,12 @@ export default function RangeMonthPicker({ rangeValue, onChange, dateFormat, cla
       selectsRange
       fixedHeight
       showMonthYearPicker
-      showFullMonthYearPicker
       showFourColumnMonthYearPicker
       filterDate={monthsOnlyFilter}
       locale={fr}
       dateFormat={dateFormat}
       dropdownMode="select"
       placeholderText="sélectionner une date"
-      todayButton="Aujourd'hui"
       customInput={<CustomInput />}
       startDate={startDate}
       endDate={endDate}

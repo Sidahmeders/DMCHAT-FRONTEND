@@ -7,7 +7,7 @@ import './DatePicker.scss'
 
 registerLocale(fr)
 
-export default function DatePicker({ value, onChange, showMonthYearPicker, dateFormat, className }) {
+export default function DatePicker({ value, onChange, showMonthYearPicker, dateFormat, className, ...props }) {
   return (
     <div className={className}>
       <ReactDatePicker
@@ -16,6 +16,7 @@ export default function DatePicker({ value, onChange, showMonthYearPicker, dateF
         selected={value}
         onChange={(date) => onChange(date)}
         showMonthYearPicker={showMonthYearPicker}
+        {...props}
       />
     </div>
   )

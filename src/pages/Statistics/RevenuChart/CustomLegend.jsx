@@ -50,7 +50,7 @@ const CustomLegend = ({
               onChange={() => setShowEmptyDays(!showEmptyDays)}
             />
           </FormControl>
-          <DatePicker showMonthYearPicker dateFormat="yyyy/MM" className="month-range-picker" />
+          <DatePicker withPortal showMonthYearPicker dateFormat="yyyy/MM" className="month-range-picker" />
         </HStack>
       )}
     </HStack>
