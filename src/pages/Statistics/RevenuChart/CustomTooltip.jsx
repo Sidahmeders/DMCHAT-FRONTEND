@@ -10,7 +10,7 @@ const CustomTooltip = (props) => {
           padding: '10px',
           borderRadius: '6px',
         }}>
-        <p className="label">{formatMoney(payload[0].value)}</p>
+        <p className="label">{`${payload[0]?.payload?.name}: ${formatMoney(payload[0]?.value)}`}</p>
       </div>
     )
   }

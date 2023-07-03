@@ -3,6 +3,7 @@ import { ComposedChart, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend 
 import { isValid, subDays } from 'date-fns'
 
 import { abbreviateNumber, formatDate } from '@utils'
+import { FRENCH_MONTH_NAMES, X_AXIS_DAY_NAMES, MOCK_YEAR_DATA, MOCK_MONTH_DATA } from '@config'
 import { fetchPaymentsByDateRange } from '@services/statistics'
 
 import CustomLegend from './CustomLegend'
@@ -10,144 +11,64 @@ import CustomTooltip from './CustomTooltip'
 
 import './RevenuChart.scss'
 
-const yearData = [
-  {
-    name: 'jan',
-    date: '22-01',
-    revenu: 650000,
-  },
-  {
-    name: 'fev',
-    date: '22-02',
-    revenu: 550000,
-  },
-  {
-    name: 'mar',
-    date: '22-03',
-    revenu: 880000,
-  },
-  {
-    name: 'avr',
-    date: '22-04',
-    revenu: 490000,
-  },
-  {
-    name: 'mai',
-    date: '22-05',
-    revenu: 950000,
-  },
-  {
-    name: 'jun',
-    date: '22-06',
-    revenu: 1430000,
-  },
-  {
-    name: 'jul',
-    date: '22-07',
-    revenu: 1030000,
-  },
-  {
-    name: 'aou',
-    date: '22-08',
-    revenu: 430000,
-  },
-  {
-    name: 'sep',
-    date: '22-09',
-    revenu: 830000,
-  },
-  {
-    name: 'oct',
-    date: '22-10',
-    revenu: 1130000,
-  },
-  {
-    name: 'nov',
-    date: '22-11',
-    revenu: 330000,
-  },
-  {
-    name: 'dec',
-    date: '22-12',
-    revenu: 530000,
-  },
-  {
-    name: 'jan',
-    date: '23-01',
-    revenu: 650000,
-  },
-]
-
-const mixedMonthData = [
-  { name: '01', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '02', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '03', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '04', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '05', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '06', revenu: 0 },
-  { name: '07', revenu: 0 },
-  { name: '08', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '09', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '10', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '11', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '12', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '13', revenu: 0 },
-  { name: '14', revenu: 0 },
-  { name: '15', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '16', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '17', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '18', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '19', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '20', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '21', revenu: 0 },
-  { name: '22', revenu: 0 },
-  { name: '23', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '24', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '25', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '26', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '27', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '28', revenu: 0 },
-  { name: '29', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-  { name: '30', revenu: Math.floor(Math.random() * (80000 - 5000 + 1)) + 5000 },
-]
-
-const cleanMonthData = mixedMonthData.filter((day) => day.revenu > 0)
-
-const aggregateYearData = (data) => {
+const aggregatePaymentsData = (data, isYearFormat = false) => {
   const paymentsMap = new Map()
 
   data.forEach((payment) => {
-    const paymentDate = formatDate(payment.date)
-    if (paymentsMap.has(paymentDate)) {
-      const previousAmount = paymentsMap.get(paymentDate)
-      paymentsMap.set(paymentDate, payment.amount + previousAmount)
-    } else {
-      paymentsMap.set(paymentDate, payment.amount)
-    }
+    const paymentDate = isYearFormat ? formatDate(payment.date, 'yyyy-MM') : formatDate(payment.date)
+    const paymentValue = paymentsMap.get(paymentDate)
+
+    paymentsMap.set(paymentDate, {
+      label: X_AXIS_DAY_NAMES[formatDate(paymentDate, 'd')],
+      name: isYearFormat ? FRENCH_MONTH_NAMES[formatDate(paymentDate, 'M')] : formatDate(paymentDate, 'dd'),
+      revenu: paymentValue ? payment.amount + paymentValue.revenu : payment.amount,
+    })
   })
 
-  return paymentsMap
+  return [...paymentsMap.values()]
 }
 
 const RevenuChart = () => {
   const [selectedStat, setSelectedStat] = useState({ year: true, month: false })
   const [showEmptyDays, setShowEmptyDays] = useState(false)
   const [dateRangeValue, setDateRangeValue] = useState([subDays(new Date(), 30), new Date()])
+  const [yearData, setYearData] = useState([])
+  const [monthDateValue, setMonthDateValue] = useState(new Date())
+  const [monthData, setMonthData] = useState([])
+  const [useMockData, setUseMockData] = useState(false) // TODO: should remove this
 
-  const monthData = showEmptyDays ? mixedMonthData : cleanMonthData
+  const chosenMonthData = showEmptyDays ? monthData : monthData.filter((day) => day.revenu > 0)
+
+  useEffect(() => {
+    ;(async () => {
+      const [startDate, endDate] = [formatDate(monthDateValue, 'yyyy-MM-01'), formatDate(monthDateValue, 'yyyy-MM-31')]
+      const monthStatData = await fetchPaymentsByDateRange(startDate, endDate)
+      // TODO: should remove this
+      if (useMockData) {
+        setMonthData(MOCK_MONTH_DATA)
+      } else {
+        setMonthData(aggregatePaymentsData(monthStatData))
+      }
+    })()
+  }, [monthDateValue, useMockData])
 
   useEffect(() => {
     ;(async () => {
       const [startDate, endDate] = dateRangeValue
       if (!isValid(startDate) || !isValid(endDate)) return
-      const paymentRatioData = await fetchPaymentsByDateRange(startDate, endDate)
-      console.log(aggregateYearData(paymentRatioData))
+      const yearStatData = await fetchPaymentsByDateRange(startDate, endDate)
+      // TODO: should remove this
+      if (useMockData) {
+        setYearData(MOCK_YEAR_DATA)
+      } else {
+        setYearData(aggregatePaymentsData(yearStatData, true))
+      }
     })()
-  }, [dateRangeValue])
+  }, [dateRangeValue, useMockData])
 
   return (
     <div className="revenu-stat-container">
-      <ComposedChart width={900} height={400} data={selectedStat.year ? yearData : monthData}>
+      <ComposedChart width={900} height={400} data={selectedStat.year ? yearData : chosenMonthData}>
         <CartesianGrid strokeDasharray="4 4" />
         <Tooltip content={<CustomTooltip />} />
         <Legend
@@ -160,12 +81,17 @@ const RevenuChart = () => {
               setShowEmptyDays={setShowEmptyDays}
               dateRangeValue={dateRangeValue}
               setDateRangeValue={setDateRangeValue}
+              monthDateValue={monthDateValue}
+              setMonthDateValue={setMonthDateValue}
+              // TODO: should remove this
+              useMockData={useMockData}
+              setUseMockData={setUseMockData}
             />
           }
         />
         <YAxis tickFormatter={(value) => abbreviateNumber(value)} />
         <XAxis
-          tickFormatter={(value) => (selectedStat.year ? yearData[value].name : monthData[value].name)}
+          tickFormatter={(value) => (selectedStat.year ? yearData[value].name : chosenMonthData[value].label)}
           scale="revenu"
         />
         <Bar dataKey="revenu" barSize={2} fill="#36dd" />

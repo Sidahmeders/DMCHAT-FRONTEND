@@ -8,8 +8,13 @@ const CustomLegend = ({
   setShowEmptyDays,
   selectedStat,
   setSelectedStat,
+  monthDateValue,
+  setMonthDateValue,
   dateRangeValue,
   setDateRangeValue,
+  // TODO: should remove this
+  useMockData,
+  setUseMockData,
 }) => {
   return (
     <HStack display="flex" justifyContent="space-between" ml="14" mb="4">
@@ -29,6 +34,23 @@ const CustomLegend = ({
           Année Revenu
         </Button>
       </HStack>
+
+      {/* TODO: should remove this */}
+      <HStack>
+        <FormControl display="flex" alignItems="center" mr="4">
+          <FormLabel htmlFor="use-mock-data" fontSize="xs" mr="1" mb="0">
+            faux données?
+          </FormLabel>
+          <Switch
+            size="sm"
+            id="use-mock-data"
+            colorScheme="green"
+            checked={useMockData}
+            onChange={() => setUseMockData(!useMockData)}
+          />
+        </FormControl>
+      </HStack>
+      {/* ***************** */}
 
       {selectedStat.year ? (
         <RangeMonthPicker
@@ -50,7 +72,14 @@ const CustomLegend = ({
               onChange={() => setShowEmptyDays(!showEmptyDays)}
             />
           </FormControl>
-          <DatePicker withPortal showMonthYearPicker dateFormat="yyyy/MM" className="month-range-picker" />
+          <DatePicker
+            withPortal
+            showMonthYearPicker
+            dateFormat="yyyy/MM"
+            className="month-range-picker"
+            value={monthDateValue}
+            onChange={(date) => setMonthDateValue(date)}
+          />
         </HStack>
       )}
     </HStack>
