@@ -7,10 +7,11 @@ import {
   InputRightElement,
   InputGroup,
   Spinner,
-  Text,
   useToast,
+  Stack,
+  Text,
 } from '@chakra-ui/react'
-import { Send, ArrowLeft } from 'react-feather'
+import { Send, ArrowLeft, Mail } from 'react-feather'
 import { isEmpty } from 'lodash'
 
 import { ChatState } from '@context'
@@ -165,11 +166,12 @@ const SingleChat = () => {
           </Box>
         </>
       ) : (
-        <Box display="flex" alignItems="center" justifyContent="center" h="100%">
-          <Text fontSize="3xl" pb="3">
+        <Stack justifyContent="center" alignItems="center" p="12" mt="16">
+          <Mail size="50%" color="#34d9" />
+          <Text fontSize="2xl" fontFamily="mono" fontWeight="bold" color="#34d9">
             Cliquez un utilisateur à discuter
           </Text>
-        </Box>
+        </Stack>
       )}
     </>
   )

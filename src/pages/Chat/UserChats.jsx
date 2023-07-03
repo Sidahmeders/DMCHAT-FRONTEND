@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { Avatar, Box, HStack, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
+import { isEmpty } from 'lodash'
 
 import { ChatState } from '@context'
 import { formatDate, getSender, getSenderFull, getUser } from '@utils'
@@ -32,7 +33,7 @@ const UserChats = () => {
 
   return (
     <Box
-      display={{ base: selectedChat ? 'none' : 'flex', md: 'flex' }}
+      display={{ base: !isEmpty(selectedChat) ? 'none' : 'flex', md: 'flex' }}
       flexDir="column"
       alignItems="center"
       boxShadow="inner"
