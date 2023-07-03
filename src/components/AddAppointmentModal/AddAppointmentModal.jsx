@@ -14,10 +14,10 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
     <Modal size="xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay bg="blackAlpha.400" />
       <ModalContent>
-        <Tabs>
+        <Tabs onClick={() => setTemplateButtons(getMotifTemplateButtons())}>
           <TabList>
             <Tab>Ajouter rendez-vous</Tab>
-            <Tab onClick={() => setTemplateButtons(getMotifTemplateButtons())}>modifier boutons</Tab>
+            <Tab>modifier boutons</Tab>
             <Tab>définir la disponibilité</Tab>
           </TabList>
 

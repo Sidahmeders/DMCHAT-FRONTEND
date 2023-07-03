@@ -185,19 +185,20 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
               )}
             />
 
-            <HStack>
+            <HStack display="flex" flexWrap="wrap" justifyContent="flex-end">
               {motifRadioOptions.map((option) => (
                 <Button
                   colorScheme={motifRadioValue?.id === option.id ? 'messenger' : 'gray'}
+                  key={option.id}
+                  size="sm"
+                  my="2"
                   onClick={() => {
                     setMotifRadioValue(option)
                     reset({
                       ...getValues(),
                       [CREATE_APPOINTMENT_NAMES.MOTIF]: option.name,
                     })
-                  }}
-                  key={option.id}
-                  size="sm">
+                  }}>
                   {option.name}
                 </Button>
               ))}
