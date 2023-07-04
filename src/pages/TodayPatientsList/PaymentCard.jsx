@@ -4,7 +4,7 @@ import { CardBody } from '@chakra-ui/card'
 import { debounce } from 'lodash'
 
 import { AppointmentsState, ChatState } from '@context'
-import { formatMoney, getUser, notify } from '@utils'
+import { getUser, notify } from '@utils'
 import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS, APPOINTMENTS_LISTENERS } from '@config'
 import { updateAppointment } from '@services/appointments'
 import { createPayment } from '@services/payments'
@@ -113,11 +113,9 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
           setPaymentVal,
           setPaymentLeftVal,
         })
-        const { payment, paymentLeft } = updatedAppointment
-        const currentPayment = payment - appointment?.payment
         notify({
           title: `paiement effectué par "${fullName}"`,
-          description: `payé: ${formatMoney(currentPayment)} / reste: ${formatMoney(paymentLeft)}`,
+          description: `payé: ${createdPayment.amount} / reste: ${updatedAppointment.paymentLeft}`,
         })
       }
     })
