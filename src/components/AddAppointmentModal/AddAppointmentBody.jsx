@@ -19,7 +19,7 @@ import {
   HStack,
 } from '@chakra-ui/react'
 import Select from 'react-select'
-import { isEmpty } from 'lodash'
+import { isEmpty, omit } from 'lodash'
 
 import { CREATE_APPOINTMENT_NAMES } from '@config'
 import { getMotifTemplateButtons, getUser } from '@utils'
@@ -81,7 +81,11 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
       const createdAppointment = isNewTreatment
         ? await createAppointment(appointmentBody)
         : await relateAppointment({
-            ...appointmentBody,
+            ...omit(appointmentBody, [
+              CREATE_APPOINTMENT_NAMES.DIAGNOSTIC,
+              CREATE_APPOINTMENT_NAMES.TREATMENT_PLAN,
+              CREATE_APPOINTMENT_NAMES.TOTAL_PRICE,
+            ]),
             [CREATE_APPOINTMENT_NAMES.BASE_APPOINTMENT_ID]: baseAppointmentRadioValue,
           })
 
