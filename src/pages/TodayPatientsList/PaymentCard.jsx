@@ -6,7 +6,7 @@ import { debounce } from 'lodash'
 import { AppointmentsState, ChatState } from '@context'
 import { getUser, notify } from '@utils'
 import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS, APPOINTMENTS_LISTENERS } from '@config'
-import { updateAppointment } from '@services/appointments'
+import { updateAppointmentSync } from '@services/appointments'
 import { createPayment } from '@services/payments'
 
 const updatePaymentsState = debounce(
@@ -24,7 +24,10 @@ const updatePaymentsState = debounce(
     setTotalPriceVal(totalPrice)
     setPaymentVal(payment)
     setPaymentLeftVal(paymentLeft)
-    setTodayPaymentHistory((paymentHistory) => [...paymentHistory, createdPayment])
+
+    if (createdPayment) {
+      setTodayPaymentHistory((paymentHistory) => [...paymentHistory, createdPayment])
+    }
   },
 )
 
@@ -73,17 +76,23 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
         [CREATE_APPOINTMENT_NAMES.PAYMENT]: paymentVal,
         [CREATE_APPOINTMENT_NAMES.PAYMENT_LEFT]: paymentLeftVal,
       }
-      const paymentUpdate = {
-        [CREATE_PAYMENT_NAMES.SENDER]: getUser()?._id,
-        [CREATE_PAYMENT_NAMES.PATIENT]: patientId,
-        [CREATE_PAYMENT_NAMES.AMOUNT]: paymentVal - appointment.payment,
-        [CREATE_PAYMENT_NAMES.PAYER_NAME]: fullName,
+
+      const updatedAppointment = await updateAppointmentSync(appointment._id, appointmentUpdate)
+
+      if (paymentVal !== appointment.payment) {
+        const paymentUpdate = {
+          [CREATE_PAYMENT_NAMES.SENDER]: getUser()?._id,
+          [CREATE_PAYMENT_NAMES.PATIENT]: patientId,
+          [CREATE_PAYMENT_NAMES.AMOUNT]: paymentVal - appointment.payment,
+          [CREATE_PAYMENT_NAMES.PAYER_NAME]: fullName,
+        }
+
+        const createdPayment = await createPayment(new Date(), paymentUpdate)
+
+        socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { updatedAppointment, createdPayment })
+      } else {
+        socket.emit(APPOINTMENTS_EVENTS.UPDATE_APPOINTMENT, updatedAppointment)
       }
-
-      const updatedAppointment = await updateAppointment(appointment._id, appointmentUpdate)
-      const createdPayment = await createPayment(new Date(), paymentUpdate)
-
-      socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { updatedAppointment, createdPayment })
 
       setCanUpdatePayments(false)
       setCanShowUpdateBtn(false)
@@ -116,6 +125,19 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
         notify({
           title: `paiement effectué par "${fullName}"`,
           description: `payé: ${createdPayment.amount} / reste: ${updatedAppointment.paymentLeft}`,
+        })
+      }
+    })
+
+    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_UPDATE, (updatedAppointment) => {
+      if (updatedAppointment._id === appointment._id) {
+        updatePaymentsState({
+          updatedAppointment,
+          setTodayPaymentHistory,
+          setAppointment,
+          setTotalPriceVal,
+          setPaymentVal,
+          setPaymentLeftVal,
         })
       }
     })

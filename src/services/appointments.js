@@ -15,6 +15,10 @@ const updateAppointment = async (appointmentId, appointmentData) => {
   return await _fetch.PUT(`/api/appointments/${appointmentId}/update`, appointmentData)
 }
 
+const updateAppointmentSync = async (appointmentId, appointmentData) => {
+  return await _fetch.PUT(`/api/appointments/${appointmentId}/update-sync`, appointmentData)
+}
+
 const updateAppointmentsHistory = async (appointmentData) => _fetch.PUT('/api/appointments/history', appointmentData)
 
 const deleteAppointment = async (appointmentId) => await _fetch.DELETE(`/api/appointments/${appointmentId}`)
@@ -32,6 +36,7 @@ export {
   createAppointment,
   relateAppointment,
   updateAppointment,
+  updateAppointmentSync,
   updateAppointmentsHistory,
   fetchMonthAppointments,
   fetchDayAppointments,
