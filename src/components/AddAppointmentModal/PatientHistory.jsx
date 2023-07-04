@@ -1,8 +1,7 @@
 import { useEffect, useState } from 'react'
 import { RadioGroup, Radio, Table, Tbody, Tr, Td, TableContainer, Button } from '@chakra-ui/react'
 
-import { groupAppointments } from './utils'
-import { formatDate } from '@utils'
+import { formatDate, groupAppointments } from '@utils'
 import { fetchPatientAppointments } from '@services/appointments'
 
 export default function PatientHistory({ show, patient, baseAppointmentRadioValue, setBaseAppointmentRadioValue }) {

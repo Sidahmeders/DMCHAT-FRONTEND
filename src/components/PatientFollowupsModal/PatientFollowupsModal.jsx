@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { ChevronDown, ChevronUp } from 'react-feather'
 
-import { getPatient } from '@utils'
+import { getPatient, groupAppointments } from '@utils'
 
 import Loader from '../Loader/Loader'
 import PatientEditBody from './PatientEditBody'
@@ -35,7 +35,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
       setIsLoading(true)
       try {
         const patientAppointments = await fetchPatientAppointments(patient._id)
-        setAppointments(patientAppointments)
+        setAppointments(groupAppointments(patientAppointments))
       } catch (error) {
         toast({ description: error.message })
       }
@@ -63,22 +63,14 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
         <ModalBody className="patient-followups-modal-body">
           {appointments.length ? (
             <Loader loading={isLoading}>
-              {appointments
-                .reduce((prevAppointments, appointment) => {
-                  if (appointment.isNewTreatment) {
-                    return [...prevAppointments, [appointment]]
-                  }
-                  const lastGroup = prevAppointments[prevAppointments.length - 1] || []
-                  return [...prevAppointments.slice(0, -1), [...lastGroup, appointment]]
-                }, [])
-                .map((appointmentsGroup, index) => (
-                  <AppointmentTable
-                    key={index}
-                    appointments={appointments}
-                    setAppointments={setAppointments}
-                    appointmentsGroup={appointmentsGroup}
-                  />
-                ))}
+              {appointments.map(({ group: appointmentsGroup }, index) => (
+                <AppointmentTable
+                  key={index}
+                  appointments={appointments}
+                  setAppointments={setAppointments}
+                  appointmentsGroup={appointmentsGroup}
+                />
+              ))}
             </Loader>
           ) : null}
         </ModalBody>
