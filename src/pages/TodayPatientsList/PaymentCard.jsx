@@ -73,8 +73,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
     try {
       const appointmentUpdate = {
         [CREATE_APPOINTMENT_NAMES.TOTAL_PRICE]: totalPriceVal,
-        [CREATE_APPOINTMENT_NAMES.PAYMENT]: paymentVal,
-        [CREATE_APPOINTMENT_NAMES.PAYMENT_LEFT]: paymentLeftVal,
+        [CREATE_APPOINTMENT_NAMES.PAYMENT]: paymentVal - appointment.payment,
       }
 
       const updatedAppointment = await updateAppointmentSync(appointment._id, appointmentUpdate)
