@@ -35,7 +35,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   const { fullName, patientId } = appointmentData
   const toast = useToast()
   const { socket } = ChatState()
-  const { setTodayPaymentHistory } = AppointmentsState()
+  const { setTodayPaymentHistory, fetchTodayAppointments } = AppointmentsState()
   const [appointment, setAppointment] = useState(appointmentData)
   const [paymentVal, setPaymentVal] = useState(appointment.payment || 0)
   const [totalPriceVal, setTotalPriceVal] = useState(appointment.totalPrice || 0)
@@ -85,9 +85,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
           [CREATE_PAYMENT_NAMES.AMOUNT]: paymentVal - appointment.payment,
           [CREATE_PAYMENT_NAMES.PAYER_NAME]: fullName,
         }
-
         const createdPayment = await createPayment(new Date(), paymentUpdate)
-
         socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { updatedAppointment, createdPayment })
       } else {
         socket.emit(APPOINTMENTS_EVENTS.UPDATE_APPOINTMENT, updatedAppointment)
@@ -121,6 +119,9 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
           setPaymentVal,
           setPaymentLeftVal,
         })
+
+        fetchTodayAppointments()
+
         notify({
           title: `paiement effectué par "${fullName}"`,
           description: `payé: ${createdPayment.amount} / reste: ${updatedAppointment.paymentLeft}`,
@@ -138,6 +139,8 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
           setPaymentVal,
           setPaymentLeftVal,
         })
+
+        fetchTodayAppointments()
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
