@@ -14,7 +14,7 @@ import { X } from 'react-feather'
 import { ChatState } from '@context'
 import { formatDate, getPatient } from '@utils'
 import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS } from '@config'
-import { updateAppointmentsHistory } from '@services/appointments'
+import { updateAppointmentSync } from '@services/appointments'
 import { createPayment } from '@services/payments'
 
 import SubAppointment from './SubAppointment'
@@ -24,7 +24,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
   const { socket } = ChatState()
   const [baseAppointment] = appointmentsGroup
   const totalPayments = appointmentsGroup.reduce((total, appointment) => total + appointment.payment, 0)
-  const paymentLeft = baseAppointment.totalPrice - totalPayments || '0'
+  const paymentLeft = baseAppointment.totalPrice - totalPayments || 0
   const doneAppointments = appointmentsGroup.reduce((count, appointment) => (appointment.isDone ? count + 1 : count), 0)
 
   const [treatmentUpdate, setTreatmentUpdate] = useState({ [baseAppointment._id]: baseAppointment })
@@ -33,16 +33,16 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
   const [canShowConfirmUpdate, setCanShowConfirmUpdate] = useState(false)
 
   const baseTitleRef = useRef(baseAppointment.title)
-  const basePaymentRef = useRef(baseAppointment.payment || '0')
+  const basePaymentRef = useRef(baseAppointment.payment || 0)
   const baseTotalPriceRef = useRef(baseAppointment.totalPrice)
 
-  const onInputEditHandler = (e, appointmentId, name, previousPaymentVal) => {
+  const onInputEditHandler = (e, appointmentId, name, previousPayment) => {
     const { value, innerText } = e.target
     setTreatmentUpdate({
       ...treatmentUpdate,
       [appointmentId]: {
         ...treatmentUpdate[appointmentId],
-        previousPaymentVal,
+        previousPayment,
         [name]: value || innerText,
       },
     })
@@ -51,47 +51,53 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
 
   const saveUpdateHandler = async () => {
     try {
-      const appointmentsUpdate = Object.entries(treatmentUpdate).map(([key, values]) => ({
-        _id: key,
-        ...values,
-        [CREATE_APPOINTMENT_NAMES.PAYMENT_LEFT]: values.previousPaymentVal
-          ? values[CREATE_APPOINTMENT_NAMES.PAYMENT_LEFT] -
-            values[CREATE_APPOINTMENT_NAMES.PAYMENT] +
-            values.previousPaymentVal
-          : values[CREATE_APPOINTMENT_NAMES.PAYMENT_LEFT],
-      }))
-      const appointmentsData = await updateAppointmentsHistory(appointmentsUpdate)
+      const updatedAppointments = await Object.entries(treatmentUpdate).reduce(async (prevPromise, [key, values]) => {
+        const listOfUpdates = await prevPromise
+
+        const { previousPayment, payment } = values
+        const appointmentUpdate = {
+          _id: key,
+          ...values,
+          [CREATE_APPOINTMENT_NAMES.PAYMENT]: parseInt(payment) - previousPayment || 0,
+        }
+
+        const updatedAppointment = await updateAppointmentSync(appointmentUpdate._id, appointmentUpdate)
+
+        return [...listOfUpdates, updatedAppointment]
+      }, Promise.resolve([]))
 
       setAppointments(
         appointments.map((appointment) => {
-          const indexOfAppointment = appointmentsData.findIndex((item) => item._id === appointment._id)
+          const indexOfAppointment = updatedAppointments.findIndex((item) => item._id === appointment._id)
           if (indexOfAppointment >= 0) {
             return {
               ...appointment,
-              ...appointmentsData[indexOfAppointment],
+              ...updatedAppointments[indexOfAppointment],
             }
           }
           return appointment
         }),
       )
 
-      appointmentsUpdate
-        .filter((appointment) => appointment.previousPaymentVal)
-        .reduce(async (prevPromise, appointment) => {
-          try {
-            await prevPromise
+      updatedAppointments.reduce(async (prevPromise, appointment) => {
+        try {
+          await prevPromise
+          if (appointment.previousPayment) {
             const paymentUpdate = {
               [CREATE_PAYMENT_NAMES.SENDER]: baseAppointment.sender,
               [CREATE_PAYMENT_NAMES.PATIENT]: baseAppointment.patient,
-              [CREATE_PAYMENT_NAMES.AMOUNT]: parseInt(appointment.payment) - parseInt(appointment.previousPaymentVal),
+              [CREATE_PAYMENT_NAMES.AMOUNT]: appointment.payment - appointment.previousPayment,
               [CREATE_PAYMENT_NAMES.PAYER_NAME]: getPatient()?.fullName,
             }
             const createdPayment = await createPayment(new Date(), paymentUpdate)
             socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { updatedAppointment: appointment, createdPayment })
-          } catch (error) {
-            toast({ description: error.message })
+          } else {
+            socket.emit(APPOINTMENTS_EVENTS.UPDATE_APPOINTMENT, appointment)
           }
-        }, Promise.resolve())
+        } catch (error) {
+          toast({ description: error.message })
+        }
+      }, Promise.resolve())
 
       toast({
         title: 'rendez-vous mis à jour avec succès!',
