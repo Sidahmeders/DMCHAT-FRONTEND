@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { Avatar, Box, HStack, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
+import { Avatar, Box, HStack, Skeleton, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
 import { ChatState } from '@context'
@@ -9,6 +9,14 @@ import { fetchUserChats } from '@services/chats'
 import SearchUserDrawer from '@components/SearchUserDrawer'
 import GroupChatModal from '@components/miscellaneous/GroupChatModal'
 import LogoutButton from '@components/miscellaneous/LogoutButton'
+
+const UsersChatLoader = () => (
+  <Stack>
+    <Skeleton height="67px" borderRadius="md" />
+    <Skeleton height="67px" borderRadius="md" />
+    <Skeleton height="67px" borderRadius="md" />
+  </Stack>
+)
 
 const UserChats = () => {
   const user = getUser()
@@ -47,7 +55,7 @@ const UserChats = () => {
 
       <Box display="flex" flexDir="column" p="4" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
         <Stack overflowY="scroll">
-          {chats.length &&
+          {chats.length ? (
             chats.map((chat) => {
               const sender = getSender(user, chat.users)
               const { pic } = getSenderFull(user, chat.users)
@@ -78,7 +86,10 @@ const UserChats = () => {
                   </HStack>
                 </Box>
               )
-            })}
+            })
+          ) : (
+            <UsersChatLoader />
+          )}
         </Stack>
       </Box>
     </Box>
