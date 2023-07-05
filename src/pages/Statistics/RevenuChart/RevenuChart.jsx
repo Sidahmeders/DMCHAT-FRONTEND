@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useToast } from '@chakra-ui/react'
 import { ComposedChart, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
-import { isValid, subDays } from 'date-fns'
+import { isValid, subDays, endOfMonth } from 'date-fns'
 
 import { abbreviateNumber, formatDate } from '@utils'
 import { FRENCH_MONTH_NAMES, X_AXIS_DAY_NAMES, MOCK_YEAR_DATA, MOCK_MONTH_DATA } from '@config'
@@ -51,7 +51,7 @@ const RevenuChart = () => {
         }
         const [startDate, endDate] = [
           formatDate(monthDateValue, 'yyyy-MM-01'),
-          formatDate(monthDateValue, 'yyyy-MM-31'),
+          formatDate(endOfMonth(monthDateValue), 'yyyy-MM-dd'),
         ]
         const monthStatData = await fetchPaymentsByDateRange(startDate, endDate)
         setMonthData(aggregatePaymentsData(monthStatData))
