@@ -86,6 +86,13 @@ export const ChatProvider = ({ children, socket }) => {
     })
   })
 
+  useEffect(() => {
+    socket.on(CHAT_LISTENERS.CHAT_ERROR, (errorMessage) => {
+      toast({ title: 'Socket.IO Chat Error, veuillez réessayer plus tard', description: errorMessage })
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   return (
     <ChatContext.Provider
       value={{

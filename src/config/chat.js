@@ -8,6 +8,7 @@ export const CHAT_EVENTS = {
 
 export const CHAT_LISTENERS = {
   CONNECTED: 'connected',
+  CHAT_ERROR: 'chat error',
   TYPING: 'typing',
   STOP_TYPING: 'stop typing',
   MESSAGE_RECIEVED: 'message recieved',
