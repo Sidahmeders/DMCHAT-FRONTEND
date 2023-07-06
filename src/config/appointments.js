@@ -11,12 +11,12 @@ export const CREATE_APPOINTMENT_NAMES = {
   TREATMENT_PLAN: 'treatmentPlan',
   TOTAL_PRICE: 'totalPrice',
   PAYMENT: 'payment',
-  PAYMENT_LEFT: 'paymentLeft',
   isNewTreatment: 'isNewTreatment',
   IS_CONFIRMED: 'isConfirmed',
   IS_LEFT: 'isLeft',
   IS_WAITING_ROOM: 'isWaitingRoom',
   IS_DONE: 'isDone',
+  ORDER: 'order',
 }
 
 export const MOTIF_ENUM = {

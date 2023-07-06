@@ -5,7 +5,7 @@ import { useToast } from '@chakra-ui/react'
 
 import { ChatState, AppointmentsState } from '@context'
 import { flattenAppointment } from '@utils'
-import { APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
+import { APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS, CREATE_APPOINTMENT_NAMES } from '@config'
 import { updateAppointment } from '@services/appointments'
 
 import ExpectedAppointments from './ExpectedAppointments'
@@ -32,8 +32,12 @@ const reorderAppointments = async ({ socket, appointmentsList, source, destinati
   const sourceAppointment = appointments[source.index]
   const destinationAppointment = appointments[destination.index]
 
-  const updatedSourceAppointment = await updateAppointment(sourceAppointment._id, { order: destination.index })
-  const updatedDestinationAppointment = await updateAppointment(destinationAppointment._id, { order: source.index })
+  const updatedSourceAppointment = await updateAppointment(sourceAppointment._id, {
+    [CREATE_APPOINTMENT_NAMES.ORDER]: destination.index,
+  })
+  const updatedDestinationAppointment = await updateAppointment(destinationAppointment._id, {
+    [CREATE_APPOINTMENT_NAMES.ORDER]: source.index,
+  })
 
   socket.emit(APPOINTMENTS_EVENTS.REORDER_APPOINTMENT, [updatedSourceAppointment, updatedDestinationAppointment])
 }
