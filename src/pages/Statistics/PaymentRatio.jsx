@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import {
   Card,
   CardBody,
@@ -11,14 +12,38 @@ import {
   CardFooter,
   Text,
   Box,
+  useToast,
 } from '@chakra-ui/react'
+import { subDays } from 'date-fns'
+
 import { formatDate, formatMoney } from '@utils'
+import { fetchAppointmentsRevenueByDateRange } from '@services/statistics'
 
 const PaymentRatio = () => {
-  const TOTAL = 25220000
-  const PAID = 11220000
-  const REMAINING = TOTAL - PAID
+  const toast = useToast()
+  const [startDate, setStartDate] = useState(subDays(new Date(), 30))
+  const [endDate, setEndDate] = useState(new Date())
+  const [appointmentsRevenue, setAppointmentsRevenue] = useState({})
+
+  const { totalPrice, paymentLeft } = appointmentsRevenue
+  const TOTAL = totalPrice
+  const PAID = totalPrice - paymentLeft
+  const REMAINING = paymentLeft
   const paidPercentage = Math.round((PAID / TOTAL) * 100)
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const appointmentsRevenueData = await fetchAppointmentsRevenueByDateRange(startDate, endDate)
+        setAppointmentsRevenue(appointmentsRevenueData)
+      } catch (error) {
+        toast({ description: error.message })
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endDate, startDate])
+
+  console.log(appointmentsRevenue)
 
   return (
     <Card variant="filled" bg="gray.50">
@@ -33,7 +58,8 @@ const PaymentRatio = () => {
               borderRadius="md"
               px="1"
               width="125px"
-              defaultValue={formatDate(new Date())}
+              value={formatDate(startDate)}
+              onChange={(e) => setStartDate(e.target.value)}
             />
           </FormControl>
 
@@ -46,7 +72,8 @@ const PaymentRatio = () => {
               borderRadius="md"
               px="1"
               width="125px"
-              defaultValue={formatDate(new Date())}
+              value={formatDate(endDate)}
+              onChange={(e) => setEndDate(e.target.value)}
             />
           </FormControl>
 
