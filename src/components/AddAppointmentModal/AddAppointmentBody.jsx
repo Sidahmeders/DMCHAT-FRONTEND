@@ -21,10 +21,12 @@ import {
 import Select from 'react-select'
 import { isEmpty, omit } from 'lodash'
 
-import { CREATE_APPOINTMENT_NAMES } from '@config'
+import { ChatState } from '@context'
+import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS } from '@config'
 import { getMotifTemplateButtons, getUser } from '@utils'
 import { createAppointment, relateAppointment } from '@services/appointments'
 import { fetchPatients } from '@services/patients'
+import { createPayment } from '@services/payments'
 
 import Loader from '@components/Loader/Loader'
 import PatientHistory from './PatientHistory'
@@ -37,9 +39,10 @@ const resolvePatientOptions = (patients) => {
 }
 
 export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setEvents }) {
-  const user = getUser()
   const { start, end } = selectedSlotInfo
+  const user = getUser()
   const toast = useToast()
+  const { socket } = ChatState()
   const motifRadioOptions = getMotifTemplateButtons()
   const { handleSubmit, control, reset, getValues } = useForm()
 
@@ -89,7 +92,18 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
             [CREATE_APPOINTMENT_NAMES.BASE_APPOINTMENT_ID]: baseAppointmentRadioValue,
           })
 
-      const { patient, title, payment, startDate, endDate } = createdAppointment || {}
+      const payment = data[CREATE_APPOINTMENT_NAMES.PAYMENT]
+      if (payment && payment > 0) {
+        const createdPayment = await createPayment(new Date(), {
+          [CREATE_PAYMENT_NAMES.SENDER]: user._id,
+          [CREATE_PAYMENT_NAMES.PATIENT]: patientId,
+          [CREATE_PAYMENT_NAMES.AMOUNT]: data[CREATE_APPOINTMENT_NAMES.PAYMENT],
+          [CREATE_PAYMENT_NAMES.PAYER_NAME]: data[CREATE_APPOINTMENT_NAMES.FULL_NAME]?.split('-')[1],
+        })
+        socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { createdPayment })
+      }
+
+      const { patient, title, startDate, endDate } = createdAppointment || {}
       setEvents((prevEvents) => [
         ...prevEvents,
         {

@@ -9,27 +9,23 @@ import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS, AP
 import { updateAppointmentSync } from '@services/appointments'
 import { createPayment } from '@services/payments'
 
-const updatePaymentsState = debounce(
-  ({
-    updatedAppointment,
-    createdPayment,
-    setTodayPaymentHistory,
-    setAppointment,
-    setTotalPriceVal,
-    setPaymentVal,
-    setPaymentLeftVal,
-  }) => {
+const updateAppointmentState = debounce(
+  ({ updatedAppointment, setAppointment, setTotalPriceVal, setPaymentVal, setPaymentLeftVal }) => {
     const { totalPrice, payment, paymentLeft } = updatedAppointment
     setAppointment(updatedAppointment)
     setTotalPriceVal(totalPrice)
     setPaymentVal(payment)
     setPaymentLeftVal(paymentLeft)
-
-    if (createdPayment) {
-      setTodayPaymentHistory((paymentHistory) => [...paymentHistory, createdPayment])
-    }
   },
 )
+
+const updatePaymentsState = debounce(({ createdPayment, setTodayPaymentHistory }) => {
+  setTodayPaymentHistory((paymentHistory) => [...paymentHistory, createdPayment])
+  notify({
+    title: `paiement effectué par "${createdPayment.payerName}"`,
+    description: `payé: ${createdPayment.amount} DA`,
+  })
+})
 
 const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   const { fullName, patientId } = appointmentData
@@ -109,37 +105,33 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   useEffect(() => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_PAID, (payload) => {
       const { updatedAppointment, createdPayment } = payload
-      if (updatedAppointment._id === appointment._id) {
-        updatePaymentsState({
+
+      if (!updatedAppointment && createdPayment) {
+        updatePaymentsState({ createdPayment, setTodayPaymentHistory })
+      }
+
+      if (updatedAppointment?._id === appointment._id) {
+        updateAppointmentState({
           updatedAppointment,
-          createdPayment,
-          setTodayPaymentHistory,
           setAppointment,
           setTotalPriceVal,
           setPaymentVal,
           setPaymentLeftVal,
         })
-
+        updatePaymentsState({ createdPayment, setTodayPaymentHistory })
         fetchTodayAppointments()
-
-        notify({
-          title: `paiement effectué par "${fullName}"`,
-          description: `payé: ${createdPayment.amount} / reste: ${updatedAppointment.paymentLeft}`,
-        })
       }
     })
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_UPDATED, (updatedAppointment) => {
       if (updatedAppointment._id === appointment._id) {
-        updatePaymentsState({
+        updateAppointmentState({
           updatedAppointment,
-          setTodayPaymentHistory,
           setAppointment,
           setTotalPriceVal,
           setPaymentVal,
           setPaymentLeftVal,
         })
-
         fetchTodayAppointments()
       }
     })
