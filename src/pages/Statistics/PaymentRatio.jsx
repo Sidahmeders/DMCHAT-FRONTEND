@@ -43,11 +43,9 @@ const PaymentRatio = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [endDate, startDate])
 
-  console.log(appointmentsRevenue)
-
   return (
     <Card variant="filled" bg="gray.50">
-      <CardHeader>
+      <CardHeader pb="2">
         <HStack>
           <FormControl mr="1">
             <Input
@@ -86,6 +84,10 @@ const PaymentRatio = () => {
         </HStack>
       </CardHeader>
       <CardBody px="8">
+        <Text textAlign="center" mb="4" color="purple.600">
+          Analyse des transactions de paiement des rendez-vous
+        </Text>
+
         <HStack fontWeight="semibold" justify="space-between">
           <Text>Total:</Text>
           <Text fontSize="14" fontWeight="normal" color="gray.500">
