@@ -26,10 +26,10 @@ const PaymentRatio = () => {
   const [appointmentsRevenue, setAppointmentsRevenue] = useState({})
 
   const { totalPrice, paymentLeft } = appointmentsRevenue
-  const TOTAL = totalPrice
-  const PAID = totalPrice - paymentLeft
-  const REMAINING = paymentLeft
-  const paidPercentage = Math.round((PAID / TOTAL) * 100)
+  const TOTAL = totalPrice || 0
+  const PAID = totalPrice - paymentLeft || 0
+  const REMAINING = paymentLeft || 0
+  const paidPercentage = Math.round((PAID / TOTAL) * 100) || 0
 
   useEffect(() => {
     ;(async () => {
