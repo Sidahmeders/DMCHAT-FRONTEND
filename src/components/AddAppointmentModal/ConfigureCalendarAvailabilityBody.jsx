@@ -56,10 +56,10 @@ export default function ConfigureCalendarAvailabilityBody({ selectedSlotInfo, se
       </ModalBody>
 
       <ModalFooter pb="0">
-        <Button type="submit" colorScheme="blue" mr={3} onClick={handleCalendarAvailability}>
-          confirmer disponibilité
+        <Button type="submit" colorScheme="blue" mr={3} onClick={handleCalendarAvailability} isDisabled={isLoading}>
+          Confirmer disponibilité
         </Button>
-        <Button variant="ghost" onClick={handleClose}>
+        <Button variant="ghost" onClick={handleClose} isDisabled={isLoading}>
           Annuler
         </Button>
       </ModalFooter>

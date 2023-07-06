@@ -19,7 +19,7 @@ import { createPayment } from '@services/payments'
 
 import SubAppointment from './SubAppointment'
 
-export default function AppointmentTable({ appointmentsGroup, appointments, setAppointments }) {
+export default function AppointmentTable({ appointmentsGroup, appointments, setAppointments, onClose }) {
   const toast = useToast()
   const { socket } = ChatState()
   const [baseAppointment] = appointmentsGroup
@@ -31,6 +31,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
   const [canShowSaveBtn, setCanShowSaveBtn] = useState(false)
   const [canShowResetBtn, setCanShowResetBtn] = useState(false)
   const [canShowConfirmUpdate, setCanShowConfirmUpdate] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const baseTitleRef = useRef(baseAppointment.title)
   const basePaymentRef = useRef(baseAppointment.payment || 0)
@@ -50,20 +51,25 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
   }
 
   const saveUpdateHandler = async () => {
+    setIsLoading(true)
     try {
       const updatedAppointments = await Object.entries(treatmentUpdate).reduce(async (prevPromise, [key, values]) => {
-        const listOfUpdates = await prevPromise
+        try {
+          const listOfUpdates = await prevPromise
 
-        const { previousPayment, payment } = values
-        const appointmentUpdate = {
-          _id: key,
-          ...values,
-          [CREATE_APPOINTMENT_NAMES.PAYMENT]: parseInt(payment) - previousPayment || 0,
+          const { previousPayment, payment } = values
+          const appointmentUpdate = {
+            _id: key,
+            ...values,
+            [CREATE_APPOINTMENT_NAMES.PAYMENT]: parseInt(payment) - previousPayment || 0,
+          }
+
+          const updatedAppointment = await updateAppointmentSync(appointmentUpdate._id, appointmentUpdate)
+
+          return [...listOfUpdates, updatedAppointment]
+        } catch (error) {
+          toast({ description: error.message })
         }
-
-        const updatedAppointment = await updateAppointmentSync(appointmentUpdate._id, appointmentUpdate)
-
-        return [...listOfUpdates, updatedAppointment]
       }, Promise.resolve([]))
 
       setAppointments(
@@ -99,16 +105,15 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
         }
       }, Promise.resolve())
 
-      toast({
-        title: 'rendez-vous mis à jour avec succès!',
-        status: 'success',
-      })
+      toast({ title: 'rendez-vous mis à jour avec succès!', status: 'success' })
     } catch (error) {
       toast({ description: error.message })
     }
 
+    setIsLoading(false)
     setCanShowSaveBtn(false)
     setCanShowConfirmUpdate(false)
+    onClose()
   }
 
   const cancelUpdateHandler = () => {
@@ -247,7 +252,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
             <td style={{ border: 'none', padding: '0.75rem 0' }}>
               {canShowConfirmUpdate ? (
                 <>
-                  <Button type="submit" colorScheme="red" mr={3} onClick={saveUpdateHandler}>
+                  <Button type="submit" colorScheme="red" mr={3} onClick={saveUpdateHandler} isDisabled={isLoading}>
                     Confirmer les modifications
                   </Button>
                 </>
@@ -258,7 +263,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
                   </Button>
                 </>
               )}
-              <Button variant="ghost" onClick={cancelUpdateHandler}>
+              <Button variant="ghost" onClick={cancelUpdateHandler} isDisabled={isLoading}>
                 Annuler
               </Button>
             </td>

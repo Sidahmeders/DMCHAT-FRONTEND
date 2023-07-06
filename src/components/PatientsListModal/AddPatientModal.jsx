@@ -17,8 +17,8 @@ import {
   InputLeftElement,
 } from '@chakra-ui/react'
 
-import { CREATE_PATIENT_NAMES } from '@config'
 import { getUser } from '@utils'
+import { CREATE_PATIENT_NAMES } from '@config'
 import { createPatient } from '@services/patients'
 
 const initialValues = Object.values(CREATE_PATIENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
@@ -31,7 +31,7 @@ export default function AddPatientModal({ setPatientsData }) {
     handleSubmit,
     control,
     reset,
-    formState: { isSubmitted },
+    formState: { isSubmitted, isSubmitting },
   } = useForm({ defaultValues: initialValues })
 
   const onSubmit = async (data) => {
@@ -141,10 +141,10 @@ export default function AddPatientModal({ setPatientsData }) {
               </Stack>
             </ModalBody>
             <ModalFooter>
-              <Button type="submit" colorScheme="blue" mr={3}>
+              <Button type="submit" colorScheme="blue" mr={3} isDisabled={isSubmitting}>
                 Créer patient
               </Button>
-              <Button variant="ghost" onClick={onClose}>
+              <Button variant="ghost" onClick={onClose} isDisabled={isSubmitting}>
                 Annuler
               </Button>
             </ModalFooter>

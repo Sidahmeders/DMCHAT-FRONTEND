@@ -44,7 +44,13 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
   const toast = useToast()
   const { socket } = ChatState()
   const motifRadioOptions = getMotifTemplateButtons()
-  const { handleSubmit, control, reset, getValues } = useForm()
+  const {
+    handleSubmit,
+    control,
+    reset,
+    getValues,
+    formState: { isSubmitting },
+  } = useForm()
 
   const [matchedPatients, setMatchedPatients] = useState([])
   const [patientOptions, setPatientOptions] = useState([])
@@ -370,10 +376,10 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
           </Stack>
         </ModalBody>
         <ModalFooter pb="0">
-          <Button type="submit" colorScheme="blue" mr={3}>
+          <Button type="submit" colorScheme="blue" mr={3} isDisabled={isSubmitting}>
             Ajouter rendez-vous
           </Button>
-          <Button variant="ghost" onClick={handleClose}>
+          <Button variant="ghost" onClick={handleClose} isDisabled={isSubmitting}>
             Annuler
           </Button>
         </ModalFooter>

@@ -47,6 +47,11 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
     setIsLoading(false)
   }
 
+  const cancelDelete = () => {
+    setCanDeletePatient(false)
+    onClose()
+  }
+
   useEffect(() => {
     setPatient(getPatient())
   }, [isOpen])
@@ -67,7 +72,7 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
           </ModalBody>
           <ModalFooter>
             {canDeletePatient ? (
-              <Button type="submit" colorScheme="red" mr={3} onClick={deletePatient}>
+              <Button type="submit" colorScheme="red" mr={3} onClick={deletePatient} isDisabled={isLoading}>
                 Supprimer définitivement
               </Button>
             ) : (
@@ -75,12 +80,7 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
                 Supprimer
               </Button>
             )}
-            <Button
-              variant="ghost"
-              onClick={() => {
-                setCanDeletePatient(false)
-                onClose()
-              }}>
+            <Button variant="ghost" onClick={() => cancelDelete} isDisabled={isLoading}>
               Annuler
             </Button>
           </ModalFooter>

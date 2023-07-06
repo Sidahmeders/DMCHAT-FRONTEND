@@ -38,6 +38,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   const [paymentLeftVal, setPaymentLeftVal] = useState(appointment.paymentLeft || 0)
   const [canUpdatePayments, setCanUpdatePayments] = useState(false)
   const [canShowUpdateBtn, setCanShowUpdateBtn] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const updatePaymentVal = (e) => {
     setCanShowUpdateBtn(true)
@@ -66,6 +67,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   }
 
   const handlePaymentsUpdate = async () => {
+    setIsLoading(true)
     try {
       const appointmentUpdate = {
         [CREATE_APPOINTMENT_NAMES.TOTAL_PRICE]: totalPriceVal,
@@ -92,6 +94,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
     } catch (error) {
       toast({ description: error.message })
     }
+    setIsLoading(false)
   }
 
   const cancelPaymentUpdate = () => {
@@ -156,7 +159,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
           </InputGroup>
         </InputGroup>
         {canShowUpdateBtn && canUpdatePayments && (
-          <Button colorScheme="orange" mt="2" mb="2" onClick={handlePaymentsUpdate}>
+          <Button colorScheme="orange" mt="2" mb="2" onClick={handlePaymentsUpdate} isDisabled={isLoading}>
             Confirmer modification
           </Button>
         )}
@@ -166,7 +169,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
           </Button>
         )}
         {canShowUpdateBtn && (
-          <Button ml="2" onClick={cancelPaymentUpdate}>
+          <Button ml="2" onClick={cancelPaymentUpdate} isDisabled={isLoading}>
             Annuler
           </Button>
         )}

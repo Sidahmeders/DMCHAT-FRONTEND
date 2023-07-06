@@ -69,6 +69,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
                   appointments={appointments}
                   setAppointments={setAppointments}
                   appointmentsGroup={appointmentsGroup}
+                  onClose={onClose}
                 />
               ))}
             </Loader>

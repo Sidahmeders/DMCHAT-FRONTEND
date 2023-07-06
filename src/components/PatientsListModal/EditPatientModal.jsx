@@ -28,7 +28,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
     handleSubmit,
     control,
     reset,
-    formState: { isSubmitted },
+    formState: { isSubmitted, isSubmitting },
   } = useForm()
 
   const onSubmit = async (data) => {
@@ -137,10 +137,10 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
             </Stack>
           </ModalBody>
           <ModalFooter>
-            <Button type="submit" colorScheme="blue" mr={3}>
-              Modifier patient
+            <Button type="submit" colorScheme="orange" mr={3} isDisabled={isSubmitting}>
+              Sauvegarder patient
             </Button>
-            <Button variant="ghost" onClick={onClose}>
+            <Button variant="ghost" onClick={onClose} isDisabled={isSubmitting}>
               Annuler
             </Button>
           </ModalFooter>
