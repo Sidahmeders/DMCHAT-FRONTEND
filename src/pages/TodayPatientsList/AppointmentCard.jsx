@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useDisclosure, IconButton, Box, Flex, Heading, Stack, Skeleton, useToast } from '@chakra-ui/react'
+import { useDisclosure, Button, IconButton, Box, Flex, Heading, Stack, Skeleton, useToast } from '@chakra-ui/react'
 import { Card, CardHeader } from '@chakra-ui/card'
 import { Activity, ChevronDown, ChevronUp, Edit2 } from 'react-feather'
 import { isBoolean } from 'lodash'
@@ -23,7 +23,7 @@ export const LoadingCards = () => (
   </Stack>
 )
 
-export default function AppointmentCard({ appointment, withConfirm, withPresence }) {
+export default function AppointmentCard({ appointment, withConfirm, withPresence, index }) {
   const { fullName, motif } = appointment
   const { socket } = ChatState()
   const { fetchTodayAppointments } = AppointmentsState()
@@ -105,6 +105,11 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
         className={`card-container ${withConfirm && isConfirmed && 'confirmed'} ${withPresence && isLeft && 'left'}`}>
         <CardHeader p="1">
           <Flex spacing="4">
+            {index !== undefined && (
+              <Button variant="unstyled" color="red.600" p="0" m="0" minWidth="1.75rem">
+                {index + 1}
+              </Button>
+            )}
             <Flex flex="1" gap="2" justifyContent="space-between" alignItems="center">
               <Box pl="2">
                 <Heading size="sm" display="flex">

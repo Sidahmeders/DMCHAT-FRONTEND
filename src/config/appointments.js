@@ -44,6 +44,7 @@ export const APPOINTMENTS_EVENTS = {
   DROP_APPOINTMENT: 'drop appointment',
   PAYMENT_APPOINTMENT: 'payment appointment',
   UPDATE_APPOINTMENT: 'update appointment',
+  REORDER_APPOINTMENT: 'reorder appointment',
 }
 
 export const APPOINTMENTS_LISTENERS = {
@@ -52,5 +53,6 @@ export const APPOINTMENTS_LISTENERS = {
   APPOINTMENT_DROPPED: 'appointment dropped',
   APPOINTMENT_MESSAGED: 'appointment messaged',
   APPOINTMENT_PAID: 'appointment paid',
-  APPOINTMENT_UPDATE: 'appointment update',
+  APPOINTMENT_UPDATED: 'appointment updated',
+  APPOINTMENT_REORDERED: 'appointment reordered',
 }

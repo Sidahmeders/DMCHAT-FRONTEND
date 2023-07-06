@@ -22,7 +22,7 @@ export default function WaitingRoomAppointments({ appointments, isLoading }) {
           ) : (
             appointments.map((appointment, index) => (
               <DragWrap key={appointment.id} id={appointment.id} index={index}>
-                <AppointmentCard withPresence appointment={appointment} />
+                <AppointmentCard withPresence appointment={appointment} index={index} />
               </DragWrap>
             ))
           )}

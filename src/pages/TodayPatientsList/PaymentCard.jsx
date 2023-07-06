@@ -129,7 +129,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
       }
     })
 
-    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_UPDATE, (updatedAppointment) => {
+    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_UPDATED, (updatedAppointment) => {
       if (updatedAppointment._id === appointment._id) {
         updatePaymentsState({
           updatedAppointment,
