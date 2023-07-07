@@ -18,4 +18,6 @@ const signUpUser = async (credentials) => {
   })
 }
 
-export { searchUsers, signInUser, signUpUser }
+const requestPasswordReset = async (email) => await _fetch.POST('/api/users/forget-password', { email })
+
+export { searchUsers, signInUser, signUpUser, requestPasswordReset }

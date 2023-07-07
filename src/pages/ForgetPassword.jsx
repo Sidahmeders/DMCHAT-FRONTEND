@@ -4,6 +4,8 @@ import { Mail } from 'react-feather'
 import { useForm, Controller } from 'react-hook-form'
 import { Link } from 'react-router-dom'
 
+import { requestPasswordReset } from '@services/users'
+
 import Timer from '@components/Timer'
 
 const ForgetPassword = () => {
@@ -12,29 +14,35 @@ const ForgetPassword = () => {
     handleSubmit,
     control,
     getValues,
-    formState: { isSubmitting, isSubmitSuccessful },
+    formState: { isSubmitting },
   } = useForm()
 
+  const [isSuccessfulSubmit, setIsSuccessfulSubmit] = useState(false)
   const [seconds, setSeconds] = useState(60)
 
-  const submitRestPassword = (data) => {
+  const submitRestPassword = async (data) => {
     try {
-      console.log(data, 'DATA++')
+      await requestPasswordReset(data.email)
+      setIsSuccessfulSubmit(true)
     } catch (error) {
-      toast({ description: error.message })
+      toast({ title: error.message })
     }
   }
 
   const onErrors = (errors) => toast({ title: errors.email.message, status: 'warning' })
 
-  const resendInstructions = () => {
-    console.log(getValues(), 'DATA--')
+  const resendInstructions = async () => {
+    try {
+      await requestPasswordReset(getValues().email)
+    } catch (error) {
+      toast({ description: error.message })
+    }
     setSeconds(60)
   }
 
   return (
     <Container maxWidth="xl">
-      {isSubmitSuccessful ? (
+      {isSuccessfulSubmit ? (
         <Stack gap="4">
           <Text fontSize="lg">
             veuillez vérifier votre boîte de réception et vous devriez recevoir un lien de réinitialisation de mot de
@@ -42,9 +50,9 @@ const ForgetPassword = () => {
           </Text>
 
           <HStack>
-            <Text>une fois votre mot de passe réinitialisé, vous pouvez: </Text>
+            <Text>une fois votre mot de passe réinitialisé, vous pouvez revenir à la: </Text>
             <Button variant="link">
-              <Link to="/">revenir à la connexion</Link>
+              <Link to="/">connexion</Link>
             </Button>
           </HStack>
 
@@ -87,6 +95,9 @@ const ForgetPassword = () => {
 
             <Button type="submit" colorScheme="purple" isDisabled={isSubmitting}>
               Envoyer des instructions
+            </Button>
+            <Button isDisabled={isSubmitting}>
+              <Link to="/">revenir à la connexion</Link>
             </Button>
           </Stack>
         </form>
