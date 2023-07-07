@@ -9,7 +9,7 @@ import { checkIsJWTExpired, removeUser, getPageRoute, getUser } from '@utils'
 import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
-import { Auth, Chat, TodayPatientsList, Statistics, Calendar } from './pages'
+import { Auth, Chat, TodayPatientsList, Statistics, Calendar, ForgetPassword } from './pages'
 
 import './App.css'
 
@@ -74,12 +74,21 @@ const App = () => {
     <div className="App">
       {!isEmpty(user) && <TopNavigation />}
       <Routes>
-        {isEmpty(user) && <Route path="/" element={<Auth />} />}
-        <Route path={APP_ROUTES.CHATS} element={<Chat />} />
-        <Route path={APP_ROUTES.TODAY_PATIENTS_LIST} element={<TodayPatientsList />} />
-        <Route path={APP_ROUTES.CALENDAR} element={<Calendar />} />
-        <Route path={APP_ROUTES.STATISTICS} element={<Statistics />} />
-        <Route path="*" element={<Navigate to={getPageRoute()} replace />} />
+        {isEmpty(user) ? (
+          <>
+            <Route path="/" element={<Auth />} />
+            <Route path={APP_ROUTES.FORGET_PASSWORD} element={<ForgetPassword />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </>
+        ) : (
+          <>
+            <Route path={APP_ROUTES.CHATS} element={<Chat />} />
+            <Route path={APP_ROUTES.TODAY_PATIENTS_LIST} element={<TodayPatientsList />} />
+            <Route path={APP_ROUTES.CALENDAR} element={<Calendar />} />
+            <Route path={APP_ROUTES.STATISTICS} element={<Statistics />} />
+            <Route path="*" element={<Navigate to={getPageRoute()} replace />} />
+          </>
+        )}
       </Routes>
     </div>
   )

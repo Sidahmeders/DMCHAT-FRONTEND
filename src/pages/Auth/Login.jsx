@@ -1,5 +1,6 @@
-import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Stack, useToast } from '@chakra-ui/react'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Stack, useToast } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
 import { setUser } from '@utils'
@@ -62,7 +63,7 @@ const Login = () => {
       <Stack spacing="5">
         <FormControl isRequired>
           <FormLabel htmlFor="password">Mot de Passe</FormLabel>
-          <InputGroup>
+          <InputGroup position="relative" mb="8">
             <InputRightElement w="4.5rem">
               <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
                 {show ? 'cacher' : 'voir'}
@@ -76,6 +77,10 @@ const Login = () => {
               onChange={(e) => handleCredentials(e)}
             />
           </InputGroup>
+
+          <Button variant="link" position="absolute" bottom="0" right="1" fontSize="14" color="red">
+            <Link to={APP_ROUTES.FORGET_PASSWORD}>mot de passe oublié?</Link>
+          </Button>
         </FormControl>
       </Stack>
 

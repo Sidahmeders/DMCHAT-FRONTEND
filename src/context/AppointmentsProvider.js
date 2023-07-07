@@ -1,7 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { isEmpty } from 'lodash'
 
 import { APPOINTMENTS_IDS } from '../config'
-import { flattenAppointment } from '../utils'
+import { flattenAppointment, getUser } from '@utils'
 import { fetchDayAppointments } from '@services/appointments'
 import { fetchDayPayments } from '@services/payments'
 
@@ -47,6 +48,7 @@ export const AppointmentsProvider = ({ children }) => {
 
   useEffect(() => {
     ;(async () => {
+      if (isEmpty(getUser())) return
       const todayPayments = await fetchDayPayments(new Date())
       setTodayPaymentHistory(todayPayments)
     })()

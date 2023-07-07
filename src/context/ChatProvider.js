@@ -1,9 +1,9 @@
 import { createContext, useContext, useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
-import { isEmpty, debounce } from 'lodash'
+import { debounce } from 'lodash'
 
-import { getUser, notify } from '@utils'
+import { notify } from '@utils'
 import { CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
 
@@ -56,7 +56,6 @@ export const ChatProvider = ({ children, socket }) => {
   }
 
   useEffect(() => {
-    if (isEmpty(getUser())) navigate('/')
     fetchMessages()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate])
