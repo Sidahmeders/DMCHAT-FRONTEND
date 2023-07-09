@@ -9,7 +9,7 @@ import { checkIsJWTExpired, removeUser, getPageRoute, getUser } from '@utils'
 import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
-import { Auth, Chat, TodayPatientsList, Statistics, Calendar, ForgetPassword } from './pages'
+import { Auth, Chat, TodayPatientsList, Statistics, Calendar, ForgetPassword, ConfirmLogin } from './pages'
 
 import './App.css'
 
@@ -19,7 +19,7 @@ const App = () => {
   const toast = useToast()
   const navigate = useNavigate()
 
-  if (user && user.token) {
+  if (!isEmpty(user) && user.token) {
     if (checkIsJWTExpired(user.token)) {
       removeUser()
       navigate('/')
@@ -78,6 +78,7 @@ const App = () => {
           <>
             <Route path="/" element={<Auth />} />
             <Route path={APP_ROUTES.FORGET_PASSWORD} element={<ForgetPassword />} />
+            <Route path={APP_ROUTES.CONFIRM_LOGIN} element={<ConfirmLogin />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </>
         ) : (

@@ -1,48 +1,40 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Button, FormControl, FormLabel, Input, InputGroup, InputRightElement, Stack, useToast } from '@chakra-ui/react'
-import { isEmpty } from 'lodash'
 
-import { setUser } from '@utils'
+import { setConfirmationToken } from '@utils'
 import { APP_ROUTES } from '@config'
 import { signInUser } from '@services/users'
 
 const Login = () => {
+  const toast = useToast()
+  const navigate = useNavigate()
+
   const [show, setShow] = useState(false)
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [credentials, setCredentials] = useState({ email: '', password: '' })
 
-  const toast = useToast()
-
-  const handleCredentials = (e) => {
-    setCredentials({ ...credentials, [e.target.name]: e.target.value })
-  }
-
-  const submitHandler = async () => {
+  const submitLoginHandler = async () => {
     if (!credentials.email || !credentials.password) {
       return toast({
         title: 'Veuillez remplir tous les champs obligatoires',
         status: 'warning',
       })
     }
-    setLoading(true)
+    setIsLoading(true)
     try {
-      const userData = await signInUser(credentials)
-      if (!isEmpty(userData)) {
-        setUser(userData)
-        setLoading(false)
-        toast({
-          title: 'utilisateur authentifié avec succès',
-          status: 'success',
-        })
-        setTimeout(() => {
-          window.location = APP_ROUTES.CHATS
-        }, 1500)
-      }
+      const { token } = await signInUser(credentials)
+      setConfirmationToken(token)
+      navigate(APP_ROUTES.CONFIRM_LOGIN)
     } catch (error) {
       toast({ title: error.message })
     }
-    setLoading(false)
+    setIsLoading(false)
+  }
+
+  const onChangeHandler = (e) => {
+    const { name, value } = e.target
+    setCredentials({ ...credentials, [name]: value })
   }
 
   return (
@@ -55,7 +47,7 @@ const Login = () => {
             name="email"
             value={credentials.email}
             placeholder="enter votre email"
-            onChange={(e) => handleCredentials(e)}
+            onChange={(e) => onChangeHandler(e)}
           />
         </FormControl>
       </Stack>
@@ -74,7 +66,7 @@ const Login = () => {
               name="password"
               value={credentials.password}
               placeholder="mot de passe"
-              onChange={(e) => handleCredentials(e)}
+              onChange={(e) => onChangeHandler(e)}
             />
           </InputGroup>
 
@@ -84,7 +76,12 @@ const Login = () => {
         </FormControl>
       </Stack>
 
-      <Button colorScheme="blue" width="100%" style={{ marginTop: 15 }} onClick={submitHandler} isLoading={loading}>
+      <Button
+        colorScheme="blue"
+        width="100%"
+        style={{ marginTop: 15 }}
+        onClick={submitLoginHandler}
+        isLoading={isLoading}>
         Connexion
       </Button>
 

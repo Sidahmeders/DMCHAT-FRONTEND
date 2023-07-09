@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { Users } from 'react-feather'
 
-import { getUser, setPatient } from '@utils'
+import { setPatient } from '@utils'
 import { PAGINATION_ROWS_PER_PAGE_OPTIONS } from '@config'
 import { fetchPatients } from '@services/patients'
 
@@ -28,7 +28,6 @@ import AddPatientModal from './AddPatientModal'
 import './PatientsListModal.scss'
 
 export default function PatientListModal() {
-  const user = getUser()
   const toast = useToast()
   const { isOpen: isPatientsModalOpen, onOpen: onPatientsModalOpen, onClose: onPatientsModalClose } = useDisclosure()
   const { isOpen: isEditModalOpen, onOpen: onEditModalOpen, onClose: ondEditModalClose } = useDisclosure()
@@ -48,7 +47,6 @@ export default function PatientListModal() {
 
   useEffect(() => {
     ;(async () => {
-      if (!user) return
       setIsLoading(true)
       try {
         const patientData = await fetchPatients({ pageNumber, pageSize, searchName: filterText })

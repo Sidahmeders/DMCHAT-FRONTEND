@@ -1,10 +1,14 @@
 import { MOTIF_TEMPLATE_VALUES, MOTIF_ENUM } from '@config'
 import { guid } from '@utils'
 
+const CONFIRM_TOKEN = 'confirm-token'
 const USER = 'userInfo'
 const PATIENT = 'patient'
 const PAGE_ROUTE = 'pageRoute'
 const MOTIF_TEMPLATE_BUTTONS = 'motifTemplateButtons'
+
+export const getConfirmationToken = () => localStorage.getItem(CONFIRM_TOKEN) || null
+export const setConfirmationToken = (token) => localStorage.setItem(CONFIRM_TOKEN, token)
 
 export const getUser = () => JSON.parse(localStorage.getItem(USER)) || {}
 export const setUser = (userData) => localStorage.setItem(USER, JSON.stringify(userData))

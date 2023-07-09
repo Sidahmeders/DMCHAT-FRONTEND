@@ -9,6 +9,10 @@ const signInUser = async (credentials) => {
   })
 }
 
+const confirmSignIn = async (data) => {
+  return await _fetch.POST('/api/users/login-confirmation', data)
+}
+
 const signUpUser = async (credentials) => {
   return await _fetch.POST('/api/users', {
     name: credentials.name,
@@ -20,4 +24,4 @@ const signUpUser = async (credentials) => {
 
 const requestPasswordReset = async (email) => await _fetch.POST('/api/users/forget-password', { email })
 
-export { searchUsers, signInUser, signUpUser, requestPasswordReset }
+export { searchUsers, signInUser, confirmSignIn, signUpUser, requestPasswordReset }

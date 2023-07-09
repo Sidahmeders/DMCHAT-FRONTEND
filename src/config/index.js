@@ -12,6 +12,7 @@ export const APP_ROUTES = {
   TODAY_PATIENTS_LIST: '/today-appointments',
   STATISTICS: '/statistics',
   FORGET_PASSWORD: '/forget-password',
+  CONFIRM_LOGIN: '/confirm-login',
 }
 
 export const PAGINATION_ROWS_PER_PAGE_OPTIONS = [20, 40, 60, 100, 200]
