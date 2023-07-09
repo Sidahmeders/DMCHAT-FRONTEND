@@ -1,11 +1,12 @@
-import { useState, useRef } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
 import { Container, useToast, Flex, Box, Input, Button, Stack, Text } from '@chakra-ui/react'
 
 import { getConfirmationToken, setUser } from '@utils'
 import { APP_ROUTES } from '@config'
 import { confirmSignIn } from '@services/users'
 import { Mail } from 'react-feather'
+import Timer from '@components/Timer'
 
 const ConfirmLogin = () => {
   const toast = useToast()
@@ -14,6 +15,7 @@ const ConfirmLogin = () => {
   const codeRef = useRef(null)
   const [OTPCode, setOTPCode] = useState('')
   const [isDisabled, setIsDisabled] = useState(false)
+  const [seconds, setSeconds] = useState(60 * 5)
 
   const handleOTPSubmit = async (e) => {
     e.preventDefault()
@@ -49,6 +51,10 @@ const ConfirmLogin = () => {
     }
   }
 
+  useEffect(() => {
+    if (seconds <= 1) navigate('/')
+  }, [navigate, seconds])
+
   return (
     <Container maxWidth="md" onClick={handleCodeBoxClick}>
       <Stack mb="4">
@@ -56,7 +62,10 @@ const ConfirmLogin = () => {
           <Mail size="12rem" color="#36fd" />
         </Box>
         <Text textAlign="center" style={{ margin: 0 }} fontSize="xl" color="#36fd" fontWeight="bold">
-          Vérifier votre E-mail pour le code
+          Vérifier votre E-mail pour le code avant la fin du temps:
+          <Text width="12" ml="1" display="inline-block" color={seconds <= 120 && 'red.500'}>
+            {<Timer seconds={seconds} setSeconds={setSeconds} />}
+          </Text>
         </Text>
       </Stack>
 
@@ -97,6 +106,9 @@ const ConfirmLogin = () => {
       </Box>
       <Button colorScheme="blue" opacity="0.9" width="100%" onClick={handleOTPSubmit} isDisabled={isDisabled}>
         Envoyer le code de vérification
+      </Button>
+      <Button mt="2" width="100%">
+        <Link to="/">revenir à la connexion</Link>
       </Button>
     </Container>
   )
