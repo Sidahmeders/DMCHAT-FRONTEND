@@ -61,12 +61,12 @@ const ConfirmLogin = () => {
         <Box display="flex" justifyContent="center">
           <Mail size="12rem" color="#36fd" />
         </Box>
-        <Text textAlign="center" style={{ margin: 0 }} fontSize="xl" color="#36fd" fontWeight="bold">
+        <Box textAlign="center" fontSize="xl" color="#36fd" fontWeight="bold" style={{ margin: 0 }}>
           Vérifier votre E-mail pour le code avant la fin du temps:
           <Text width="14" display="inline-block" color={seconds <= 120 && 'red.500'}>
             {<Timer seconds={seconds} setSeconds={setSeconds} />}
           </Text>
-        </Text>
+        </Box>
       </Stack>
 
       <Box>
