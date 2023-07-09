@@ -11,44 +11,33 @@ import {
   useToast,
 } from '@chakra-ui/react'
 
-import { setUser } from '@utils'
-import { APP_ROUTES } from '@config'
 import { signUpUser } from '@services/users'
 import { uploadImage } from '@services/cloud'
+import { CREATE_USER_NAMES } from '@config'
+
+const initialValues = Object.values(CREATE_USER_NAMES).reduce((acc, val) => ({ ...acc, [val]: '' }), {})
 
 const Signup = () => {
   const [show, setShow] = useState(false)
   const [loading, setLoading] = useState(false)
   const toast = useToast()
 
-  const [credentials, setCredentials] = useState({
-    name: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    pic: '',
-  })
+  const [credentials, setCredentials] = useState(initialValues)
 
   const handleCredentials = (e) => {
-    setCredentials({ ...credentials, [e.target.name]: e.target.value })
+    const { name, value } = e.target
+    setCredentials({ ...credentials, [name]: value })
   }
 
   const handleUploadPicture = async (e) => {
     const { name, files } = e.target
     if (files[0] === undefined) {
-      return toast({
-        title: 'Veuillez sélectionner une image',
-        status: 'warning',
-      })
+      return toast({ title: 'Veuillez sélectionner une image', status: 'warning' })
     }
     setLoading(true)
     try {
       const uploadedImage = await uploadImage(files)
-      setCredentials({
-        ...credentials,
-        [name]: uploadedImage.secure_url.toString(),
-      })
-      setLoading(false)
+      setCredentials({ ...credentials, [name]: uploadedImage.secure_url.toString() })
     } catch (error) {
       toast({ description: error.message })
     }
@@ -57,29 +46,20 @@ const Signup = () => {
 
   const submitHandler = async () => {
     if (!credentials.name || !credentials.email || !credentials.password || !credentials.confirmPassword) {
-      return toast({
-        title: 'Veuillez remplir tous les champs obligatoires',
-        status: 'warning',
-      })
+      return toast({ title: 'Veuillez remplir tous les champs obligatoires', status: 'warning' })
     }
     if (credentials.password !== credentials.confirmPassword) {
-      return toast({
-        title: 'Les mots de passe ne correspondent pas',
-        status: 'warning',
-      })
+      return toast({ title: 'Les mots de passe ne correspondent pas', status: 'warning' })
     }
     setLoading(true)
     try {
-      const signedUpUser = await signUpUser(credentials)
-      setUser(signedUpUser)
-      setLoading(false)
+      await signUpUser(credentials)
+      setCredentials(initialValues)
       toast({
         title: "l'utilisateur s'est inscrit avec succès",
+        description: "veuillez contacter l'administrateur pour vous donner accès au système",
         status: 'success',
       })
-      setTimeout(() => {
-        window.location = APP_ROUTES.CHATS
-      }, 1500)
     } catch (error) {
       toast({ description: error.message })
     }
