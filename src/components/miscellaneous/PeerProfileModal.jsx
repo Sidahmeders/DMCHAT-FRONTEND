@@ -3,7 +3,7 @@ import {
   Button,
   HStack,
   IconButton,
-  Image,
+  Avatar,
   Modal,
   ModalBody,
   ModalContent,
@@ -34,7 +34,7 @@ export default function PeerProfileModal({ sender, chatId, setMessages }) {
             {sender.name}
           </ModalHeader>
           <ModalBody display="flex" flexDir="column" alignItems="center" justifyContent="space-between">
-            <Image borderRadius="full" objectFit="cover" boxSize="12.5rem" src={sender.pic} alt={sender.name} />
+            <Avatar src={sender.pic} name={sender.name} objectFit="cover" boxSize="12.5rem" />
             <Text fontSize="1.25rem" mt="6">
               Email: <strong> {sender.email}</strong>
             </Text>

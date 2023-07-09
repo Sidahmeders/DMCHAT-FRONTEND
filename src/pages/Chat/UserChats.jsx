@@ -73,7 +73,7 @@ const UserChats = () => {
                   py="2"
                   borderRadius="lg">
                   <HStack gap="2">
-                    <Avatar src={!chat.isGroupChat && pic} name={chat.chatName} />
+                    <Avatar name={sender} src={!chat.isGroupChat && pic} />
                     <Box pt="2">
                       <Text>{!chat.isGroupChat ? sender : chat.chatName}</Text>
                       <Text fontSize="small" color={selectedChat?._id === chat._id ? 'white' : 'blue.500'}>

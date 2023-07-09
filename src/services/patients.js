@@ -1,7 +1,7 @@
 import _fetch from './_fetch'
 
 const fetchPatients = async ({ pageNumber, pageSize, searchName }) => {
-  let searchQuery = [
+  const searchQuery = [
     pageNumber && `page=${pageNumber}`,
     pageSize && `pageSize=${pageSize}`,
     searchName && `fullName=${searchName}`,
