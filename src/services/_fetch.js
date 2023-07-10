@@ -17,13 +17,13 @@ class Fetch {
         Authorization: `Bearer ${this.#user.token}`,
       },
     })
-    const { data, error } = await response.json()
+    const { data, error } = await response?.json()
 
     if (error) {
       throw new Error(error.message)
     }
 
-    return data
+    return data || null
   }
 
   async POST(url, body) {
@@ -35,13 +35,13 @@ class Fetch {
       },
       body: JSON.stringify(body),
     })
-    const { data, error } = await response.json()
+    const { data, error } = await response?.json()
 
     if (error) {
       throw new Error(error.message)
     }
 
-    return data
+    return data || null
   }
 
   async PUT(url, body) {
@@ -53,13 +53,13 @@ class Fetch {
       },
       body: JSON.stringify(body),
     })
-    const { data, error } = await response.json()
+    const { data, error } = await response?.json()
 
     if (error) {
       throw new Error(error.message)
     }
 
-    return data
+    return data || null
   }
 
   async DELETE(url) {
@@ -69,8 +69,13 @@ class Fetch {
         Authorization: `Bearer ${this.#user.token}`,
       },
     })
+    const { data, error } = await response?.json()
 
-    return response.status
+    if (error) {
+      throw new Error(error.message)
+    }
+
+    return data || null || null
   }
 }
 
