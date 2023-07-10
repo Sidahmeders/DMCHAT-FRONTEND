@@ -12,8 +12,8 @@ import { fetchPatientById } from '@services/patients'
 
 import PatientFollowupsModal from '@components/PatientFollowupsModal/PatientFollowupsModal'
 import PaymentCard from './PaymentCard'
-import ConfirmSound from '../../assets/songs/confirmation-tone.wav'
-import DoorBellSound from '../../assets/songs/door-bell.wav'
+import ConfirmSound from '../../assets/songs/confirm-tone.mp3'
+import LeaveSound from '../../assets/songs/leave-tone.mp3'
 
 export const LoadingCards = () => (
   <Stack mt="2">
@@ -90,7 +90,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       if (payload._id === appointment._id) {
         setIsLeft(payload.isLeft)
         fetchTodayAppointments()
-        new Audio(DoorBellSound).play()
+        new Audio(LeaveSound).play()
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
