@@ -17,13 +17,15 @@ class Fetch {
         Authorization: `Bearer ${this.#user.token}`,
       },
     })
-    const { data, error } = await response?.json()
 
-    if (error) {
-      throw new Error(error.message)
+    const contentType = response.headers.get('Content-Type')
+    if (contentType && contentType.includes('application/json')) {
+      const { data, error } = await response.json()
+      if (error) throw new Error(error.message)
+      return data
     }
 
-    return data || null
+    return null
   }
 
   async POST(url, body) {
@@ -35,13 +37,15 @@ class Fetch {
       },
       body: JSON.stringify(body),
     })
-    const { data, error } = await response?.json()
 
-    if (error) {
-      throw new Error(error.message)
+    const contentType = response.headers.get('Content-Type')
+    if (contentType && contentType.includes('application/json')) {
+      const { data, error } = await response.json()
+      if (error) throw new Error(error.message)
+      return data
     }
 
-    return data || null
+    return null
   }
 
   async PUT(url, body) {
@@ -53,13 +57,15 @@ class Fetch {
       },
       body: JSON.stringify(body),
     })
-    const { data, error } = await response?.json()
 
-    if (error) {
-      throw new Error(error.message)
+    const contentType = response.headers.get('Content-Type')
+    if (contentType && contentType.includes('application/json')) {
+      const { data, error } = await response.json()
+      if (error) throw new Error(error.message)
+      return data
     }
 
-    return data || null
+    return null
   }
 
   async DELETE(url) {
@@ -69,13 +75,15 @@ class Fetch {
         Authorization: `Bearer ${this.#user.token}`,
       },
     })
-    const { data, error } = await response?.json()
 
-    if (error) {
-      throw new Error(error.message)
+    const contentType = response.headers.get('Content-Type')
+    if (contentType && contentType.includes('application/json')) {
+      const { data, error } = await response.json()
+      if (error) throw new Error(error.message)
+      return data
     }
 
-    return data || null || null
+    return null
   }
 }
 

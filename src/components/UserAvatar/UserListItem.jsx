@@ -44,7 +44,7 @@ const UserListItem = ({ user, setUsersList, onClose }) => {
 
   const handleRoleUpdate = async () => {
     try {
-      const updatedUser = await updateUser({ id: user._id, email: user.email }, { role: roleValue })
+      const updatedUser = await updateUser(user._id, { role: roleValue })
       setUsersList((prevUsers) => prevUsers.map((user) => (user._id === updatedUser._id ? updatedUser : user)))
     } catch (error) {
       toast({ description: error.message })

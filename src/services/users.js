@@ -24,9 +24,8 @@ const signUpUser = async (credentials) => {
 
 const requestPasswordReset = async (email) => await _fetch.POST('/api/users/forget-password', { email })
 
-const updateUser = async ({ id, email }, userData) => {
-  const searchQuery = [id && `id=${id}`, email && `email=${email}`].filter((query) => query).join('&')
-  return await _fetch.PUT(`/api/users?${searchQuery}`, userData)
-}
+const updateUser = async (userId, userData) => await _fetch.PUT(`/api/users/${userId}`, userData)
 
-export { searchUsers, signInUser, confirmSignIn, signUpUser, requestPasswordReset, updateUser }
+const deleteUser = async (userId) => await _fetch.DELETE(`/api/users/${userId}`)
+
+export { searchUsers, signInUser, confirmSignIn, signUpUser, requestPasswordReset, updateUser, deleteUser }
