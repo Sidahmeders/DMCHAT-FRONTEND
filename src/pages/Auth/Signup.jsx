@@ -58,6 +58,7 @@ const Signup = () => {
       toast({
         title: "l'utilisateur s'est inscrit avec succès",
         description: "veuillez contacter l'administrateur pour vous donner accès au système",
+        duration: 15000,
         status: 'success',
       })
     } catch (error) {

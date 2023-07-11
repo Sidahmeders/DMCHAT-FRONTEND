@@ -27,7 +27,7 @@ const LoadingChats = () => (
   </Stack>
 )
 
-const SearchUserDrawer = () => {
+const UsersListDrawer = () => {
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -77,4 +77,4 @@ const SearchUserDrawer = () => {
   )
 }
 
-export default SearchUserDrawer
+export default UsersListDrawer

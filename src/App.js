@@ -15,9 +15,9 @@ import './App.css'
 
 const App = () => {
   const user = getUser()
-  const { socket, setSocketConnected } = ChatState()
   const toast = useToast()
   const navigate = useNavigate()
+  const { socket, setSocketConnected } = ChatState()
 
   if (!isEmpty(user) && user.token) {
     if (checkIsJWTExpired(user.token)) {

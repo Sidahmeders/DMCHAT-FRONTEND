@@ -68,20 +68,22 @@ export const ChatProvider = ({ children, socket }) => {
 
   useEffect(() => {
     socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (payload) => {
-      const { createdMessage, targetChat } = payload
-
-      updateChatMessages({
-        selectedChat,
-        targetChat,
-        createdMessage,
-        setMessages,
-        notifications,
-        setNotifications,
-        setFetchAgain,
-      })
-
-      const { sender, content } = createdMessage || {}
-      notify({ title: sender?.name, description: content })
+      try {
+        const { createdMessage, targetChat } = payload
+        updateChatMessages({
+          selectedChat,
+          targetChat,
+          createdMessage,
+          setMessages,
+          notifications,
+          setNotifications,
+          setFetchAgain,
+        })
+        const { sender, content } = createdMessage || {}
+        notify({ title: sender?.name, description: content })
+      } catch (error) {
+        toast({ description: error.message })
+      }
     })
   })
 

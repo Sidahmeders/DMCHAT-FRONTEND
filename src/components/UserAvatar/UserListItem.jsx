@@ -82,6 +82,8 @@ const UserListItem = ({ user, setUsersList, onClose }) => {
             </HStack>
           </HStack>
         </HStack>
+
+        {/* TODO: ADD DELETE USER */}
         {showMore && (
           <Stack pl="1">
             <Text fontSize="14">

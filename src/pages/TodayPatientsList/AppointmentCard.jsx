@@ -79,18 +79,26 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
 
   useEffect(() => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_CONFIRMATION, (payload) => {
-      if (payload._id === appointment._id) {
-        setIsConfirmed(payload.isConfirmed)
-        fetchTodayAppointments()
-        new Audio(ConfirmSound).play()
+      try {
+        if (payload._id === appointment._id) {
+          setIsConfirmed(payload.isConfirmed)
+          fetchTodayAppointments()
+          new Audio(ConfirmSound).play()
+        }
+      } catch (error) {
+        toast({ description: error.description })
       }
     })
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_LEFT, (payload) => {
-      if (payload._id === appointment._id) {
-        setIsLeft(payload.isLeft)
-        fetchTodayAppointments()
-        new Audio(LeaveSound).play()
+      try {
+        if (payload._id === appointment._id) {
+          setIsLeft(payload.isLeft)
+          fetchTodayAppointments()
+          new Audio(LeaveSound).play()
+        }
+      } catch (error) {
+        toast({ description: error.description })
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps

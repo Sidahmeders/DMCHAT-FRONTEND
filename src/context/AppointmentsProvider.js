@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState } from 'react'
+import { useToast } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
 import { APPOINTMENTS_IDS } from '../config'
@@ -9,6 +10,7 @@ import { fetchDayPayments } from '@services/payments'
 const AppointmentsContext = createContext()
 
 export const AppointmentsProvider = ({ children }) => {
+  const toast = useToast()
   const [appointmentsList, setAppointmentsList] = useState({
     [APPOINTMENTS_IDS.EXPECTED]: [],
     [APPOINTMENTS_IDS.WAITING_ROOM]: [],
@@ -48,10 +50,15 @@ export const AppointmentsProvider = ({ children }) => {
 
   useEffect(() => {
     ;(async () => {
-      if (isEmpty(getUser())) return
-      const todayPayments = await fetchDayPayments(new Date())
-      setTodayPaymentHistory(todayPayments)
+      try {
+        if (isEmpty(getUser())) return
+        const todayPayments = await fetchDayPayments(new Date())
+        setTodayPaymentHistory(todayPayments)
+      } catch (error) {
+        toast({ description: error.message })
+      }
     })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

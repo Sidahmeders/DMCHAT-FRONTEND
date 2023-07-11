@@ -107,35 +107,43 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
 
   useEffect(() => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_PAID, (payload) => {
-      const { updatedAppointment, createdPayment } = payload
+      try {
+        const { updatedAppointment, createdPayment } = payload
 
-      if (!updatedAppointment && createdPayment) {
-        updatePaymentsState({ createdPayment, setTodayPaymentHistory })
-      }
+        if (!updatedAppointment && createdPayment) {
+          updatePaymentsState({ createdPayment, setTodayPaymentHistory })
+        }
 
-      if (updatedAppointment?._id === appointment._id) {
-        updateAppointmentState({
-          updatedAppointment,
-          setAppointment,
-          setTotalPriceVal,
-          setPaymentVal,
-          setPaymentLeftVal,
-        })
-        updatePaymentsState({ createdPayment, setTodayPaymentHistory })
-        fetchTodayAppointments()
+        if (updatedAppointment?._id === appointment._id) {
+          updateAppointmentState({
+            updatedAppointment,
+            setAppointment,
+            setTotalPriceVal,
+            setPaymentVal,
+            setPaymentLeftVal,
+          })
+          updatePaymentsState({ createdPayment, setTodayPaymentHistory })
+          fetchTodayAppointments()
+        }
+      } catch (error) {
+        toast({ description: error.description })
       }
     })
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_UPDATED, (updatedAppointment) => {
-      if (updatedAppointment._id === appointment._id) {
-        updateAppointmentState({
-          updatedAppointment,
-          setAppointment,
-          setTotalPriceVal,
-          setPaymentVal,
-          setPaymentLeftVal,
-        })
-        fetchTodayAppointments()
+      try {
+        if (updatedAppointment._id === appointment._id) {
+          updateAppointmentState({
+            updatedAppointment,
+            setAppointment,
+            setTotalPriceVal,
+            setPaymentVal,
+            setPaymentLeftVal,
+          })
+          fetchTodayAppointments()
+        }
+      } catch (error) {
+        toast({ description: error.description })
       }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps

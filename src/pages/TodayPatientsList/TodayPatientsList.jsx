@@ -105,26 +105,37 @@ export default function TodayPatientsList() {
 
   useEffect(() => {
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_DROPPED, (payload) => {
-      const { draggableId, sourceDroppableId, destinationDroppableId, updatedAppointment } = payload
-      setAppointmentsList({
-        ...appointmentsList,
-        [sourceDroppableId]: appointmentsList[sourceDroppableId].filter(
-          (appointment) => appointment.id !== draggableId,
-        ),
-        [destinationDroppableId]: [...appointmentsList[destinationDroppableId], flattenAppointment(updatedAppointment)],
-      })
+      try {
+        const { draggableId, sourceDroppableId, destinationDroppableId, updatedAppointment } = payload
+        setAppointmentsList({
+          ...appointmentsList,
+          [sourceDroppableId]: appointmentsList[sourceDroppableId].filter(
+            (appointment) => appointment.id !== draggableId,
+          ),
+          [destinationDroppableId]: [
+            ...appointmentsList[destinationDroppableId],
+            flattenAppointment(updatedAppointment),
+          ],
+        })
+      } catch (error) {
+        toast({ description: error.message })
+      }
     })
 
     socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_REORDERED, (updatedAppointments) => {
-      const appointments = appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM].map((appointment) => {
-        const foundAppointment = updatedAppointments.find((item) => item._id === appointment._id)
-        return foundAppointment ? flattenAppointment(foundAppointment) : appointment
-      })
+      try {
+        const appointments = appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM].map((appointment) => {
+          const foundAppointment = updatedAppointments.find((item) => item._id === appointment._id)
+          return foundAppointment ? flattenAppointment(foundAppointment) : appointment
+        })
 
-      setAppointmentsList({
-        ...appointmentsList,
-        [APPOINTMENTS_IDS.WAITING_ROOM]: appointments.sort((a, b) => a.order - b.order),
-      })
+        setAppointmentsList({
+          ...appointmentsList,
+          [APPOINTMENTS_IDS.WAITING_ROOM]: appointments.sort((a, b) => a.order - b.order),
+        })
+      } catch (error) {
+        toast({ description: error.message })
+      }
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [appointmentsList, setAppointmentsList])
