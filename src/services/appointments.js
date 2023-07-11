@@ -5,7 +5,7 @@ const fetchPatientAppointments = async (patientId) => await _fetch.GET(`/api/app
 
 const fetchMonthAppointments = async (date) => await _fetch.GET(`/api/appointments/${formatDate(date, 'yyyy/MM')}`)
 
-const fetchDayAppointments = async (date) => _fetch.GET(`/api/appointments/${formatDate(date, 'yyyy/MM/dd')}`)
+const fetchDayAppointments = async (date) => await _fetch.GET(`/api/appointments/${formatDate(date, 'yyyy/MM/dd')}`)
 
 const createAppointment = async (appointmentData) => await _fetch.POST('/api/appointments/new', appointmentData)
 
