@@ -31,7 +31,9 @@ const updateChatMessages = debounce(
 )
 
 export const ChatProvider = ({ children, socket }) => {
+  const toast = useToast()
   const navigate = useNavigate()
+
   const [selectedChat, setSelectedChat] = useState({})
   const [chats, setChats] = useState([])
   const [notifications, setNotifications] = useState([])
@@ -39,8 +41,6 @@ export const ChatProvider = ({ children, socket }) => {
   const [fetchAgain, setFetchAgain] = useState(false)
   const [isLoadingMessages, setIsLoadingMessages] = useState(false)
   const [socketConnected, setSocketConnected] = useState(false)
-
-  const toast = useToast()
 
   const fetchMessages = async () => {
     if (!selectedChat._id) return

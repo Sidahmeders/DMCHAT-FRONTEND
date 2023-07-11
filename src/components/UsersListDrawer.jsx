@@ -67,7 +67,7 @@ const UsersListDrawer = () => {
               <LoadingChats />
             ) : (
               usersList?.map((user) => (
-                <UserListItem key={user._id} user={user} setUsersList={setUsersList} onClose={onClose} />
+                <UserListItem key={user._id} user={user} setUsersList={setUsersList} closeDrawer={onClose} />
               ))
             )}
           </DrawerBody>
