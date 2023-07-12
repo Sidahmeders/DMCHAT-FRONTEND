@@ -30,7 +30,6 @@ const LoadingChats = () => (
 const UsersListDrawer = () => {
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
-
   const [usersList, setUsersList] = useState([])
   const [loading, setLoading] = useState(false)
 

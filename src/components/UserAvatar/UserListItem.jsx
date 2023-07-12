@@ -11,75 +11,16 @@ import {
   Text,
   useToast,
   Button,
-  Modal,
-  ModalContent,
-  ModalBody,
-  ModalFooter,
   useDisclosure,
-  ModalOverlay,
-  ModalHeader,
 } from '@chakra-ui/react'
-import { AlertTriangle, ChevronDown, MessageCircle, Trash } from 'react-feather'
+import { ChevronDown, MessageCircle } from 'react-feather'
 
 import { ChatState } from '@context'
 import { USER_ROLES } from '@config'
 import { accessChat } from '@services/chats'
-import { deleteUser, updateUser } from '@services/users'
+import { updateUser } from '@services/users'
 
-const DeleteUserModal = ({ user, isOpen, onOpen, onClose }) => {
-  const toast = useToast()
-  const [canDeleteUser, setCanDeleteUser] = useState(false)
-
-  const handleDeleteUser = async () => {
-    try {
-      await deleteUser(user._id)
-    } catch (error) {
-      toast({ description: error.message })
-    }
-  }
-
-  const handleClose = () => {
-    setCanDeleteUser(false)
-    onClose()
-  }
-
-  return (
-    <>
-      <IconButton size="sm" variant="ghost" icon={<Trash size="1.35rem" color="red" />} onClick={onOpen} />
-
-      <Modal size="lg" isOpen={isOpen} onClose={handleClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>êtes-vous sûr de vouloir supprimer cet utilisateur?</ModalHeader>
-          <ModalBody>
-            <Text pl="2">
-              vous êtes sur le point de supprimer le utilisateur <strong>{user.name}</strong> à
-              <strong> {user.email}</strong>
-            </Text>
-            <HStack color="red" mt="4">
-              <AlertTriangle />
-              <Text fontWeight="semibold">veuillez noter que cette action ne peut pas être annulée!</Text>
-            </HStack>
-          </ModalBody>
-          <ModalFooter>
-            {canDeleteUser ? (
-              <Button colorScheme="red" onClick={handleDeleteUser}>
-                Supprimer définitivement
-              </Button>
-            ) : (
-              <Button colorScheme="orange" onClick={setCanDeleteUser}>
-                Supprimer
-              </Button>
-            )}
-            <Button ml="2" onClick={handleClose}>
-              Annuler
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
-    </>
-  )
-}
+import DeleteUserModal from '@components/miscellaneous/DeleteUserModal'
 
 const UserListItem = ({ user, setUsersList, closeDrawer }) => {
   const toast = useToast()
@@ -109,6 +50,7 @@ const UserListItem = ({ user, setUsersList, closeDrawer }) => {
     try {
       const updatedUser = await updateUser(user._id, { role: roleValue })
       setUsersList((prevUsers) => prevUsers.map((user) => (user._id === updatedUser._id ? updatedUser : user)))
+      toast({ title: 'rôle modifié avec succès', status: 'success' })
     } catch (error) {
       toast({ description: error.message })
     }
@@ -132,7 +74,13 @@ const UserListItem = ({ user, setUsersList, closeDrawer }) => {
                 {user.name}
               </Text>
               <HStack>
-                <DeleteUserModal user={user} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />
+                <DeleteUserModal
+                  user={user}
+                  setUsersList={setUsersList}
+                  isOpen={isOpen}
+                  onOpen={onOpen}
+                  onClose={onClose}
+                />
                 <IconButton
                   size="sm"
                   variant="ghost"

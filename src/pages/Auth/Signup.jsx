@@ -166,12 +166,7 @@ const Signup = () => {
         </FormControl>
       </Stack>
 
-      <Button
-        colorScheme="blue"
-        width="100%"
-        style={{ marginTop: 15 }}
-        onClick={() => submitHandler()}
-        isLoading={loading}>
+      <Button colorScheme="blue" width="100%" style={{ marginTop: 15 }} onClick={submitHandler} isLoading={loading}>
         S'inscrire
       </Button>
     </Stack>

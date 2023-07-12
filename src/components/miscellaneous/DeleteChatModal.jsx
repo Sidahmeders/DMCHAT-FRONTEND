@@ -10,17 +10,27 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
+  useToast,
 } from '@chakra-ui/react'
 import { Trash, AlertTriangle } from 'react-feather'
 
+import { ChatState } from '@context'
 import { deleteChat } from '@services/chats'
 
 const DeleteChatModal = ({ chat, isOpen, onOpen, onClose }) => {
+  const toast = useToast()
+  const { setSelectedChat, setChats } = ChatState()
   const [canDeleteChat, setCanDeleteChat] = useState(false)
 
-  const handleChatDelete = async (e) => {
-    e.stopPropagation()
-    await deleteChat(chat._id)
+  const handleChatDelete = async () => {
+    try {
+      await deleteChat(chat._id)
+      setSelectedChat({})
+      setChats((prevChats) => prevChats.filter((item) => item._id !== chat._id))
+      toast({ title: 'Chat supprimé avec succès', status: 'warning' })
+    } catch (error) {
+      toast({ description: error.message })
+    }
   }
 
   const handleCancel = () => {

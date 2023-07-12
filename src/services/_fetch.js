@@ -12,10 +12,6 @@ class Fetch {
   }
 
   handleResponse = async (response) => {
-    if (!response.ok) {
-      throw new Error(response.statusText)
-    }
-
     const contentType = response.headers.get('Content-Type')
     if (contentType && contentType.includes('application/json')) {
       const { data, error } = await response.json()
@@ -23,6 +19,10 @@ class Fetch {
         throw new Error(error.message)
       }
       return data
+    }
+
+    if (!response.ok) {
+      throw new Error(response.statusText)
     }
 
     return null

@@ -27,7 +27,7 @@ const DeleteChatMessagesModal = ({ sender, chatId, setMessages }) => {
     try {
       await deleteMessages(chatId)
       toast({
-        title: 'Chat supprimé avec succès',
+        title: 'Messages supprimé avec succès',
         status: 'warning',
       })
       onDeleteModalClose()
