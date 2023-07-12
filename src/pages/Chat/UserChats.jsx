@@ -1,13 +1,13 @@
 import { useEffect } from 'react'
-import { Avatar, Box, HStack, Skeleton, Stack, Text, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, HStack, Skeleton, Stack, useDisclosure, useToast } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
 import { ChatState } from '@context'
-import { formatDate, getSender, getSenderFull, getUser } from '@utils'
 import { fetchUserChats } from '@services/chats'
 
 import UsersListDrawer from '@components/UsersListDrawer'
 import GroupChatModal from '@components/miscellaneous/GroupChatModal'
+import UserChatItem from '@components/miscellaneous/UserChatItem'
 import LogoutButton from '@components/miscellaneous/LogoutButton'
 
 const UsersChatLoader = () => (
@@ -19,10 +19,9 @@ const UsersChatLoader = () => (
 )
 
 const UserChats = () => {
-  const user = getUser()
   const toast = useToast()
   const { onClose } = useDisclosure()
-  const { selectedChat, setSelectedChat, chats, setChats, fetchAgain } = ChatState()
+  const { selectedChat, chats, setChats, fetchAgain } = ChatState()
 
   const fetchChats = async () => {
     try {
@@ -55,41 +54,7 @@ const UserChats = () => {
 
       <Box display="flex" flexDir="column" p="4" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
         <Stack overflowY="scroll">
-          {chats.length ? (
-            chats.map((chat) => {
-              const sender = getSender(user, chat.users)
-              const { pic } = getSenderFull(user, chat.users) || {}
-              const { content, updatedAt } = chat?.latestMessage || {}
-
-              return (
-                <Box
-                  key={chat._id}
-                  onClick={() => setSelectedChat(chat)}
-                  cursor="pointer"
-                  bg={selectedChat?._id === chat._id ? '#47f9' : 'gray.100'}
-                  color={selectedChat?._id === chat._id ? 'white' : 'black'}
-                  position="relative"
-                  px="3"
-                  py="2"
-                  borderRadius="lg">
-                  <HStack gap="2">
-                    <Avatar name={sender} src={!chat.isGroupChat && pic} />
-                    <Box pt="2">
-                      <Text>{!chat.isGroupChat ? sender : chat.chatName}</Text>
-                      <Text fontSize="small" color={selectedChat?._id === chat._id ? 'white' : 'blue.500'}>
-                        {content && content.slice(0, 35)}
-                      </Text>
-                    </Box>
-                    <Text fontSize="small" position="absolute" right="0.75rem" top="1">
-                      {updatedAt && formatDate(updatedAt, 'E hh:mm')}
-                    </Text>
-                  </HStack>
-                </Box>
-              )
-            })
-          ) : (
-            <UsersChatLoader />
-          )}
+          {chats.length ? chats.map((chat) => <UserChatItem key={chat._id} chat={chat} />) : <UsersChatLoader />}
         </Stack>
       </Box>
     </Box>

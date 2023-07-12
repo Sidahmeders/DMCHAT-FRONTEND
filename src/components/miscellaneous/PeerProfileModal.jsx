@@ -15,7 +15,7 @@ import {
 } from '@chakra-ui/react'
 import { Info } from 'react-feather'
 
-import DeleteChatModal from './DeleteChatModal'
+import DeleteChatMessagesModal from './DeleteChatMessagesModal'
 
 export default function PeerProfileModal({ sender, chatId, setMessages }) {
   const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure()
@@ -23,7 +23,7 @@ export default function PeerProfileModal({ sender, chatId, setMessages }) {
   return (
     <>
       <HStack>
-        <DeleteChatModal sender={sender} chatId={chatId} setMessages={setMessages} />
+        <DeleteChatMessagesModal sender={sender} chatId={chatId} setMessages={setMessages} />
         <IconButton icon={<Info />} onClick={onProfileOpen} />
       </HStack>
 

@@ -26,7 +26,7 @@ import { searchUsers } from '@services/users'
 
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem'
-import DeleteChatModal from './DeleteChatModal'
+import DeleteChatMessagesModal from './DeleteChatMessagesModal'
 
 const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, setMessages }) => {
   const user = getUser()
@@ -128,7 +128,7 @@ const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, se
   return (
     <>
       <HStack>
-        <DeleteChatModal sender={sender} chatId={chatId} setMessages={setMessages} />
+        <DeleteChatMessagesModal sender={sender} chatId={chatId} setMessages={setMessages} />
         <IconButton icon={<Sliders />} onClick={onOpen} />
       </HStack>
 
