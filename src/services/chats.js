@@ -32,4 +32,6 @@ const removeGroup = async (chatId, groupChatName) => {
   })
 }
 
-export { createGroupChat, leaveGroup, joinGroup, removeGroup, accessChat, fetchUserChats }
+const deleteChat = async (chatId) => await _fetch.DELETE(`/api/chats/${chatId}`)
+
+export { createGroupChat, leaveGroup, joinGroup, removeGroup, accessChat, fetchUserChats, deleteChat }

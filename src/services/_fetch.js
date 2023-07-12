@@ -2,12 +2,30 @@ import { getUser } from '@utils'
 
 class Fetch {
   #user
+
   constructor(user = getUser()) {
     if (!Fetch.instance) {
       this.#user = user
       Fetch.instance = this
     }
     return Fetch.instance
+  }
+
+  handleResponse = async (response) => {
+    if (!response.ok) {
+      throw new Error(response.statusText)
+    }
+
+    const contentType = response.headers.get('Content-Type')
+    if (contentType && contentType.includes('application/json')) {
+      const { data, error } = await response.json()
+      if (error) {
+        throw new Error(error.message)
+      }
+      return data
+    }
+
+    return null
   }
 
   async GET(url) {
@@ -18,14 +36,7 @@ class Fetch {
       },
     })
 
-    const contentType = response.headers.get('Content-Type')
-    if (contentType && contentType.includes('application/json')) {
-      const { data, error } = await response.json()
-      if (error) throw new Error(error.message)
-      return data
-    }
-
-    return null
+    return this.handleResponse(response)
   }
 
   async POST(url, body) {
@@ -38,14 +49,7 @@ class Fetch {
       body: JSON.stringify(body),
     })
 
-    const contentType = response.headers.get('Content-Type')
-    if (contentType && contentType.includes('application/json')) {
-      const { data, error } = await response.json()
-      if (error) throw new Error(error.message)
-      return data
-    }
-
-    return null
+    return this.handleResponse(response)
   }
 
   async PUT(url, body) {
@@ -58,14 +62,7 @@ class Fetch {
       body: JSON.stringify(body),
     })
 
-    const contentType = response.headers.get('Content-Type')
-    if (contentType && contentType.includes('application/json')) {
-      const { data, error } = await response.json()
-      if (error) throw new Error(error.message)
-      return data
-    }
-
-    return null
+    return this.handleResponse(response)
   }
 
   async DELETE(url) {
@@ -76,14 +73,7 @@ class Fetch {
       },
     })
 
-    const contentType = response.headers.get('Content-Type')
-    if (contentType && contentType.includes('application/json')) {
-      const { data, error } = await response.json()
-      if (error) throw new Error(error.message)
-      return data
-    }
-
-    return null
+    return this.handleResponse(response)
   }
 }
 

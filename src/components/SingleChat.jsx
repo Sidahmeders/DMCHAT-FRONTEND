@@ -41,6 +41,7 @@ const SingleChat = () => {
   const [newMessage, setNewMessage] = useState('')
   const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
+  const senderName = getSender(user, selectedChat.users)
 
   const sendMessage = async (e) => {
     if (newMessage.trim().length < 1) return
@@ -106,7 +107,9 @@ const SingleChat = () => {
             />
             {!selectedChat.isGroupChat ? (
               <>
-                {getSender(user, selectedChat.users)}
+                <Text fontWeight="500" color={senderName ? 'gray.600' : 'red.600'}>
+                  {senderName || 'Compte Supprimé'}
+                </Text>
                 <PeerProfileModal
                   chatId={selectedChat._id}
                   sender={getSenderFull(user, selectedChat.users)}
