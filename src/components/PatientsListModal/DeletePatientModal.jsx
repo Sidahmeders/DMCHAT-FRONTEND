@@ -7,7 +7,6 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  ModalCloseButton,
   useToast,
   HStack,
   Text,
@@ -57,11 +56,10 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
   }, [isOpen])
 
   return (
-    <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
+    <Modal size="lg" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />
       <ModalContent>
         <ModalHeader>êtes-vous sûr de vouloir supprimer ce patient</ModalHeader>
-        <ModalCloseButton p="6" />
         <Loader loading={isLoading}>
           <ModalBody>
             êtes-vous sûr de vouloir supprimer <strong>{patient.fullName}</strong> / <strong>{patient.age}</strong> ans
@@ -76,11 +74,11 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
                 Supprimer définitivement
               </Button>
             ) : (
-              <Button colorScheme="orange" mr={3} onClick={() => setCanDeletePatient(true)}>
+              <Button colorScheme="orange" mr={3} onClick={setCanDeletePatient}>
                 Supprimer
               </Button>
             )}
-            <Button variant="ghost" onClick={() => cancelDelete} isDisabled={isLoading}>
+            <Button variant="ghost" onClick={cancelDelete} isDisabled={isLoading}>
               Annuler
             </Button>
           </ModalFooter>

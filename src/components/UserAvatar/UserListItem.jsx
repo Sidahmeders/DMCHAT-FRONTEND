@@ -71,7 +71,7 @@ const DeleteUserModal = ({ user, isOpen, onOpen, onClose }) => {
                 Supprimer
               </Button>
             )}
-            <Button onClick={handleClose} ml="2">
+            <Button ml="2" onClick={handleClose}>
               Annuler
             </Button>
           </ModalFooter>

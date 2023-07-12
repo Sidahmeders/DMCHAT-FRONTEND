@@ -53,8 +53,13 @@ const DeleteChatModal = ({ sender, chatId, setMessages }) => {
           <ModalHeader>êtes-vous sûr de vouloir supprimer l'intégralité de cette conversation?</ModalHeader>
           <ModalBody>
             <Text pl="2">
-              vous êtes sur le point de supprimer toute la conversation avec <strong>{sender.name}</strong> à
-              <strong> {sender.email}</strong>
+              vous êtes sur le point de supprimer toute la conversation
+              {sender.name && (
+                <>
+                  {' '}
+                  avec <strong>{sender.name}</strong> à<strong> {sender.email}</strong>
+                </>
+              )}
             </Text>
             <HStack color="red" mt="4">
               <AlertTriangle />
