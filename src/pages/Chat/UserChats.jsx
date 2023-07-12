@@ -6,7 +6,7 @@ import { ChatState } from '@context'
 import { fetchUserChats } from '@services/chats'
 
 import UsersListDrawer from '@components/UsersListDrawer/UsersListDrawer'
-import GroupChatModal from '@components/miscellaneous/GroupChatModal'
+import CreateGroupChatModal from '@components/miscellaneous/CreateGroupChatModal'
 import UserChatItem from '@components/miscellaneous/UserChatItem'
 import LogoutButton from '@components/miscellaneous/LogoutButton'
 
@@ -48,7 +48,7 @@ const UserChats = () => {
       w={{ base: '100%', md: '30%' }}>
       <HStack p="5" gap="2" width="100%" justifyContent="space-evenly">
         <UsersListDrawer />
-        <GroupChatModal />
+        <CreateGroupChatModal />
         <LogoutButton />
       </HStack>
 

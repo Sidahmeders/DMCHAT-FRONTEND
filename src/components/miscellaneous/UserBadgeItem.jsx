@@ -4,20 +4,18 @@ import { X } from 'react-feather'
 const UserBadgeItem = ({ user, handleFunction }) => {
   return (
     <Badge
-      px={2}
-      py={1}
+      variant="outline"
+      colorScheme="blue"
       borderRadius="lg"
-      m={1}
-      mb={2}
-      variant="solid"
-      fontSize={12}
-      colorScheme="purple"
-      cursor="pointer"
       display="flex"
       alignItems="center"
-      onClick={handleFunction}>
+      pl="3"
+      pr="2"
+      py="1.5"
+      mr="2"
+      mb="4">
       <Box mr="2">{user.name}</Box>
-      <X size="0.75rem" />
+      <X cursor="pointer" color="red" size="1rem" onClick={handleFunction} />
     </Badge>
   )
 }

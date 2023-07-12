@@ -16,43 +16,42 @@ import {
   useToast,
 } from '@chakra-ui/react'
 import { Plus } from 'react-feather'
+import { SyncLoader } from 'react-spinners'
 
 import { ChatState } from '@context'
 import { createGroupChat } from '@services/chats'
 import { searchUsers } from '@services/users'
 
-import UserBadgeItem from '../UserAvatar/UserBadgeItem'
-import UserListItem from '../UserAvatar/UserListItem' // FIXME:
+import UserBadgeItem from './UserBadgeItem'
+import GroupUserItem from './GroupUserItem'
 
-const GroupChatModal = () => {
+const CreateGroupChatModal = () => {
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { userChats, setUserChats } = ChatState()
 
   const [groupChatName, setGroupChatName] = useState('')
   const [selectedUsers, setSelectedUsers] = useState([])
-  const [search, setSearch] = useState('')
-  const [searchResults, setSearchResults] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [usersResult, setUsersResult] = useState([])
+  const [isLoading, setIsLoading] = useState(false)
 
-  const handleSearch = async (query) => {
-    setSearch(query)
-    if (!query || query === '') {
-      setSearchResults([])
-      return
+  const handleSearch = async (e) => {
+    const { value: query } = e.target
+    if (query.trim().length <= 2) {
+      return setUsersResult([])
     }
-    setLoading(true)
+    setIsLoading(true)
     try {
-      const data = await searchUsers(search)
-      setSearchResults(data)
+      const matchedUsers = await searchUsers(query)
+      setUsersResult(matchedUsers)
     } catch (error) {
       toast({
         title: 'Erreur est survenue!',
-        description: 'Impossible de charger les résultats de la recherche',
+        description: 'Échec de charger les résultats de la recherche',
         status: 'error',
       })
-      setLoading(false)
     }
+    setIsLoading(false)
   }
 
   const handleSubmit = async () => {
@@ -80,18 +79,15 @@ const GroupChatModal = () => {
     }
   }
 
-  const handleDelete = (deletedUser) => {
-    setSelectedUsers(selectedUsers.filter((selected) => selected._id !== deletedUser._id))
+  const handleDelete = (deleteUser) => {
+    setSelectedUsers(selectedUsers.filter((user) => user._id !== deleteUser._id))
   }
 
-  const handleGroup = (userToAdd) => {
-    if (selectedUsers.includes(userToAdd)) {
-      return toast({
-        title: 'Utilisateur déjà ajouté',
-        status: 'warning',
-      })
+  const addUserToGroup = (addUser) => {
+    if (selectedUsers.indexOf(addUser) >= 0) {
+      return toast({ title: 'Utilisateur déjà ajouté', status: 'warning' })
     }
-    setSelectedUsers([...selectedUsers, userToAdd])
+    setSelectedUsers([...selectedUsers, addUser])
   }
 
   return (
@@ -112,29 +108,31 @@ const GroupChatModal = () => {
               <Input placeholder="Nom du chat" mb={3} onChange={(e) => setGroupChatName(e.target.value)} />
             </FormControl>
             <FormControl>
-              <Input placeholder="Rechercher des utilisateurs" mb={3} onChange={(e) => handleSearch(e.target.value)} />
+              <Input placeholder="Rechercher des utilisateurs" mb={3} onChange={handleSearch} />
             </FormControl>
 
-            {/* Selected users */}
             <Box display="flex" flexWrap="wrap" w="100%">
               {selectedUsers.map((user) => (
                 <UserBadgeItem key={user._id} user={user} handleFunction={() => handleDelete(user)} />
               ))}
             </Box>
 
-            {loading ? (
-              <div>Loading</div>
+            {isLoading ? (
+              <Box mt="8">
+                <SyncLoader color="#474aff99" />
+              </Box>
             ) : (
-              searchResults?.map((user) => (
-                <UserListItem key={user._id} user={user} handleFunction={() => handleGroup(user)} />
+              usersResult?.map((user) => (
+                <GroupUserItem key={user._id} user={user} handleFunction={() => addUserToGroup(user)} />
               ))
             )}
           </ModalBody>
-
           <ModalFooter>
-            <Button colorScheme="blue" onClick={handleSubmit}>
-              Créer un groupe
-            </Button>
+            {selectedUsers.length >= 2 ? (
+              <Button colorScheme="blue" onClick={handleSubmit}>
+                Créer un groupe
+              </Button>
+            ) : null}
           </ModalFooter>
         </ModalContent>
       </Modal>
@@ -142,4 +140,4 @@ const GroupChatModal = () => {
   )
 }
 
-export default GroupChatModal
+export default CreateGroupChatModal

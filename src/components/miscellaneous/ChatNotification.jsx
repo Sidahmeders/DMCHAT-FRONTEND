@@ -10,8 +10,8 @@ import './ChatNotification.scss'
 
 const ChatNotification = () => {
   const user = getUser()
-  const { setSelectedChat, notifications, setNotifications } = ChatState()
   const navigate = useNavigate()
+  const { setSelectedChat, notifications, setNotifications } = ChatState()
 
   return (
     <Menu>
