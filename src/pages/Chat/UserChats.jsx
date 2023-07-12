@@ -5,7 +5,7 @@ import { isEmpty } from 'lodash'
 import { ChatState } from '@context'
 import { fetchUserChats } from '@services/chats'
 
-import UsersListDrawer from '@components/UsersListDrawer'
+import UsersListDrawer from '@components/UsersListDrawer/UsersListDrawer'
 import GroupChatModal from '@components/miscellaneous/GroupChatModal'
 import UserChatItem from '@components/miscellaneous/UserChatItem'
 import LogoutButton from '@components/miscellaneous/LogoutButton'

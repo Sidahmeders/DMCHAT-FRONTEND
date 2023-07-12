@@ -17,7 +17,7 @@ import { List } from 'react-feather'
 
 import { searchUsers } from '@services/users'
 
-import UserListItem from './UserAvatar/UserListItem'
+import UserListItem from './UserListItem'
 
 const LoadingChats = () => (
   <Stack>
