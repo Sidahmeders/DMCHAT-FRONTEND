@@ -25,7 +25,7 @@ import DeleteUserModal from '@components/miscellaneous/DeleteUserModal'
 const UserListItem = ({ user, setUsersList, closeDrawer }) => {
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { setSelectedChat, chats, setChats } = ChatState()
+  const { setSelectedChat, userChats, setUserChats } = ChatState()
 
   const [loadingChat, setLoadingChat] = useState(false)
   const [showMore, setShowMore] = useState(false)
@@ -37,7 +37,7 @@ const UserListItem = ({ user, setUsersList, closeDrawer }) => {
     try {
       const chatData = await accessChat(user._id)
       // If the chat already inside 'chat' state, append it
-      if (!chats.find((c) => c._id === chatData._id)) setChats([chatData, ...chats])
+      if (!userChats.find((c) => c._id === chatData._id)) setUserChats([chatData, ...userChats])
       setSelectedChat(chatData)
       closeDrawer()
     } catch (error) {

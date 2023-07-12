@@ -35,7 +35,7 @@ export const ChatProvider = ({ children, socket }) => {
   const navigate = useNavigate()
 
   const [selectedChat, setSelectedChat] = useState({})
-  const [chats, setChats] = useState([])
+  const [userChats, setUserChats] = useState([])
   const [notifications, setNotifications] = useState([])
   const [messages, setMessages] = useState([])
   const [fetchAgain, setFetchAgain] = useState(false)
@@ -100,8 +100,8 @@ export const ChatProvider = ({ children, socket }) => {
         socket,
         selectedChat,
         setSelectedChat,
-        chats,
-        setChats,
+        userChats,
+        setUserChats,
         notifications,
         setNotifications,
         messages,

@@ -21,12 +21,12 @@ const UsersChatLoader = () => (
 const UserChats = () => {
   const toast = useToast()
   const { onClose } = useDisclosure()
-  const { selectedChat, chats, setChats, fetchAgain } = ChatState()
+  const { selectedChat, userChats, setUserChats, fetchAgain } = ChatState()
 
   const fetchChats = async () => {
     try {
-      const allchats = await fetchUserChats()
-      setChats(allchats)
+      const userChats = await fetchUserChats()
+      setUserChats(userChats)
       onClose()
     } catch (error) {
       toast({ description: error.message })
@@ -54,7 +54,11 @@ const UserChats = () => {
 
       <Box display="flex" flexDir="column" p="4" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
         <Stack overflowY="scroll">
-          {chats.length ? chats.map((chat) => <UserChatItem key={chat._id} chat={chat} />) : <UsersChatLoader />}
+          {userChats.length ? (
+            userChats.map((chat) => <UserChatItem key={chat._id} chat={chat} />)
+          ) : (
+            <UsersChatLoader />
+          )}
         </Stack>
       </Box>
     </Box>

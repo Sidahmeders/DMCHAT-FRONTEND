@@ -25,7 +25,7 @@ import { joinGroup, leaveGroup, removeGroup } from '@services/chats'
 import { searchUsers } from '@services/users'
 
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
-import UserListItem from '../UserAvatar/UserListItem'
+import UserListItem from '../UserAvatar/UserListItem' // FIXME:
 import DeleteChatMessagesModal from './DeleteChatMessagesModal'
 
 const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, setMessages }) => {

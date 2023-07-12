@@ -22,12 +22,12 @@ import { createGroupChat } from '@services/chats'
 import { searchUsers } from '@services/users'
 
 import UserBadgeItem from '../UserAvatar/UserBadgeItem'
-import UserListItem from '../UserAvatar/UserListItem'
+import UserListItem from '../UserAvatar/UserListItem' // FIXME:
 
 const GroupChatModal = () => {
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { chats, setChats } = ChatState()
+  const { userChats, setUserChats } = ChatState()
 
   const [groupChatName, setGroupChatName] = useState('')
   const [selectedUsers, setSelectedUsers] = useState([])
@@ -65,7 +65,7 @@ const GroupChatModal = () => {
 
     try {
       const data = await createGroupChat(groupChatName, selectedUsers)
-      setChats([data, ...chats])
+      setUserChats([data, ...userChats])
       onClose()
       toast({
         title: 'Nouvelle discussion de groupe créée!',
