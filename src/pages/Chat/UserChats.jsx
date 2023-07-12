@@ -21,7 +21,7 @@ const UsersChatLoader = () => (
 const UserChats = () => {
   const toast = useToast()
   const { onClose } = useDisclosure()
-  const { selectedChat, userChats, setUserChats, fetchAgain } = ChatState()
+  const { selectedChat, userChats, setUserChats, fetchChatsAgain } = ChatState()
 
   const fetchChats = async () => {
     try {
@@ -36,7 +36,7 @@ const UserChats = () => {
   useEffect(() => {
     fetchChats()
     // eslint-disable-next-line
-  }, [fetchAgain])
+  }, [fetchChatsAgain])
 
   return (
     <Box

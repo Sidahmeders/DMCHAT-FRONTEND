@@ -10,7 +10,7 @@ import { fetchMessagesByChatId } from '@services/messages'
 const ChatContext = createContext()
 
 const updateChatMessages = debounce(
-  ({ selectedChat, targetChat, createdMessage, setMessages, notifications, setNotifications, setFetchAgain }) => {
+  ({ selectedChat, targetChat, createdMessage, setMessages, notifications, setNotifications, setFetchChatsAgain }) => {
     if (selectedChat._id === targetChat._id) {
       setMessages((prevMessages) => [...prevMessages, createdMessage])
     }
@@ -24,7 +24,7 @@ const updateChatMessages = debounce(
       if (!isSenderNotificationFound) {
         const newNotification = { ...createdMessage, notificationSender }
         setNotifications([newNotification, ...notifications])
-        setFetchAgain((prevState) => !prevState)
+        setFetchChatsAgain((prevState) => !prevState)
       }
     }
   },
@@ -34,13 +34,13 @@ export const ChatProvider = ({ children, socket }) => {
   const toast = useToast()
   const navigate = useNavigate()
 
-  const [selectedChat, setSelectedChat] = useState({})
   const [userChats, setUserChats] = useState([])
+  const [selectedChat, setSelectedChat] = useState({})
   const [notifications, setNotifications] = useState([])
   const [messages, setMessages] = useState([])
-  const [fetchAgain, setFetchAgain] = useState(false)
   const [isLoadingMessages, setIsLoadingMessages] = useState(false)
   const [socketConnected, setSocketConnected] = useState(false)
+  const [fetchChatsAgain, setFetchChatsAgain] = useState(false)
 
   const fetchMessages = async () => {
     if (!selectedChat._id) return
@@ -77,7 +77,7 @@ export const ChatProvider = ({ children, socket }) => {
           setMessages,
           notifications,
           setNotifications,
-          setFetchAgain,
+          setFetchChatsAgain,
         })
         const { sender, content } = createdMessage || {}
         notify({ title: sender?.name, description: content })
@@ -108,8 +108,8 @@ export const ChatProvider = ({ children, socket }) => {
         setMessages,
         fetchMessages,
         isLoadingMessages,
-        fetchAgain,
-        setFetchAgain,
+        fetchChatsAgain,
+        setFetchChatsAgain,
         socketConnected,
         setSocketConnected,
       }}>

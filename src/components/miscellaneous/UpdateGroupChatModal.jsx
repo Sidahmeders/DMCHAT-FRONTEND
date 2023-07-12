@@ -28,7 +28,7 @@ import UserBadgeItem from '../UserAvatar/UserBadgeItem'
 import UserListItem from '../UserAvatar/UserListItem' // FIXME:
 import DeleteChatMessagesModal from './DeleteChatMessagesModal'
 
-const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, setMessages }) => {
+const UpdateGroupChatModal = ({ setFetchChatsAgain, fetchMessages, sender, chatId, setMessages }) => {
   const user = getUser()
   const toast = useToast()
   const { selectedChat, setSelectedChat } = ChatState()
@@ -54,7 +54,7 @@ const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, se
       const data = await leaveGroup(selectedChat._id, removeUser)
       // If logged in user removed himself or left the group
       removeUser._id === user._id ? setSelectedChat() : setSelectedChat(data)
-      setFetchAgain((prevState) => !prevState)
+      setFetchChatsAgain((prevState) => !prevState)
       fetchMessages()
       setLoading(false)
     } catch (error) {
@@ -84,7 +84,7 @@ const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, se
       setLoading(true)
       const data = await joinGroup(selectedChat._id, addUser)
       setSelectedChat(data)
-      setFetchAgain((prevState) => !prevState)
+      setFetchChatsAgain((prevState) => !prevState)
       setLoading(false)
     } catch (error) {
       toast({ description: 'Failed to add the user!' })
@@ -98,7 +98,7 @@ const UpdateGroupChatModal = ({ setFetchAgain, fetchMessages, sender, chatId, se
       setRenameLoading(true)
       const data = await removeGroup(selectedChat._id, groupChatName)
       setSelectedChat(data)
-      setFetchAgain((prevState) => !prevState)
+      setFetchChatsAgain((prevState) => !prevState)
       setRenameLoading(false)
     } catch (error) {
       toast({ description: 'Failed to rename group chat!' })

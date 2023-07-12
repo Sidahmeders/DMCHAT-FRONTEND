@@ -34,7 +34,7 @@ const SingleChat = () => {
     setMessages,
     fetchMessages,
     isLoadingMessages,
-    setFetchAgain,
+    setFetchChatsAgain,
     socketConnected,
   } = ChatState()
 
@@ -52,7 +52,7 @@ const SingleChat = () => {
       const createdMessage = await createMessage(newMessage, selectedChat._id)
       socket.emit(CHAT_EVENTS.NEW_MESSAGE, { createdMessage, targetChat: selectedChat })
       setMessages([...messages, createdMessage])
-      setFetchAgain((prevState) => !prevState)
+      setFetchChatsAgain((prevState) => !prevState)
     } catch (error) {
       toast({ description: error.message })
     }
@@ -120,7 +120,7 @@ const SingleChat = () => {
               <>
                 {selectedChat.chatName.toUpperCase()}
                 <UpdateGroupChatModal
-                  setFetchAgain={setFetchAgain}
+                  setFetchChatsAgain={setFetchChatsAgain}
                   fetchMessages={fetchMessages}
                   chatId={selectedChat._id}
                   sender={getSenderFull(user, selectedChat.users)}

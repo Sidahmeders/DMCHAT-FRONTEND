@@ -18,7 +18,7 @@ import { ChatState } from '@context'
 import { deleteUser } from '@services/users'
 
 const DeleteUserModal = ({ user, setUsersList, isOpen, onOpen, onClose }) => {
-  const { setFetchAgain } = ChatState()
+  const { setFetchChatsAgain } = ChatState()
   const toast = useToast()
   const [canDeleteUser, setCanDeleteUser] = useState(false)
 
@@ -27,7 +27,7 @@ const DeleteUserModal = ({ user, setUsersList, isOpen, onOpen, onClose }) => {
       await deleteUser(user._id)
       setUsersList((prevUsers) => prevUsers.filter((item) => item._id !== user._id))
       toast({ title: 'Utilisateur supprimé avec succès', status: 'warning' })
-      setFetchAgain((prevState) => !prevState)
+      setFetchChatsAgain((prevState) => !prevState)
     } catch (error) {
       toast({ description: error.message })
     }
