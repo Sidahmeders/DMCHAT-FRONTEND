@@ -108,7 +108,9 @@ const UsersListDrawer = () => {
                 {loading ? (
                   <LoadingChats />
                 ) : (
-                  groupChatsList?.map((chatGroup) => <GroupChatItem key={chatGroup._id} chatGroup={chatGroup} />)
+                  groupChatsList?.map((chatGroup) => (
+                    <GroupChatItem key={chatGroup._id} chatGroup={chatGroup} setGroupChatsList={setGroupChatsList} />
+                  ))
                 )}
               </DrawerBody>
             </>

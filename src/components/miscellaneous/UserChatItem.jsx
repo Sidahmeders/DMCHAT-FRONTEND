@@ -9,7 +9,7 @@ const UserChatItem = ({ chat }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { selectedChat, setSelectedChat } = ChatState()
   const user = getUser()
-  const sender = getSender(user, chat.users)
+  const sender = chat.isGroupChat ? chat.chatName : getSender(user, chat.users)
   const { pic } = getSenderFull(user, chat.users) || {}
   const { content, updatedAt } = chat?.latestMessage || {}
 

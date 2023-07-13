@@ -15,7 +15,7 @@ import {
 import { Trash, AlertTriangle } from 'react-feather'
 
 import { ChatState } from '@context'
-import { deleteChat } from '@services/chats'
+import { deleteChatById } from '@services/chats'
 
 const DeleteChatModal = ({ chat, isOpen, onOpen, onClose }) => {
   const toast = useToast()
@@ -24,7 +24,7 @@ const DeleteChatModal = ({ chat, isOpen, onOpen, onClose }) => {
 
   const handleChatDelete = async () => {
     try {
-      await deleteChat(chat._id)
+      await deleteChatById(chat._id)
       setSelectedChat({})
       setChats((prevChats) => prevChats.filter((item) => item._id !== chat._id))
       toast({ title: 'Chat supprimé avec succès', status: 'warning' })

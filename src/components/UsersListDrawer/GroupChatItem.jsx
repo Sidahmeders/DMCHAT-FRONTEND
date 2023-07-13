@@ -13,11 +13,13 @@ import {
   HStack,
   IconButton,
   Button,
+  useToast,
 } from '@chakra-ui/react'
+import { ChevronDown, ChevronUp } from 'react-feather'
 
 import { USER_ROLES_MAP } from '@config'
 import { formatMessageDate } from '@utils'
-import { ChevronDown, ChevronUp } from 'react-feather'
+import { deleteChatById } from '@services/chats'
 
 const UsersListPopover = ({ chatGroup }) => {
   const initialFocusRef = useRef()
@@ -56,12 +58,19 @@ const UsersListPopover = ({ chatGroup }) => {
   )
 }
 
-const GroupChatItem = ({ chatGroup }) => {
+const GroupChatItem = ({ chatGroup, setGroupChatsList }) => {
+  const toast = useToast()
   const [showMore, setShowMore] = useState(false)
   const [canDeleteGroup, setCanDeleteGroup] = useState(false)
 
   const deleteGroupChat = async () => {
-    // TODO: Delete chat by Id
+    try {
+      await deleteChatById(chatGroup._id)
+      setGroupChatsList((prevChatList) => prevChatList.filter((chat) => chat._id !== chatGroup._id))
+      toast({ title: 'chat supprimé avec succès', status: 'warning' })
+    } catch (error) {
+      toast({ description: error.message })
+    }
   }
 
   const cancelHanlder = () => {
