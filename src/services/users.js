@@ -1,6 +1,6 @@
 import _fetch from './_fetch'
 
-const searchUsers = async (searchQuery) => await _fetch.GET(`/api/users?search=${searchQuery}`)
+const searchUsers = async (searchQuery = '') => await _fetch.GET(`/api/users?search=${searchQuery}`)
 
 const signInUser = async (credentials) => {
   return await _fetch.POST('/api/users/login', {

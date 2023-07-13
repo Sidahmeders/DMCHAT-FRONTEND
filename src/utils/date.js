@@ -1,4 +1,4 @@
-import { format, isValid, parseISO } from 'date-fns'
+import { format, isValid, parseISO, isToday, isYesterday, isThisMonth } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 /**
@@ -25,4 +25,23 @@ export const formatDate = (date, dateFormat = 'yyyy-MM-dd') => {
     console.error('Error formatting date:', error.message)
     return null
   }
+}
+
+export const formatMessageDate = (date) => {
+  const messageDate = parseISO(date)
+
+  if (!isValid(messageDate)) {
+    return '###'
+  }
+  if (isToday(messageDate)) {
+    return formatDate(messageDate, 'h:mm a')
+  }
+  if (isYesterday(messageDate)) {
+    return formatDate(messageDate, 'E h:mm a')
+  }
+  if (isThisMonth(messageDate)) {
+    return formatDate(messageDate, 'MMM d, h:mm a')
+  }
+
+  return formatDate(messageDate, 'MMM d, yyyy, h:mm a')
 }

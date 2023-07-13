@@ -12,3 +12,10 @@ export const USER_ROLES = [
   { id: '#3', name: 'Assistant', value: 'assistant' },
   { id: '#4', name: 'Non Autorisé', value: 'unauthorized' },
 ]
+
+export const USER_ROLES_MAP = {
+  admin: 'Admin',
+  doctor: 'Médecin',
+  assistant: 'Assistant',
+  unauthorized: 'Non Autorisé',
+}

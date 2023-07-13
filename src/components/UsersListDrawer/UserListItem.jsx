@@ -64,81 +64,79 @@ const UserListItem = ({ user, setUsersList, closeDrawer }) => {
   if (loadingChat) return <Skeleton height="60px" mb="2" borderRadius="lg" />
 
   return (
-    <>
-      <Box bg="#E8E8E8" display="flex" alignItems="center" color="black" p="3" mb="2" borderRadius="lg">
-        <Stack w="100%">
-          <HStack>
-            <Avatar name={user.name} src={user.pic} size="sm" mr="3" />
-            <HStack w="100%" display="flex" justifyContent="space-between">
-              <Text fontWeight="semibold" fontSize="15" color="gray.600">
-                {user.name}
-              </Text>
-              <HStack>
-                <DeleteUserModal
-                  user={user}
-                  setUsersList={setUsersList}
-                  isOpen={isOpen}
-                  onOpen={onOpen}
-                  onClose={onClose}
-                />
-                <IconButton
-                  size="sm"
-                  variant="ghost"
-                  color="#38B2AC"
-                  icon={<MessageCircle size="1.35rem" />}
-                  onClick={accessUserChat}
-                />
-                <IconButton
-                  size="sm"
-                  variant="ghost"
-                  icon={<ChevronDown size="1.35rem" />}
-                  onClick={() => setShowMore(!showMore)}
-                />
-              </HStack>
+    <Box bg="#E8E8E8" display="flex" alignItems="center" color="black" p="3" mb="2" borderRadius="lg">
+      <Stack w="100%">
+        <HStack>
+          <Avatar name={user.name} src={user.pic} size="sm" mr="3" />
+          <HStack w="100%" display="flex" justifyContent="space-between">
+            <Text fontWeight="semibold" fontSize="15" color="gray.600">
+              {user.name}
+            </Text>
+            <HStack>
+              <DeleteUserModal
+                user={user}
+                setUsersList={setUsersList}
+                isOpen={isOpen}
+                onOpen={onOpen}
+                onClose={onClose}
+              />
+              <IconButton
+                size="sm"
+                variant="ghost"
+                color="#38B2AC"
+                icon={<MessageCircle size="1.35rem" />}
+                onClick={accessUserChat}
+              />
+              <IconButton
+                size="sm"
+                variant="ghost"
+                icon={<ChevronDown size="1.35rem" />}
+                onClick={() => setShowMore(!showMore)}
+              />
             </HStack>
           </HStack>
+        </HStack>
 
-          {showMore && (
-            <Stack pl="1">
-              <Text fontSize="14">
-                <b>Email : </b>
-                {user.email}
-              </Text>
-              <Text fontSize="14">
-                <b>Accès :</b>
-              </Text>
+        {showMore && (
+          <Stack pl="1">
+            <Text fontSize="14">
+              <b>Email : </b>
+              {user.email}
+            </Text>
+            <Text fontSize="14">
+              <b>Accès :</b>
+            </Text>
 
-              <RadioGroup bg="whiteAlpha.600" p="2" borderRadius="lg" onChange={setRoleValue} value={roleValue}>
-                <HStack flexWrap="wrap" columnGap="6" rowGap="2">
-                  {USER_ROLES.map((role, index) => (
-                    <Radio colorScheme="yellow" ml={index === 0 && '2'} key={role.id} value={role.value}>
-                      {role.name}
-                    </Radio>
-                  ))}
-                </HStack>
+            <RadioGroup bg="whiteAlpha.600" p="2" borderRadius="lg" onChange={setRoleValue} value={roleValue}>
+              <HStack flexWrap="wrap" columnGap="6" rowGap="2">
+                {USER_ROLES.map((role, index) => (
+                  <Radio colorScheme="yellow" ml={index === 0 && '2'} key={role.id} value={role.value}>
+                    {role.name}
+                  </Radio>
+                ))}
+              </HStack>
 
-                {user.role !== roleValue && (
-                  <Box mt="5">
-                    {canUpdateRole ? (
-                      <Button size="sm" colorScheme="red" onClick={handleRoleUpdate}>
-                        Confirmer modification
-                      </Button>
-                    ) : (
-                      <Button size="sm" colorScheme="orange" onClick={setCanUpdateRole}>
-                        Modifier le rôle
-                      </Button>
-                    )}
-                    <Button size="sm" ml="2" onClick={cancelUpdate}>
-                      Annuler
+              {user.role !== roleValue && (
+                <Box mt="5">
+                  {canUpdateRole ? (
+                    <Button size="sm" colorScheme="red" onClick={handleRoleUpdate}>
+                      Confirmer modification
                     </Button>
-                  </Box>
-                )}
-              </RadioGroup>
-            </Stack>
-          )}
-        </Stack>
-      </Box>
-    </>
+                  ) : (
+                    <Button size="sm" colorScheme="orange" onClick={setCanUpdateRole}>
+                      Modifier le rôle
+                    </Button>
+                  )}
+                  <Button size="sm" ml="2" onClick={cancelUpdate}>
+                    Annuler
+                  </Button>
+                </Box>
+              )}
+            </RadioGroup>
+          </Stack>
+        )}
+      </Stack>
+    </Box>
   )
 }
 

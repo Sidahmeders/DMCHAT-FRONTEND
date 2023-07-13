@@ -1,5 +1,7 @@
 import _fetch from './_fetch'
 
+const fetchGroupChats = async () => await _fetch.GET('/api/chats/group')
+
 const fetchUserChats = async () => await _fetch.GET(`/api/chats/user`)
 
 const accessChat = async (userId) => await _fetch.POST(`/api/chats/access`, { userId })
@@ -34,4 +36,4 @@ const renameGroup = async (chatId, groupChatName) => {
 
 const deleteChat = async (chatId) => await _fetch.DELETE(`/api/chats/${chatId}`)
 
-export { createGroupChat, leaveGroup, joinGroup, renameGroup, accessChat, fetchUserChats, deleteChat }
+export { fetchGroupChats, fetchUserChats, createGroupChat, leaveGroup, joinGroup, renameGroup, accessChat, deleteChat }
