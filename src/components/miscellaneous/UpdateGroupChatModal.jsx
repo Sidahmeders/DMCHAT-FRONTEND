@@ -10,7 +10,6 @@ import {
   ModalBody,
   ModalCloseButton,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   useDisclosure,
@@ -21,20 +20,22 @@ import { SyncLoader } from 'react-spinners'
 
 import { ChatState } from '@context'
 import { getUser } from '@utils'
-import { joinGroup, leaveGroup, removeGroup } from '@services/chats'
+import { joinGroup, leaveGroup, renameGroup } from '@services/chats'
 import { searchUsers } from '@services/users'
 
 import UserBadgeItem from './UserBadgeItem'
 import GroupUserItem from './GroupUserItem'
 import DeleteChatMessagesModal from './DeleteChatMessagesModal'
+import { CHAT_EVENTS } from '@config'
 
-const UpdateGroupChatModal = ({ setFetchChatsAgain, fetchMessages, sender, chatId, setMessages }) => {
+const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
   const localUser = getUser()
   const toast = useToast()
-  const { selectedChat, setSelectedChat } = ChatState()
+  const { selectedChat, socket } = ChatState()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   const [groupChatName, setGroupChatName] = useState('')
+  const [searchUsersQuery, setSearchUsersQuery] = useState('')
   const [usersResult, setUsersResult] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [renameLoading, setRenameLoading] = useState(false)
@@ -50,10 +51,7 @@ const UpdateGroupChatModal = ({ setFetchChatsAgain, fetchMessages, sender, chatI
     setIsLoading(true)
     try {
       const removedUser = await leaveGroup(selectedChat._id, removeUser)
-      // If logged in user removed himself or left the group
-      removeUser._id === localUser._id ? setSelectedChat() : setSelectedChat(removedUser)
-      setFetchChatsAgain((prevState) => !prevState)
-      fetchMessages()
+      socket.emit(CHAT_EVENTS.UPDATE_GROUP, removedUser)
     } catch (error) {
       toast({ description: "Échec de la suppression de l'utilisateur" })
     }
@@ -78,8 +76,7 @@ const UpdateGroupChatModal = ({ setFetchChatsAgain, fetchMessages, sender, chatI
     setIsLoading(true)
     try {
       const addedUser = await joinGroup(selectedChat._id, addUser)
-      setSelectedChat(addedUser)
-      setFetchChatsAgain((prevState) => !prevState)
+      socket.emit(CHAT_EVENTS.UPDATE_GROUP, addedUser)
     } catch (error) {
       toast({ description: "Échec de l'ajout de l'utilisateur" })
     }
@@ -90,9 +87,8 @@ const UpdateGroupChatModal = ({ setFetchChatsAgain, fetchMessages, sender, chatI
     if (!groupChatName) return
     setRenameLoading(true)
     try {
-      const renamedChat = await removeGroup(selectedChat._id, groupChatName)
-      setSelectedChat(renamedChat)
-      setFetchChatsAgain((prevState) => !prevState)
+      const renamedChat = await renameGroup(selectedChat._id, groupChatName)
+      socket.emit(CHAT_EVENTS.UPDATE_GROUP, renamedChat)
     } catch (error) {
       toast({ description: 'Échec de renommer le chat de groupe' })
     }
@@ -102,6 +98,7 @@ const UpdateGroupChatModal = ({ setFetchChatsAgain, fetchMessages, sender, chatI
 
   const handleSearch = async (e) => {
     const { value: query } = e.target
+    setSearchUsersQuery(query)
     if (query.trim().length <= 2) {
       return setUsersResult([])
     }
@@ -152,7 +149,12 @@ const UpdateGroupChatModal = ({ setFetchChatsAgain, fetchMessages, sender, chatI
             </FormControl>
 
             <FormControl>
-              <Input mb="1" placeholder="Ajouter un utilisateur au groupe" onChange={handleSearch} />
+              <Input
+                mb="1"
+                value={searchUsersQuery}
+                placeholder="Ajouter un utilisateur au groupe"
+                onChange={handleSearch}
+              />
             </FormControl>
 
             {isLoading ? (
@@ -165,12 +167,6 @@ const UpdateGroupChatModal = ({ setFetchChatsAgain, fetchMessages, sender, chatI
               ))
             )}
           </ModalBody>
-
-          <ModalFooter>
-            <Button onClick={() => handleRemove(localUser)} colorScheme="red">
-              Quitter le groupe
-            </Button>
-          </ModalFooter>
         </ModalContent>
       </Modal>
     </>

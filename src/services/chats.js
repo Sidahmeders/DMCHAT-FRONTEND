@@ -25,7 +25,7 @@ const joinGroup = async (chatId, addUser) => {
   })
 }
 
-const removeGroup = async (chatId, groupChatName) => {
+const renameGroup = async (chatId, groupChatName) => {
   return await _fetch.PUT('/api/chats/group/rename', {
     chatId: chatId,
     chatName: groupChatName,
@@ -34,4 +34,4 @@ const removeGroup = async (chatId, groupChatName) => {
 
 const deleteChat = async (chatId) => await _fetch.DELETE(`/api/chats/${chatId}`)
 
-export { createGroupChat, leaveGroup, joinGroup, removeGroup, accessChat, fetchUserChats, deleteChat }
+export { createGroupChat, leaveGroup, joinGroup, renameGroup, accessChat, fetchUserChats, deleteChat }

@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 
-import { notify } from '@utils'
+import { getUser, notify } from '@utils'
 import { CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
 
@@ -58,13 +58,7 @@ export const ChatProvider = ({ children, socket }) => {
   useEffect(() => {
     fetchMessages()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [navigate])
-
-  // Whenever users switches chat, call the function again
-  useEffect(() => {
-    fetchMessages()
-    // eslint-disable-next-line
-  }, [selectedChat])
+  }, [navigate, selectedChat])
 
   useEffect(() => {
     socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (payload) => {
@@ -90,6 +84,13 @@ export const ChatProvider = ({ children, socket }) => {
   useEffect(() => {
     socket.on(CHAT_LISTENERS.CHAT_ERROR, (errorMessage) => {
       toast({ title: 'Socket.IO Chat Error, veuillez réessayer plus tard', description: errorMessage })
+    })
+
+    socket.on(CHAT_LISTENERS.GROUP_UPDATED, (chatPayload) => {
+      if (chatPayload.groupAdmin._id === getUser()._id) {
+        setSelectedChat(chatPayload)
+      }
+      setFetchChatsAgain((prevState) => !prevState)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])

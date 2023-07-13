@@ -32,7 +32,6 @@ const SingleChat = () => {
     setSelectedChat,
     messages,
     setMessages,
-    fetchMessages,
     isLoadingMessages,
     setFetchChatsAgain,
     socketConnected,
@@ -69,7 +68,7 @@ const SingleChat = () => {
     }
 
     let lastTypingTime = new Date().getTime()
-    let timerLength = 15000
+    let timerLength = 7500
 
     setTimeout(() => {
       let timeNow = new Date().getTime()
@@ -88,7 +87,7 @@ const SingleChat = () => {
         setIsTyping(true)
       }
     })
-    socket.on(CHAT_LISTENERS.STOP_TYPING, (chatId) => {
+    socket.on(CHAT_LISTENERS.TYPING_STOPPED, (chatId) => {
       if (chatId === selectedChat?._id) {
         setIsTyping(false)
       }
@@ -110,6 +109,8 @@ const SingleChat = () => {
                 <Text fontWeight="500" color={senderName ? 'gray.600' : 'red.600'}>
                   {senderName || 'Compte Supprimé'}
                 </Text>
+                {/* FIXME: fix error when removing localUser from the group */}
+                {/* Uncaught TypeError: Cannot read properties of undefined (reading 'users') at SingleChat */}
                 <PeerProfileModal
                   chatId={selectedChat._id}
                   sender={getSenderFull(user, selectedChat.users)}
@@ -120,8 +121,6 @@ const SingleChat = () => {
               <>
                 {selectedChat.chatName.toUpperCase()}
                 <UpdateGroupChatModal
-                  setFetchChatsAgain={setFetchChatsAgain}
-                  fetchMessages={fetchMessages}
                   chatId={selectedChat._id}
                   sender={getSenderFull(user, selectedChat.users)}
                   setMessages={setMessages}
