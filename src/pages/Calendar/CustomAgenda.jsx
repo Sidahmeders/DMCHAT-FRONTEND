@@ -14,7 +14,7 @@ import { startOfMonth, toDate } from 'date-fns'
 
 import { formatDate, formatMoney } from '@utils'
 
-function rangeFunc(start, end, unit = 'day') {
+const rangeFunc = (start, end, unit = 'day') => {
   let current = start
   const days = []
   while (dates.lte(current, end, unit)) {
@@ -24,7 +24,7 @@ function rangeFunc(start, end, unit = 'day') {
   return days
 }
 
-function inRange(e, start, end, accessors) {
+const inRange = (e, start, end, accessors) => {
   const eStart = dates.startOf(accessors.start(e), 'day')
   const eEnd = accessors.end(e)
   const startsBeforeEnd = dates.lte(eStart, end, 'day')

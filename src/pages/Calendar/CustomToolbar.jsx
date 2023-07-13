@@ -6,7 +6,7 @@ import { CALENDAR_NAVIGATION } from '@config'
 
 import DatePicker from '@components/DatePicker/DatePicker'
 
-function ViewNamesGroup({ views: viewNames, view, messages, onView }) {
+const ViewNamesGroup = ({ views: viewNames, view, messages, onView }) => {
   return viewNames.map((name) => (
     <button type="button" key={name} className={view === name ? 'rbc-active' : ''} onClick={() => onView(name)}>
       {messages[name]}

@@ -1,7 +1,8 @@
-import { omit, debounce } from 'lodash'
+import { debounce } from 'lodash'
 
 export * from './localStorage'
-export * from './ChatLogics'
+export * from './chat'
+export * from './appointment'
 export * from './date'
 
 export const guid = () => {
@@ -38,47 +39,6 @@ export const notify = debounce(async ({ title, description }) => {
     setTimeout(notification.close.bind(notification), 4500)
   }
 })
-
-export const flattenAppointment = (appointment) => ({
-  id: appointment._id,
-  patientId: appointment.patient._id,
-  ...appointment.patient,
-  ...omit(appointment, 'patient'),
-})
-
-export const groupAppointments = (appointments) => {
-  const groupedAppointments = []
-
-  const appointmentMap = new Map(appointments.map((appointment) => [appointment._id, appointment]))
-
-  appointments.forEach((appointment) => {
-    if (appointment.baseAppointmentId) {
-      const baseAppointment = appointmentMap.get(appointment.baseAppointmentId)
-
-      if (baseAppointment) {
-        const parentAppointment = groupedAppointments.find((a) => a._id === baseAppointment._id)
-        if (parentAppointment) {
-          parentAppointment.group.push(appointment)
-        } else {
-          groupedAppointments.push({
-            _id: baseAppointment._id,
-            group: [baseAppointment, appointment],
-          })
-        }
-      }
-    } else {
-      const existingGroup = groupedAppointments.find((group) => group._id === appointment._id)
-      if (!existingGroup) {
-        groupedAppointments.push({
-          _id: appointment._id,
-          group: [appointment],
-        })
-      }
-    }
-  })
-
-  return groupedAppointments
-}
 
 export const checkIsJWTExpired = (token = '') => {
   const payload = token.split('.')[1]
