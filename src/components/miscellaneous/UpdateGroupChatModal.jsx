@@ -51,7 +51,7 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
     setIsLoading(true)
     try {
       const removedUser = await leaveGroup(selectedChat._id, removeUser)
-      socket.emit(CHAT_EVENT_LISTENERS.UPDATE_GROUP, removedUser)
+      socket.emit(CHAT_EVENT_LISTENERS.REMOVE_GROUP_USER, removedUser)
     } catch (error) {
       toast({ description: "Échec de la suppression de l'utilisateur" })
     }
@@ -76,7 +76,8 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
     setIsLoading(true)
     try {
       const addedUser = await joinGroup(selectedChat._id, addUser)
-      socket.emit(CHAT_EVENT_LISTENERS.UPDATE_GROUP, addedUser)
+      socket.emit(CHAT_EVENT_LISTENERS.ADD_GROUP_USER, addedUser)
+      // socket.emit(CHAT_EVENT_LISTENERS.XX, addedUser)
     } catch (error) {
       toast({ description: "Échec de l'ajout de l'utilisateur" })
     }
