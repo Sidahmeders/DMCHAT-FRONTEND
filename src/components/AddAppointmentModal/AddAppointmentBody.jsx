@@ -22,7 +22,7 @@ import Select from 'react-select'
 import { isEmpty, omit } from 'lodash'
 
 import { ChatState } from '@context'
-import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS } from '@config'
+import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENT_EVENT_LISTENERS } from '@config'
 import { getMotifTemplateButtons, getUser } from '@utils'
 import { createAppointment, relateAppointment } from '@services/appointments'
 import { fetchPatients } from '@services/patients'
@@ -106,7 +106,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
           [CREATE_PAYMENT_NAMES.AMOUNT]: data[CREATE_APPOINTMENT_NAMES.PAYMENT],
           [CREATE_PAYMENT_NAMES.PAYER_NAME]: data[CREATE_APPOINTMENT_NAMES.FULL_NAME]?.split('-')[1],
         })
-        socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { createdPayment })
+        socket.emit(APPOINTMENT_EVENT_LISTENERS.PAYMENT_APPOINTMENT, { createdPayment })
       }
 
       const { patient, title, startDate, endDate } = createdAppointment || {}

@@ -5,7 +5,7 @@ import { debounce } from 'lodash'
 
 import { AppointmentsState, ChatState } from '@context'
 import { getUser, notify } from '@utils'
-import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS, APPOINTMENTS_LISTENERS } from '@config'
+import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENT_EVENT_LISTENERS } from '@config'
 import { updateAppointmentSync } from '@services/appointments'
 import { createPayment } from '@services/payments'
 
@@ -84,9 +84,9 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
           [CREATE_PAYMENT_NAMES.PAYER_NAME]: fullName,
         }
         const createdPayment = await createPayment(new Date(), paymentUpdate)
-        socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { updatedAppointment, createdPayment })
+        socket.emit(APPOINTMENT_EVENT_LISTENERS.PAYMENT_APPOINTMENT, { updatedAppointment, createdPayment })
       } else {
-        socket.emit(APPOINTMENTS_EVENTS.UPDATE_APPOINTMENT, updatedAppointment)
+        socket.emit(APPOINTMENT_EVENT_LISTENERS.UPDATE_APPOINTMENT, updatedAppointment)
       }
 
       setCanUpdatePayments(false)
@@ -106,7 +106,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   }
 
   useEffect(() => {
-    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_PAID, (payload) => {
+    socket.on(APPOINTMENT_EVENT_LISTENERS.PAYMENT_APPOINTMENT, (payload) => {
       try {
         const { updatedAppointment, createdPayment } = payload
 
@@ -130,7 +130,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
       }
     })
 
-    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_UPDATED, (updatedAppointment) => {
+    socket.on(APPOINTMENT_EVENT_LISTENERS.UPDATE_APPOINTMENT, (updatedAppointment) => {
       try {
         if (updatedAppointment._id === appointment._id) {
           updateAppointmentState({

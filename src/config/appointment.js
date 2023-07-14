@@ -38,21 +38,11 @@ export const APPOINTMENTS_IDS = {
   WAITING_ROOM: 'isWaitingRoom',
 }
 
-export const APPOINTMENTS_EVENTS = {
+export const APPOINTMENT_EVENT_LISTENERS = {
   CONFIRM_APPOINTMENT: 'confirm appointment',
   LEAVE_APPOINTMENT: 'leave appointment',
   DROP_APPOINTMENT: 'drop appointment',
   PAYMENT_APPOINTMENT: 'payment appointment',
   UPDATE_APPOINTMENT: 'update appointment',
   REORDER_APPOINTMENT: 'reorder appointment',
-}
-
-export const APPOINTMENTS_LISTENERS = {
-  APPOINTMENT_CONFIRMATION: 'appointment confirmation',
-  APPOINTMENT_LEFT: 'appointment left',
-  APPOINTMENT_DROPPED: 'appointment dropped',
-  APPOINTMENT_MESSAGED: 'appointment messaged',
-  APPOINTMENT_PAID: 'appointment paid',
-  APPOINTMENT_UPDATED: 'appointment updated',
-  APPOINTMENT_REORDERED: 'appointment reordered',
 }

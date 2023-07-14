@@ -5,7 +5,7 @@ import { useToast } from '@chakra-ui/react'
 
 import { ChatState, AppointmentsState } from '@context'
 import { flattenAppointment } from '@utils'
-import { APPOINTMENTS_IDS, APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS, CREATE_APPOINTMENT_NAMES } from '@config'
+import { APPOINTMENTS_IDS, CREATE_APPOINTMENT_NAMES, APPOINTMENT_EVENT_LISTENERS } from '@config'
 import { updateAppointment } from '@services/appointments'
 
 import ExpectedAppointments from './ExpectedAppointments'
@@ -39,7 +39,10 @@ const reorderAppointments = async ({ socket, appointmentsList, source, destinati
     [CREATE_APPOINTMENT_NAMES.ORDER]: source.index,
   })
 
-  socket.emit(APPOINTMENTS_EVENTS.REORDER_APPOINTMENT, [updatedSourceAppointment, updatedDestinationAppointment])
+  socket.emit(APPOINTMENT_EVENT_LISTENERS.REORDER_APPOINTMENT, [
+    updatedSourceAppointment,
+    updatedDestinationAppointment,
+  ])
 }
 
 const updateAppointmentStatus = async ({ socket, appointmentsList, draggableId, source, destination }) => {
@@ -57,7 +60,7 @@ const updateAppointmentStatus = async ({ socket, appointmentsList, draggableId, 
         [destinationDroppableId]: true,
       })
 
-      socket.emit(APPOINTMENTS_EVENTS.DROP_APPOINTMENT, {
+      socket.emit(APPOINTMENT_EVENT_LISTENERS.DROP_APPOINTMENT, {
         draggableId,
         sourceDroppableId,
         destinationDroppableId,
@@ -104,7 +107,7 @@ export default function TodayPatientsList() {
   }, [pathname])
 
   useEffect(() => {
-    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_DROPPED, (payload) => {
+    socket.on(APPOINTMENT_EVENT_LISTENERS.DROP_APPOINTMENT, (payload) => {
       try {
         const { draggableId, sourceDroppableId, destinationDroppableId, updatedAppointment } = payload
         setAppointmentsList({
@@ -122,7 +125,7 @@ export default function TodayPatientsList() {
       }
     })
 
-    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_REORDERED, (updatedAppointments) => {
+    socket.on(APPOINTMENT_EVENT_LISTENERS.REORDER_APPOINTMENT, (updatedAppointments) => {
       try {
         const appointments = appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM].map((appointment) => {
           const foundAppointment = updatedAppointments.find((item) => item._id === appointment._id)

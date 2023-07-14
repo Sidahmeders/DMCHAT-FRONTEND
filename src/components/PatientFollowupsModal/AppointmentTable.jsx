@@ -13,7 +13,7 @@ import { X } from 'react-feather'
 
 import { ChatState } from '@context'
 import { formatDate, getPatient } from '@utils'
-import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENTS_EVENTS } from '@config'
+import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENT_EVENT_LISTENERS } from '@config'
 import { updateAppointmentSync } from '@services/appointments'
 import { createPayment } from '@services/payments'
 
@@ -96,9 +96,12 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
               [CREATE_PAYMENT_NAMES.PAYER_NAME]: getPatient()?.fullName,
             }
             const createdPayment = await createPayment(new Date(), paymentUpdate)
-            socket.emit(APPOINTMENTS_EVENTS.PAYMENT_APPOINTMENT, { updatedAppointment: appointment, createdPayment })
+            socket.emit(APPOINTMENT_EVENT_LISTENERS.PAYMENT_APPOINTMENT, {
+              updatedAppointment: appointment,
+              createdPayment,
+            })
           } else {
-            socket.emit(APPOINTMENTS_EVENTS.UPDATE_APPOINTMENT, appointment)
+            socket.emit(APPOINTMENT_EVENT_LISTENERS.UPDATE_APPOINTMENT, appointment)
           }
         } catch (error) {
           toast({ description: error.message })

@@ -6,7 +6,7 @@ import { isBoolean } from 'lodash'
 
 import { ChatState, AppointmentsState } from '@context'
 import { setPatient } from '@utils'
-import { APPOINTMENTS_LISTENERS, APPOINTMENTS_EVENTS } from '@config'
+import { APPOINTMENT_EVENT_LISTENERS } from '@config'
 import { toggleAppointmentConfirmation, toggleAppointmentLeave } from '@services/appointments'
 import { fetchPatientById } from '@services/patients'
 
@@ -44,7 +44,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     try {
       const confirmedPatient = await toggleAppointmentConfirmation(appointment.id, isConfirmed)
       if (isBoolean(confirmedPatient.isConfirmed)) {
-        socket.emit(APPOINTMENTS_EVENTS.CONFIRM_APPOINTMENT, confirmedPatient)
+        socket.emit(APPOINTMENT_EVENT_LISTENERS.CONFIRM_APPOINTMENT, confirmedPatient)
       }
     } catch (error) {
       toast({ description: error.message })
@@ -57,7 +57,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
     try {
       const leftPatient = await toggleAppointmentLeave(appointment.id, isLeft)
       if (isBoolean(leftPatient.isLeft)) {
-        socket.emit(APPOINTMENTS_EVENTS.LEAVE_APPOINTMENT, leftPatient)
+        socket.emit(APPOINTMENT_EVENT_LISTENERS.LEAVE_APPOINTMENT, leftPatient)
       }
     } catch (error) {
       toast({ description: error.message })
@@ -78,7 +78,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
   }
 
   useEffect(() => {
-    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_CONFIRMATION, (payload) => {
+    socket.on(APPOINTMENT_EVENT_LISTENERS.CONFIRM_APPOINTMENT, (payload) => {
       try {
         if (payload._id === appointment._id) {
           setIsConfirmed(payload.isConfirmed)
@@ -90,7 +90,7 @@ export default function AppointmentCard({ appointment, withConfirm, withPresence
       }
     })
 
-    socket.on(APPOINTMENTS_LISTENERS.APPOINTMENT_LEFT, (payload) => {
+    socket.on(APPOINTMENT_EVENT_LISTENERS.LEAVE_APPOINTMENT, (payload) => {
       try {
         if (payload._id === appointment._id) {
           setIsLeft(payload.isLeft)
