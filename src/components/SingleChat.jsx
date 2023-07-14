@@ -33,7 +33,7 @@ const SingleChat = () => {
     messages,
     setMessages,
     isLoadingMessages,
-    setFetchChatsAgain,
+    setFetchUserChatsAgain,
     socketConnected,
   } = ChatState()
 
@@ -51,7 +51,7 @@ const SingleChat = () => {
       const createdMessage = await createMessage(newMessage, selectedChat._id)
       socket.emit(CHAT_EVENT_LISTENERS.NEW_MESSAGE, { createdMessage, targetChat: selectedChat })
       setMessages([...messages, createdMessage])
-      setFetchChatsAgain((prevState) => !prevState)
+      setFetchUserChatsAgain((prevState) => !prevState)
     } catch (error) {
       toast({ description: error.message })
     }

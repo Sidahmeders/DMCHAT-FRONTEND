@@ -24,9 +24,9 @@ import GroupChatItem from './GroupChatItem'
 
 const LoadingChats = () => (
   <Stack>
-    <Skeleton height="45px" />
-    <Skeleton height="45px" />
-    <Skeleton height="45px" />
+    <Skeleton height="60px" borderRadius="lg" />
+    <Skeleton height="60px" borderRadius="lg" />
+    <Skeleton height="60px" borderRadius="lg" />
   </Stack>
 )
 
