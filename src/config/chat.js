@@ -6,8 +6,6 @@ export const CHAT_EVENT_LISTENERS = {
   TYPING: 'typing',
   STOP_TYPING: 'stop typing',
   NEW_MESSAGE: 'new message',
-  ADD_GROUP_USER: 'add group user',
   UPDATE_GROUP: 'update group',
-  REMOVE_GROUP_USER: 'remove group user',
   DELETE_CHAT: 'delete chat',
 }

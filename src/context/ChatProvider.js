@@ -31,6 +31,7 @@ const updateChatMessages = debounce(
 )
 
 export const ChatProvider = ({ children, socket }) => {
+  const localUser = getUser()
   const toast = useToast()
   const navigate = useNavigate()
 
@@ -88,25 +89,11 @@ export const ChatProvider = ({ children, socket }) => {
       toast({ title: 'Socket.IO Chat Error, veuillez réessayer plus tard', description: errorMessage })
     })
 
-    socket.on(CHAT_EVENT_LISTENERS.ADD_GROUP_USER, (chatPayload) => {
-      if (chatPayload.groupAdmin._id !== getUser()._id) {
-        setUserChats((prevList) => [chatPayload, ...prevList])
-      }
-    })
-
     socket.on(CHAT_EVENT_LISTENERS.UPDATE_GROUP, (chatPayload) => {
-      if (chatPayload.groupAdmin._id === getUser()._id) {
+      if (chatPayload.groupAdmin._id === localUser._id) {
         setSelectedChat(chatPayload)
       }
-      setUserChats((prevList) => prevList.map((chat) => (chat._id === chatPayload._id ? chatPayload : chat)))
-    })
-
-    socket.on(CHAT_EVENT_LISTENERS.REMOVE_GROUP_USER, (chatPayload) => {
-      if (chatPayload.groupAdmin._id !== getUser()._id) {
-        setUserChats((prevList) => prevList.filter((chat) => chat._id !== chatPayload._id))
-      } else {
-        setSelectedChat(chatPayload)
-      }
+      setFetchChatsAgain((prevState) => !prevState)
     })
 
     socket.on(CHAT_EVENT_LISTENERS.DELETE_CHAT, (chatPayload) => {

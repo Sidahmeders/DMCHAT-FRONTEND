@@ -40,20 +40,18 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
   const [isLoading, setIsLoading] = useState(false)
   const [renameLoading, setRenameLoading] = useState(false)
 
-  const handleRemove = async (removeUser) => {
-    // Check if group admin id !== logged in user id and user id who is trying to remove !== logged in user id
-    if (selectedChat.groupAdmin._id !== localUser._id && removeUser._id !== localUser._id) {
-      return toast({
-        title: "Seuls les administrateurs peuvent supprimer quelqu'un",
-        status: 'warning',
-      })
+  const handleSearch = async (e) => {
+    const { value: query } = e.target
+    setSearchUsersQuery(query)
+    if (query.trim().length <= 2) {
+      return setUsersResult([])
     }
     setIsLoading(true)
     try {
-      const removedUser = await leaveGroup(selectedChat._id, removeUser)
-      socket.emit(CHAT_EVENT_LISTENERS.REMOVE_GROUP_USER, removedUser)
+      const usersData = await searchUsers(query)
+      setUsersResult(usersData)
     } catch (error) {
-      toast({ description: "Échec de la suppression de l'utilisateur" })
+      toast({ description: 'Échec du chargement des résultats de la recherche' })
     }
     setIsLoading(false)
   }
@@ -76,7 +74,6 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
     setIsLoading(true)
     try {
       const addedUser = await joinGroup(selectedChat._id, addUser)
-      socket.emit(CHAT_EVENT_LISTENERS.ADD_GROUP_USER, addedUser)
       socket.emit(CHAT_EVENT_LISTENERS.UPDATE_GROUP, addedUser)
     } catch (error) {
       toast({ description: "Échec de l'ajout de l'utilisateur" })
@@ -97,18 +94,17 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
     setGroupChatName('')
   }
 
-  const handleSearch = async (e) => {
-    const { value: query } = e.target
-    setSearchUsersQuery(query)
-    if (query.trim().length <= 2) {
-      return setUsersResult([])
+  const handleRemove = async (removeUser) => {
+    // Check if group admin id !== logged in user id and user id who is trying to remove !== logged in user id
+    if (selectedChat.groupAdmin._id !== localUser._id && removeUser._id !== localUser._id) {
+      return toast({ title: "Seuls les administrateurs peuvent supprimer quelqu'un", status: 'warning' })
     }
     setIsLoading(true)
     try {
-      const usersData = await searchUsers(query)
-      setUsersResult(usersData)
+      const removedUser = await leaveGroup(selectedChat._id, removeUser)
+      socket.emit(CHAT_EVENT_LISTENERS.UPDATE_GROUP, removedUser)
     } catch (error) {
-      toast({ description: 'Échec du chargement des résultats de la recherche' })
+      toast({ description: "Échec de la suppression de l'utilisateur" })
     }
     setIsLoading(false)
   }
@@ -128,7 +124,7 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
             {selectedChat.chatName}
           </ModalHeader>
           <ModalCloseButton />
-          <ModalBody display="flex" flexDir="column" alignItems="center">
+          <ModalBody display="flex" flexDir="column" alignItems="center" pb="4">
             <Box w="100%" display="flex" flexWrap="wrap" pb="3">
               {selectedChat.users
                 .filter((user) => user._id !== localUser._id)
