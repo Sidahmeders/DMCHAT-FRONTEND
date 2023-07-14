@@ -1,4 +1,5 @@
 import React, { useCallback, useState } from 'react'
+import { Card } from '@chakra-ui/card'
 import { PieChart, Pie, Sector } from 'recharts'
 
 import { formatMoney } from '@utils'
@@ -68,19 +69,21 @@ const PayerCategoryChart = () => {
   )
 
   return (
-    <PieChart width={500} height={300}>
-      <Pie
-        activeIndex={activeIndex}
-        activeShape={renderActiveShape}
-        data={data}
-        cx={220}
-        innerRadius={90}
-        outerRadius={110}
-        fill="#8884d8"
-        dataKey="value"
-        onMouseEnter={onPieEnter}
-      />
-    </PieChart>
+    <Card variant="filled" bg="gray.50" w="465px" overflow="auto">
+      <PieChart width={450} height={300}>
+        <Pie
+          activeIndex={activeIndex}
+          activeShape={renderActiveShape}
+          data={data}
+          cx={210}
+          innerRadius={60}
+          outerRadius={85}
+          fill="#8884d8"
+          dataKey="value"
+          onMouseEnter={onPieEnter}
+        />
+      </PieChart>
+    </Card>
   )
 }
 

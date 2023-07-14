@@ -17,7 +17,7 @@ import { Cloud } from 'react-feather'
 import { AppointmentsState } from '@context'
 import { formatMoney } from '@utils'
 
-export default function PaymentsHistory() {
+const PaymentsHistory = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { todayPaymentHistory } = AppointmentsState()
 
@@ -58,3 +58,5 @@ export default function PaymentsHistory() {
     </>
   )
 }
+
+export default PaymentsHistory

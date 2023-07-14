@@ -83,7 +83,7 @@ const RevenuChart = () => {
 
   return (
     <div className="revenu-stat-container">
-      <ComposedChart width={900} height={400} data={selectedStat.year ? yearData : chosenMonthData}>
+      <ComposedChart width={1000} height={500} data={selectedStat.year ? yearData : chosenMonthData}>
         <CartesianGrid strokeDasharray="4 4" />
         <Tooltip content={<CustomTooltip />} />
         <Legend

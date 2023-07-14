@@ -127,7 +127,7 @@ const WorkLoadChart = () => {
   const range = [16, 225]
 
   return (
-    <div style={{ overflowX: 'auto', width: '900px' }}>
+    <div style={{ overflowX: 'auto' }}>
       <ScatterChart width={2200} height={60} margin={{ top: 12 }}>
         <XAxis
           type="category"

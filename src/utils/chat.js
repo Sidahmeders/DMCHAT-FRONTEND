@@ -30,16 +30,19 @@ export const isSameSenderMargin = (messages, currentMessage, currentMessageIndex
     currentMessageIndex < messages.length - 1 &&
     messages[currentMessageIndex + 1].sender._id === currentMessage.sender._id &&
     messages[currentMessageIndex].sender._id !== loggedUserId
-  )
+  ) {
     return 33
-  else if (
+  }
+  if (
     (currentMessageIndex < messages.length - 1 &&
       messages[currentMessageIndex + 1].sender._id !== currentMessage.sender._id &&
       messages[currentMessageIndex].sender._id !== loggedUserId) ||
     (currentMessageIndex === messages.length - 1 && messages[currentMessageIndex].sender._id !== loggedUserId)
-  )
+  ) {
     return 0
-  else return 'auto'
+  }
+
+  return 'auto'
 }
 
 export const isSameUser = (messages, currentMessage, currentMessageIndex) => {
