@@ -5,8 +5,8 @@ import { isEmpty } from 'lodash'
 import { Wifi, WifiOff } from 'react-feather'
 
 import { ChatState } from '@context'
+import { APP_ROUTES, CHAT_EVENT_LISTENERS } from '@config'
 import { checkIsJWTExpired, removeUser, getPageRoute, getUser } from '@utils'
-import { APP_ROUTES, CHAT_LISTENERS, CHAT_EVENTS } from '@config'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
 import { Auth, Chat, TodayPatientsList, Statistics, Calendar, ForgetPassword, ConfirmLogin } from './pages'
@@ -65,8 +65,8 @@ const App = () => {
 
   useEffect(() => {
     if (!user) return
-    socket.emit(CHAT_EVENTS.SETUP, user)
-    socket.on(CHAT_LISTENERS.CONNECTED, () => setSocketConnected(true))
+    socket.emit(CHAT_EVENT_LISTENERS.SETUP, user)
+    socket.on(CHAT_EVENT_LISTENERS.CONNECTED, () => setSocketConnected(true))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user, socket])
 

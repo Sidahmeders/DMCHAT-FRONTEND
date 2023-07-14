@@ -26,7 +26,7 @@ import { searchUsers } from '@services/users'
 import UserBadgeItem from './UserBadgeItem'
 import GroupUserItem from './GroupUserItem'
 import DeleteChatMessagesModal from './DeleteChatMessagesModal'
-import { CHAT_EVENTS } from '@config'
+import { CHAT_EVENT_LISTENERS } from '@config'
 
 const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
   const localUser = getUser()
@@ -51,7 +51,7 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
     setIsLoading(true)
     try {
       const removedUser = await leaveGroup(selectedChat._id, removeUser)
-      socket.emit(CHAT_EVENTS.UPDATE_GROUP, removedUser)
+      socket.emit(CHAT_EVENT_LISTENERS.UPDATE_GROUP, removedUser)
     } catch (error) {
       toast({ description: "Échec de la suppression de l'utilisateur" })
     }
@@ -76,7 +76,7 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
     setIsLoading(true)
     try {
       const addedUser = await joinGroup(selectedChat._id, addUser)
-      socket.emit(CHAT_EVENTS.UPDATE_GROUP, addedUser)
+      socket.emit(CHAT_EVENT_LISTENERS.UPDATE_GROUP, addedUser)
     } catch (error) {
       toast({ description: "Échec de l'ajout de l'utilisateur" })
     }
@@ -88,7 +88,7 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
     setRenameLoading(true)
     try {
       const renamedChat = await renameGroup(selectedChat._id, groupChatName)
-      socket.emit(CHAT_EVENTS.UPDATE_GROUP, renamedChat)
+      socket.emit(CHAT_EVENT_LISTENERS.UPDATE_GROUP, renamedChat)
     } catch (error) {
       toast({ description: 'Échec de renommer le chat de groupe' })
     }

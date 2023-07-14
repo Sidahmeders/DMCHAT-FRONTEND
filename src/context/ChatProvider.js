@@ -4,7 +4,7 @@ import { useToast } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 
 import { getUser, notify } from '@utils'
-import { CHAT_LISTENERS, CHAT_EVENTS } from '@config'
+import { CHAT_EVENT_LISTENERS } from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
 
 const ChatContext = createContext()
@@ -50,7 +50,7 @@ export const ChatProvider = ({ children, socket }) => {
     try {
       const messagesData = await fetchMessagesByChatId(selectedChat._id)
       setMessages(messagesData)
-      socket.emit(CHAT_EVENTS.JOIN_CHAT, selectedChat._id)
+      socket.emit(CHAT_EVENT_LISTENERS.JOIN_CHAT, selectedChat._id)
     } catch (error) {
       toast({ description: 'Impossible de charger les messages' })
     }
@@ -63,7 +63,7 @@ export const ChatProvider = ({ children, socket }) => {
   }, [navigate, selectedChat])
 
   useEffect(() => {
-    socket.on(CHAT_LISTENERS.MESSAGE_RECIEVED, (payload) => {
+    socket.on(CHAT_EVENT_LISTENERS.NEW_MESSAGE, (payload) => {
       try {
         const { createdMessage, targetChat } = payload
         updateChatMessages({
@@ -84,18 +84,18 @@ export const ChatProvider = ({ children, socket }) => {
   })
 
   useEffect(() => {
-    socket.on(CHAT_LISTENERS.CHAT_ERROR, (errorMessage) => {
+    socket.on(CHAT_EVENT_LISTENERS.CHAT_ERROR, (errorMessage) => {
       toast({ title: 'Socket.IO Chat Error, veuillez réessayer plus tard', description: errorMessage })
     })
 
-    socket.on(CHAT_LISTENERS.GROUP_UPDATED, (chatPayload) => {
+    socket.on(CHAT_EVENT_LISTENERS.UPDATE_GROUP, (chatPayload) => {
       if (chatPayload.groupAdmin._id === getUser()._id) {
         setSelectedChat(chatPayload)
       }
       setFetchChatsAgain((prevState) => !prevState)
     })
 
-    socket.on(CHAT_LISTENERS.CHAT_DELETED, (chatPayload) => {
+    socket.on(CHAT_EVENT_LISTENERS.DELETE_CHAT, (chatPayload) => {
       setGroupChatsList((prevList) => prevList.filter((chat) => chat._id !== chatPayload._id))
       setUserChats((prevList) =>
         prevList.map((chat) => (chat._id === chatPayload._id ? null : chat)).filter((chat) => chat),

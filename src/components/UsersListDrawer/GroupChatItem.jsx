@@ -3,7 +3,7 @@ import { Box, Text, Stack, HStack, IconButton, Button, useToast } from '@chakra-
 import { ChevronDown, ChevronUp } from 'react-feather'
 
 import { ChatState } from '@context'
-import { CHAT_EVENTS } from '@config'
+import { CHAT_EVENT_LISTENERS } from '@config'
 import { formatMessageDate } from '@utils'
 import { deleteChatById } from '@services/chats'
 
@@ -23,7 +23,7 @@ const GroupChatItem = ({ chatGroup }) => {
   const deleteGroupChat = async () => {
     try {
       await deleteChatById(chatGroup._id)
-      socket.emit(CHAT_EVENTS.DELETE_CHAT, chatGroup)
+      socket.emit(CHAT_EVENT_LISTENERS.DELETE_CHAT, chatGroup)
       toast({ title: 'chat supprimé avec succès', status: 'warning' })
     } catch (error) {
       toast({ description: error.message })

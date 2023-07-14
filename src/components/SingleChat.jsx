@@ -15,8 +15,8 @@ import { Send, ArrowLeft, Mail } from 'react-feather'
 import { isEmpty } from 'lodash'
 
 import { ChatState } from '@context'
+import { CHAT_EVENT_LISTENERS } from '@config'
 import { getSender, getSenderFull, getUser } from '@utils'
-import { CHAT_EVENTS, CHAT_LISTENERS } from '@config'
 import { createMessage } from '@services/messages'
 
 import PeerProfileModal from './miscellaneous/PeerProfileModal'
@@ -46,10 +46,10 @@ const SingleChat = () => {
     if (newMessage.trim().length < 1) return
     if (e.key !== 'Enter' && e.type !== 'click') return
     try {
-      socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
+      socket.emit(CHAT_EVENT_LISTENERS.STOP_TYPING, selectedChat._id)
       setNewMessage('')
       const createdMessage = await createMessage(newMessage, selectedChat._id)
-      socket.emit(CHAT_EVENTS.NEW_MESSAGE, { createdMessage, targetChat: selectedChat })
+      socket.emit(CHAT_EVENT_LISTENERS.NEW_MESSAGE, { createdMessage, targetChat: selectedChat })
       setMessages([...messages, createdMessage])
       setFetchChatsAgain((prevState) => !prevState)
     } catch (error) {
@@ -64,7 +64,7 @@ const SingleChat = () => {
 
     if (!typing) {
       setTyping(true)
-      socket.emit(CHAT_EVENTS.TYPING, selectedChat._id)
+      socket.emit(CHAT_EVENT_LISTENERS.TYPING, selectedChat._id)
     }
 
     let lastTypingTime = new Date().getTime()
@@ -75,19 +75,19 @@ const SingleChat = () => {
       let timeDiff = timeNow - lastTypingTime
 
       if (timeDiff >= timerLength && typing) {
-        socket.emit(CHAT_EVENTS.STOP_TYPING, selectedChat._id)
+        socket.emit(CHAT_EVENT_LISTENERS.STOP_TYPING, selectedChat._id)
         setTyping(false)
       }
     }, timerLength)
   }
 
   useEffect(() => {
-    socket.on(CHAT_LISTENERS.TYPING, (chatId) => {
+    socket.on(CHAT_EVENT_LISTENERS.TYPING, (chatId) => {
       if (chatId === selectedChat?._id) {
         setIsTyping(true)
       }
     })
-    socket.on(CHAT_LISTENERS.TYPING_STOPPED, (chatId) => {
+    socket.on(CHAT_EVENT_LISTENERS.STOP_TYPING, (chatId) => {
       if (chatId === selectedChat?._id) {
         setIsTyping(false)
       }
