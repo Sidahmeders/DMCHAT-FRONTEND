@@ -1,4 +1,5 @@
 import { getUser } from '@utils'
+import { isEmpty } from 'lodash'
 
 class Fetch {
   #user
@@ -29,6 +30,10 @@ class Fetch {
   }
 
   async GET(url) {
+    if (!this.#user || isEmpty(this.#user)) {
+      return null
+    }
+
     const response = await fetch(url, {
       method: 'GET',
       headers: {
