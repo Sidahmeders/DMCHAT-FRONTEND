@@ -18,6 +18,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion'
 import { Circle, List, Target } from 'react-feather'
 
+import { ChatState } from '@context'
 import { searchUsers } from '@services/users'
 import { fetchGroupChats } from '@services/chats'
 
@@ -35,8 +36,7 @@ const LoadingChats = () => (
 const UsersListDrawer = () => {
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const [usersList, setUsersList] = useState([])
-  const [groupChatsList, setGroupChatsList] = useState([])
+  const { usersList, setUsersList, groupChatsList, setGroupChatsList } = ChatState()
   const [loading, setLoading] = useState(false)
   const [showGrouplist, setShowGrouplist] = useState(false)
 
@@ -108,9 +108,7 @@ const UsersListDrawer = () => {
                 {loading ? (
                   <LoadingChats />
                 ) : (
-                  groupChatsList?.map((chatGroup) => (
-                    <GroupChatItem key={chatGroup._id} chatGroup={chatGroup} setGroupChatsList={setGroupChatsList} />
-                  ))
+                  groupChatsList?.map((chatGroup) => <GroupChatItem key={chatGroup._id} chatGroup={chatGroup} />)
                 )}
               </DrawerBody>
             </>

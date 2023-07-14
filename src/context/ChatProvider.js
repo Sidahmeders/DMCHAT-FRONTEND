@@ -38,6 +38,8 @@ export const ChatProvider = ({ children, socket }) => {
   const [selectedChat, setSelectedChat] = useState({})
   const [notifications, setNotifications] = useState([])
   const [messages, setMessages] = useState([])
+  const [usersList, setUsersList] = useState([])
+  const [groupChatsList, setGroupChatsList] = useState([])
   const [isLoadingMessages, setIsLoadingMessages] = useState(false)
   const [socketConnected, setSocketConnected] = useState(false)
   const [fetchChatsAgain, setFetchChatsAgain] = useState(false)
@@ -92,6 +94,13 @@ export const ChatProvider = ({ children, socket }) => {
       }
       setFetchChatsAgain((prevState) => !prevState)
     })
+
+    socket.on(CHAT_LISTENERS.CHAT_DELETED, (chatPayload) => {
+      setGroupChatsList((prevList) => prevList.filter((chat) => chat._id !== chatPayload._id))
+      setUserChats((prevList) =>
+        prevList.map((chat) => (chat._id === chatPayload._id ? null : chat)).filter((chat) => chat),
+      )
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
@@ -107,6 +116,10 @@ export const ChatProvider = ({ children, socket }) => {
         setNotifications,
         messages,
         setMessages,
+        usersList,
+        setUsersList,
+        groupChatsList,
+        setGroupChatsList,
         fetchMessages,
         isLoadingMessages,
         fetchChatsAgain,

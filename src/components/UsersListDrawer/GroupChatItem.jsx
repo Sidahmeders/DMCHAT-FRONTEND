@@ -1,81 +1,33 @@
-import { useRef, useState } from 'react'
-import {
-  Box,
-  Avatar,
-  Text,
-  Stack,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverHeader,
-  PopoverArrow,
-  PopoverBody,
-  HStack,
-  IconButton,
-  Button,
-  useToast,
-} from '@chakra-ui/react'
+import { useState } from 'react'
+import { Box, Text, Stack, HStack, IconButton, Button, useToast } from '@chakra-ui/react'
 import { ChevronDown, ChevronUp } from 'react-feather'
 
-import { USER_ROLES_MAP } from '@config'
+import { ChatState } from '@context'
+import { CHAT_EVENTS } from '@config'
 import { formatMessageDate } from '@utils'
 import { deleteChatById } from '@services/chats'
 
-const UsersListPopover = ({ chatGroup }) => {
-  const initialFocusRef = useRef()
-  const slicedUsers = chatGroup?.users?.slice(0, 4) || []
+import UsersListPopover from './UsersListPopover'
 
-  return (
-    <Popover initialFocusRef={initialFocusRef} placement="bottom-end">
-      <PopoverTrigger>
-        <Avatar cursor="pointer" name={chatGroup.chatName} h="10" w="10" size="md" mr="3" />
-      </PopoverTrigger>
-      <PopoverContent color="white" bg="#474aff">
-        <PopoverHeader pt={4} fontWeight="bold" border="0">
-          <HStack justifyContent="space-between">
-            <Text color="red.200" fontWeight="extrabold">
-              Groupe Utilisateurs :
-            </Text>
-            <Box>
-              {slicedUsers.map((user) => (
-                <Avatar key={user._id} size="xs" src={user.pic} m="0" p="0" />
-              ))}
-              {slicedUsers.length !== chatGroup?.users?.length ? '..' : ''}
-            </Box>
-          </HStack>
-        </PopoverHeader>
-        <PopoverArrow bg="#474affee" />
-        <PopoverBody>
-          {chatGroup?.users?.map((user) => (
-            <HStack key={user._id} w="100%" justifyContent="space-between">
-              <Text>{user?.name?.slice(0, 20)}</Text>
-              <Text color="orange.200">{USER_ROLES_MAP[user.role]}</Text>
-            </HStack>
-          ))}
-        </PopoverBody>
-      </PopoverContent>
-    </Popover>
-  )
-}
-
-const GroupChatItem = ({ chatGroup, setGroupChatsList }) => {
+const GroupChatItem = ({ chatGroup }) => {
+  const { socket } = ChatState()
   const toast = useToast()
   const [showMore, setShowMore] = useState(false)
   const [canDeleteGroup, setCanDeleteGroup] = useState(false)
 
+  const cancelHanlder = () => {
+    setCanDeleteGroup(false)
+    setShowMore(false)
+  }
+
   const deleteGroupChat = async () => {
     try {
       await deleteChatById(chatGroup._id)
-      setGroupChatsList((prevChatList) => prevChatList.filter((chat) => chat._id !== chatGroup._id))
+      socket.emit(CHAT_EVENTS.DELETE_CHAT, chatGroup)
       toast({ title: 'chat supprimé avec succès', status: 'warning' })
     } catch (error) {
       toast({ description: error.message })
     }
-  }
-
-  const cancelHanlder = () => {
-    setCanDeleteGroup(false)
-    setShowMore(false)
   }
 
   return (
@@ -83,7 +35,7 @@ const GroupChatItem = ({ chatGroup, setGroupChatsList }) => {
       <Box display="flex" alignItems="center">
         <UsersListPopover chatGroup={chatGroup} />
         <Stack>
-          <Text>{chatGroup.chatName}</Text>
+          <Text fontWeight="500">{chatGroup.chatName}</Text>
           <Text fontSize="12" color="blue" style={{ margin: '0' }}>
             {chatGroup?.latestMessage?.content.slice(0, 50)}..
           </Text>

@@ -45,3 +45,9 @@ export const isSameSenderMargin = (messages, currentMessage, currentMessageIndex
 export const isSameUser = (messages, currentMessage, currentMessageIndex) => {
   return currentMessageIndex > 0 && messages[currentMessageIndex - 1].sender._id === currentMessage.sender._id
 }
+
+export const getGroupAdminUser = (chatGroup) => {
+  const { groupAdmin } = chatGroup
+  const adminUser = chatGroup.users.find((item) => item._id === groupAdmin)
+  return adminUser
+}

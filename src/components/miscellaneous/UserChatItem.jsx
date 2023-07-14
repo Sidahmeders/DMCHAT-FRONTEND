@@ -1,7 +1,7 @@
 import { Avatar, Box, HStack, Stack, Text, useDisclosure } from '@chakra-ui/react'
 
 import { ChatState } from '@context'
-import { formatDate, getSender, getSenderFull, getUser } from '@utils'
+import { formatMessageDate, getSender, getSenderFull, getUser } from '@utils'
 
 import DeleteChatModal from './DeleteChatModal'
 
@@ -33,7 +33,7 @@ const UserChatItem = ({ chat }) => {
           </Text>
         </Box>
         <Stack position="absolute" right="0.75rem" top="1" alignItems="flex-end" justifyContent="center">
-          <Text fontSize="small">{updatedAt && formatDate(updatedAt, 'E hh:mm')}</Text>
+          <Text fontSize="12">{updatedAt && formatMessageDate(updatedAt)}</Text>
           {!sender && <DeleteChatModal chat={chat} isOpen={isOpen} onOpen={onOpen} onClose={onClose} />}
         </Stack>
       </HStack>
