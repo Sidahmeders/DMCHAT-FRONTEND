@@ -7,6 +7,7 @@ import UsersListDrawer from '@components/UsersListDrawer/UsersListDrawer'
 import CreateGroupChatModal from '@components/miscellaneous/CreateGroupChatModal'
 import UserChatItem from '@components/miscellaneous/UserChatItem'
 import LogoutButton from '@components/miscellaneous/LogoutButton'
+import EditUserSettings from '@components/EditUserSettings'
 
 const UsersChatLoader = () => (
   <Stack>
@@ -30,6 +31,7 @@ const UserChats = () => {
       <HStack p="5" gap="2" width="100%" justifyContent="space-evenly">
         <UsersListDrawer />
         <CreateGroupChatModal />
+        <EditUserSettings />
         <LogoutButton />
       </HStack>
 
