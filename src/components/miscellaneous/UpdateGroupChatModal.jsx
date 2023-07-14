@@ -77,7 +77,7 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
     try {
       const addedUser = await joinGroup(selectedChat._id, addUser)
       socket.emit(CHAT_EVENT_LISTENERS.ADD_GROUP_USER, addedUser)
-      // socket.emit(CHAT_EVENT_LISTENERS.XX, addedUser)
+      socket.emit(CHAT_EVENT_LISTENERS.UPDATE_GROUP, addedUser)
     } catch (error) {
       toast({ description: "Échec de l'ajout de l'utilisateur" })
     }
