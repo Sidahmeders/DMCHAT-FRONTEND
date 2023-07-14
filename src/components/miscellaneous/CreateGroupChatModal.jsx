@@ -28,7 +28,7 @@ import GroupUserItem from './GroupUserItem'
 const CreateGroupChatModal = () => {
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { userChats, setUserChats } = ChatState()
+  const { setUserChats, setGroupChatsList } = ChatState()
 
   const [groupChatName, setGroupChatName] = useState('')
   const [selectedUsers, setSelectedUsers] = useState([])
@@ -54,40 +54,31 @@ const CreateGroupChatModal = () => {
     setIsLoading(false)
   }
 
-  const handleSubmit = async () => {
-    if (!groupChatName || !selectedUsers) {
-      return toast({
-        title: 'Veuillez remplir tous les champs obligatoires',
-        status: 'warning',
-      })
+  const addUserToGroup = (addUser) => {
+    if (selectedUsers.indexOf(addUser) >= 0) {
+      return toast({ title: 'Utilisateur déjà ajouté', status: 'warning' })
     }
-
-    try {
-      const data = await createGroupChat(groupChatName, selectedUsers)
-      setUserChats([data, ...userChats])
-      onClose()
-      toast({
-        title: 'Nouvelle discussion de groupe créée!',
-        status: 'success',
-      })
-    } catch (error) {
-      toast({
-        title: 'Erreur est survenue!',
-        description: 'Échec de la création du chat!',
-        status: 'error',
-      })
-    }
+    setSelectedUsers([...selectedUsers, addUser])
   }
 
   const handleDelete = (deleteUser) => {
     setSelectedUsers(selectedUsers.filter((user) => user._id !== deleteUser._id))
   }
 
-  const addUserToGroup = (addUser) => {
-    if (selectedUsers.indexOf(addUser) >= 0) {
-      return toast({ title: 'Utilisateur déjà ajouté', status: 'warning' })
+  const submitNewGroupChat = async () => {
+    if (!groupChatName || !selectedUsers) {
+      return toast({ title: 'Veuillez remplir tous les champs obligatoires', status: 'warning' })
     }
-    setSelectedUsers([...selectedUsers, addUser])
+
+    try {
+      const newGroupChat = await createGroupChat(groupChatName, selectedUsers)
+      setUserChats((prevList) => [newGroupChat, ...prevList])
+      setGroupChatsList((prevList) => [newGroupChat, ...prevList])
+      toast({ title: 'Nouvelle discussion de groupe créée!', status: 'success' })
+      onClose()
+    } catch (error) {
+      toast({ description: error.message })
+    }
   }
 
   return (
@@ -129,7 +120,7 @@ const CreateGroupChatModal = () => {
           </ModalBody>
           <ModalFooter>
             {selectedUsers.length >= 2 ? (
-              <Button colorScheme="blue" onClick={handleSubmit}>
+              <Button colorScheme="blue" onClick={submitNewGroupChat}>
                 Créer un groupe
               </Button>
             ) : null}
