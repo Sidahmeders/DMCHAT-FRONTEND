@@ -10,12 +10,14 @@ const ChatBox = () => {
 
   return (
     <Box
-      display={{ base: !isEmpty(selectedChat) ? 'flex' : 'none', md: 'flex' }}
+      boxShadow="inner"
       alignItems="center"
       flexDir="column"
-      p={3}
-      boxShadow="inner"
       borderRadius="lg"
+      paddingX="3"
+      paddingTop="3"
+      paddingBottom="1.5"
+      display={{ base: !isEmpty(selectedChat) ? 'flex' : 'none', md: 'flex' }}
       w={{ base: '100%', md: '68%' }}>
       <SingleChat />
     </Box>

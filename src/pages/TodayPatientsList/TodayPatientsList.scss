@@ -1,13 +1,13 @@
 .today-patients-list-page-container {
   width: 100%;
   background-color: white;
-  padding: 1rem;
-  margin-top: 3rem;
+  padding: 0 0.75rem;
+  margin-top: 4rem;
 
   .room-container {
     display: flex;
     width: 100%;
-    height: 85vh;
+    height: 90vh;
     overflow-x: auto;
 
     @media (max-width: 768px) {
@@ -20,6 +20,7 @@
       min-width: 28rem;
       margin-right: 1rem;
       padding: 0.5rem;
+      padding-bottom: 0;
       flex: 1;
       height: 85vh;
       overflow-y: auto;
@@ -68,34 +69,39 @@
         }
       }
 
-      .card-container {
-        background-color: #ddd2;
-        margin-top: 0.5rem;
+      .cards-container {
+        height: 34rem;
+        overflow-y: auto;
 
-        &.confirmed {
-          background-color: #20ac2033;
-          button:nth-child(1) {
-            color: #20ac20;
-          }
-        }
-
-        &.left {
-          background-color: #f3ad2a33;
-          button:nth-child(2) {
-            color: #da9414;
-          }
-        }
-
-        .payments-input {
+        .card-container {
+          background-color: #ddd2;
           margin-top: 0.5rem;
-          label {
-            position: absolute;
-            top: -10%;
-            right: 2%;
-            font-weight: bold;
-            font-size: small;
-            padding: 6px;
-            color: #a27beb;
+
+          &.confirmed {
+            background-color: #20ac2033;
+            button:nth-child(1) {
+              color: #20ac20;
+            }
+          }
+
+          &.left {
+            background-color: #f3ad2a33;
+            button:nth-child(2) {
+              color: #da9414;
+            }
+          }
+
+          .payments-input {
+            margin-top: 0.5rem;
+            label {
+              position: absolute;
+              top: -10%;
+              right: 2%;
+              font-weight: bold;
+              font-size: small;
+              padding: 6px;
+              color: #a27beb;
+            }
           }
         }
       }

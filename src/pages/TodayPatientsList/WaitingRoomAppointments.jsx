@@ -17,16 +17,18 @@ export default function WaitingRoomAppointments({ appointments, isLoading }) {
               {appointments.length}
             </Circle>
           </h1>
-          {isLoading ? (
-            <LoadingCards />
-          ) : (
-            appointments.map((appointment, index) => (
-              <DragWrap key={appointment.id} id={appointment.id} index={index}>
-                <AppointmentCard withPresence appointment={appointment} index={index} />
-              </DragWrap>
-            ))
-          )}
-          {provided.placeholder}
+          <div className="cards-container">
+            {isLoading ? (
+              <LoadingCards />
+            ) : (
+              appointments.map((appointment, index) => (
+                <DragWrap key={appointment.id} id={appointment.id} index={index}>
+                  <AppointmentCard withPresence appointment={appointment} index={index} />
+                </DragWrap>
+              ))
+            )}
+            {provided.placeholder}
+          </div>
         </div>
       )}
     </Droppable>

@@ -133,10 +133,10 @@ const SingleChat = () => {
             display="flex"
             flexDir="column"
             justifyContent="flex-end"
-            p={3}
+            padding="3"
             bg="gray.100"
-            w="100%"
-            h="100%"
+            width="100%"
+            height="100%"
             borderRadius="lg"
             overflowY="hidden">
             {isLoadingMessages ? (

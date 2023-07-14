@@ -17,16 +17,18 @@ export default function ExpectedAppointments({ appointments, isLoading }) {
               {appointments.length}
             </Circle>
           </h1>
-          {isLoading ? (
-            <LoadingCards />
-          ) : (
-            appointments.map((appointment, index) => (
-              <DragWrap key={appointment.id} id={appointment.id} index={index}>
-                <AppointmentCard withConfirm appointment={appointment} />
-              </DragWrap>
-            ))
-          )}
-          {provided.placeholder}
+          <div className="cards-container">
+            {isLoading ? (
+              <LoadingCards />
+            ) : (
+              appointments.map((appointment, index) => (
+                <DragWrap key={appointment.id} id={appointment.id} index={index}>
+                  <AppointmentCard withConfirm appointment={appointment} />
+                </DragWrap>
+              ))
+            )}
+            {provided.placeholder}
+          </div>
         </div>
       )}
     </Droppable>

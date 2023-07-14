@@ -12,7 +12,7 @@ export default function Chat() {
   return (
     <>
       {!isEmpty(user) && (
-        <Box display="flex" justifyContent="space-between" w="100%" mt="16" h="90vh" p="1rem" pb="0">
+        <Box display="flex" justifyContent="space-between" w="100%" mt="12" h="90vh" p="1rem" pb="0">
           <UserChats />
           <ChatBox />
         </Box>

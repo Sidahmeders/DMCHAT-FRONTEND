@@ -21,11 +21,11 @@ const UserChats = () => {
 
   return (
     <Box
-      display={{ base: !isEmpty(selectedChat) ? 'none' : 'flex', md: 'flex' }}
+      boxShadow="inner"
       flexDir="column"
       alignItems="center"
-      boxShadow="inner"
       borderRadius="lg"
+      display={{ base: !isEmpty(selectedChat) ? 'none' : 'flex', md: 'flex' }}
       w={{ base: '100%', md: '30%' }}>
       <HStack p="5" gap="2" width="100%" justifyContent="space-evenly">
         <UsersListDrawer />
