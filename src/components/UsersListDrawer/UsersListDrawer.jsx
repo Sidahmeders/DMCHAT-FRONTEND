@@ -13,9 +13,10 @@ import {
   IconButton,
   HStack,
   Text,
+  DrawerFooter,
 } from '@chakra-ui/react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Circle, List, Target } from 'react-feather'
+import { ChevronLeft, Circle, List, Target } from 'react-feather'
 
 import { ChatState } from '@context'
 
@@ -92,6 +93,11 @@ const UsersListDrawer = () => {
               </DrawerBody>
             </>
           )}
+          <DrawerFooter>
+            <Button variant="outline" colorScheme="purple" size="sm" onClick={onClose}>
+              <ChevronLeft />
+            </Button>
+          </DrawerFooter>
         </DrawerContent>
       </Drawer>
     </>
