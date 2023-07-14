@@ -6,6 +6,8 @@ import { debounce } from 'lodash'
 import { getUser, notify } from '@utils'
 import { CHAT_EVENT_LISTENERS } from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
+import { fetchGroupChats, fetchUserChats } from '@services/chats'
+import { searchUsers } from '@services/users'
 
 const ChatContext = createContext()
 
@@ -41,9 +43,12 @@ export const ChatProvider = ({ children, socket }) => {
   const [messages, setMessages] = useState([])
   const [usersList, setUsersList] = useState([])
   const [groupChatsList, setGroupChatsList] = useState([])
-  const [isLoadingMessages, setIsLoadingMessages] = useState(false)
+
   const [socketConnected, setSocketConnected] = useState(false)
   const [fetchChatsAgain, setFetchChatsAgain] = useState(false)
+  const [isLoadingMessages, setIsLoadingMessages] = useState(false)
+  const [isLoadingUserChats, setIsLoadingUserChats] = useState(false)
+  const [isLoadingDrawerChats, setIsLoadingDrawerChats] = useState(false)
 
   const fetchMessages = async () => {
     if (!selectedChat._id) return
@@ -58,10 +63,44 @@ export const ChatProvider = ({ children, socket }) => {
     setIsLoadingMessages(false)
   }
 
+  const fetchChats = async () => {
+    setIsLoadingUserChats(true)
+    try {
+      const userChats = await fetchUserChats()
+      setUserChats(userChats)
+    } catch (error) {
+      toast({ description: error.message })
+    }
+    setIsLoadingUserChats(false)
+  }
+
+  const fetchGroupChatsList = async () => {
+    setIsLoadingDrawerChats(true)
+    try {
+      const users = await searchUsers()
+      setUsersList(users)
+      const groupChats = await fetchGroupChats()
+      setGroupChatsList(groupChats)
+    } catch (error) {
+      toast({ description: error.message })
+    }
+    setIsLoadingDrawerChats(false)
+  }
+
   useEffect(() => {
     fetchMessages()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate, selectedChat])
+
+  useEffect(() => {
+    fetchChats()
+    // eslint-disable-next-line
+  }, [fetchChatsAgain])
+
+  useEffect(() => {
+    fetchGroupChatsList()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     socket.on(CHAT_EVENT_LISTENERS.NEW_MESSAGE, (payload) => {
@@ -109,6 +148,8 @@ export const ChatProvider = ({ children, socket }) => {
     <ChatContext.Provider
       value={{
         socket,
+        socketConnected,
+        setSocketConnected,
         selectedChat,
         setSelectedChat,
         userChats,
@@ -121,12 +162,11 @@ export const ChatProvider = ({ children, socket }) => {
         setUsersList,
         groupChatsList,
         setGroupChatsList,
+        setFetchChatsAgain,
         fetchMessages,
         isLoadingMessages,
-        fetchChatsAgain,
-        setFetchChatsAgain,
-        socketConnected,
-        setSocketConnected,
+        isLoadingUserChats,
+        isLoadingDrawerChats,
       }}>
       {children}
     </ChatContext.Provider>

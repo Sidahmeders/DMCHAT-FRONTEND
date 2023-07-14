@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   Button,
   Tooltip,
@@ -8,7 +8,6 @@ import {
   DrawerContent,
   DrawerHeader,
   DrawerOverlay,
-  useToast,
   Stack,
   Skeleton,
   IconButton,
@@ -19,8 +18,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Circle, List, Target } from 'react-feather'
 
 import { ChatState } from '@context'
-import { searchUsers } from '@services/users'
-import { fetchGroupChats } from '@services/chats'
 
 import UserListItem from './UserListItem'
 import GroupChatItem from './GroupChatItem'
@@ -34,27 +31,9 @@ const LoadingChats = () => (
 )
 
 const UsersListDrawer = () => {
-  const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const { usersList, setUsersList, groupChatsList, setGroupChatsList } = ChatState()
-  const [loading, setLoading] = useState(false)
+  const { usersList, setUsersList, groupChatsList, isLoadingDrawerChats } = ChatState()
   const [showGrouplist, setShowGrouplist] = useState(false)
-
-  useEffect(() => {
-    ;(async () => {
-      setLoading(true)
-      try {
-        const users = await searchUsers()
-        setUsersList(users)
-        const groupChats = await fetchGroupChats()
-        setGroupChatsList(groupChats)
-      } catch (error) {
-        toast({ description: error.message })
-      }
-      setLoading(false)
-    })()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <>
@@ -93,7 +72,7 @@ const UsersListDrawer = () => {
           {!showGrouplist ? (
             <>
               <DrawerBody>
-                {loading ? (
+                {isLoadingDrawerChats ? (
                   <LoadingChats />
                 ) : (
                   usersList?.map((user) => (
@@ -105,7 +84,7 @@ const UsersListDrawer = () => {
           ) : (
             <>
               <DrawerBody height="max">
-                {loading ? (
+                {isLoadingDrawerChats ? (
                   <LoadingChats />
                 ) : (
                   groupChatsList?.map((chatGroup) => <GroupChatItem key={chatGroup._id} chatGroup={chatGroup} />)

@@ -1,9 +1,7 @@
-import { useEffect } from 'react'
-import { Box, HStack, Skeleton, Stack, useDisclosure, useToast } from '@chakra-ui/react'
+import { Box, HStack, Skeleton, Stack } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
 import { ChatState } from '@context'
-import { fetchUserChats } from '@services/chats'
 
 import UsersListDrawer from '@components/UsersListDrawer/UsersListDrawer'
 import CreateGroupChatModal from '@components/miscellaneous/CreateGroupChatModal'
@@ -19,24 +17,7 @@ const UsersChatLoader = () => (
 )
 
 const UserChats = () => {
-  const toast = useToast()
-  const { onClose } = useDisclosure()
-  const { selectedChat, userChats, setUserChats, fetchChatsAgain } = ChatState()
-
-  const fetchChats = async () => {
-    try {
-      const userChats = await fetchUserChats()
-      setUserChats(userChats)
-      onClose()
-    } catch (error) {
-      toast({ description: error.message })
-    }
-  }
-
-  useEffect(() => {
-    fetchChats()
-    // eslint-disable-next-line
-  }, [fetchChatsAgain])
+  const { selectedChat, userChats, isLoadingUserChats } = ChatState()
 
   return (
     <Box
@@ -54,10 +35,10 @@ const UserChats = () => {
 
       <Box display="flex" flexDir="column" p="4" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
         <Stack overflowY="scroll">
-          {userChats.length ? (
-            userChats.map((chat) => <UserChatItem key={chat._id} chat={chat} />)
-          ) : (
+          {isLoadingUserChats ? (
             <UsersChatLoader />
+          ) : (
+            userChats.map((chat) => <UserChatItem key={chat._id} chat={chat} />)
           )}
         </Stack>
       </Box>
