@@ -18,13 +18,13 @@ import { CREATE_USER_NAMES } from '@config'
 const initialValues = Object.values(CREATE_USER_NAMES).reduce((acc, val) => ({ ...acc, [val]: '' }), {})
 
 const Signup = () => {
-  const [show, setShow] = useState(false)
-  const [loading, setLoading] = useState(false)
   const toast = useToast()
+  const [showPassword, setShowPassword] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
 
   const [credentials, setCredentials] = useState(initialValues)
 
-  const handleCredentials = (e) => {
+  const handleChange = (e) => {
     const { name, value } = e.target
     setCredentials({ ...credentials, [name]: value })
   }
@@ -34,14 +34,14 @@ const Signup = () => {
     if (files[0] === undefined) {
       return toast({ title: 'Veuillez sélectionner une image', status: 'warning' })
     }
-    setLoading(true)
+    setIsLoading(true)
     try {
       const uploadedImage = await uploadImage(files)
       setCredentials({ ...credentials, [name]: uploadedImage.secure_url.toString() })
     } catch (error) {
       toast({ description: error.message })
     }
-    setLoading(false)
+    setIsLoading(false)
   }
 
   const submitHandler = async () => {
@@ -51,7 +51,7 @@ const Signup = () => {
     if (credentials.password !== credentials.confirmPassword) {
       return toast({ title: 'Les mots de passe ne correspondent pas', status: 'warning' })
     }
-    setLoading(true)
+    setIsLoading(true)
     try {
       await signUpUser(credentials)
       setCredentials(initialValues)
@@ -64,7 +64,7 @@ const Signup = () => {
     } catch (error) {
       toast({ description: error.message })
     }
-    setLoading(false)
+    setIsLoading(false)
   }
 
   return (
@@ -74,10 +74,10 @@ const Signup = () => {
           <FormLabel htmlFor="name">Nom</FormLabel>
           <Input
             type="text"
-            name="name"
+            name={CREATE_USER_NAMES.NAME}
             value={credentials.name}
             placeholder="entrer votre nom"
-            onChange={(e) => handleCredentials(e)}
+            onChange={handleChange}
           />
         </FormControl>
       </Stack>
@@ -87,10 +87,10 @@ const Signup = () => {
           <FormLabel htmlFor="email">Email</FormLabel>
           <Input
             type="email"
-            name="email"
+            name={CREATE_USER_NAMES.EMAIL}
             value={credentials.email}
             placeholder="entrer votre Email"
-            onChange={(e) => handleCredentials(e)}
+            onChange={handleChange}
           />
         </FormControl>
       </Stack>
@@ -100,16 +100,16 @@ const Signup = () => {
           <FormLabel htmlFor="password">Mot de Passe</FormLabel>
           <InputGroup>
             <InputRightElement w="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                {show ? 'cacher' : 'voir'}
+              <Button h="1.75rem" size="sm" onClick={() => setShowPassword(!showPassword)}>
+                {showPassword ? 'cacher' : 'voir'}
               </Button>
             </InputRightElement>
             <Input
-              type={show ? 'text' : 'password'}
-              name="password"
+              type={showPassword ? 'text' : 'password'}
+              name={CREATE_USER_NAMES.PASSWORD}
               value={credentials.password}
               placeholder="mot de pass"
-              onChange={(e) => handleCredentials(e)}
+              onChange={handleChange}
             />
           </InputGroup>
         </FormControl>
@@ -118,20 +118,13 @@ const Signup = () => {
       <Stack spacing="5">
         <FormControl isRequired id="confirmPassword">
           <FormLabel htmlFor="confirmPassword">Confirmer Mot de Passe</FormLabel>
-          <InputGroup>
-            <InputRightElement w="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={() => setShow(!show)}>
-                {show ? 'cacher' : 'voir'}
-              </Button>
-            </InputRightElement>
-            <Input
-              type={show ? 'text' : 'password'}
-              name="confirmPassword"
-              value={credentials.confirmPassword}
-              placeholder="confirmer mot de pass"
-              onChange={(e) => handleCredentials(e)}
-            />
-          </InputGroup>
+          <Input
+            type={showPassword ? 'text' : 'password'}
+            name={CREATE_USER_NAMES.CONFIRM_PASSWORD}
+            value={credentials.confirmPassword}
+            placeholder="confirmer mot de pass"
+            onChange={handleChange}
+          />
         </FormControl>
       </Stack>
 
@@ -166,7 +159,7 @@ const Signup = () => {
         </FormControl>
       </Stack>
 
-      <Button colorScheme="blue" width="100%" style={{ marginTop: 15 }} onClick={submitHandler} isLoading={loading}>
+      <Button colorScheme="blue" width="100%" style={{ marginTop: 15 }} onClick={submitHandler} isLoading={isLoading}>
         S'inscrire
       </Button>
     </Stack>
