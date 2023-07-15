@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import {
-  Avatar,
   Input,
   Button,
   Text,
@@ -25,6 +24,7 @@ import { omit } from 'lodash'
 import { getUser, setUser } from '@utils'
 import { CREATE_USER_NAMES } from '@config'
 import { updateUser } from '@services/users'
+import UploaderAvatar from './UploaderAvatar'
 
 const EditUserSettings = () => {
   const localUser = getUser()
@@ -40,6 +40,11 @@ const EditUserSettings = () => {
   const handleChange = (e) => {
     const { name, value } = e.target
     setUserUpdate({ ...userUpdate, [name]: value })
+    setCanUpdateUser(true)
+  }
+
+  const handleFileLoad = (reader) => {
+    setUserUpdate({ ...userUpdate, pic: reader.result })
     setCanUpdateUser(true)
   }
 
@@ -81,13 +86,12 @@ const EditUserSettings = () => {
             {isAdmin && (
               <Text fontSize="14" color="red">
                 <b>REMARQUE:</b> les utilisateurs admin ne peuvent pas modifier leur email pour des raisons de sécurité
-                de sécurité
               </Text>
             )}
           </ModalHeader>
           <ModalBody>
             <HStack alignItems="flex-start">
-              <Avatar size="xl" cursor="pointer" src={localUser.pic} />
+              <UploaderAvatar src={userUpdate.pic} onLoad={handleFileLoad} />
               <FormControl>
                 <Stack>
                   <Input
