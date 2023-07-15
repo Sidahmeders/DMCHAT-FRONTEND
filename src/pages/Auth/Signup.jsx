@@ -3,6 +3,7 @@ import {
   Button,
   FormControl,
   FormLabel,
+  HStack,
   Input,
   InputGroup,
   InputLeftElement,
@@ -14,6 +15,7 @@ import {
 import { signUpUser } from '@services/users'
 import { uploadImage } from '@services/cloud'
 import { CREATE_USER_NAMES } from '@config'
+import { Eye, EyeOff, Image } from 'react-feather'
 
 const initialValues = Object.values(CREATE_USER_NAMES).reduce((acc, val) => ({ ...acc, [val]: '' }), {})
 
@@ -68,73 +70,55 @@ const Signup = () => {
   }
 
   return (
-    <Stack spacing="6">
-      <Stack spacing="5">
-        <FormControl isRequired id="name">
-          <FormLabel htmlFor="name">Nom</FormLabel>
-          <Input
-            type="text"
-            name={CREATE_USER_NAMES.NAME}
-            value={credentials.name}
-            placeholder="entrer votre nom"
-            onChange={handleChange}
-          />
-        </FormControl>
-      </Stack>
+    <Stack spacing="4">
+      <Input
+        type="text"
+        name={CREATE_USER_NAMES.NAME}
+        value={credentials.name}
+        placeholder="Nom"
+        onChange={handleChange}
+      />
 
-      <Stack spacing="5">
-        <FormControl isRequired id="email">
-          <FormLabel htmlFor="email">Email</FormLabel>
-          <Input
-            type="email"
-            name={CREATE_USER_NAMES.EMAIL}
-            value={credentials.email}
-            placeholder="entrer votre Email"
-            onChange={handleChange}
-          />
-        </FormControl>
-      </Stack>
+      <Input
+        type="email"
+        name={CREATE_USER_NAMES.EMAIL}
+        value={credentials.email}
+        placeholder="Email"
+        onChange={handleChange}
+      />
 
-      <Stack spacing="5">
-        <FormControl isRequired id="password">
-          <FormLabel htmlFor="password">Mot de Passe</FormLabel>
-          <InputGroup>
-            <InputRightElement w="4.5rem">
-              <Button h="1.75rem" size="sm" onClick={() => setShowPassword(!showPassword)}>
-                {showPassword ? 'cacher' : 'voir'}
-              </Button>
-            </InputRightElement>
-            <Input
-              type={showPassword ? 'text' : 'password'}
-              name={CREATE_USER_NAMES.PASSWORD}
-              value={credentials.password}
-              placeholder="mot de pass"
-              onChange={handleChange}
-            />
-          </InputGroup>
-        </FormControl>
-      </Stack>
-
-      <Stack spacing="5">
-        <FormControl isRequired id="confirmPassword">
-          <FormLabel htmlFor="confirmPassword">Confirmer Mot de Passe</FormLabel>
+      <HStack>
+        <InputGroup>
+          <InputRightElement>
+            <Button variant="ghost" colorScheme="blue" size="xs" mr="1" onClick={() => setShowPassword(!showPassword)}>
+              {showPassword ? <EyeOff color="#369" /> : <Eye color="#369" />}
+            </Button>
+          </InputRightElement>
           <Input
             type={showPassword ? 'text' : 'password'}
-            name={CREATE_USER_NAMES.CONFIRM_PASSWORD}
-            value={credentials.confirmPassword}
-            placeholder="confirmer mot de pass"
+            name={CREATE_USER_NAMES.PASSWORD}
+            value={credentials.password}
+            placeholder="Mot de pass"
             onChange={handleChange}
           />
-        </FormControl>
-      </Stack>
+        </InputGroup>
+
+        <Input
+          type={showPassword ? 'text' : 'password'}
+          name={CREATE_USER_NAMES.CONFIRM_PASSWORD}
+          value={credentials.confirmPassword}
+          placeholder="Confirmer Mot de pass"
+          onChange={handleChange}
+        />
+      </HStack>
 
       <Stack spacing="5">
         <FormControl id="pic">
           <FormLabel htmlFor="pic">Téléchargez votre image</FormLabel>
 
           <InputGroup>
-            <InputLeftElement pointerEvents="none">
-              <i className="fas fa-folder-open" />
+            <InputLeftElement>
+              <Image color="#e00d" />
             </InputLeftElement>
 
             <Input
@@ -142,7 +126,8 @@ const Signup = () => {
               name="pic"
               accept="image/*"
               isInvalid={true}
-              errorBorderColor="#eaafc8"
+              cursor="pointer"
+              errorBorderColor="#e00d"
               sx={{
                 '::file-selector-button': {
                   height: 10,
@@ -159,7 +144,7 @@ const Signup = () => {
         </FormControl>
       </Stack>
 
-      <Button colorScheme="blue" width="100%" style={{ marginTop: 15 }} onClick={submitHandler} isLoading={isLoading}>
+      <Button colorScheme="blue" width="100%" onClick={submitHandler} isLoading={isLoading}>
         S'inscrire
       </Button>
     </Stack>

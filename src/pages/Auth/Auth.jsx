@@ -19,26 +19,19 @@ export default function Auth() {
 
   return (
     <Container maxWidth="xl">
-      <Box
-        d="flex"
-        justifyContent="center"
-        p={3}
-        bg="white"
-        w="100%"
-        m="40px 0 15px 0"
-        borderRadius="lg"
-        borderWidth="1px">
+      <Box d="flex" justifyContent="center" p={3} bg="white" w="100%" mb="15px" borderRadius="lg" borderWidth="1px">
         <Text fontSize="4xl" textAlign="center">
           Deghmine M.A
         </Text>
       </Box>
 
-      <Box bg="white" w="100%" p={4} borderRadius="lg" borderWidth="1px">
+      <Box bg="white" w="100%" p="4" borderRadius="lg" borderWidth="1px">
         <Tabs isFitted variant="soft-rounded">
           <TabList mb="1em">
             <Tab>Connexion</Tab>
             <Tab>S'inscrire</Tab>
           </TabList>
+
           <TabPanels>
             <TabPanel>
               <Login />

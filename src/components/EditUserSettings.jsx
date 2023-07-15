@@ -18,7 +18,7 @@ import {
   InputGroup,
   InputRightElement,
 } from '@chakra-ui/react'
-import { Settings } from 'react-feather'
+import { Settings, Eye, EyeOff } from 'react-feather'
 import { omit } from 'lodash'
 
 import { getUser, setUser } from '@utils'
@@ -113,9 +113,14 @@ const EditUserSettings = () => {
 
                 <Stack mt="2">
                   <InputGroup>
-                    <InputRightElement w="4.5rem">
-                      <Button h="1.75rem" size="sm" onClick={() => setShowPassword(!showPassword)}>
-                        {showPassword ? 'cacher' : 'voir'}
+                    <InputRightElement>
+                      <Button
+                        variant="ghost"
+                        colorScheme="blue"
+                        size="xs"
+                        mr="1"
+                        onClick={() => setShowPassword(!showPassword)}>
+                        {showPassword ? <EyeOff color="#369" /> : <Eye color="#369" />}
                       </Button>
                     </InputRightElement>
                     <Input
