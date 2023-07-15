@@ -73,7 +73,7 @@ const EditUserSettings = () => {
       </Button>
 
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={cancelUpdate}>
-        <ModalOverlay />
+        <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />
         <ModalContent>
           <ModalCloseButton />
           <ModalHeader>

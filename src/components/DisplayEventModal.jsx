@@ -66,7 +66,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
 
   return (
     <Modal size="xl" isOpen={isOpen} onClose={onClose}>
-      <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />
+      <ModalOverlay />
       <ModalContent>
         <Loader loading={isLoading}>
           <ModalHeader>
