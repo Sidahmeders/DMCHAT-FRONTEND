@@ -20,11 +20,11 @@
 
 .App {
   width: 100%;
-  min-height: 100vh;
   align-items: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-top: 5rem;
 }
 
 /* Width and height of the scrollbar track */

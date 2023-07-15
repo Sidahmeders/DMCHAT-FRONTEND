@@ -52,17 +52,17 @@ export default function CustomToolbar({
 
       <span className="rbc-btn-group custom-toolbar">
         <button type="button" onClick={() => onNavigate(CALENDAR_NAVIGATION.PREVIOUS)} aria-label={messages.previous}>
-          <ChevronLeft width={40} height={35} />
+          <ChevronLeft width={40} height={28} />
         </button>
         <button
-          style={{ height: '45px' }}
+          style={{ height: '40px' }}
           type="button"
           onClick={() => onNavigate(CALENDAR_NAVIGATION.TODAY)}
           aria-label={messages.today}>
           Aujourd'hui
         </button>
         <button type="button" onClick={() => onNavigate(CALENDAR_NAVIGATION.NEXT)} aria-label={messages.next}>
-          <ChevronRight width={40} height={35} />
+          <ChevronRight width={40} height={28} />
         </button>
       </span>
     </div>

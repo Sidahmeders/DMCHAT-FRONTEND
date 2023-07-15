@@ -2,9 +2,8 @@
 @import 'react-big-calendar/lib/addons/dragAndDrop/styles';
 
 .calendar-container {
-  margin-top: 4rem;
   width: 100%;
-  min-height: 80vh;
+  height: calc(100vh - 5rem);
   display: flex;
   justify-content: center;
 }
@@ -28,8 +27,6 @@
 
 .rbc-calendar {
   width: 80vw;
-  min-height: 40rem !important;
-  height: 85vh;
 
   .rbc-month-view {
     border-radius: 0.5rem;
@@ -46,12 +43,6 @@
     display: flex;
     justify-content: space-evenly;
     align-items: center;
-  }
-
-  .rbc-btn-group {
-    button:nth-child(2) {
-      display: none;
-    }
   }
 
   .rbc-day-bg.rbc-today {

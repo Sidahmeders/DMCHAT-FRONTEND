@@ -1,4 +1,3 @@
-import { Box } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
 import { getUser } from '@utils'
@@ -6,16 +5,18 @@ import { getUser } from '@utils'
 import ChatBox from './ChatBox'
 import UserChats from './UserChats'
 
+import './Chat.scss'
+
 export default function Chat() {
   const user = getUser()
 
   return (
     <>
       {!isEmpty(user) && (
-        <Box display="flex" justifyContent="space-between" w="100%" mt="12" h="90vh" p="1rem" pb="0">
+        <div className="chat-container">
           <UserChats />
           <ChatBox />
-        </Box>
+        </div>
       )}
     </>
   )
