@@ -18,7 +18,7 @@ import { ChevronDown, MessageCircle } from 'react-feather'
 import { ChatState } from '@context'
 import { USER_ROLES } from '@config'
 import { accessChat } from '@services/chats'
-import { updateUser } from '@services/users'
+import { updateUserRole } from '@services/users'
 
 import DeleteUserModal from '@components/miscellaneous/DeleteUserModal'
 
@@ -48,8 +48,10 @@ const UserListItem = ({ user, setUsersList, closeDrawer }) => {
 
   const handleRoleUpdate = async () => {
     try {
-      const updatedUser = await updateUser(user._id, { role: roleValue })
-      setUsersList((prevUsers) => prevUsers.map((user) => (user._id === updatedUser._id ? updatedUser : user)))
+      await updateUserRole(user._id, roleValue)
+      setUsersList((prevUsers) =>
+        prevUsers.map((prevUser) => ({ ...prevUser, role: prevUser._id === user._id ? roleValue : prevUser.role })),
+      )
       toast({ title: 'rôle modifié avec succès', status: 'success' })
     } catch (error) {
       toast({ description: error.message })

@@ -26,6 +26,17 @@ const requestPasswordReset = async (email) => await _fetch.POST('/api/users/forg
 
 const updateUser = async (userId, userData) => await _fetch.PUT(`/api/users/${userId}`, userData)
 
+const updateUserRole = async (userId, role) => await _fetch.PUT(`/api/users/role/${userId}`, { role })
+
 const deleteUser = async (userId) => await _fetch.DELETE(`/api/users/${userId}`)
 
-export { searchUsers, signInUser, confirmSignIn, signUpUser, requestPasswordReset, updateUser, deleteUser }
+export {
+  searchUsers,
+  signInUser,
+  confirmSignIn,
+  signUpUser,
+  requestPasswordReset,
+  updateUser,
+  updateUserRole,
+  deleteUser,
+}
