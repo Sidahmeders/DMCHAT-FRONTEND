@@ -7,9 +7,9 @@ import AddAppointmentBody from './AddAppointmentBody'
 import EditableButtons from '../EditableButtons/EditableButtons'
 import ConfigureCalendarAvailabilityBody from './ConfigureCalendarAvailabilityBody'
 
-export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose, setEvents, setAvailabilities }) {
+const AddAppointmentModal = ({ selectedView, selectedSlotInfo, isOpen, onClose, setEvents, setAvailabilities }) => {
   const { action } = selectedSlotInfo
-  const isClickAction = action === 'click'
+  const canAddAppointment = action === 'click' || selectedView === 'day'
   const [templateButtons, setTemplateButtons] = useState(getMotifTemplateButtons())
 
   return (
@@ -18,13 +18,13 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
       <ModalContent>
         <Tabs onClick={() => setTemplateButtons(getMotifTemplateButtons())}>
           <TabList>
-            {isClickAction && <Tab>Ajouter rendez-vous</Tab>}
-            {isClickAction && <Tab>modifier boutons</Tab>}
+            {canAddAppointment && <Tab>Ajouter rendez-vous</Tab>}
+            {canAddAppointment && <Tab>modifier boutons</Tab>}
             <Tab>définir la disponibilité</Tab>
           </TabList>
 
           <TabPanels>
-            {isClickAction && (
+            {canAddAppointment && (
               <TabPanel>
                 <AddAppointmentBody
                   selectedSlotInfo={selectedSlotInfo}
@@ -34,7 +34,7 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
                 />
               </TabPanel>
             )}
-            {isClickAction && (
+            {canAddAppointment && (
               <TabPanel>
                 <EditableButtons
                   label="Motif de consultation (btn modifiable)"
@@ -58,3 +58,5 @@ export default function AddAppointmentModal({ selectedSlotInfo, isOpen, onClose,
     </Modal>
   )
 }
+
+export default AddAppointmentModal

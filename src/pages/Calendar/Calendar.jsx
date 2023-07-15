@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { Calendar as BigCalendar, DateLocalizer, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { registerLocale } from 'react-datepicker'
-import { format, parse, startOfWeek, getDay, addMonths, subMonths } from 'date-fns'
+import { format, parse, startOfWeek, getDay, addMonths, subMonths, addHours } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 import { formatDate } from '@utils'
@@ -59,6 +59,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   const [events, setEvents] = useState([])
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedSlotInfo, setSelectedSlotInfo] = useState({})
+  const [selectedView, setSelectedView] = useState('month')
   const [selectedEvent, setSelectedEvent] = useState({})
   const [availabilities, setAvailabilities] = useState({})
 
@@ -110,7 +111,8 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
 
   const onEventDrop = async ({ event, start, end }) => {
     try {
-      const updatedAppointment = await updateAppointment(event._id, { startDate: start, endDate: end })
+      const endDate = selectedView === 'day' ? addHours(start, 1) : end
+      const updatedAppointment = await updateAppointment(event._id, { startDate: start, endDate })
       const updatedEvents = events.map((appointment) => {
         if (appointment.id === updatedAppointment._id) {
           return {
@@ -165,6 +167,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   return (
     <div {...swipeHandlers} className="calendar-container" {...props}>
       <AddAppointmentModal
+        selectedView={selectedView}
         selectedSlotInfo={selectedSlotInfo}
         isOpen={isAddAppointmentModalOpen}
         onClose={onAddAppointmentModalClose}
@@ -192,6 +195,7 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         onDoubleClickEvent={onDoubleClickEvent}
         onSelectSlot={onSelectSlot}
         onEventDrop={onEventDrop}
+        onView={setSelectedView}
         views={{ month: true, day: true, agenda: CustomAgenda }}
         dayPropGetter={(date) => ({ style: { background: AVAILABILITY_BG_COLORS[availabilities[formatDate(date)]] } })}
         components={{ toolbar: (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} /> }}
