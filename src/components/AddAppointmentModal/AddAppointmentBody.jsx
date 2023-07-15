@@ -39,8 +39,8 @@ const resolvePatientOptions = (patients) => {
 }
 
 export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setEvents }) {
+  const localUser = getUser()
   const { start, end } = selectedSlotInfo
-  const user = getUser()
   const toast = useToast()
   const { socket } = ChatState()
   const motifRadioOptions = getMotifTemplateButtons()
@@ -63,7 +63,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
   const [baseAppointmentRadioValue, setBaseAppointmentRadioValue] = useState(null)
 
   const submitAppointment = async (data) => {
-    if (isEmpty(user)) return
+    if (isEmpty(localUser)) return
     if (!baseAppointmentRadioValue && !isNewTreatment) {
       return toast({
         title: "Erreur lors de l'obtention du rendez-vous de base",
@@ -77,7 +77,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
       const [patientId] = data?.fullName?.split('-') || []
       const appointmentBody = {
         ...data,
-        [CREATE_APPOINTMENT_NAMES.SENDER]: user._id,
+        [CREATE_APPOINTMENT_NAMES.SENDER]: localUser._id,
         [CREATE_APPOINTMENT_NAMES.PATIENT]: patientId,
         [CREATE_APPOINTMENT_NAMES.START_DATE]: start,
         [CREATE_APPOINTMENT_NAMES.END_DATE]: end,
@@ -101,7 +101,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
       const payment = data[CREATE_APPOINTMENT_NAMES.PAYMENT]
       if (payment && payment > 0) {
         const createdPayment = await createPayment(new Date(), {
-          [CREATE_PAYMENT_NAMES.SENDER]: user._id,
+          [CREATE_PAYMENT_NAMES.SENDER]: localUser._id,
           [CREATE_PAYMENT_NAMES.PATIENT]: patientId,
           [CREATE_PAYMENT_NAMES.AMOUNT]: data[CREATE_APPOINTMENT_NAMES.PAYMENT],
           [CREATE_PAYMENT_NAMES.PAYER_NAME]: data[CREATE_APPOINTMENT_NAMES.FULL_NAME]?.split('-')[1],
