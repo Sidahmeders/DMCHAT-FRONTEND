@@ -1,6 +1,5 @@
 import propTypes from 'prop-types'
 import {
-  Button,
   HStack,
   IconButton,
   Avatar,
@@ -12,14 +11,16 @@ import {
   ModalOverlay,
   Text,
   useDisclosure,
+  ModalCloseButton,
 } from '@chakra-ui/react'
 import { Info } from 'react-feather'
 
 import DeleteChatMessagesModal from './DeleteChatMessagesModal'
+import { USER_ROLES_MAP } from '@config'
+import { formatDate } from '@utils'
 
 export default function PeerProfileModal({ sender, chatId, setMessages }) {
   const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure()
-
   return (
     <>
       <HStack>
@@ -30,20 +31,23 @@ export default function PeerProfileModal({ sender, chatId, setMessages }) {
       <Modal size="xl" isOpen={isProfileOpen} onClose={onProfileClose} isCentered>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader display="flex" justifyContent="center" fontSize="1.5rem">
-            {sender.name || 'Utilisateur supprimé'}
+          <ModalCloseButton size="lg" />
+          <ModalHeader display="flex" justifyContent="center" alignItems="center">
+            <Text fontSize="24">{sender.name || 'Utilisateur supprimé'}</Text>
+            <Text fontSize="16" ml="2" color="orange.400">
+              {USER_ROLES_MAP[sender.role]}
+            </Text>
           </ModalHeader>
           <ModalBody display="flex" flexDir="column" alignItems="center" justifyContent="space-between">
             <Avatar src={sender.pic} name={sender.name} objectFit="cover" boxSize="12.5rem" />
-            <Text fontSize="1.25rem" mt="6">
-              Email: <strong> {sender.email || 'Utilisateur supprimé'}</strong>
+            <Text fontSize="20" mt="6">
+              Email: <b> {sender.email || 'Utilisateur supprimé'}</b>
+            </Text>
+            <Text fontSize="16" mt="2">
+              Inscrit à: <b>{formatDate(sender.createdAt, 'HH:mm EEEE dd/MM . yyyy')}</b>
             </Text>
           </ModalBody>
-          <ModalFooter>
-            <Button mr={3} onClick={onProfileClose}>
-              Fermer
-            </Button>
-          </ModalFooter>
+          <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
     </>
