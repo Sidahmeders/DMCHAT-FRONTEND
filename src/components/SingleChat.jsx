@@ -26,16 +26,8 @@ import ScrollableChat from './ScrollableChat'
 const SingleChat = () => {
   const user = getUser()
   const toast = useToast()
-  const {
-    socket,
-    selectedChat,
-    setSelectedChat,
-    messages,
-    setMessages,
-    isLoadingMessages,
-    setFetchUserChatsAgain,
-    socketConnected,
-  } = ChatState()
+  const { socket, selectedChat, setSelectedChat, messages, setMessages, isLoadingMessages, socketConnected } =
+    ChatState()
 
   const [newMessage, setNewMessage] = useState('')
   const [typing, setTyping] = useState(false)
@@ -51,7 +43,6 @@ const SingleChat = () => {
       const createdMessage = await createMessage(newMessage, selectedChat._id)
       socket.emit(CHAT_EVENT_LISTENERS.NEW_MESSAGE, { createdMessage, targetChat: selectedChat })
       setMessages([...messages, createdMessage])
-      setFetchUserChatsAgain((prevState) => !prevState)
     } catch (error) {
       toast({ description: error.message })
     }
