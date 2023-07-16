@@ -49,7 +49,12 @@ export default function PatientListModal() {
     ;(async () => {
       setIsLoading(true)
       try {
-        const patientData = await fetchPatients({ pageNumber, pageSize, searchName: filterText })
+        let patientData
+        if (filterText.trim().length > 0) {
+          patientData = await fetchPatients({ searchName: filterText })
+        } else {
+          patientData = await fetchPatients({ pageNumber, pageSize })
+        }
         setPatientsData(patientData)
       } catch (error) {
         toast({ description: error.message })

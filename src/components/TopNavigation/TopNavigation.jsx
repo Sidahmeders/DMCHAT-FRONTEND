@@ -50,7 +50,7 @@ export default function TopNavigation() {
   }
 
   useEffect(() => {
-    if (position.x < -350) {
+    if (position.x < -250) {
       setPosition({ ...position, x: 5 })
     }
     if (position.x > window.outerWidth - 50) {
@@ -59,7 +59,7 @@ export default function TopNavigation() {
     if (position.y > 50) {
       setPosition({ ...position, y: -5 })
     }
-    if (Math.abs(position.y) > window.outerHeight - 125) {
+    if (Math.abs(position.y) > window.outerHeight - 50) {
       setPosition({ ...position, y: position.y + 25 })
     }
   }, [position])
