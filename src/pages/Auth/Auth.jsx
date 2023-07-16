@@ -18,7 +18,7 @@ export default function Auth() {
   }, [navigate])
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" mt="5rem">
       <Box d="flex" justifyContent="center" p={3} bg="white" w="100%" mb="15px" borderRadius="lg" borderWidth="1px">
         <Text fontSize="4xl" textAlign="center">
           Deghmine M.A

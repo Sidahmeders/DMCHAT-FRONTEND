@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { Cast, Calendar, PieChart } from 'react-feather'
 import { getPageRoute, setPageRoute } from '@utils'
@@ -16,17 +16,12 @@ export default function TopNavigation() {
   const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
 
-  const handleDragStart = () => {
-    setIsDragging(true)
-  }
-  const handleDragEnd = (result) => {
-    setIsDragging(false)
-    if (!result.destination) {
-      return
-    }
-  }
-
+  const handleDragStart = () => setIsDragging(true)
   const handleMouseDown = () => setIsDragging(true)
+  const handleDragEnd = () => setIsDragging(false)
+  const handleTouchEnd = () => setIsDragging(false)
+  const handleMouseUp = () => setIsDragging(false)
+
   const handleMouseMove = (event) => {
     if (isDragging) {
       setPosition((prevPosition) => ({
@@ -35,7 +30,6 @@ export default function TopNavigation() {
       }))
     }
   }
-  const handleMouseUp = () => setIsDragging(false)
 
   const handleTouchStart = (event) => {
     setIsDragging(true)
@@ -43,6 +37,7 @@ export default function TopNavigation() {
     setInitialTouchPosition({ x: touch.clientX, y: touch.clientY })
     setInitialPosition({ x: position.x, y: position.y })
   }
+
   const handleTouchMove = (event) => {
     if (isDragging) {
       const touch = event.touches[0]
@@ -53,7 +48,21 @@ export default function TopNavigation() {
       setInitialTouchPosition({ x: touch.clientX, y: touch.clientY })
     }
   }
-  const handleTouchEnd = () => setIsDragging(false)
+
+  useEffect(() => {
+    if (position.x < -350) {
+      setPosition({ ...position, x: 5 })
+    }
+    if (position.x > window.outerWidth - 50) {
+      setPosition({ ...position, x: position.x - 100 })
+    }
+    if (position.y > 50) {
+      setPosition({ ...position, y: -5 })
+    }
+    if (Math.abs(position.y) > window.outerHeight - 125) {
+      setPosition({ ...position, y: position.y + 25 })
+    }
+  }, [position])
 
   useEffect(() => {
     if (isDragging) {

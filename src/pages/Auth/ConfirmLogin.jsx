@@ -57,7 +57,7 @@ const ConfirmLogin = () => {
   }, [navigate, seconds])
 
   return (
-    <Container maxWidth="md" onClick={handleCodeBoxClick}>
+    <Container maxWidth="md" mt="5rem" onClick={handleCodeBoxClick}>
       <Stack mb="4">
         <Box display="flex" justifyContent="center">
           <Mail size="12rem" color="#36fd" />
