@@ -76,7 +76,7 @@ const PaymentRatio = () => {
           </FormControl>
 
           <FormControl display="flex" alignItems="center" m="0" bg="#fff" borderRadius="md">
-            <FormLabel htmlFor="show-all-time" fontSize="xs" pl="1" m="1">
+            <FormLabel htmlFor="show-all-time" fontSize="sm" pl="1" m="1">
               Toute?
             </FormLabel>
             <Switch size="sm" id="show-all-time" colorScheme="yellow" checked={false} onChange={() => {}} />

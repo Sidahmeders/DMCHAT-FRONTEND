@@ -2,16 +2,14 @@
   position: fixed;
   top: 0;
   z-index: 999;
-  width: 50vw;
-  min-width: 20rem;
-  max-width: 60rem;
+  // min-width: 20rem;
   display: flex;
   justify-content: space-evenly;
-  padding: 0.75rem;
+  padding: 0.75rem 0;
   border-top: 0;
   background-color: white;
-  border-radius: 1rem;
-  border: 1px solid;
+  border-radius: 25rem;
+  box-shadow: 0 0 5px #dddd;
 
   .save-icon,
   a {
@@ -19,15 +17,11 @@
     border-radius: 50%;
     background: #474aff11;
     padding: 6px 8px 2px;
-  }
+    margin: 0 1rem;
+    transition: transform 0.2s ease-in-out;
 
-  .selected {
-    border-color: #020f5c56;
-    background: #474aff66;
-
-    svg {
-      fill: #474aff66;
-      color: #474aff;
+    &:hover {
+      transform: scale(1.1);
     }
   }
 
@@ -35,5 +29,18 @@
     width: 2rem;
     height: 2rem;
     color: #474aff;
+    transition: fill 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out;
+  }
+
+  .selected {
+    border-color: transparent;
+    background: #f05c18d3;
+    box-shadow: 0 0 15px #f70c0c;
+
+    svg {
+      fill: #f39c74d3;
+      color: #fbfcf2;
+      transition: fill 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out;
+    }
   }
 }
