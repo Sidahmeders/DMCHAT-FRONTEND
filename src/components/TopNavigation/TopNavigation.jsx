@@ -46,16 +46,39 @@ export default function TopNavigation() {
     setIsDragging(false)
   }
 
+  const handleTouchStart = () => {
+    setIsDragging(true)
+  }
+
+  const handleTouchEnd = () => {
+    setIsDragging(false)
+  }
+
+  const handleTouchMove = (event) => {
+    if (isDragging) {
+      setPosition((prevPosition) => ({
+        x: prevPosition.x + event.touches[0].movementX,
+        y: prevPosition.y + event.touches[0].movementY,
+      }))
+    }
+  }
+
   useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove)
       document.addEventListener('mouseup', handleMouseUp)
+      document.addEventListener('touchmove', handleTouchMove, { passive: false })
+      document.addEventListener('touchend', handleTouchEnd)
     } else {
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchend', handleTouchEnd)
     }
 
     return () => {
+      document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('touchend', handleTouchEnd)
       document.removeEventListener('mousemove', handleMouseMove)
       document.removeEventListener('mouseup', handleMouseUp)
     }
@@ -69,9 +92,12 @@ export default function TopNavigation() {
           <div
             className={`top-navigation-container ${isDragging ? 'dragging' : ''}`}
             style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+            onTouchMove={handleTouchMove}
             ref={provided.innerRef}
-            {...provided.droppableProps}
-            onMouseDown={handleMouseDown}>
+            {...provided.droppableProps}>
             <Link
               className={`${selectedRoute === APP_ROUTES.CHATS ? 'selected' : ''}`}
               onClick={() => setPageRoute(APP_ROUTES.CHATS)}
