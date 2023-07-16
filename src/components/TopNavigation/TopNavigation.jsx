@@ -12,16 +12,13 @@ export default function TopNavigation() {
   const location = useLocation()
   const [selectedRoute, setSelectedRoute] = useState(getPageRoute())
   const [position, setPosition] = useState({ x: 0, y: 0 })
+  const [initialTouchPosition, setInitialTouchPosition] = useState({ x: 0, y: 0 })
+  const [initialPosition, setInitialPosition] = useState({ x: 0, y: 0 })
   const [isDragging, setIsDragging] = useState(false)
-
-  useEffect(() => {
-    setSelectedRoute(getPageRoute())
-  }, [location.pathname])
 
   const handleDragStart = () => {
     setIsDragging(true)
   }
-
   const handleDragEnd = (result) => {
     setIsDragging(false)
     if (!result.destination) {
@@ -29,6 +26,7 @@ export default function TopNavigation() {
     }
   }
 
+  const handleMouseDown = () => setIsDragging(true)
   const handleMouseMove = (event) => {
     if (isDragging) {
       setPosition((prevPosition) => ({
@@ -37,53 +35,51 @@ export default function TopNavigation() {
       }))
     }
   }
+  const handleMouseUp = () => setIsDragging(false)
 
-  const handleMouseDown = () => {
+  const handleTouchStart = (event) => {
     setIsDragging(true)
+    const touch = event.touches[0]
+    setInitialTouchPosition({ x: touch.clientX, y: touch.clientY })
+    setInitialPosition({ x: position.x, y: position.y })
   }
-
-  const handleMouseUp = () => {
-    setIsDragging(false)
-  }
-
-  const handleTouchStart = () => {
-    setIsDragging(true)
-  }
-
-  const handleTouchEnd = () => {
-    setIsDragging(false)
-  }
-
   const handleTouchMove = (event) => {
     if (isDragging) {
-      setPosition((prevPosition) => ({
-        x: prevPosition.x + event.touches[0].movementX,
-        y: prevPosition.y + event.touches[0].movementY,
-      }))
+      const touch = event.touches[0]
+      setPosition({
+        x: initialPosition.x + (touch.clientX - initialTouchPosition.x),
+        y: initialPosition.y + (touch.clientY - initialTouchPosition.y),
+      })
+      setInitialTouchPosition({ x: touch.clientX, y: touch.clientY })
     }
   }
+  const handleTouchEnd = () => setIsDragging(false)
 
   useEffect(() => {
     if (isDragging) {
       document.addEventListener('mousemove', handleMouseMove)
-      document.addEventListener('mouseup', handleMouseUp)
       document.addEventListener('touchmove', handleTouchMove, { passive: false })
-      document.addEventListener('touchend', handleTouchEnd)
+      document.addEventListener('mouseup', handleMouseUp)
+      document.addEventListener('touchend', handleTouchEnd, { passive: false })
     } else {
       document.removeEventListener('mousemove', handleMouseMove)
-      document.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('touchmove', handleTouchMove)
+      document.removeEventListener('mouseup', handleMouseUp)
       document.removeEventListener('touchend', handleTouchEnd)
     }
 
     return () => {
-      document.removeEventListener('touchmove', handleTouchMove)
-      document.removeEventListener('touchend', handleTouchEnd)
       document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('touchmove', handleTouchMove)
       document.removeEventListener('mouseup', handleMouseUp)
+      document.removeEventListener('touchend', handleTouchEnd)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isDragging])
+
+  useEffect(() => {
+    setSelectedRoute(getPageRoute())
+  }, [location.pathname])
 
   return (
     <DragDropContext onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
@@ -92,12 +88,10 @@ export default function TopNavigation() {
           <div
             className={`top-navigation-container ${isDragging ? 'dragging' : ''}`}
             style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
-            onMouseDown={handleMouseDown}
-            onTouchStart={handleTouchStart}
-            onTouchEnd={handleTouchEnd}
-            onTouchMove={handleTouchMove}
             ref={provided.innerRef}
-            {...provided.droppableProps}>
+            {...provided.droppableProps}
+            onMouseDown={handleMouseDown}
+            onTouchStart={handleTouchStart}>
             <Link
               className={`${selectedRoute === APP_ROUTES.CHATS ? 'selected' : ''}`}
               onClick={() => setPageRoute(APP_ROUTES.CHATS)}
