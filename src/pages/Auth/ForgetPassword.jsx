@@ -41,7 +41,7 @@ const ForgetPassword = () => {
   }
 
   return (
-    <Container maxWidth="xl">
+    <Container maxWidth="xl" minH="95vh" display="flex" flexDir="column" justifyContent="center">
       {isSuccessfulSubmit ? (
         <Stack gap="4">
           <Text fontSize="lg">

@@ -11,9 +11,9 @@ export const getSenderFull = (loggedUser, users = []) => {
 export const isSameSender = (messages, currentMessage, currentMessageIndex, loggedUserId) => {
   return (
     currentMessageIndex < messages.length - 1 &&
-    (messages[currentMessageIndex + 1].sender._id !== currentMessage.sender._id ||
-      messages[currentMessageIndex + 1].sender._id === undefined) &&
-    messages[currentMessageIndex].sender._id !== loggedUserId
+    (messages[currentMessageIndex + 1].sender?._id !== currentMessage.sender?._id ||
+      messages[currentMessageIndex + 1].sender?._id === undefined) &&
+    messages[currentMessageIndex].sender?._id !== loggedUserId
   )
 }
 
@@ -27,17 +27,17 @@ export const isLastMessage = (messages, currentMessageIndex, loggedUserId) => {
 
 export const isSameSenderMargin = (messages, currentMessage, currentMessageIndex, loggedUserId) => {
   if (
-    currentMessageIndex < messages.length - 1 &&
-    messages[currentMessageIndex + 1].sender._id === currentMessage.sender._id &&
-    messages[currentMessageIndex].sender._id !== loggedUserId
+    currentMessageIndex < messages?.length - 1 &&
+    messages[currentMessageIndex + 1]?.sender?._id === currentMessage?.sender?._id &&
+    messages[currentMessageIndex].sender?._id !== loggedUserId
   ) {
     return 33
   }
   if (
-    (currentMessageIndex < messages.length - 1 &&
-      messages[currentMessageIndex + 1].sender._id !== currentMessage.sender._id &&
-      messages[currentMessageIndex].sender._id !== loggedUserId) ||
-    (currentMessageIndex === messages.length - 1 && messages[currentMessageIndex].sender._id !== loggedUserId)
+    (currentMessageIndex < messages?.length - 1 &&
+      messages[currentMessageIndex + 1].sender?._id !== currentMessage?.sender?._id &&
+      messages[currentMessageIndex]?.sender?._id !== loggedUserId) ||
+    (currentMessageIndex === messages.length - 1 && messages[currentMessageIndex]?.sender?._id !== loggedUserId)
   ) {
     return 0
   }
@@ -46,7 +46,7 @@ export const isSameSenderMargin = (messages, currentMessage, currentMessageIndex
 }
 
 export const isSameUser = (messages, currentMessage, currentMessageIndex) => {
-  return currentMessageIndex > 0 && messages[currentMessageIndex - 1].sender._id === currentMessage.sender._id
+  return currentMessageIndex > 0 && messages[currentMessageIndex - 1]?.sender?._id === currentMessage?.sender?._id
 }
 
 export const getGroupAdminUser = (chatGroup) => {
