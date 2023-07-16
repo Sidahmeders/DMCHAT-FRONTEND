@@ -6,7 +6,7 @@
   .room-container {
     display: flex;
     width: 100%;
-    height: calc(100vh - 5rem);
+    height: calc(100vh - 0.5rem);
     overflow-x: auto;
 
     @media (max-width: 768px) {

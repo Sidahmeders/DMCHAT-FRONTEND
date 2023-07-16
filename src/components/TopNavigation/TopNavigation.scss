@@ -1,15 +1,14 @@
 .top-navigation-container {
   position: fixed;
-  top: 0;
   z-index: 999;
-  // min-width: 20rem;
+  bottom: 0;
+  left: 0;
+  background-color: white;
+  border-radius: 5rem;
+  padding: 0.75rem 0;
+  box-shadow: 0 0 5px #dddd;
   display: flex;
   justify-content: space-evenly;
-  padding: 0.75rem 0;
-  border-top: 0;
-  background-color: white;
-  border-radius: 25rem;
-  box-shadow: 0 0 5px #dddd;
 
   .save-icon,
   a {
@@ -17,7 +16,7 @@
     border-radius: 50%;
     background: #474aff11;
     padding: 6px 8px 2px;
-    margin: 0 1rem;
+    margin: 0 0.75rem;
     transition: transform 0.2s ease-in-out;
 
     &:hover {
@@ -26,8 +25,8 @@
   }
 
   svg {
-    width: 2rem;
-    height: 2rem;
+    width: 1.75rem;
+    height: 1.75rem;
     color: #474aff;
     transition: fill 0.2s ease-in-out, color 0.2s ease-in-out, transform 0.2s ease-in-out;
   }

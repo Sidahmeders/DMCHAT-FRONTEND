@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin-top: 5rem;
+  margin-top: 0.5rem;
 }
 
 /* Width and height of the scrollbar track */
