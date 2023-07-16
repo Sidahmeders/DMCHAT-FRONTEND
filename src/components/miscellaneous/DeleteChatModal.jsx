@@ -19,14 +19,14 @@ import { deleteChatById } from '@services/chats'
 
 const DeleteChatModal = ({ chat, isOpen, onOpen, onClose }) => {
   const toast = useToast()
-  const { setSelectedChat, setChats } = ChatState()
+  const { setSelectedChat, setUserChats } = ChatState()
   const [canDeleteChat, setCanDeleteChat] = useState(false)
 
   const handleChatDelete = async () => {
     try {
       await deleteChatById(chat._id)
       setSelectedChat({})
-      setChats((prevChats) => prevChats.filter((item) => item._id !== chat._id))
+      setUserChats((prevChats) => prevChats.filter((item) => item._id !== chat._id))
       toast({ title: 'Chat supprimé avec succès', status: 'warning' })
     } catch (error) {
       toast({ description: error.message })

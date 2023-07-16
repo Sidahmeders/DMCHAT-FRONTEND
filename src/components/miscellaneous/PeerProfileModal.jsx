@@ -31,12 +31,12 @@ export default function PeerProfileModal({ sender, chatId, setMessages }) {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader display="flex" justifyContent="center" fontSize="1.5rem">
-            {sender.name}
+            {sender.name || 'Utilisateur supprimé'}
           </ModalHeader>
           <ModalBody display="flex" flexDir="column" alignItems="center" justifyContent="space-between">
             <Avatar src={sender.pic} name={sender.name} objectFit="cover" boxSize="12.5rem" />
             <Text fontSize="1.25rem" mt="6">
-              Email: <strong> {sender.email}</strong>
+              Email: <strong> {sender.email || 'Utilisateur supprimé'}</strong>
             </Text>
           </ModalBody>
           <ModalFooter>

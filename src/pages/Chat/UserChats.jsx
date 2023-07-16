@@ -37,10 +37,10 @@ const UserChats = () => {
 
       <Box display="flex" flexDir="column" p="4" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
         <Stack overflowY="scroll">
-          {isLoadingUserChats ? (
-            <UsersChatLoader />
-          ) : (
+          {!isLoadingUserChats || userChats.length ? (
             userChats.map((chat) => <UserChatItem key={chat._id} chat={chat} />)
+          ) : (
+            <UsersChatLoader />
           )}
         </Stack>
       </Box>
