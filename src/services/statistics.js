@@ -9,4 +9,6 @@ const fetchAppointmentsRevenueByDateRange = async (startDate, endDate) => {
   return await _fetch.GET(`/api/statistics/${formatDate(startDate)}/${formatDate(endDate)}/appointments-revenue`)
 }
 
-export { fetchPaymentsByDateRange, fetchAppointmentsRevenueByDateRange }
+const fetchPatientsAgeRatio = async () => await _fetch.GET('/api/statistics/patients/age-ratio')
+
+export { fetchPaymentsByDateRange, fetchAppointmentsRevenueByDateRange, fetchPatientsAgeRatio }

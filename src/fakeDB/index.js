@@ -112,8 +112,8 @@ export const MOCK_MONTH_DATA = [
 ]
 
 export const MOCK_PATIENTS_AGE_RATIO_DATA = [
-  { name: '5/18', count: 292 },
-  { name: '19/30', count: 359 },
-  { name: '31/45', count: 412 },
+  { name: '4-18', count: 292 },
+  { name: '19-30', count: 359 },
+  { name: '31-45', count: 412 },
   { name: '46+', count: 189 },
 ]
