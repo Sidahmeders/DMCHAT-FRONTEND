@@ -5,6 +5,7 @@ import RevenuChart from './RevenuChart/RevenuChart'
 import PayerCategoryChart from './PayerCategoryChart'
 import WorkLoadChart from './WorkLoadChart'
 import PatientAgeRatio from './PatientAgeRatio/PatientAgeRatio'
+import PatientsCount from './PatientsCount'
 
 const Statistics = () => (
   <HStack gap="8" width="100%" px="12" justifyContent="space-around" flexWrap="wrap">
@@ -14,6 +15,7 @@ const Statistics = () => (
           <PaymentRatio />
           <PatientAgeRatio />
           <PayerCategoryChart />
+          <PatientsCount />
         </HStack>
       </CardBody>
     </Card>

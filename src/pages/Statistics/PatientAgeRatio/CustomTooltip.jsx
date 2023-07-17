@@ -4,8 +4,10 @@ const CustomTooltip = (props) => {
     return (
       <div
         style={{
-          background: '#fff',
-          padding: '10px',
+          background: 'white',
+          color: payload[0].payload.fill,
+          fontWeight: 'bold',
+          padding: '6px',
           borderRadius: '6px',
         }}>
         <p className="label">{payload[0]?.value} patients</p>
