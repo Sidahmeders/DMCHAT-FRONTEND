@@ -3,8 +3,9 @@ import { useToast } from '@chakra-ui/react'
 import { ComposedChart, Area, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts'
 import { isValid, subDays, endOfMonth } from 'date-fns'
 
+import { MOCK_MONTH_DATA, MOCK_YEAR_DATA } from '@fakeDB'
 import { abbreviateNumber, formatDate } from '@utils'
-import { FRENCH_MONTH_NAMES, X_AXIS_DAY_NAMES, MOCK_YEAR_DATA, MOCK_MONTH_DATA } from '@config'
+import { FRENCH_MONTH_NAMES, X_AXIS_DAY_NAMES } from '@config'
 import { fetchPaymentsByDateRange } from '@services/statistics'
 
 import CustomLegend from './CustomLegend'

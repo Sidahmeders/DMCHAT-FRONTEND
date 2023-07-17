@@ -8,6 +8,7 @@ module.exports = {
       '@config': path.resolve(__dirname, './src/config'),
       '@services': path.resolve(__dirname, './src/services'),
       '@components': path.resolve(__dirname, './src/components'),
+      '@fakeDB': path.resolve(__dirname, './src/fakeDB'),
     },
   },
 }

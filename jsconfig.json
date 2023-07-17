@@ -6,7 +6,8 @@
       "@utils": ["./src/utils"],
       "@config": ["./src/config"],
       "@services/*": ["./src/services/*"],
-      "@components/*": ["./src/components/*"]
+      "@components/*": ["./src/components/*"],
+      "@fakeDB": ["./src/fakeDB"]
     }
   },
   "exclude": ["node_modules", "build"]
