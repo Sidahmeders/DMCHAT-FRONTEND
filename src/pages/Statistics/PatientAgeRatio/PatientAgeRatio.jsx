@@ -50,13 +50,13 @@ const PatientAge = () => {
   }, [])
 
   return (
-    <Card variant="filled" bg="gray.50" w="400px">
-      <PieChart width={400} height={300}>
+    <Card variant="filled" bg="gray.50" overflow="auto" width="450px" height="300px">
+      <PieChart width={450} height={300}>
         <Tooltip content={CustomTooltip} />
         <Legend verticalAlign content={<CustomLegend useMockData={useMockData} setUseMockData={setUseMockData} />} />
         <Pie
           data={PatientStatData}
-          cx={200}
+          cx={220}
           cy={190}
           outerRadius={100}
           label={renderCustomizedLabel}

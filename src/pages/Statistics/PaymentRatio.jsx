@@ -5,8 +5,6 @@ import {
   CardHeader,
   Tooltip,
   FormControl,
-  FormLabel,
-  Switch,
   Input,
   HStack,
   CardFooter,
@@ -44,47 +42,35 @@ const PaymentRatio = () => {
   }, [endDate, startDate])
 
   return (
-    <Card variant="filled" bg="gray.50" w="400px" minH="300px">
-      <CardHeader pb="2">
-        <HStack overflow="auto">
-          <FormControl mr="1">
-            <Input
-              type="date"
-              fontSize="15px"
-              variant="unstyled"
-              bg="#fff"
-              borderRadius="md"
-              px="1"
-              width="125px"
-              value={formatDate(startDate)}
-              onChange={(e) => setStartDate(e.target.value)}
-            />
-          </FormControl>
+    <Card ml="2" variant="filled" bg="gray.50" overflow="auto" width="450px" height="300px">
+      <CardHeader pb="1" display="flex" justifyContent="space-around">
+        <FormControl width="150px" mr="1">
+          <Input
+            type="date"
+            variant="unstyled"
+            bg="#fff"
+            borderRadius="md"
+            px="4"
+            value={formatDate(startDate)}
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+        </FormControl>
 
-          <FormControl mr="1">
-            <Input
-              type="date"
-              fontSize="15px"
-              variant="unstyled"
-              bg="#fff"
-              borderRadius="md"
-              px="1"
-              width="125px"
-              value={formatDate(endDate)}
-              onChange={(e) => setEndDate(e.target.value)}
-            />
-          </FormControl>
-
-          <FormControl display="flex" alignItems="center" m="0" bg="#fff" borderRadius="md">
-            <FormLabel htmlFor="show-all-time" fontSize="sm" pl="1" m="1">
-              Toute?
-            </FormLabel>
-            <Switch size="sm" id="show-all-time" colorScheme="yellow" checked={false} onChange={() => {}} />
-          </FormControl>
-        </HStack>
+        <FormControl width="150px" mr="1">
+          <Input
+            type="date"
+            variant="unstyled"
+            bg="#fff"
+            borderRadius="md"
+            px="4"
+            value={formatDate(endDate)}
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+        </FormControl>
       </CardHeader>
+
       <CardBody px="8">
-        <Text textAlign="center" mb="4" color="purple.600">
+        <Text textAlign="center" mx="7" mb="6" color="purple.600">
           Analyse des transactions de paiement des rendez-vous
         </Text>
 
@@ -110,6 +96,7 @@ const PaymentRatio = () => {
           <Text>{formatMoney(REMAINING)}</Text>
         </HStack>
       </CardBody>
+
       <CardFooter px="8">
         <Tooltip label={`${formatMoney(REMAINING)}`} bg="blue.200" placement="top-end" hasArrow>
           <Box width="100%" height="6" borderRadius="full" bg="#1f7ea166" overflow="hidden">

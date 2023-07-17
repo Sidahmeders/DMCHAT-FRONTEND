@@ -2,14 +2,8 @@ import React, { useCallback, useState } from 'react'
 import { Card } from '@chakra-ui/card'
 import { PieChart, Pie, Sector } from 'recharts'
 
+import { PAYMENT_CATEGORY_DATA } from '@fakeDB'
 import { formatMoney } from '@utils'
-
-const data = [
-  { name: 'Douleur', value: 493500 },
-  { name: 'Fonctionnel', value: 1683500 },
-  { name: 'Esthetique', value: 933500 },
-  { name: 'Autre', value: 983500 },
-]
 
 const renderActiveShape = (props) => {
   const RADIAN = Math.PI / 180
@@ -69,13 +63,13 @@ const PayerCategoryChart = () => {
   )
 
   return (
-    <Card variant="filled" bg="gray.50" w="465px" overflow="auto">
-      <PieChart width={450} height={300}>
+    <Card variant="filled" bg="gray.50" overflow="auto" width="500px" height="300px">
+      <PieChart width={500} height={300}>
         <Pie
           activeIndex={activeIndex}
           activeShape={renderActiveShape}
-          data={data}
-          cx={210}
+          data={PAYMENT_CATEGORY_DATA}
+          cx={230}
           innerRadius={60}
           outerRadius={85}
           fill="#8884d8"

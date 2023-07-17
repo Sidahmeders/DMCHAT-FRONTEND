@@ -12,7 +12,6 @@ const CustomLegend = ({
   setMonthDateValue,
   dateRangeValue,
   setDateRangeValue,
-  // TODO: should remove this
   useMockData,
   setUseMockData,
 }) => {
@@ -35,7 +34,6 @@ const CustomLegend = ({
         </Button>
       </HStack>
 
-      {/* TODO: should remove this */}
       <HStack>
         <FormControl display="flex" alignItems="center" mr="4">
           <FormLabel htmlFor="use-mock-data" fontSize="xs" mr="1" mb="0">
@@ -50,7 +48,6 @@ const CustomLegend = ({
           />
         </FormControl>
       </HStack>
-      {/* ***************** */}
 
       {selectedStat.year ? (
         <RangeMonthPicker

@@ -38,14 +38,13 @@ const RevenuChart = () => {
   const [yearData, setYearData] = useState([])
   const [monthDateValue, setMonthDateValue] = useState(new Date())
   const [monthData, setMonthData] = useState([])
-  const [useMockData, setUseMockData] = useState(false) // TODO: should remove this
+  const [useMockData, setUseMockData] = useState(false)
 
   const chosenMonthData = showEmptyDays ? monthData : monthData.filter((day) => day.revenu > 0)
 
   useEffect(() => {
     ;(async () => {
       try {
-        // TODO: should remove this
         if (useMockData) {
           setMonthData(MOCK_MONTH_DATA)
           return
@@ -66,7 +65,6 @@ const RevenuChart = () => {
   useEffect(() => {
     ;(async () => {
       try {
-        // TODO: should remove this
         if (useMockData) {
           setYearData(MOCK_YEAR_DATA)
           return
@@ -84,7 +82,7 @@ const RevenuChart = () => {
 
   return (
     <div className="revenu-stat-container">
-      <ComposedChart width={1000} height={500} data={selectedStat.year ? yearData : chosenMonthData}>
+      <ComposedChart width={1200} height={500} data={selectedStat.year ? yearData : chosenMonthData}>
         <CartesianGrid strokeDasharray="4 4" />
         <Tooltip content={<CustomTooltip />} />
         <Legend
@@ -99,7 +97,6 @@ const RevenuChart = () => {
               setDateRangeValue={setDateRangeValue}
               monthDateValue={monthDateValue}
               setMonthDateValue={setMonthDateValue}
-              // TODO: should remove this
               useMockData={useMockData}
               setUseMockData={setUseMockData}
             />
