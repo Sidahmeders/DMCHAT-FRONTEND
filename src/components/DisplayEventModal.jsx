@@ -67,7 +67,11 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
   return (
     <Modal size="xl" isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
-      <ModalContent>
+      <ModalContent
+        onKeyDownCapture={(e) => {
+          // This is a fix to (TypeError: Cannot read properties of undefined (reading 'getDate') at MonthView.selectDates)
+          e.stopPropagation()
+        }}>
         <Loader loading={isLoading}>
           <ModalHeader>
             <div
