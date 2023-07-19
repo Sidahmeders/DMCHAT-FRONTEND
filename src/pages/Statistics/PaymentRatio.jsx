@@ -42,7 +42,7 @@ const PaymentRatio = () => {
   }, [endDate, startDate])
 
   return (
-    <Card ml="2" variant="filled" bg="gray.50" overflow="auto" width="450px" height="300px">
+    <Card variant="filled" bg="gray.50" overflow="auto" width="450px" height="300px">
       <CardHeader pb="1" display="flex" justifyContent="space-around">
         <FormControl width="150px" mr="1">
           <Input

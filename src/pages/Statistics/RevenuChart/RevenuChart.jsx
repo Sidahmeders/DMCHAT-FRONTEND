@@ -42,6 +42,9 @@ const RevenuChart = () => {
 
   const chosenMonthData = showEmptyDays ? monthData : monthData.filter((day) => day.revenu > 0)
 
+  const chartWidth = window.innerWidth > 480 ? 1200 : 600
+  const chartHeight = window.innerWidth > 480 ? 500 : 350
+
   useEffect(() => {
     ;(async () => {
       try {
@@ -82,7 +85,7 @@ const RevenuChart = () => {
 
   return (
     <div className="revenu-stat-container">
-      <ComposedChart width={1200} height={500} data={selectedStat.year ? yearData : chosenMonthData}>
+      <ComposedChart width={chartWidth} height={chartHeight} data={selectedStat.year ? yearData : chosenMonthData}>
         <CartesianGrid strokeDasharray="4 4" />
         <Tooltip content={<CustomTooltip />} />
         <Legend

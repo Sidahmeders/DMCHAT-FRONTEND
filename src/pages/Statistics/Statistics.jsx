@@ -8,12 +8,28 @@ import PatientAgeRatio from './PatientAgeRatio/PatientAgeRatio'
 import PatientsCount from './PatientsCount'
 
 const Statistics = () => (
-  <Stack gap="8" width="100%" maxW="85rem" px="8" mt="2">
+  <Stack gap="8" width="100%" maxW="85rem" px="2" mt="2">
     <HStack gap="4" display="flex" justify="center" flexWrap="wrap">
-      <PaymentRatio />
-      <PayerCategoryChart />
-      <PatientAgeRatio />
-      <PatientsCount />
+      <Card ml="2">
+        <CardBody p="1" overflow="auto">
+          <PaymentRatio />
+        </CardBody>
+      </Card>
+      <Card>
+        <CardBody p="1" overflow="auto">
+          <PayerCategoryChart />
+        </CardBody>
+      </Card>
+      <Card>
+        <CardBody p="1" overflow="auto">
+          <PatientAgeRatio />
+        </CardBody>
+      </Card>
+      <Card>
+        <CardBody p="1" overflow="auto">
+          <PatientsCount />
+        </CardBody>
+      </Card>
     </HStack>
 
     <Card>
