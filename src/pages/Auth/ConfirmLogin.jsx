@@ -1,11 +1,12 @@
 import { useState, useRef, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Container, useToast, Flex, Box, Input, Button, Stack, Text } from '@chakra-ui/react'
+import { ChevronLeft, Mail } from 'react-feather'
 
 import { getConfirmationToken, setPageRoute, setUser } from '@utils'
 import { APP_ROUTES } from '@config'
 import { confirmSignIn } from '@services/users'
-import { Mail } from 'react-feather'
+
 import Timer from '@components/Timer'
 
 const ConfirmLogin = () => {
@@ -109,7 +110,8 @@ const ConfirmLogin = () => {
         Envoyer le code de vérification
       </Button>
       <Button mt="2" width="100%">
-        <Link to="/">revenir à la connexion</Link>
+        <ChevronLeft />
+        <Link to="/">Revenir à la connexion</Link>
       </Button>
     </Container>
   )

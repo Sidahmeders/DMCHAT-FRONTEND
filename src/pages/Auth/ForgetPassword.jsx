@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { Container, InputGroup, InputLeftElement, Input, Button, Stack, Text, useToast, HStack } from '@chakra-ui/react'
-import { Mail } from 'react-feather'
-import { useForm, Controller } from 'react-hook-form'
 import { Link } from 'react-router-dom'
+import { Container, InputGroup, InputLeftElement, Input, Button, Stack, Text, useToast, HStack } from '@chakra-ui/react'
+import { ChevronLeft, Mail } from 'react-feather'
+import { useForm, Controller } from 'react-hook-form'
 
 import { requestPasswordReset } from '@services/users'
 
@@ -56,13 +56,19 @@ const ForgetPassword = () => {
             </Button>
           </HStack>
 
-          <Text color="orange">
+          <Text color="orange.500">
             si vous n'avez pas reçu les instructions, assurez-vous d'avoir entré le bon e-mail ou cliquez sur Renvoyer
             les instructions après <strong>1:00 min</strong>
           </Text>
-          <Button color="orange" onClick={resendInstructions} isDisabled={seconds > 0}>
-            Renvoyer l'instruction {seconds > 0 ? <Timer seconds={seconds} setSeconds={setSeconds} /> : null}
-          </Button>
+          <Stack>
+            <Button variant="solid" colorScheme="orange" onClick={resendInstructions} isDisabled={seconds > 0}>
+              Renvoyer l'instruction {seconds > 0 ? <Timer seconds={seconds} setSeconds={setSeconds} /> : null}
+            </Button>
+            <Button>
+              <ChevronLeft />
+              <Link to="/"> Revenir à la connexion</Link>
+            </Button>
+          </Stack>
         </Stack>
       ) : (
         <form onSubmit={handleSubmit(submitRestPassword, onErrors)}>
@@ -96,8 +102,9 @@ const ForgetPassword = () => {
             <Button type="submit" colorScheme="purple" isDisabled={isSubmitting}>
               Envoyer des instructions
             </Button>
-            <Button isDisabled={isSubmitting}>
-              <Link to="/">revenir à la connexion</Link>
+            <Button>
+              <ChevronLeft />
+              <Link to="/"> Revenir à la connexion</Link>
             </Button>
           </Stack>
         </form>
