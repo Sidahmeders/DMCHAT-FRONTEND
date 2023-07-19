@@ -100,8 +100,6 @@ const SingleChat = () => {
                 <Text fontWeight="500" color={senderName ? 'gray.600' : 'red.600'}>
                   {senderName || 'Compte Supprimé'}
                 </Text>
-                {/* FIXME: fix error when removing localUser from the group */}
-                {/* Uncaught TypeError: Cannot read properties of undefined (reading 'users') at SingleChat */}
                 <PeerProfileModal
                   chatId={selectedChat._id}
                   sender={getSenderFull(user, selectedChat.users)}
@@ -110,7 +108,9 @@ const SingleChat = () => {
               </>
             ) : (
               <>
-                {selectedChat.chatName.toUpperCase()}
+                <Text fontWeight="500" color="gray.600">
+                  {selectedChat.chatName.toUpperCase()}
+                </Text>
                 <UpdateGroupChatModal
                   chatId={selectedChat._id}
                   sender={getSenderFull(user, selectedChat.users)}
