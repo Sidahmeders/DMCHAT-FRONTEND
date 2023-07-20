@@ -24,27 +24,7 @@
       height: 85vh;
       overflow-y: auto;
 
-      .title {
-        padding: 0.75rem;
-        font-weight: bold;
-        text-align: center;
-        text-transform: uppercase;
-        border-radius: 0.5rem;
-        background-color: #ddd2;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-
-        .circle {
-          color: white;
-          display: inline-block;
-          margin-left: 0.75rem;
-          display: flex;
-          align-items: center;
-        }
-      }
-
-      &:nth-child(1) .title {
+      &:nth-child(1) > :first-child {
         border-top: 2px solid #0084ff;
         color: #0084ff;
         .circle {
@@ -52,7 +32,7 @@
         }
       }
 
-      &:nth-child(2) .title {
+      &:nth-child(2) > :first-child {
         border-top: 2px solid #ac2020;
         color: #ac2020;
         .circle {
@@ -60,7 +40,7 @@
         }
       }
 
-      &:nth-child(3) .title {
+      &:nth-child(3) > :first-child {
         border-top: 2px solid #0bbe98;
         color: #0bbe98;
         .circle {
