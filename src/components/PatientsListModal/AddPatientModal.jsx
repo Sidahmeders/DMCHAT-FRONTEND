@@ -39,7 +39,7 @@ export default function AddPatientModal({ setPatientsData }) {
       const createdPatient = await createPatient({ ...data, [CREATE_PATIENT_NAMES.SENDER]: user._id })
       setPatientsData((patientsData) => ({
         ...patientsData,
-        patients: [...patientsData.patients, createdPatient],
+        patients: [createdPatient, ...patientsData.patients],
         totalCount: patientsData.totalCount + 1,
       }))
       toast({ title: 'nouveau patient créé avec succès', status: 'success' })

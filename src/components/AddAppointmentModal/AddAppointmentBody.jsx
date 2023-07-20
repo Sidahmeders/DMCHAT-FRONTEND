@@ -265,7 +265,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
               <Controller
                 control={control}
                 name={CREATE_APPOINTMENT_NAMES.PAYMENT}
-                defaultValue={0}
                 render={({ field: { onChange, value } }) => (
                   <InputGroup>
                     <InputLeftElement pointerEvents="none" children={<DollarSign size="1.25rem" color="gray" />} />
@@ -328,7 +327,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
                     <Controller
                       control={control}
                       name={CREATE_APPOINTMENT_NAMES.TOTAL_PRICE}
-                      defaultValue={0}
                       render={({ field: { onChange, value } }) => (
                         <InputGroup>
                           <InputLeftElement
@@ -351,7 +349,6 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
                     <Controller
                       control={control}
                       name={CREATE_APPOINTMENT_NAMES.PAYMENT}
-                      defaultValue={0}
                       render={({ field: { onChange, value } }) => (
                         <InputGroup>
                           <InputLeftElement
