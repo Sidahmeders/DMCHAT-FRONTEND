@@ -15,15 +15,28 @@ import {
 } from '@chakra-ui/react'
 import { Info } from 'react-feather'
 
-import DeleteChatMessagesModal from './DeleteChatMessagesModal'
 import { USER_ROLES_MAP } from '@config'
 import { formatDate } from '@utils'
 
+import DeleteChatMessagesModal from './DeleteChatMessagesModal'
+import ConfigureSuggestionModal from './ConfigureSuggestionModal'
+
 export default function PeerProfileModal({ sender, chatId, setMessages }) {
   const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure()
+  const {
+    isOpen: isSuggestionModalOpen,
+    onOpen: onSuggestionModalOpen,
+    onClose: onSuggestionModalClose,
+  } = useDisclosure()
+
   return (
     <>
       <HStack>
+        <ConfigureSuggestionModal
+          isOpen={isSuggestionModalOpen}
+          onOpen={onSuggestionModalOpen}
+          onClose={onSuggestionModalClose}
+        />
         <DeleteChatMessagesModal sender={sender} chatId={chatId} setMessages={setMessages} />
         <IconButton icon={<Info />} onClick={onProfileOpen} />
       </HStack>

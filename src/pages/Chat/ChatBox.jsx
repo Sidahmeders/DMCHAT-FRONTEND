@@ -2,7 +2,7 @@ import { Box } from '@chakra-ui/react'
 
 import { ChatState } from '@context'
 
-import SingleChat from '@components/SingleChat'
+import SingleChat from '@components/SingleChat/SingleChat'
 import { isEmpty } from 'lodash'
 
 const ChatBox = () => {

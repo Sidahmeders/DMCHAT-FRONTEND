@@ -19,6 +19,7 @@ import { Sliders } from 'react-feather'
 import { SyncLoader } from 'react-spinners'
 
 import { ChatState } from '@context'
+import { CHAT_EVENT_LISTENERS } from '@config'
 import { getUser } from '@utils'
 import { joinGroup, leaveGroup, renameGroup } from '@services/chats'
 import { searchUsers } from '@services/users'
@@ -26,13 +27,22 @@ import { searchUsers } from '@services/users'
 import UserBadgeItem from './UserBadgeItem'
 import GroupUserItem from './GroupUserItem'
 import DeleteChatMessagesModal from './DeleteChatMessagesModal'
-import { CHAT_EVENT_LISTENERS } from '@config'
+import ConfigureSuggestionModal from './ConfigureSuggestionModal'
 
 const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
   const localUser = getUser()
   const toast = useToast()
   const { selectedChat, socket } = ChatState()
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const {
+    isOpen: isUpdateGroupModalOpen,
+    onOpen: onUpdateGroupModalOpen,
+    onClose: onUpdateGroupModalClose,
+  } = useDisclosure()
+  const {
+    isOpen: isSuggestionModalOpen,
+    onOpen: onSuggestionModalOpen,
+    onClose: onSuggestionModalClose,
+  } = useDisclosure()
 
   const [groupChatName, setGroupChatName] = useState('')
   const [searchUsersQuery, setSearchUsersQuery] = useState('')
@@ -112,13 +122,17 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
   return (
     <>
       <HStack>
+        <ConfigureSuggestionModal
+          isOpen={isSuggestionModalOpen}
+          onOpen={onSuggestionModalOpen}
+          onClose={onSuggestionModalClose}
+        />
         <DeleteChatMessagesModal sender={sender} chatId={chatId} setMessages={setMessages} />
-        <IconButton icon={<Sliders />} onClick={onOpen} />
+        <IconButton icon={<Sliders />} onClick={onUpdateGroupModalOpen} />
       </HStack>
 
-      <Modal isOpen={isOpen} onClose={onClose} isCentered>
+      <Modal isOpen={isUpdateGroupModalOpen} onClose={onUpdateGroupModalClose} isCentered>
         <ModalOverlay />
-
         <ModalContent>
           <ModalHeader display="flex" justifyContent="center" fontSize="1.5rem">
             {selectedChat.chatName}

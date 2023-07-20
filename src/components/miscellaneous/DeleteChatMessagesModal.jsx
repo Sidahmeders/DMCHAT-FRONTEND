@@ -45,7 +45,7 @@ const DeleteChatMessagesModal = ({ sender, chatId, setMessages }) => {
 
   return (
     <>
-      <IconButton icon={<Trash color="red" />} onClick={onDeleteModalOpen} />
+      <IconButton icon={<Trash color="red" />} _hover={{ bg: 'red.100' }} onClick={onDeleteModalOpen} />
 
       <Modal size="xl" isOpen={isDeleteModalOpen} onClose={onDeleteModalClose}>
         <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />

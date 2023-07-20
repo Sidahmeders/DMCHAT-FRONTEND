@@ -4,7 +4,12 @@ import { useToast } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 
 import { getUser, notify } from '@utils'
-import { CHAT_EVENT_LISTENERS } from '@config'
+import {
+  CHAT_EVENT_LISTENERS,
+  SUGGESTIONS_CHECKBOXES,
+  SUGGESTIONS_CONTAINER_HEIGHTS,
+  SUGGESTIONS_CONTAINER_DIRECTION,
+} from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
 import { fetchGroupChats, fetchUserChats } from '@services/chats'
 import { searchUsers } from '@services/users'
@@ -51,6 +56,9 @@ export const ChatProvider = ({ children, socket }) => {
   const [messages, setMessages] = useState([])
   const [usersList, setUsersList] = useState([])
   const [groupChatsList, setGroupChatsList] = useState([])
+  const [suggestionCheckboxes, setSuggestionCheckboxes] = useState(SUGGESTIONS_CHECKBOXES)
+  const [suggestionContainerDirection, setSuggestionContainerDirection] = useState(SUGGESTIONS_CONTAINER_DIRECTION.row)
+  const [suggestionContainerHeight, setSuggestionContainerHeight] = useState(SUGGESTIONS_CONTAINER_HEIGHTS.small)
 
   const [socketConnected, setSocketConnected] = useState(false)
   const [fetchUserChatsAgain, setFetchUserChatsAgain] = useState(false)
@@ -176,6 +184,12 @@ export const ChatProvider = ({ children, socket }) => {
         isLoadingUserChats,
         isLoadingDrawerChats,
         setFetchUserChatsAgain,
+        suggestionCheckboxes,
+        setSuggestionCheckboxes,
+        suggestionContainerDirection,
+        setSuggestionContainerDirection,
+        suggestionContainerHeight,
+        setSuggestionContainerHeight,
       }}>
       {children}
     </ChatContext.Provider>

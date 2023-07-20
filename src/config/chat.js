@@ -9,3 +9,20 @@ export const CHAT_EVENT_LISTENERS = {
   UPDATE_GROUP: 'update group',
   DELETE_CHAT: 'delete chat',
 }
+
+export const SUGGESTIONS_CONTAINER_HEIGHTS = {
+  small: '52px',
+  medium: '124px',
+  large: '300px',
+}
+
+export const SUGGESTIONS_CONTAINER_DIRECTION = {
+  row: 'ROW',
+  column: 'COLUMN',
+}
+
+export const SUGGESTIONS_CHECKBOXES = {
+  showSuggestions: false,
+  filterSuggestions: false,
+  useMultipleSuggestions: false,
+}

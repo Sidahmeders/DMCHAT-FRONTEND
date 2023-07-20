@@ -30,7 +30,7 @@
 /* Width and height of the scrollbar track */
 ::-webkit-scrollbar {
   width: 0;
-  height: 10px;
+  height: 8px;
 }
 
 /* Background color of the scrollbar track */

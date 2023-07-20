@@ -14,25 +14,38 @@ import {
 import { Send, ArrowLeft, Mail } from 'react-feather'
 import { isEmpty } from 'lodash'
 
+import { SUGGESTIONS } from '@fakeDB'
 import { ChatState } from '@context'
 import { CHAT_EVENT_LISTENERS } from '@config'
 import { getSender, getSenderFull, getUser } from '@utils'
 import { createMessage } from '@services/messages'
 
-import PeerProfileModal from './miscellaneous/PeerProfileModal'
-import UpdateGroupChatModal from './miscellaneous/UpdateGroupChatModal'
-import ScrollableChat from './ScrollableChat'
+import PeerProfileModal from '../miscellaneous/PeerProfileModal'
+import UpdateGroupChatModal from '../miscellaneous/UpdateGroupChatModal'
+import ScrollableChat from '../ScrollableChat'
+import SuggestionBox from './SuggestionBox'
+
+import './SingleChat.scss'
 
 const SingleChat = () => {
   const user = getUser()
   const toast = useToast()
-  const { socket, selectedChat, setSelectedChat, messages, setMessages, isLoadingMessages, socketConnected } =
-    ChatState()
+  const {
+    socket,
+    selectedChat,
+    setSelectedChat,
+    messages,
+    setMessages,
+    suggestionCheckboxes,
+    isLoadingMessages,
+    socketConnected,
+  } = ChatState()
 
+  const senderName = getSender(user, selectedChat.users)
   const [newMessage, setNewMessage] = useState('')
+  const [suggestions, setSuggestions] = useState(SUGGESTIONS)
   const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
-  const senderName = getSender(user, selectedChat.users)
 
   const sendMessage = async (e) => {
     if (newMessage.trim().length < 1) return
@@ -85,11 +98,23 @@ const SingleChat = () => {
     })
   }, [selectedChat, socket])
 
+  useEffect(() => {
+    if (suggestionCheckboxes.filterSuggestions) {
+      const filteredSuggestions = SUGGESTIONS.filter((suggestion) =>
+        suggestion.toLowerCase().includes(newMessage.toLowerCase()),
+      )
+      setSuggestions(filteredSuggestions)
+    } else {
+      setSuggestions(SUGGESTIONS)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newMessage])
+
   return (
     <>
       {!isEmpty(selectedChat) ? (
         <>
-          <Box fontSize="1.25rem" w="100%" pb="3" display="flex" justifyContent="space-between" alignItems="center">
+          <Box fontSize="1.25rem" w="100%" pb="2" display="flex" justifyContent="space-between" alignItems="center">
             <IconButton
               display={{ base: 'flex', md: 'none' }}
               icon={<ArrowLeft />}
@@ -121,10 +146,12 @@ const SingleChat = () => {
           </Box>
 
           <Box
+            className="single-chat-container"
             display="flex"
             flexDir="column"
             justifyContent="flex-end"
-            padding="3"
+            px="3"
+            pb="2"
             bg="gray.100"
             width="100%"
             height="100%"
@@ -133,16 +160,12 @@ const SingleChat = () => {
             {isLoadingMessages ? (
               <Spinner size="xl" w="20" h="20" alignSelf="center" margin="auto" />
             ) : (
-              <div
-                style={{
-                  display: 'flex',
-                  flexDirection: 'column',
-                  overflowY: 'scroll',
-                  scrollbarWidth: 'none',
-                }}>
+              <Stack overflowY="auto" mt="0" maxH="80%">
                 <ScrollableChat messages={messages} isTyping={isTyping} />
-              </div>
+              </Stack>
             )}
+
+            <SuggestionBox suggestions={suggestions} setNewMessage={setNewMessage} />
 
             <FormControl mt="3" onKeyDown={sendMessage} isRequired>
               <InputGroup>
