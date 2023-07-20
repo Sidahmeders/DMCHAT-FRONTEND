@@ -49,7 +49,7 @@ export default function CustomAgenda({ accessors, length, date, events }) {
           inRange(e, dates.startOf(day, 'day'), dates.endOf(day, 'day'), accessors),
         )
 
-        const totalPayments = dayEvents.reduce((total, event) => total + event.payment, 0)
+        const totalPayments = dayEvents.reduce((total, event) => total + (event.payment || 0), 0)
         const doneAppointments = dayEvents.reduce((done, event) => (event.isDone ? done + 1 : done), 0)
 
         return dayEvents.length > 0 ? (
@@ -80,7 +80,7 @@ export default function CustomAgenda({ accessors, length, date, events }) {
                     <Text display="flex">
                       {patient?.fullName} <Activity color="#3339" /> {motif?.name}
                     </Text>
-                    <Text>{formatMoney(payment)} DA</Text>
+                    <Text>{formatMoney(payment || 0)} DA</Text>
                   </HStack>
                 </AccordionPanel>
               ))}
