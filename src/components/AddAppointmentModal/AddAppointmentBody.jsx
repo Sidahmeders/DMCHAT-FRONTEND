@@ -81,6 +81,8 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
         [CREATE_APPOINTMENT_NAMES.PATIENT]: patientId,
         [CREATE_APPOINTMENT_NAMES.START_DATE]: start,
         [CREATE_APPOINTMENT_NAMES.END_DATE]: end,
+        [CREATE_APPOINTMENT_NAMES.PAYMENT]: Number(data[CREATE_APPOINTMENT_NAMES.PAYMENT]),
+        [CREATE_APPOINTMENT_NAMES.TOTAL_PRICE]: Number(data[CREATE_APPOINTMENT_NAMES.TOTAL_PRICE]),
         [CREATE_APPOINTMENT_NAMES.MOTIF]: {
           name: data[CREATE_APPOINTMENT_NAMES.MOTIF],
           value: motifRadioValue?.value,
