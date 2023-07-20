@@ -50,25 +50,19 @@ const updateAppointmentStatus = async ({ socket, appointmentsList, draggableId, 
   const { droppableId: sourceDroppableId } = source || {}
   const { droppableId: destinationDroppableId } = destination || {}
 
-  Object.values(APPOINTMENTS_IDS).forEach(async (key) => {
-    if (sourceDroppableId && destinationDroppableId === key && sourceDroppableId !== destinationDroppableId) {
-      const droppedAppointment = appointmentsList[sourceDroppableId].find(
-        (appointment) => appointment.id === draggableId,
-      )
+  const droppedAppointment = appointmentsList[sourceDroppableId].find((appointment) => appointment.id === draggableId)
 
-      const updatedAppointment = await updateAppointment(droppedAppointment.id, {
-        order: Number.MAX_SAFE_INTEGER,
-        [sourceDroppableId]: false,
-        [destinationDroppableId]: true,
-      })
+  const updatedAppointment = await updateAppointment(droppedAppointment.id, {
+    order: Number.MAX_SAFE_INTEGER,
+    [sourceDroppableId]: false,
+    [destinationDroppableId]: true,
+  })
 
-      socket.emit(APPOINTMENT_EVENT_LISTENERS.DROP_APPOINTMENT, {
-        draggableId,
-        sourceDroppableId,
-        destinationDroppableId,
-        updatedAppointment,
-      })
-    }
+  socket.emit(APPOINTMENT_EVENT_LISTENERS.DROP_APPOINTMENT, {
+    draggableId,
+    sourceDroppableId,
+    destinationDroppableId,
+    updatedAppointment,
   })
 }
 
@@ -78,8 +72,6 @@ export default function TodayPatientsList() {
   const toast = useToast()
   const { appointmentsList, setAppointmentsList, fetchTodayAppointments } = AppointmentsState()
   const [isLoading, setIsLoading] = useState(false)
-
-  console.log(appointmentsList, 'appointmentsList')
 
   const onDragEnd = async (props) => {
     setIsLoading(true)
