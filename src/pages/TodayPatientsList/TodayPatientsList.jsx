@@ -57,6 +57,7 @@ const updateAppointmentStatus = async ({ socket, appointmentsList, draggableId, 
       )
 
       const updatedAppointment = await updateAppointment(droppedAppointment.id, {
+        order: Number.MAX_SAFE_INTEGER,
         [sourceDroppableId]: false,
         [destinationDroppableId]: true,
       })
@@ -77,6 +78,8 @@ export default function TodayPatientsList() {
   const toast = useToast()
   const { appointmentsList, setAppointmentsList, fetchTodayAppointments } = AppointmentsState()
   const [isLoading, setIsLoading] = useState(false)
+
+  console.log(appointmentsList, 'appointmentsList')
 
   const onDragEnd = async (props) => {
     setIsLoading(true)
