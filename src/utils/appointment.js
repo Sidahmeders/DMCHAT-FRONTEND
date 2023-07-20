@@ -40,3 +40,16 @@ export const groupAppointments = (appointments) => {
 
   return groupedAppointments
 }
+
+export const groupAppointmentsByMotif = (appointments) =>
+  appointments.reduce((result, item) => {
+    const { value: motifValue } = item?.motif || {}
+
+    if (!result[motifValue]) {
+      result[motifValue] = []
+    }
+
+    result[motifValue].push(item)
+
+    return result
+  }, {})

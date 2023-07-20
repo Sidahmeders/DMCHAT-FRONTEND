@@ -1,23 +1,11 @@
 import { useState } from 'react'
 import { Circle, Box, Text } from '@chakra-ui/react'
 
+import { groupAppointmentsByMotif } from '@utils'
+
 import './RoomTitle.scss'
 
-const groupAppointmentsByMotif = (appointments) =>
-  appointments.reduce((result, item) => {
-    const motifValue = item.motif.value
-
-    if (!result[motifValue]) {
-      result[motifValue] = []
-    }
-
-    result[motifValue].push(item)
-
-    return result
-  }, {})
-
 const RoomTitle = ({ title, appointments }) => {
-  const groupedAppointments = groupAppointmentsByMotif(appointments)
   const [showMotifCounter, setShowMotifCounter] = useState(false)
 
   return (
@@ -28,7 +16,7 @@ const RoomTitle = ({ title, appointments }) => {
       </Circle>
       <span className={`motif-counts-container ${showMotifCounter && 'show'}`}>
         {showMotifCounter &&
-          Object.entries(groupedAppointments).map(([key, values]) => (
+          Object.entries(groupAppointmentsByMotif(appointments)).map(([key, values]) => (
             <Box className="motif-count" key={key}>
               <Text fontSize="12" textTransform="capitalize" mr="1">
                 {values[0]?.motif?.name}
