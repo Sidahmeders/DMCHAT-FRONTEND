@@ -26,23 +26,24 @@ export const DragWrap = ({ id, index, children }) => (
 )
 
 const reorderAppointments = async ({ socket, appointmentsList, source, destination }) => {
-  if (source.droppableId !== APPOINTMENTS_IDS.WAITING_ROOM) return
-  const appointments = appointmentsList[source.droppableId]
+  if (source.droppableId === APPOINTMENTS_IDS.EXPECTED || source.droppableId === APPOINTMENTS_IDS.WAITING_ROOM) {
+    const appointments = appointmentsList[source.droppableId]
 
-  const sourceAppointment = appointments[source.index]
-  const destinationAppointment = appointments[destination.index]
+    const sourceAppointment = appointments[source.index]
+    const destinationAppointment = appointments[destination.index]
 
-  const updatedSourceAppointment = await updateAppointment(sourceAppointment._id, {
-    [CREATE_APPOINTMENT_NAMES.ORDER]: destination.index,
-  })
-  const updatedDestinationAppointment = await updateAppointment(destinationAppointment._id, {
-    [CREATE_APPOINTMENT_NAMES.ORDER]: source.index,
-  })
+    const updatedSourceAppointment = await updateAppointment(sourceAppointment._id, {
+      [CREATE_APPOINTMENT_NAMES.ORDER]: destination.index,
+    })
+    const updatedDestinationAppointment = await updateAppointment(destinationAppointment._id, {
+      [CREATE_APPOINTMENT_NAMES.ORDER]: source.index,
+    })
 
-  socket.emit(APPOINTMENT_EVENT_LISTENERS.REORDER_APPOINTMENT, [
-    updatedSourceAppointment,
-    updatedDestinationAppointment,
-  ])
+    socket.emit(APPOINTMENT_EVENT_LISTENERS.REORDER_APPOINTMENT, {
+      sourceDroppableId: source.droppableId,
+      updatedAppointments: [updatedSourceAppointment, updatedDestinationAppointment],
+    })
+  }
 }
 
 const updateAppointmentStatus = async ({ socket, appointmentsList, draggableId, source, destination }) => {
@@ -125,16 +126,17 @@ export default function TodayPatientsList() {
       }
     })
 
-    socket.on(APPOINTMENT_EVENT_LISTENERS.REORDER_APPOINTMENT, (updatedAppointments) => {
+    socket.on(APPOINTMENT_EVENT_LISTENERS.REORDER_APPOINTMENT, (payload) => {
+      const { sourceDroppableId, updatedAppointments } = payload
       try {
-        const appointments = appointmentsList[APPOINTMENTS_IDS.WAITING_ROOM].map((appointment) => {
+        const appointments = appointmentsList[sourceDroppableId].map((appointment) => {
           const foundAppointment = updatedAppointments.find((item) => item._id === appointment._id)
           return foundAppointment ? flattenAppointment(foundAppointment) : appointment
         })
 
         setAppointmentsList({
           ...appointmentsList,
-          [APPOINTMENTS_IDS.WAITING_ROOM]: appointments.sort((a, b) => a.order - b.order),
+          [sourceDroppableId]: appointments.sort((a, b) => a.order - b.order),
         })
       } catch (error) {
         toast({ description: error.message })

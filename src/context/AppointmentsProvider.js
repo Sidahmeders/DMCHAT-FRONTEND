@@ -42,7 +42,7 @@ export const AppointmentsProvider = ({ children }) => {
     )
 
     setAppointmentsList({
-      [APPOINTMENTS_IDS.EXPECTED]: expected,
+      [APPOINTMENTS_IDS.EXPECTED]: expected.sort((a, b) => a.order - b.order),
       [APPOINTMENTS_IDS.WAITING_ROOM]: awaitingRoom.sort((a, b) => a.order - b.order),
       [APPOINTMENTS_IDS.DONE]: doneList,
     })
