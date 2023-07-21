@@ -27,7 +27,7 @@ import { searchUsers } from '@services/users'
 import UserBadgeItem from './UserBadgeItem'
 import GroupUserItem from './GroupUserItem'
 import DeleteChatMessagesModal from './DeleteChatMessagesModal'
-import ConfigureSuggestionModal from './ConfigureSuggestionModal'
+import SuggestionModal from '../SuggestionModal/SuggestionModal'
 
 const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
   const localUser = getUser()
@@ -122,7 +122,7 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
   return (
     <>
       <HStack>
-        <ConfigureSuggestionModal
+        <SuggestionModal
           isOpen={isSuggestionModalOpen}
           onOpen={onSuggestionModalOpen}
           onClose={onSuggestionModalClose}

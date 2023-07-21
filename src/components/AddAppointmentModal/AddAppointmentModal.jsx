@@ -19,8 +19,8 @@ const AddAppointmentModal = ({ selectedView, selectedSlotInfo, isOpen, onClose, 
         <Tabs onClick={() => setTemplateButtons(getMotifTemplateButtons())}>
           <TabList>
             {canAddAppointment && <Tab>Ajouter rendez-vous</Tab>}
-            {canAddAppointment && <Tab>modifier boutons</Tab>}
-            <Tab>définir la disponibilité</Tab>
+            {canAddAppointment && <Tab>Modifier boutons</Tab>}
+            <Tab>Définir la disponibilité</Tab>
           </TabList>
 
           <TabPanels>

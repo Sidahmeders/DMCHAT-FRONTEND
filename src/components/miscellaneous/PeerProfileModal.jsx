@@ -19,7 +19,7 @@ import { USER_ROLES_MAP } from '@config'
 import { formatDate } from '@utils'
 
 import DeleteChatMessagesModal from './DeleteChatMessagesModal'
-import ConfigureSuggestionModal from './ConfigureSuggestionModal'
+import SuggestionModal from '../SuggestionModal/SuggestionModal'
 
 export default function PeerProfileModal({ sender, chatId, setMessages }) {
   const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure()
@@ -32,7 +32,7 @@ export default function PeerProfileModal({ sender, chatId, setMessages }) {
   return (
     <>
       <HStack>
-        <ConfigureSuggestionModal
+        <SuggestionModal
           isOpen={isSuggestionModalOpen}
           onOpen={onSuggestionModalOpen}
           onClose={onSuggestionModalClose}

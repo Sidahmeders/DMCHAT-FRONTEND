@@ -17,6 +17,7 @@ import {
   FormControl,
   InputGroup,
   InputRightElement,
+  Tooltip,
 } from '@chakra-ui/react'
 import { Settings, Eye, EyeOff } from 'react-feather'
 import { omit } from 'lodash'
@@ -73,9 +74,11 @@ const EditUserSettings = () => {
 
   return (
     <>
-      <Button p="0" onClick={onOpen}>
-        <Settings />
-      </Button>
+      <Tooltip label="Modifier le profil" hasArrow>
+        <Button p="0" onClick={onOpen}>
+          <Settings />
+        </Button>
+      </Tooltip>
 
       <Modal closeOnOverlayClick={false} isOpen={isOpen} onClose={cancelUpdate}>
         <ModalOverlay bg="blackAlpha.400" backdropFilter="blur(10px)" />
