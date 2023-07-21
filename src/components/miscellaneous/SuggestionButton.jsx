@@ -1,4 +1,6 @@
+import propTypes from 'prop-types'
 import { Button } from '@chakra-ui/react'
+
 import { ChatState } from '@context'
 
 const SuggestionButton = ({ suggestion, setNewMessage }) => {
@@ -32,4 +34,15 @@ const SuggestionButton = ({ suggestion, setNewMessage }) => {
     </Button>
   )
 }
+
+SuggestionButton.propTypes = {
+  suggestion: propTypes.string,
+  setNewMessage: propTypes.func,
+}
+
+SuggestionButton.defaultProps = {
+  suggestion: '',
+  setNewMessage: () => {},
+}
+
 export default SuggestionButton
