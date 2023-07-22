@@ -1,23 +1,24 @@
 import { useState } from 'react'
-import propTypes from 'prop-types'
 import { ModalBody, ModalFooter, Button, Input, Stack, StackItem, HStack } from '@chakra-ui/react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
-import './EditableButtons.scss'
+import { getMotifTemplateButtons, addMotifTemplateButtons, dropMotifTemplateButton } from '@utils'
+
+import './MotifEditableButtons.scss'
 
 const BUTTONS_CONTAINER_ID = 'EDITABLE_BUTTONS'
 const DROP_BOX_ID = 'DROP_BOX'
 
-const EditableButtons = ({ label, getTemplateButtons, addTemplateButtons, dropTemplateButton }) => {
+const MotifEditableButtons = () => {
   const [value, setValue] = useState('')
-  const [templateButtons, setTemplateButtons] = useState(getTemplateButtons())
+  const [templateButtons, setTemplateButtons] = useState(getMotifTemplateButtons())
   const [isDropBoxHover, setIsDropBoxHover] = useState(false)
 
   const addNewTemplate = () => {
     if (!value?.trim().length) return
-    addTemplateButtons(value)
+    addMotifTemplateButtons(value)
     setValue('')
-    setTemplateButtons(getTemplateButtons())
+    setTemplateButtons(getMotifTemplateButtons())
   }
 
   const onDragEnd = (props) => {
@@ -25,8 +26,8 @@ const EditableButtons = ({ label, getTemplateButtons, addTemplateButtons, dropTe
     const { droppableId: destinationDroppableId } = destination || {}
 
     if (destinationDroppableId === DROP_BOX_ID) {
-      dropTemplateButton(draggableId)
-      setTemplateButtons(getTemplateButtons())
+      dropMotifTemplateButton(draggableId)
+      setTemplateButtons(getMotifTemplateButtons())
     }
     setIsDropBoxHover(false)
   }
@@ -48,7 +49,12 @@ const EditableButtons = ({ label, getTemplateButtons, addTemplateButtons, dropTe
             {(provided) => (
               <Stack spacing={4} ref={provided.innerRef} {...provided.droppableProps}>
                 <HStack>
-                  <Input type="text" placeholder={label} value={value} onChange={(e) => setValue(e.target.value)} />
+                  <Input
+                    type="text"
+                    placeholder="Motif de consultation (btn modifiable)"
+                    value={value}
+                    onChange={(e) => setValue(e.target.value)}
+                  />
                   <Button colorScheme="blue" ml="0" onClick={addNewTemplate}>
                     Ajouter
                   </Button>
@@ -96,18 +102,4 @@ const EditableButtons = ({ label, getTemplateButtons, addTemplateButtons, dropTe
   )
 }
 
-EditableButtons.propTypes = {
-  label: propTypes.string,
-  getTemplateButtons: propTypes.func,
-  addTemplateButtons: propTypes.func,
-  dropTemplateButton: propTypes.func,
-}
-
-EditableButtons.defaultProps = {
-  label: '...(btn modifiable)',
-  getTemplateButtons: () => {},
-  addTemplateButtons: () => {},
-  dropTemplateButton: () => {},
-}
-
-export default EditableButtons
+export default MotifEditableButtons

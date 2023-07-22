@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Modal, ModalContent, ModalOverlay, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react'
 
-import { getMotifTemplateButtons, addMotifTemplateButtons, dropMotifTemplateButton } from '@utils'
+import { getMotifTemplateButtons } from '@utils'
 
 import AddAppointmentBody from './AddAppointmentBody'
-import EditableButtons from '../EditableButtons/EditableButtons'
+import MotifEditableButtons from './MotifEditableButtons/MotifEditableButtons'
 import ConfigureCalendarAvailabilityBody from './ConfigureCalendarAvailabilityBody'
 
 const AddAppointmentModal = ({ selectedView, selectedSlotInfo, isOpen, onClose, setEvents, setAvailabilities }) => {
@@ -36,12 +36,7 @@ const AddAppointmentModal = ({ selectedView, selectedSlotInfo, isOpen, onClose, 
             )}
             {canAddAppointment && (
               <TabPanel>
-                <EditableButtons
-                  label="Motif de consultation (btn modifiable)"
-                  getTemplateButtons={getMotifTemplateButtons}
-                  addTemplateButtons={addMotifTemplateButtons}
-                  dropTemplateButton={dropMotifTemplateButton}
-                />
+                <MotifEditableButtons />
               </TabPanel>
             )}
             <TabPanel>
