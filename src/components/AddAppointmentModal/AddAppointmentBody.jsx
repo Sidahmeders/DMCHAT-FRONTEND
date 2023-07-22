@@ -211,7 +211,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
               )}
             />
 
-            <HStack display="flex" flexWrap="wrap" justifyContent="flex-end" rowGap="2">
+            <HStack display="flex" flexWrap="wrap" justifyContent="flex-end" rowGap="2" maxH="15rem" overflowY="auto">
               {motifRadioOptions.map((option) => (
                 <Button
                   key={option.id}

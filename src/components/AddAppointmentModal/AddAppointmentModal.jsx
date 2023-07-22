@@ -38,7 +38,6 @@ const AddAppointmentModal = ({ selectedView, selectedSlotInfo, isOpen, onClose, 
               <TabPanel>
                 <EditableButtons
                   label="Motif de consultation (btn modifiable)"
-                  handleClose={onClose}
                   getTemplateButtons={getMotifTemplateButtons}
                   addTemplateButtons={addMotifTemplateButtons}
                   dropTemplateButton={dropMotifTemplateButton}

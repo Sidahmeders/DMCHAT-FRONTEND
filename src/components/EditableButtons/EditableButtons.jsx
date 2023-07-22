@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import propTypes from 'prop-types'
-import { ModalBody, ModalFooter, Button, Input, Stack, StackItem } from '@chakra-ui/react'
+import { ModalBody, ModalFooter, Button, Input, Stack, StackItem, HStack } from '@chakra-ui/react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
 import './EditableButtons.scss'
@@ -8,13 +8,7 @@ import './EditableButtons.scss'
 const BUTTONS_CONTAINER_ID = 'EDITABLE_BUTTONS'
 const DROP_BOX_ID = 'DROP_BOX'
 
-export default function EditableButtons({
-  label,
-  handleClose,
-  getTemplateButtons,
-  addTemplateButtons,
-  dropTemplateButton,
-}) {
+const EditableButtons = ({ label, getTemplateButtons, addTemplateButtons, dropTemplateButton }) => {
   const [value, setValue] = useState('')
   const [templateButtons, setTemplateButtons] = useState(getTemplateButtons())
   const [isDropBoxHover, setIsDropBoxHover] = useState(false)
@@ -48,13 +42,19 @@ export default function EditableButtons({
 
   return (
     <div className="editable-buttons-container">
-      <ModalBody>
-        <DragDropContext onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
+      <DragDropContext onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
+        <ModalBody>
           <Droppable droppableId={BUTTONS_CONTAINER_ID}>
             {(provided) => (
               <Stack spacing={4} ref={provided.innerRef} {...provided.droppableProps}>
-                <Input type="text" placeholder={label} value={value} onChange={(e) => setValue(e.target.value)} />
-                <StackItem>
+                <HStack>
+                  <Input type="text" placeholder={label} value={value} onChange={(e) => setValue(e.target.value)} />
+                  <Button colorScheme="blue" ml="0" onClick={addNewTemplate}>
+                    Ajouter
+                  </Button>
+                </HStack>
+
+                <StackItem height="20rem" overflowY="auto">
                   {templateButtons.length ? (
                     templateButtons.map((btn, index) => (
                       <Draggable key={btn.id} draggableId={btn.id} index={index}>
@@ -79,7 +79,9 @@ export default function EditableButtons({
               </Stack>
             )}
           </Droppable>
+        </ModalBody>
 
+        <ModalFooter pb="0">
           <Droppable droppableId={DROP_BOX_ID}>
             {(provided) => (
               <div className="drop-box-container" ref={provided.innerRef} {...provided.droppableProps}>
@@ -88,24 +90,14 @@ export default function EditableButtons({
               </div>
             )}
           </Droppable>
-        </DragDropContext>
-      </ModalBody>
-
-      <ModalFooter pb="0">
-        <Button colorScheme="blue" mr={3} onClick={addNewTemplate}>
-          Ajouter bouton
-        </Button>
-        <Button variant="ghost" onClick={handleClose}>
-          Annuler
-        </Button>
-      </ModalFooter>
+        </ModalFooter>
+      </DragDropContext>
     </div>
   )
 }
 
 EditableButtons.propTypes = {
   label: propTypes.string,
-  handleClose: propTypes.func,
   getTemplateButtons: propTypes.func,
   addTemplateButtons: propTypes.func,
   dropTemplateButton: propTypes.func,
@@ -113,8 +105,9 @@ EditableButtons.propTypes = {
 
 EditableButtons.defaultProps = {
   label: '...(btn modifiable)',
-  handleClose: () => {},
   getTemplateButtons: () => {},
   addTemplateButtons: () => {},
   dropTemplateButton: () => {},
 }
+
+export default EditableButtons

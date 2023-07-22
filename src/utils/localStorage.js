@@ -33,7 +33,7 @@ export const addMotifTemplateButtons = (buttonName) => {
     name: buttonName,
     value: MOTIF_ENUM.OTHERS,
   }
-  localStorage.setItem(MOTIF_TEMPLATE_BUTTONS, JSON.stringify([...motifLocalValues, newButton]))
+  localStorage.setItem(MOTIF_TEMPLATE_BUTTONS, JSON.stringify([newButton, ...motifLocalValues]))
 }
 export const dropMotifTemplateButton = (buttonId) => {
   const motifLocalValues = JSON.parse(localStorage.getItem(MOTIF_TEMPLATE_BUTTONS)) || []
