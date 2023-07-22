@@ -17,7 +17,7 @@ import { isEmpty } from 'lodash'
 import { SUGGESTIONS } from '@fakeDB'
 import { ChatState } from '@context'
 import { CHAT_EVENT_LISTENERS } from '@config'
-import { getSender, getSenderFull, getUser } from '@utils'
+import { getChatTemplateButtons, getSender, getSenderFull, getUser } from '@utils'
 import { createMessage } from '@services/messages'
 
 import PeerProfileModal from '../miscellaneous/PeerProfileModal'
@@ -36,6 +36,8 @@ const SingleChat = () => {
     setSelectedChat,
     messages,
     setMessages,
+    suggestions,
+    setSuggestions,
     suggestionCheckboxes,
     isLoadingMessages,
     socketConnected,
@@ -43,7 +45,6 @@ const SingleChat = () => {
 
   const senderName = getSender(user, selectedChat.users)
   const [newMessage, setNewMessage] = useState('')
-  const [suggestions, setSuggestions] = useState(SUGGESTIONS)
   const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
 
@@ -105,7 +106,7 @@ const SingleChat = () => {
       )
       setSuggestions(filteredSuggestions)
     } else {
-      setSuggestions(SUGGESTIONS)
+      setSuggestions([...getChatTemplateButtons(), ...SUGGESTIONS])
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newMessage])

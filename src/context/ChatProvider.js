@@ -3,7 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import { useToast } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 
-import { getUser, notify } from '@utils'
+import { SUGGESTIONS } from '@fakeDB'
+import { getChatTemplateButtons, getUser, notify } from '@utils'
 import {
   CHAT_EVENT_LISTENERS,
   SUGGESTIONS_CHECKBOXES,
@@ -56,6 +57,7 @@ export const ChatProvider = ({ children, socket }) => {
   const [messages, setMessages] = useState([])
   const [usersList, setUsersList] = useState([])
   const [groupChatsList, setGroupChatsList] = useState([])
+  const [suggestions, setSuggestions] = useState([...getChatTemplateButtons(), ...SUGGESTIONS])
   const [suggestionCheckboxes, setSuggestionCheckboxes] = useState(SUGGESTIONS_CHECKBOXES)
   const [suggestionContainerDirection, setSuggestionContainerDirection] = useState(SUGGESTIONS_CONTAINER_DIRECTION.row)
   const [suggestionContainerHeight, setSuggestionContainerHeight] = useState(SUGGESTIONS_CONTAINER_HEIGHTS.small)
@@ -184,6 +186,8 @@ export const ChatProvider = ({ children, socket }) => {
         isLoadingUserChats,
         isLoadingDrawerChats,
         setFetchUserChatsAgain,
+        suggestions,
+        setSuggestions,
         suggestionCheckboxes,
         setSuggestionCheckboxes,
         suggestionContainerDirection,

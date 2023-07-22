@@ -6,6 +6,7 @@ const USER = 'userInfo'
 const PATIENT = 'patient'
 const PAGE_ROUTE = 'pageRoute'
 const MOTIF_TEMPLATE_BUTTONS = 'motifTemplateButtons'
+const CHAT_TEMPLATE_BUTTONS = 'chatTemplateButtons'
 
 export const getConfirmationToken = () => localStorage.getItem(CONFIRM_TOKEN) || null
 export const setConfirmationToken = (token) => localStorage.setItem(CONFIRM_TOKEN, token)
@@ -37,4 +38,10 @@ export const dropMotifTemplateButton = (buttonId) => {
   const motifLocalValues = JSON.parse(localStorage.getItem(MOTIF_TEMPLATE_BUTTONS)) || []
   const filteredTemplateButtons = motifLocalValues.filter(({ id }) => buttonId !== id)
   localStorage.setItem(MOTIF_TEMPLATE_BUTTONS, JSON.stringify(filteredTemplateButtons))
+}
+
+export const getChatTemplateButtons = () => JSON.parse(localStorage.getItem(CHAT_TEMPLATE_BUTTONS)) || []
+export const setChatTemplateButtons = (suggestionText) => {
+  const chatTemplateButtons = getChatTemplateButtons()
+  localStorage.setItem(CHAT_TEMPLATE_BUTTONS, JSON.stringify([...chatTemplateButtons, suggestionText]))
 }
