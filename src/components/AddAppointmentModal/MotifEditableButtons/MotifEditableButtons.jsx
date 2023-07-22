@@ -4,6 +4,8 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
 import { getMotifTemplateButtons, addMotifTemplateButtons, dropMotifTemplateButton } from '@utils'
 
+import DropBox from '@components/DropBox/DropBox'
+
 import './MotifEditableButtons.scss'
 
 const BUTTONS_CONTAINER_ID = 'EDITABLE_BUTTONS'
@@ -88,14 +90,7 @@ const MotifEditableButtons = () => {
         </ModalBody>
 
         <ModalFooter pb="0">
-          <Droppable droppableId={DROP_BOX_ID}>
-            {(provided) => (
-              <div className="drop-box-container" ref={provided.innerRef} {...provided.droppableProps}>
-                <p className="drop-box-text">{isDropBoxHover ? 'relâcher pour supprimer' : 'déposez bouton ici'}</p>
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+          <DropBox isDropBoxHover={isDropBoxHover} boxId={DROP_BOX_ID} />
         </ModalFooter>
       </DragDropContext>
     </div>
