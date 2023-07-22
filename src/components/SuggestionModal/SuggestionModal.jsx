@@ -32,7 +32,7 @@ const SuggestionsModal = ({ isOpen, onOpen, onClose }) => {
     <>
       <IconButton width="fit-content" _hover={{ bg: 'purple.100' }} onClick={onOpen} icon={<Tool color="#8c00ff" />} />
 
-      <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+      <Modal size="2xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <Tabs>

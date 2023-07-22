@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { ModalBody, ModalFooter, Button, Input, Stack, StackItem, HStack } from '@chakra-ui/react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
-import { getMotifTemplateButtons, addMotifTemplateButtons, dropMotifTemplateButton } from '@utils'
+import { getMotifTemplateButtons, setMotifTemplateButtons, dropMotifTemplateButton } from '@utils'
 
 import DropBox from '@components/DropBox/DropBox'
 
@@ -18,7 +18,7 @@ const MotifEditableButtons = () => {
 
   const addNewTemplate = () => {
     if (!value?.trim().length) return
-    addMotifTemplateButtons(value)
+    setMotifTemplateButtons(value)
     setValue('')
     setTemplateButtons(getMotifTemplateButtons())
   }
@@ -46,7 +46,7 @@ const MotifEditableButtons = () => {
   return (
     <div className="editable-buttons-container">
       <DragDropContext onDragUpdate={onDragUpdate} onDragEnd={onDragEnd}>
-        <ModalBody>
+        <ModalBody pb="0">
           <Droppable droppableId={BUTTONS_CONTAINER_ID}>
             {(provided) => (
               <Stack spacing={4} ref={provided.innerRef} {...provided.droppableProps}>
@@ -62,7 +62,7 @@ const MotifEditableButtons = () => {
                   </Button>
                 </HStack>
 
-                <StackItem height="20rem" overflowY="auto">
+                <StackItem height="25rem" overflowY="auto">
                   {templateButtons.length ? (
                     templateButtons.map((btn, index) => (
                       <Draggable key={btn.id} draggableId={btn.id} index={index}>
@@ -89,7 +89,7 @@ const MotifEditableButtons = () => {
           </Droppable>
         </ModalBody>
 
-        <ModalFooter pb="0">
+        <ModalFooter py="0">
           <DropBox isDropBoxHover={isDropBoxHover} boxId={DROP_BOX_ID} />
         </ModalFooter>
       </DragDropContext>

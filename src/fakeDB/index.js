@@ -1,4 +1,5 @@
 import { X_AXIS_DAY_NAMES } from '@config'
+import { guid } from '@utils'
 
 export const MOCK_YEAR_DATA = [
   {
@@ -213,28 +214,28 @@ export const WORK_LOAD_DATA = [
 ]
 
 export const SUGGESTIONS = [
-  'Dents',
-  'Carie',
-  'Plombage',
-  'Extraction',
-  'Anesthésie',
-  'Gencive',
-  'Rendez-vous',
-  "Préparez le dossier du patient, s'il vous plaît.",
-  "Assurez-vous que l'équipement est prêt et fonctionne correctement.",
-  'Veuillez stériliser les instruments pour le prochain patient.',
-  "Avez-vous vérifié les rendez-vous suivants dans l'agenda ?",
-  "N'oubliez pas de noter les détails importants de la visite précédente.",
-  "Assurez-vous que la salle d'attente est propre et accueillante.",
-  'Veuillez informer le dentiste que le prochain patient est prêt à être vu.',
-  'Avez-vous préparé les rayons X ou les autres examens requis ?',
-  "Vérifiez les informations d'assurance du patient avant leur arrivée.",
-  "N'oubliez pas de mettre à jour le statut du patient dans le système informatique.",
-  "Assurez-vous de désinfecter la salle d'examen.",
-  'Prenez les prochains rendez-vous nécessaires.',
-  "Pensez à facturer les traitements effectués aujourd'hui.",
-  'Rappelez-moi de préparer les documents pour le patient suivant.',
-  'Vérifiez si des fournitures médicales doivent être réapprovisionnées.',
-  "N'oubliez pas de mettre à jour le dossier du patient.",
-  'Si le patient a besoin de médicaments, assurez-vous de les prescrire.',
+  { id: guid(), message: 'Dents' },
+  { id: guid(), message: 'Carie' },
+  { id: guid(), message: 'Plombage' },
+  { id: guid(), message: 'Extraction' },
+  { id: guid(), message: 'Anesthésie' },
+  { id: guid(), message: 'Gencive' },
+  { id: guid(), message: 'Rendez-vous' },
+  { id: guid(), message: "Préparez le dossier du patient, s'il vous plaît." },
+  { id: guid(), message: "Assurez-vous que l'équipement est prêt et fonctionne correctement." },
+  { id: guid(), message: 'Veuillez stériliser les instruments pour le prochain patient.' },
+  { id: guid(), message: "Avez-vous vérifié les rendez-vous suivants dans l'agenda ?" },
+  { id: guid(), message: "N'oubliez pas de noter les détails importants de la visite précédente." },
+  { id: guid(), message: "Assurez-vous que la salle d'attente est propre et accueillante." },
+  { id: guid(), message: 'Veuillez informer le dentiste que le prochain patient est prêt à être vu.' },
+  { id: guid(), message: 'Avez-vous préparé les rayons X ou les autres examens requis ?' },
+  { id: guid(), message: "Vérifiez les informations d'assurance du patient avant leur arrivée." },
+  { id: guid(), message: "N'oubliez pas de mettre à jour le statut du patient dans le système informatique." },
+  { id: guid(), message: "Assurez-vous de désinfecter la salle d'examen." },
+  { id: guid(), message: 'Prenez les prochains rendez-vous nécessaires.' },
+  { id: guid(), message: "Pensez à facturer les traitements effectués aujourd'hui." },
+  { id: guid(), message: 'Rappelez-moi de préparer les documents pour le patient suivant.' },
+  { id: guid(), message: 'Vérifiez si des fournitures médicales doivent être réapprovisionnées.' },
+  { id: guid(), message: "N'oubliez pas de mettre à jour le dossier du patient." },
+  { id: guid(), message: 'Si le patient a besoin de médicaments, assurez-vous de les prescrire.' },
 ]

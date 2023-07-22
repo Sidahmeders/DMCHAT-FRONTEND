@@ -26,7 +26,7 @@ export const getMotifTemplateButtons = () => {
   const motifLocalValues = JSON.parse(localStorage.getItem(MOTIF_TEMPLATE_BUTTONS)) || []
   return [...MOTIF_TEMPLATE_VALUES, ...motifLocalValues]
 }
-export const addMotifTemplateButtons = (buttonName) => {
+export const setMotifTemplateButtons = (buttonName) => {
   const motifLocalValues = JSON.parse(localStorage.getItem(MOTIF_TEMPLATE_BUTTONS)) || []
   const newButton = {
     id: guid(),
@@ -42,9 +42,18 @@ export const dropMotifTemplateButton = (buttonId) => {
 }
 
 export const getChatTemplateButtons = () => JSON.parse(localStorage.getItem(CHAT_TEMPLATE_BUTTONS)) || []
-export const setChatTemplateButtons = (suggestionText) => {
+export const setChatTemplateButtons = (chatMessage) => {
+  const newChatSuggetion = {
+    id: guid(),
+    message: chatMessage,
+  }
   const chatTemplateButtons = getChatTemplateButtons()
-  localStorage.setItem(CHAT_TEMPLATE_BUTTONS, JSON.stringify([...chatTemplateButtons, suggestionText]))
+  localStorage.setItem(CHAT_TEMPLATE_BUTTONS, JSON.stringify([newChatSuggetion, ...chatTemplateButtons]))
+}
+export const dropChatTemplateButtons = (chatId) => {
+  const chatTemplateButtons = getChatTemplateButtons()
+  const filteredChatTemplateButtons = chatTemplateButtons.filter(({ id }) => chatId !== id)
+  localStorage.setItem(CHAT_TEMPLATE_BUTTONS, JSON.stringify(filteredChatTemplateButtons))
 }
 
 export const getChatSuggestionSettings = () => {

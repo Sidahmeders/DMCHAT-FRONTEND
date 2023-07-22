@@ -18,8 +18,8 @@ const SuggestionBox = ({ suggestions, setNewMessage }) => {
         overflow="auto"
         borderRadius="md"
         py={suggestions.length ? '1' : '0'}>
-        {suggestions.map((suggestion, index) => (
-          <SuggestionButton key={index} suggestion={suggestion} setNewMessage={setNewMessage} />
+        {suggestions.map((suggestion) => (
+          <SuggestionButton key={suggestion.id} suggestion={suggestion.message} setNewMessage={setNewMessage} />
         ))}
       </Box>
     )
@@ -33,8 +33,8 @@ const SuggestionBox = ({ suggestions, setNewMessage }) => {
       borderRadius="md"
       py={suggestions.length ? '1' : '0'}>
       <HStack width="fit-content">
-        {suggestions.map((suggestion, index) => (
-          <SuggestionButton key={index} suggestion={suggestion} setNewMessage={setNewMessage} />
+        {suggestions.map((suggestion) => (
+          <SuggestionButton key={suggestion.id} suggestion={suggestion.message} setNewMessage={setNewMessage} />
         ))}
       </HStack>
     </Box>
