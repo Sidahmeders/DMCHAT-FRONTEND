@@ -4,10 +4,10 @@ import { Button } from '@chakra-ui/react'
 import { ChatState } from '@context'
 
 const SuggestionButton = ({ suggestion, setNewMessage }) => {
-  const { suggestionCheckboxes } = ChatState()
+  const { suggestionSettings } = ChatState()
 
   const updateChatMessage = () => {
-    if (suggestionCheckboxes.useMultipleSuggestions) {
+    if (suggestionSettings.useMultipleSuggestions) {
       setNewMessage((prevMessage) => prevMessage + ' ' + suggestion)
     } else {
       setNewMessage(suggestion)

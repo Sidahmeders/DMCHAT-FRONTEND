@@ -38,7 +38,7 @@ const SingleChat = () => {
     setMessages,
     suggestions,
     setSuggestions,
-    suggestionCheckboxes,
+    suggestionSettings,
     isLoadingMessages,
     socketConnected,
   } = ChatState()
@@ -100,7 +100,7 @@ const SingleChat = () => {
   }, [selectedChat, socket])
 
   useEffect(() => {
-    if (suggestionCheckboxes.filterSuggestions) {
+    if (suggestionSettings.filterSuggestions) {
       const filteredSuggestions = SUGGESTIONS.filter((suggestion) =>
         suggestion.toLowerCase().includes(newMessage.toLowerCase()),
       )

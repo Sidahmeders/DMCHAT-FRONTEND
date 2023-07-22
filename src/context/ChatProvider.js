@@ -4,13 +4,8 @@ import { useToast } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 
 import { SUGGESTIONS } from '@fakeDB'
-import { getChatTemplateButtons, getUser, notify } from '@utils'
-import {
-  CHAT_EVENT_LISTENERS,
-  SUGGESTIONS_CHECKBOXES,
-  SUGGESTIONS_CONTAINER_HEIGHTS,
-  SUGGESTIONS_CONTAINER_DIRECTION,
-} from '@config'
+import { getChatSuggestionSettings, getChatTemplateButtons, getUser, notify } from '@utils'
+import { CHAT_EVENT_LISTENERS } from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
 import { fetchGroupChats, fetchUserChats } from '@services/chats'
 import { searchUsers } from '@services/users'
@@ -48,6 +43,7 @@ const updateChatMessages = debounce(
 
 export const ChatProvider = ({ children, socket }) => {
   const localUser = getUser()
+  const chatSuggestionSettings = getChatSuggestionSettings()
   const toast = useToast()
   const navigate = useNavigate()
 
@@ -58,9 +54,9 @@ export const ChatProvider = ({ children, socket }) => {
   const [usersList, setUsersList] = useState([])
   const [groupChatsList, setGroupChatsList] = useState([])
   const [suggestions, setSuggestions] = useState([...getChatTemplateButtons(), ...SUGGESTIONS])
-  const [suggestionCheckboxes, setSuggestionCheckboxes] = useState(SUGGESTIONS_CHECKBOXES)
-  const [suggestionContainerDirection, setSuggestionContainerDirection] = useState(SUGGESTIONS_CONTAINER_DIRECTION.row)
-  const [suggestionContainerHeight, setSuggestionContainerHeight] = useState(SUGGESTIONS_CONTAINER_HEIGHTS.small)
+  const [suggestionSettings, setSuggestionSettings] = useState(chatSuggestionSettings)
+  const [suggestionContainerDirection, setSuggestionContainerDirection] = useState(chatSuggestionSettings.direction)
+  const [suggestionContainerHeight, setSuggestionContainerHeight] = useState(chatSuggestionSettings.size)
 
   const [socketConnected, setSocketConnected] = useState(false)
   const [fetchUserChatsAgain, setFetchUserChatsAgain] = useState(false)
@@ -188,8 +184,8 @@ export const ChatProvider = ({ children, socket }) => {
         setFetchUserChatsAgain,
         suggestions,
         setSuggestions,
-        suggestionCheckboxes,
-        setSuggestionCheckboxes,
+        suggestionSettings,
+        setSuggestionSettings,
         suggestionContainerDirection,
         setSuggestionContainerDirection,
         suggestionContainerHeight,

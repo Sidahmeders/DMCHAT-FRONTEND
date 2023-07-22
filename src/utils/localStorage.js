@@ -1,4 +1,4 @@
-import { MOTIF_TEMPLATE_VALUES, MOTIF_ENUM } from '@config'
+import { MOTIF_TEMPLATE_VALUES, MOTIF_ENUM, SUGGESTION_SETTINGS } from '@config'
 import { guid } from '@utils'
 
 const CONFIRM_TOKEN = 'confirm-token'
@@ -7,6 +7,7 @@ const PATIENT = 'patient'
 const PAGE_ROUTE = 'pageRoute'
 const MOTIF_TEMPLATE_BUTTONS = 'motifTemplateButtons'
 const CHAT_TEMPLATE_BUTTONS = 'chatTemplateButtons'
+const CHAT_SUGGESTION_SETTINGS = 'chatSuggestionSettings'
 
 export const getConfirmationToken = () => localStorage.getItem(CONFIRM_TOKEN) || null
 export const setConfirmationToken = (token) => localStorage.setItem(CONFIRM_TOKEN, token)
@@ -44,4 +45,11 @@ export const getChatTemplateButtons = () => JSON.parse(localStorage.getItem(CHAT
 export const setChatTemplateButtons = (suggestionText) => {
   const chatTemplateButtons = getChatTemplateButtons()
   localStorage.setItem(CHAT_TEMPLATE_BUTTONS, JSON.stringify([...chatTemplateButtons, suggestionText]))
+}
+
+export const getChatSuggestionSettings = () => {
+  return JSON.parse(localStorage.getItem(CHAT_SUGGESTION_SETTINGS)) || SUGGESTION_SETTINGS
+}
+export const setChatSuggestionSettings = (settings) => {
+  localStorage.setItem(CHAT_SUGGESTION_SETTINGS, JSON.stringify(settings))
 }

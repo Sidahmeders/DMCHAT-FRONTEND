@@ -21,8 +21,10 @@ export const SUGGESTIONS_CONTAINER_DIRECTION = {
   column: 'COLUMN',
 }
 
-export const SUGGESTIONS_CHECKBOXES = {
+export const SUGGESTION_SETTINGS = {
   showSuggestions: false,
   filterSuggestions: false,
   useMultipleSuggestions: false,
+  direction: SUGGESTIONS_CONTAINER_DIRECTION.row,
+  size: SUGGESTIONS_CONTAINER_HEIGHTS.small,
 }

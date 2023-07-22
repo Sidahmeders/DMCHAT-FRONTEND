@@ -6,9 +6,9 @@ import { SUGGESTIONS_CONTAINER_DIRECTION } from '@config'
 import SuggestionButton from '@components/miscellaneous/SuggestionButton'
 
 const SuggestionBox = ({ suggestions, setNewMessage }) => {
-  const { suggestionCheckboxes, suggestionContainerDirection, suggestionContainerHeight } = ChatState()
+  const { suggestionSettings, suggestionContainerDirection, suggestionContainerHeight } = ChatState()
 
-  if (!suggestionCheckboxes.showSuggestions) return null
+  if (!suggestionSettings.showSuggestions) return null
 
   if (suggestionContainerDirection === SUGGESTIONS_CONTAINER_DIRECTION.column) {
     return (

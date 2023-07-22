@@ -3,16 +3,55 @@ import { ModalBody, Box, Stack, Checkbox, RadioGroup, Radio, FormLabel } from '@
 
 import { ChatState } from '@context'
 import { SUGGESTIONS_CONTAINER_DIRECTION, SUGGESTIONS_CONTAINER_HEIGHTS } from '@config'
+import { setChatSuggestionSettings } from '@utils'
+import { omit } from 'lodash'
 
 const ConfigureSuggestionBody = () => {
   const {
-    suggestionCheckboxes,
-    setSuggestionCheckboxes,
+    suggestionSettings,
+    setSuggestionSettings,
     suggestionContainerDirection,
     setSuggestionContainerDirection,
     suggestionContainerHeight,
     setSuggestionContainerHeight,
   } = ChatState()
+
+  const suggestionSettingsCheckboxes = omit(suggestionSettings, ['direction', 'size'])
+  const allChecked = Object.values(suggestionSettingsCheckboxes).every(Boolean)
+  const isIndeterminate = Object.values(suggestionSettingsCheckboxes).some(Boolean) && !allChecked
+
+  const onShowSuggestion = (e) => {
+    setSuggestionSettings({
+      ...suggestionSettings,
+      showSuggestions: e.target.checked,
+      filterSuggestions: e.target.checked,
+      useMultipleSuggestions: e.target.checked,
+    })
+  }
+
+  const onShowFilterSuggestions = (e) => {
+    setSuggestionSettings({
+      ...suggestionSettings,
+      showSuggestions: true,
+      filterSuggestions: e.target.checked,
+    })
+  }
+
+  const onShowUseMultipleSuggestions = (e) => {
+    setSuggestionSettings({
+      ...suggestionSettings,
+      showSuggestions: true,
+      useMultipleSuggestions: e.target.checked,
+    })
+  }
+
+  useEffect(() => {
+    setChatSuggestionSettings({
+      ...suggestionSettings,
+      direction: suggestionContainerDirection,
+      size: suggestionContainerHeight,
+    })
+  }, [suggestionSettings, suggestionContainerDirection, suggestionContainerHeight])
 
   useEffect(() => {
     if (suggestionContainerDirection === SUGGESTIONS_CONTAINER_DIRECTION.row) {
@@ -24,36 +63,14 @@ const ConfigureSuggestionBody = () => {
   return (
     <ModalBody pb="6">
       <Box>
-        <Checkbox
-          isChecked={suggestionCheckboxes.showSuggestions}
-          isIndeterminate={suggestionCheckboxes.showSuggestions}
-          onChange={(e) =>
-            setSuggestionCheckboxes({
-              ...suggestionCheckboxes,
-              showSuggestions: e.target.checked,
-            })
-          }>
+        <Checkbox isIndeterminate={isIndeterminate} isChecked={allChecked} onChange={onShowSuggestion}>
           Afficher la boîte de suggestion
         </Checkbox>
         <Stack pl={6} mt={1} spacing={1}>
-          <Checkbox
-            isChecked={suggestionCheckboxes.filterSuggestions}
-            onChange={(e) =>
-              setSuggestionCheckboxes({
-                ...suggestionCheckboxes,
-                filterSuggestions: e.target.checked,
-              })
-            }>
+          <Checkbox isChecked={suggestionSettings.filterSuggestions} onChange={onShowFilterSuggestions}>
             Filtrer les suggestions lors de la saisie
           </Checkbox>
-          <Checkbox
-            isChecked={suggestionCheckboxes.useMultipleSuggestions}
-            onChange={(e) =>
-              setSuggestionCheckboxes({
-                ...suggestionCheckboxes,
-                useMultipleSuggestions: e.target.checked,
-              })
-            }>
+          <Checkbox isChecked={suggestionSettings.useMultipleSuggestions} onChange={onShowUseMultipleSuggestions}>
             Utiliser plusieurs suggestions à la fois
           </Checkbox>
         </Stack>
@@ -77,8 +94,8 @@ const ConfigureSuggestionBody = () => {
           <FormLabel m="0">Hauteur du conteneur (boîte) de suggestions</FormLabel>
           <RadioGroup
             colorScheme="blue"
-            defaultValue={suggestionContainerHeight}
-            onChange={setSuggestionContainerHeight}>
+            onChange={setSuggestionContainerHeight}
+            defaultValue={suggestionContainerHeight}>
             <Stack spacing={4} direction="row">
               <Radio value={SUGGESTIONS_CONTAINER_HEIGHTS.small}>petit ({SUGGESTIONS_CONTAINER_HEIGHTS.small})</Radio>
               <Radio value={SUGGESTIONS_CONTAINER_HEIGHTS.medium}>moyen ({SUGGESTIONS_CONTAINER_HEIGHTS.medium})</Radio>
