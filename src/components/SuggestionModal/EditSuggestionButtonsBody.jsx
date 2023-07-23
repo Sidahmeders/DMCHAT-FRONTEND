@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { ModalBody, Box, FormControl, Button, Textarea, ModalFooter } from '@chakra-ui/react'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
+import { SUGGESTIONS } from '@fakeDB'
 import { ChatState } from '@context'
 import { dropChatTemplateButtons, setChatTemplateButtons, getChatTemplateButtons } from '@utils'
 
@@ -18,7 +19,7 @@ const EditSuggestionButtonsBody = () => {
   const createNewChatSuggestion = () => {
     if (chatSuggestion.trim().length >= 3) {
       setChatTemplateButtons(chatSuggestion)
-      setSuggestions(getChatTemplateButtons())
+      setSuggestions([...getChatTemplateButtons(), ...SUGGESTIONS])
       setChatSuggestion('')
     }
   }
@@ -29,7 +30,7 @@ const EditSuggestionButtonsBody = () => {
 
     if (destinationDroppableId === DROP_BOX_ID) {
       dropChatTemplateButtons(draggableId)
-      setSuggestions(getChatTemplateButtons())
+      setSuggestions([...getChatTemplateButtons(), ...SUGGESTIONS])
     }
     setIsDropBoxHover(false)
   }
@@ -81,7 +82,12 @@ const EditSuggestionButtonsBody = () => {
                       ref={provided.innerRef}
                       {...provided.draggableProps}
                       {...provided.dragHandleProps}>
-                      {suggestion.message}
+                      {suggestion.message}{' '}
+                      {suggestion.required && (
+                        <Box display="inline" alignSelf="center" color="red">
+                          *
+                        </Box>
+                      )}
                     </Box>
                   )}
                 </Draggable>

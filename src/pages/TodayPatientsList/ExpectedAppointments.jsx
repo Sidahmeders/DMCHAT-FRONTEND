@@ -4,7 +4,7 @@ import { APPOINTMENTS_IDS } from '@config'
 
 import AppointmentCard, { LoadingCards } from './AppointmentCard'
 import { DragWrap } from './TodayPatientsList'
-import RoomTitle from './RoomTitle'
+import RoomTitle from './RoomTitle/RoomTitle'
 
 export default function ExpectedAppointments({ appointments, isLoading }) {
   return (

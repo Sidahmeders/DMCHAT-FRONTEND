@@ -7,6 +7,7 @@ import './RoomTitle.scss'
 
 const RoomTitle = ({ title, appointments }) => {
   const [showMotifCounter, setShowMotifCounter] = useState(false)
+  console.log(appointments, 'appointments')
 
   return (
     <div className="room-title" onClick={() => setShowMotifCounter(!showMotifCounter)}>
