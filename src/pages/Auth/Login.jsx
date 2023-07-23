@@ -82,7 +82,7 @@ const Login = () => {
         style={{ marginTop: 15 }}
         onClick={submitLoginHandler}
         isLoading={isLoading}>
-        Connexion
+        Connecter
       </Button>
 
       <Button

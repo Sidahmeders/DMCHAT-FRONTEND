@@ -145,7 +145,7 @@ const Signup = () => {
       </Stack>
 
       <Button colorScheme="blue" width="100%" onClick={submitHandler} isLoading={isLoading}>
-        S'inscrire
+        Enregistrer
       </Button>
     </Stack>
   )

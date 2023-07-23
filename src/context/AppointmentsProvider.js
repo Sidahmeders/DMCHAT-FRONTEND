@@ -3,7 +3,7 @@ import { useToast } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
 import { APPOINTMENTS_IDS } from '../config'
-import { flattenAppointment, getUser } from '@utils'
+import { flattenAppointment, formatDate, getUser } from '@utils'
 import { fetchDayAppointments } from '@services/appointments'
 import { fetchDayPayments } from '@services/payments'
 
@@ -17,6 +17,7 @@ export const AppointmentsProvider = ({ children }) => {
     [APPOINTMENTS_IDS.DONE]: [],
   })
   const [todayPaymentHistory, setTodayPaymentHistory] = useState([])
+  const [selectedDate, setSelectedDate] = useState(formatDate(new Date()))
 
   const fetchTodayAppointments = async () => {
     const todayAppointments = await fetchDayAppointments(new Date())
@@ -52,14 +53,14 @@ export const AppointmentsProvider = ({ children }) => {
     ;(async () => {
       try {
         if (isEmpty(getUser())) return
-        const todayPayments = await fetchDayPayments(new Date())
+        const todayPayments = await fetchDayPayments(selectedDate)
         setTodayPaymentHistory(todayPayments)
       } catch (error) {
         toast({ description: error.message })
       }
     })()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [selectedDate])
 
   return (
     <AppointmentsContext.Provider
@@ -69,6 +70,8 @@ export const AppointmentsProvider = ({ children }) => {
         fetchTodayAppointments,
         todayPaymentHistory,
         setTodayPaymentHistory,
+        selectedDate,
+        setSelectedDate,
       }}>
       {children}
     </AppointmentsContext.Provider>
