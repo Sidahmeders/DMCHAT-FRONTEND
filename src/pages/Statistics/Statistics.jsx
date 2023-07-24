@@ -17,7 +17,7 @@ const Statistics = () => (
       </Card>
       <Card>
         <CardBody p="1" overflow="auto">
-          <MotifPaymentRatio />
+          <PatientsCount />
         </CardBody>
       </Card>
       <Card>
@@ -27,7 +27,7 @@ const Statistics = () => (
       </Card>
       <Card>
         <CardBody p="1" overflow="auto">
-          <PatientsCount />
+          <MotifPaymentRatio />
         </CardBody>
       </Card>
     </HStack>

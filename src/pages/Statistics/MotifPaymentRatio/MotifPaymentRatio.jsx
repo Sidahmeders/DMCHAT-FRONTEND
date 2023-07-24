@@ -1,16 +1,19 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Card, CardHeader } from '@chakra-ui/card'
-import { FormControl, Input } from '@chakra-ui/react'
+import { FormControl, Input, useToast } from '@chakra-ui/react'
 import { PieChart, Pie } from 'recharts'
+import { subDays } from 'date-fns'
 
-import { PAYMENT_CATEGORY_DATA } from '@fakeDB'
 import { formatDate } from '@utils'
+import { fetchPaymentMotifByDateRange } from '@services/statistics'
 
 import RenderActiveShape from './RenderActiveShape'
 
 const MotifPaymentRatio = () => {
+  const toast = useToast()
   const [activeIndex, setActiveIndex] = useState(0)
-  const [startDate, setStartDate] = useState(new Date())
+  const [paymentMotifData, setPaymentMotifData] = useState([])
+  const [startDate, setStartDate] = useState(subDays(new Date(), 30))
   const [endDate, setEndDate] = useState(new Date())
 
   const onPieEnter = useCallback(
@@ -19,8 +22,21 @@ const MotifPaymentRatio = () => {
     },
     [setActiveIndex],
   )
+
+  useEffect(() => {
+    ;(async () => {
+      try {
+        const paymentMotif = await fetchPaymentMotifByDateRange(startDate, endDate)
+        setPaymentMotifData(paymentMotif.map((item) => ({ name: item._id, value: item.totalPayment })))
+      } catch (error) {
+        toast({ description: error.message })
+      }
+    })()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [endDate, startDate])
+
   return (
-    <Card variant="filled" bg="gray.50" overflow="auto" width="500px" height="300px">
+    <Card variant="filled" bg="gray.50" overflow="auto" width="500px" height="350px">
       <CardHeader pb="1" display="flex" justifyContent="space-around">
         <FormControl width="150px" mr="1">
           <Input
@@ -51,7 +67,7 @@ const MotifPaymentRatio = () => {
         <Pie
           activeIndex={activeIndex}
           activeShape={RenderActiveShape}
-          data={PAYMENT_CATEGORY_DATA}
+          data={paymentMotifData}
           cx={230}
           innerRadius={60}
           outerRadius={85}
