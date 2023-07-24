@@ -21,7 +21,7 @@ const CustomLegend = ({ useMockData, setUseMockData, ...props }) => {
         />
       </FormControl>
 
-      <HStack>
+      <HStack pt="2">
         {payload.map((item) => (
           <Badge key={item.value} bg={item.color} color="white" borderRadius="lg">
             {item.value}

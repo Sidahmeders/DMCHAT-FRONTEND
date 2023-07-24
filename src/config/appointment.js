@@ -26,6 +26,13 @@ export const MOTIF_ENUM = {
   OTHERS: 'others',
 }
 
+export const MOTIF_MAP = {
+  [MOTIF_ENUM.PAIN]: 'douleur',
+  [MOTIF_ENUM.FUNCTIONAL]: 'fonctionnel',
+  [MOTIF_ENUM.AESTHETIC]: 'esthetique',
+  [MOTIF_ENUM.OTHERS]: 'autres',
+}
+
 export const MOTIF_TEMPLATE_VALUES = [
   { id: '#1', name: 'douleur', value: MOTIF_ENUM.PAIN, isRequired: true },
   { id: '#2', name: 'fonctionnel', value: MOTIF_ENUM.FUNCTIONAL, isRequired: true },

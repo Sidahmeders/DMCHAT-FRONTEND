@@ -32,7 +32,7 @@ const aggregatePaymentsData = (data, isYearFormat = false) => {
 
 const RevenuChart = () => {
   const toast = useToast()
-  const [selectedStat, setSelectedStat] = useState({ year: true, month: false })
+  const [selectedStat, setSelectedStat] = useState({ year: false, month: true })
   const [showEmptyDays, setShowEmptyDays] = useState(false)
   const [dateRangeValue, setDateRangeValue] = useState([subDays(new Date(), 30), new Date()])
   const [yearData, setYearData] = useState([])
