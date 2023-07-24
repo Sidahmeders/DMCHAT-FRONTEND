@@ -8,21 +8,9 @@ import { fetchPatientsAgeRatio } from '@services/statistics'
 
 import CustomTooltip from './CustomTooltip'
 import CustomLegend from './CustomLegend'
+import RenderCustomizedLabel from './RenderCustomizedLabel'
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
-
-const renderCustomizedLabel = ({ cx, cy, midAngle, innerRadius, outerRadius, percent }) => {
-  const RADIAN = Math.PI / 180
-  const radius = innerRadius + (outerRadius - innerRadius) * 0.5
-  const x = cx + radius * Math.cos(-midAngle * RADIAN)
-  const y = cy + radius * Math.sin(-midAngle * RADIAN)
-
-  return (
-    <text x={x} y={y} fill="white" fontWeight="500" textAnchor={x > cx ? 'start' : 'end'} dominantBaseline="central">
-      {`${(percent * 100).toFixed(0)}%`}
-    </text>
-  )
-}
 
 const sortPatientsRatio = (a, b) => {
   const [ageOne] = a?.name?.split('-')
@@ -59,7 +47,7 @@ const PatientAge = () => {
           cx={220}
           cy={190}
           outerRadius={100}
-          label={renderCustomizedLabel}
+          label={RenderCustomizedLabel}
           fill="#8884d8"
           dataKey="count"
           labelLine={false}>

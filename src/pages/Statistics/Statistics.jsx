@@ -2,7 +2,7 @@ import { Card, CardBody, Stack, HStack } from '@chakra-ui/react'
 
 import PaymentRatio from './PaymentRatio'
 import RevenuChart from './RevenuChart/RevenuChart'
-import PayerCategoryChart from './PayerCategoryChart'
+import MotifPaymentRatio from './MotifPaymentRatio/MotifPaymentRatio'
 import WorkLoadChart from './WorkLoadChart'
 import PatientAgeRatio from './PatientAgeRatio/PatientAgeRatio'
 import PatientsCount from './PatientsCount'
@@ -17,7 +17,7 @@ const Statistics = () => (
       </Card>
       <Card>
         <CardBody p="1" overflow="auto">
-          <PayerCategoryChart />
+          <MotifPaymentRatio />
         </CardBody>
       </Card>
       <Card>
