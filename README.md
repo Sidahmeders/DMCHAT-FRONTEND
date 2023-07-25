@@ -55,7 +55,7 @@ Navigate to http://localhost:5000/api-docs/ to see the API docs.
 
 1. click on the red Button -> **`Obtenir informations d'identification`** then click on the blue Button -> **`Connecter`**
 
-![login page](https://i.ibb.co/j4tGcGc/login.png)
+![login page](https://i.ibb.co/p1yQjfm/scrnli-7-25-2023-2-50-14-PM.png)
 
 2. by now you should be redirected to 6-digit input form, click on the screen and type `776622` and you should be logged in with success
 
