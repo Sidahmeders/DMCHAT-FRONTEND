@@ -13,11 +13,15 @@ const Pagination = ({
 }) => {
   const pageCount = Math.floor(paginationTotalRows / paginationPerPage) + 1
 
+  const updateRowPerPage = (e) => {
+    onChangeRowsPerPage(Number(e.target.value))
+  }
+
   return (
     <div className="pagination-container">
       <div className="pagination-row-options">
         lignes
-        <select className="pagination-selectbox" onChange={(e) => onChangeRowsPerPage(Number(e.target.value))}>
+        <select className="pagination-selectbox" defaultValue={paginationPerPage} onChange={updateRowPerPage}>
           {paginationRowsPerPageOptions.map((item, index) => (
             <option key={index} value={item}>
               {item}
