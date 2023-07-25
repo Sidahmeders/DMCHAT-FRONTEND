@@ -53,7 +53,7 @@ export default function PatientListModal() {
         if (filterText.trim().length > 0) {
           patientData = await fetchPatients({ searchName: filterText })
         } else {
-          patientData = await fetchPatients({ pageNumber, pageSize })
+          patientData = await fetchPatients({ pageNumber: pageNumber + 1, pageSize })
         }
         setPatientsData(patientData)
       } catch (error) {
@@ -93,7 +93,6 @@ export default function PatientListModal() {
           <ModalCloseButton p="6" />
           <ModalBody>
             <DataTable
-              paginationServer
               loading={isLoading}
               columns={patientColumns({ onEditModalOpen, onDeleteModalOpen })}
               data={patientsData.patients}
@@ -102,6 +101,7 @@ export default function PatientListModal() {
               paginationTotalRows={patientsData.totalCount}
               paginationRowsPerPageOptions={PAGINATION_ROWS_PER_PAGE_OPTIONS}
               onChangePage={(page) => setPageNumber(page)}
+              pageNumber={pageNumber}
               onChangeRowsPerPage={(currentRowsPerPage) => setPageSize(currentRowsPerPage)}
               paginationPerPage={pageSize}
               onRowDoubleClicked={(row) => {

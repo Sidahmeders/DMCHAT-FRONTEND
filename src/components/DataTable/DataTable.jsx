@@ -4,6 +4,8 @@ import ReactDataTableComponent from 'react-data-table-component'
 import { HashLoader } from 'react-spinners'
 import { ChevronDown } from 'react-feather'
 
+import Pagination from './Pagination/Pagination'
+
 import './DataTable.scss'
 
 const defaultStyles = {
@@ -24,8 +26,8 @@ export default function DataTable({
   paginationResetDefaultPage,
   subHeaderComponent,
   onChangePage,
+  pageNumber,
   paginationTotalRows,
-  paginationServer,
   onChangeRowsPerPage,
   paginationPerPage,
   paginationRowsPerPageOptions,
@@ -35,7 +37,6 @@ export default function DataTable({
   return (
     <div className="data-table-container">
       <ReactDataTableComponent
-        pagination
         striped
         highlightOnHover
         pointerOnHover
@@ -46,13 +47,15 @@ export default function DataTable({
         columns={columns}
         progressPending={loading}
         customStyles={defaultStyles}
-        paginationServer={paginationServer}
-        paginationTotalRows={paginationTotalRows}
-        paginationPerPage={paginationPerPage}
-        paginationRowsPerPageOptions={paginationRowsPerPageOptions}
-        onChangeRowsPerPage={onChangeRowsPerPage}
-        paginationResetDefaultPage={paginationResetDefaultPage}
-        onChangePage={onChangePage}
+        //** FIXME: remove pagination props **//
+        // pagination
+        // paginationServer={paginationServer}
+        // paginationTotalRows={paginationTotalRows}
+        // paginationPerPage={paginationPerPage}
+        // paginationRowsPerPageOptions={paginationRowsPerPageOptions}
+        // onChangePage={onChangePage}
+        // onChangeRowsPerPage={onChangeRowsPerPage}
+        // paginationResetDefaultPage={paginationResetDefaultPage}
         sortIcon={<ChevronDown />}
         expandableRowExpanded={(row) => row === currentRow}
         onRowExpandToggled={(_, row) => setCurrentRow(row)}
@@ -60,6 +63,13 @@ export default function DataTable({
         subHeaderComponent={subHeaderComponent}
         expandableRowsComponent={expandableRowsComponent}
         onRowDoubleClicked={onRowDoubleClicked}
+      />
+
+      <Pagination
+        pageNumber={pageNumber}
+        paginationTotalRows={paginationTotalRows}
+        paginationPerPage={paginationPerPage}
+        onPageChange={onChangePage}
       />
     </div>
   )
@@ -74,6 +84,7 @@ DataTable.propTypes = {
   expandableRowsComponent: propTypes.func,
   subHeaderComponent: propTypes.node.isRequired,
   onChangePage: propTypes.func,
+  pageNumber: propTypes.number,
   onChangeRowsPerPage: propTypes.func,
   paginationTotalRows: propTypes.number,
   paginationServer: propTypes.bool,
@@ -88,6 +99,7 @@ DataTable.defaultProps = {
   onRowDoubleClicked: () => {},
   expandableRowsComponent: () => {},
   onChangePage: () => {},
+  pageNumber: 1,
   onChangeRowsPerPage: () => {},
   paginationTotalRows: 0,
   paginationServer: false,
