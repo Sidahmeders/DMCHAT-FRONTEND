@@ -23,7 +23,6 @@ export default function DataTable({
   loading,
   onRowDoubleClicked,
   expandableRowsComponent,
-  paginationResetDefaultPage,
   subHeaderComponent,
   onChangePage,
   pageNumber,
@@ -47,15 +46,8 @@ export default function DataTable({
         columns={columns}
         progressPending={loading}
         customStyles={defaultStyles}
-        //** FIXME: remove pagination props **//
-        // pagination
-        // paginationServer={paginationServer}
-        // paginationTotalRows={paginationTotalRows}
-        // paginationPerPage={paginationPerPage}
-        // paginationRowsPerPageOptions={paginationRowsPerPageOptions}
-        // onChangePage={onChangePage}
-        // onChangeRowsPerPage={onChangeRowsPerPage}
-        // paginationResetDefaultPage={paginationResetDefaultPage}
+        onChangePage={onChangePage}
+        onChangeRowsPerPage={onChangeRowsPerPage}
         sortIcon={<ChevronDown />}
         expandableRowExpanded={(row) => row === currentRow}
         onRowExpandToggled={(_, row) => setCurrentRow(row)}
@@ -70,6 +62,8 @@ export default function DataTable({
         paginationTotalRows={paginationTotalRows}
         paginationPerPage={paginationPerPage}
         onPageChange={onChangePage}
+        paginationRowsPerPageOptions={paginationRowsPerPageOptions}
+        onChangeRowsPerPage={onChangeRowsPerPage}
       />
     </div>
   )
@@ -79,7 +73,6 @@ DataTable.propTypes = {
   columns: propTypes.arrayOf(propTypes.any).isRequired,
   data: propTypes.arrayOf(propTypes.any),
   loading: propTypes.bool,
-  paginationResetDefaultPage: propTypes.bool,
   onRowDoubleClicked: propTypes.func,
   expandableRowsComponent: propTypes.func,
   subHeaderComponent: propTypes.node.isRequired,
@@ -95,7 +88,6 @@ DataTable.propTypes = {
 DataTable.defaultProps = {
   loading: false,
   data: [],
-  paginationResetDefaultPage: false,
   onRowDoubleClicked: () => {},
   expandableRowsComponent: () => {},
   onChangePage: () => {},

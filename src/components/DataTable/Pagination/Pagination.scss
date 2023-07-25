@@ -1,15 +1,28 @@
 .pagination-container {
-  padding: 1rem;
+  padding: 0.25rem;
+  padding-top: 1.25rem;
+  padding-bottom: 0.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative;
+  color: #474aff;
+  justify-content: space-between;
+  @media (max-width: 768px) {
+    justify-content: center;
+  }
 
-  .pagination-rows-option {
-    position: absolute;
-    right: 1rem;
-    color: #474aff;
-    font-weight: bold;
+  .pagination-row-options,
+  .pagination-page-count {
+    border: 1px solid #474aff;
+    border-radius: 6px;
+    padding: 0 6px;
+    @media (max-width: 768px) {
+      display: none;
+    }
+  }
+
+  .pagination-selectbox {
+    outline: none;
   }
 
   .pagination {
