@@ -15,6 +15,7 @@ const Pagination = ({
 
   const updateRowPerPage = (e) => {
     onChangeRowsPerPage(Number(e.target.value))
+    onPageChange(0)
   }
 
   return (
