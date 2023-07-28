@@ -12,7 +12,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import { Send, ArrowLeft, Mail } from 'react-feather'
-import { isEmpty } from 'lodash'
+import { debounce, isEmpty } from 'lodash'
 
 import { SUGGESTIONS } from '@fakeDB'
 import { ChatState } from '@context'
@@ -26,6 +26,12 @@ import ScrollableChat from '../ScrollableChat'
 import SuggestionBox from './SuggestionBox'
 
 import './SingleChat.scss'
+
+const updateTyping = debounce((chatId, selectedChat, setTyping) => {
+  if (chatId === selectedChat?._id) {
+    setTyping()
+  }
+})
 
 const SingleChat = () => {
   const user = getUser()
@@ -73,7 +79,7 @@ const SingleChat = () => {
     }
 
     let lastTypingTime = new Date().getTime()
-    let timerLength = 7500
+    let timerLength = 5000
 
     setTimeout(() => {
       let timeNow = new Date().getTime()
@@ -88,14 +94,10 @@ const SingleChat = () => {
 
   useEffect(() => {
     socket.on(CHAT_EVENT_LISTENERS.TYPING, (chatId) => {
-      if (chatId === selectedChat?._id) {
-        setIsTyping(true)
-      }
+      updateTyping(chatId, selectedChat, () => setIsTyping(true))
     })
     socket.on(CHAT_EVENT_LISTENERS.STOP_TYPING, (chatId) => {
-      if (chatId === selectedChat?._id) {
-        setIsTyping(false)
-      }
+      updateTyping(chatId, selectedChat, () => setIsTyping(false))
     })
   }, [selectedChat, socket])
 
