@@ -103,8 +103,8 @@ const SingleChat = () => {
 
   useEffect(() => {
     if (suggestionSettings.filterSuggestions) {
-      const filteredSuggestions = SUGGESTIONS.filter((suggestion) =>
-        suggestion.toLowerCase().includes(newMessage.toLowerCase()),
+      const filteredSuggestions = [...getChatTemplateButtons(), ...SUGGESTIONS].filter(
+        ({ message: suggestionMessage }) => suggestionMessage.toLowerCase().includes(newMessage.toLowerCase()),
       )
       setSuggestions(filteredSuggestions)
     } else {

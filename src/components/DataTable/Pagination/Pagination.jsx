@@ -20,16 +20,9 @@ const Pagination = ({
 
   return (
     <div className="pagination-container">
-      <div className="pagination-row-options">
-        lignes
-        <select className="pagination-selectbox" defaultValue={paginationPerPage} onChange={updateRowPerPage}>
-          {paginationRowsPerPageOptions.map((item, index) => (
-            <option key={index} value={item}>
-              {item}
-            </option>
-          ))}
-        </select>
-      </div>
+      <h3 className="pagination-page-count">
+        {paginationPerPage * pageNumber} Sur {paginationTotalRows}
+      </h3>
 
       <ReactPaginate
         containerClassName="pagination"
@@ -44,9 +37,16 @@ const Pagination = ({
         previousLabel={<ArrowLeft size="1.25rem" color="#474aff" />}
       />
 
-      <h3 className="pagination-page-count">
-        {paginationPerPage * pageNumber} / {paginationTotalRows}
-      </h3>
+      <div className="pagination-row-options">
+        lignes
+        <select className="pagination-selectbox" defaultValue={paginationPerPage} onChange={updateRowPerPage}>
+          {paginationRowsPerPageOptions.map((item, index) => (
+            <option key={index} value={item}>
+              {item}
+            </option>
+          ))}
+        </select>
+      </div>
     </div>
   )
 }
