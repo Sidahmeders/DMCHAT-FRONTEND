@@ -135,12 +135,12 @@ const SingleChat = () => {
               icon={<ArrowLeft />}
               onClick={() => setSelectedChat('')}
             />
-            {!selectedChat.isGroupChat ? (
+            {selectedChat.isGroupChat ? (
               <>
-                <Text fontWeight="500" color={senderName ? 'gray.600' : 'red.600'}>
-                  {senderName || 'Compte Supprimé'}
+                <Text fontWeight="500" color="gray.600">
+                  {selectedChat.chatName.toUpperCase()}
                 </Text>
-                <PeerProfileModal
+                <UpdateGroupChatModal
                   chatId={selectedChat._id}
                   sender={getSender(localUser, selectedChat.users)}
                   setMessages={setMessages}
@@ -148,10 +148,10 @@ const SingleChat = () => {
               </>
             ) : (
               <>
-                <Text fontWeight="500" color="gray.600">
-                  {selectedChat.chatName.toUpperCase()}
+                <Text fontWeight="500" color={senderName ? 'gray.600' : 'red.600'}>
+                  {senderName || 'Compte Supprimé'}
                 </Text>
-                <UpdateGroupChatModal
+                <PeerProfileModal
                   chatId={selectedChat._id}
                   sender={getSender(localUser, selectedChat.users)}
                   setMessages={setMessages}

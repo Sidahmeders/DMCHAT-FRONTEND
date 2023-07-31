@@ -6,7 +6,6 @@ import {
   Modal,
   ModalBody,
   ModalContent,
-  ModalFooter,
   ModalHeader,
   ModalOverlay,
   Text,
@@ -21,7 +20,7 @@ import { formatDate } from '@utils'
 import DeleteChatMessagesModal from './DeleteChatMessagesModal'
 import SuggestionModal from '../SuggestionModal/SuggestionModal'
 
-export default function PeerProfileModal({ sender, chatId, setMessages }) {
+const PeerProfileModal = ({ sender, chatId, setMessages }) => {
   const { isOpen: isProfileOpen, onOpen: onProfileOpen, onClose: onProfileClose } = useDisclosure()
   const {
     isOpen: isSuggestionModalOpen,
@@ -43,7 +42,7 @@ export default function PeerProfileModal({ sender, chatId, setMessages }) {
 
       <Modal size="xl" isOpen={isProfileOpen} onClose={onProfileClose} isCentered>
         <ModalOverlay />
-        <ModalContent>
+        <ModalContent pb="4">
           <ModalCloseButton size="lg" />
           <ModalHeader display="flex" justifyContent="center" alignItems="center">
             <Text fontSize="24">{sender.name || 'Utilisateur supprimé'}</Text>
@@ -60,7 +59,6 @@ export default function PeerProfileModal({ sender, chatId, setMessages }) {
               Inscrit à: <b>{formatDate(sender.createdAt, 'HH:mm EEEE dd/MM . yyyy')}</b>
             </Text>
           </ModalBody>
-          <ModalFooter></ModalFooter>
         </ModalContent>
       </Modal>
     </>
@@ -78,3 +76,5 @@ PeerProfileModal.defaultProps = {
   chatId: '',
   setMessages: () => {},
 }
+
+export default PeerProfileModal
