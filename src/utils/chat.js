@@ -1,9 +1,9 @@
-export const getSender = (loggedUser, users = []) => {
+export const getSenderName = (loggedUser, users = []) => {
   const [firstUser, secondUser] = users
   return firstUser?._id === loggedUser?._id ? secondUser?.name : firstUser?.name
 }
 
-export const getSenderFull = (loggedUser, users = []) => {
+export const getSender = (loggedUser, users = []) => {
   const [firstUser, secondUser] = users
   return firstUser?._id === loggedUser?._id ? secondUser : firstUser
 }

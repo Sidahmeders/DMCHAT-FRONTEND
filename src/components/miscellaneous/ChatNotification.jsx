@@ -3,7 +3,7 @@ import { Menu, MenuButton, MenuItem, MenuList, Text } from '@chakra-ui/react'
 import { MessageCircle } from 'react-feather'
 
 import { ChatState } from '@context'
-import { getSender, getLocalUser } from '@utils'
+import { getSenderName, getLocalUser } from '@utils'
 import { APP_ROUTES } from '@config'
 
 import './ChatNotification.scss'
@@ -51,7 +51,7 @@ const ChatNotification = () => {
               }}>
               {chat[0].isGroupChat
                 ? `message dans ${chat[0].chatName}`
-                : `${getSender(localUser, chat[0].users)} t'a laissé un message`}
+                : `${getSenderName(localUser, chat[0].users)} t'a laissé un message`}
             </MenuItem>
           )
         })}

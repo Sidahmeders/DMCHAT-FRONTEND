@@ -17,7 +17,7 @@ import { debounce, isEmpty } from 'lodash'
 import { SUGGESTIONS } from '@fakeDB'
 import { ChatState } from '@context'
 import { CHAT_EVENT_LISTENERS } from '@config'
-import { getChatTemplateButtons, getSender, getSenderFull, getLocalUser } from '@utils'
+import { getChatTemplateButtons, getSenderName, getSender, getLocalUser } from '@utils'
 import { createMessage } from '@services/messages'
 
 import PeerProfileModal from '../miscellaneous/PeerProfileModal'
@@ -50,7 +50,7 @@ const SingleChat = () => {
     socketConnected,
   } = ChatState()
 
-  const senderName = getSender(localUser, selectedChat.users)
+  const senderName = getSenderName(localUser, selectedChat.users)
   const [newMessage, setNewMessage] = useState('')
   const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
@@ -65,10 +65,10 @@ const SingleChat = () => {
       socket.emit(CHAT_EVENT_LISTENERS.NEW_MESSAGE, { createdMessage, targetChat: selectedChat })
       setMessages([...messages, createdMessage])
 
-      const sender = getSenderFull(localUser, selectedChat.users)
+      const sender = getSender(localUser, selectedChat.users)
       setUserChats((prevChats) =>
         prevChats.map((chat) => {
-          const senderChat = getSenderFull(localUser, chat.users)
+          const senderChat = getSender(localUser, chat.users)
           if (senderChat._id === sender._id) {
             return { ...chat, latestMessage: createdMessage }
           }
@@ -142,7 +142,7 @@ const SingleChat = () => {
                 </Text>
                 <PeerProfileModal
                   chatId={selectedChat._id}
-                  sender={getSenderFull(localUser, selectedChat.users)}
+                  sender={getSender(localUser, selectedChat.users)}
                   setMessages={setMessages}
                 />
               </>
@@ -153,7 +153,7 @@ const SingleChat = () => {
                 </Text>
                 <UpdateGroupChatModal
                   chatId={selectedChat._id}
-                  sender={getSenderFull(localUser, selectedChat.users)}
+                  sender={getSender(localUser, selectedChat.users)}
                   setMessages={setMessages}
                 />
               </>
