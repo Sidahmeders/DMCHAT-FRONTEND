@@ -1,6 +1,6 @@
 import { isEmpty } from 'lodash'
 
-import { getUser } from '@utils'
+import { getLocalUser } from '@utils'
 
 import ChatBox from './ChatBox'
 import UserChats from './UserChats'
@@ -8,11 +8,11 @@ import UserChats from './UserChats'
 import './Chat.scss'
 
 export default function Chat() {
-  const user = getUser()
+  const localUser = getLocalUser()
 
   return (
     <>
-      {!isEmpty(user) && (
+      {!isEmpty(localUser) && (
         <div className="chat-container">
           <UserChats />
           <ChatBox />

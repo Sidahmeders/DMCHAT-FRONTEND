@@ -2,13 +2,13 @@ import { useNavigate } from 'react-router-dom'
 import { Button, Tooltip } from '@chakra-ui/react'
 import { LogOut } from 'react-feather'
 
-import { removeUser } from '@utils'
+import { removeLocalUser } from '@utils'
 
 export default function LogoutButton() {
   const navigate = useNavigate()
 
   const onLogout = () => {
-    removeUser()
+    removeLocalUser()
     navigate('/')
   }
 

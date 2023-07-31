@@ -23,7 +23,7 @@ import { isEmpty, omit } from 'lodash'
 
 import { ChatState } from '@context'
 import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENT_EVENT_LISTENERS } from '@config'
-import { getMotifTemplateButtons, getUser } from '@utils'
+import { getMotifTemplateButtons, getLocalUser } from '@utils'
 import { createAppointment, relateAppointment } from '@services/appointments'
 import { fetchPatients } from '@services/patients'
 import { createPayment } from '@services/payments'
@@ -39,7 +39,7 @@ const resolvePatientOptions = (patients) => {
 }
 
 export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setEvents }) {
-  const localUser = getUser()
+  const localUser = getLocalUser()
   const { start, end } = selectedSlotInfo
   const toast = useToast()
   const { socket } = ChatState()

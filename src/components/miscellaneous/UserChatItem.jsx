@@ -1,16 +1,16 @@
 import { Avatar, Box, HStack, Stack, Text, useDisclosure } from '@chakra-ui/react'
 
 import { ChatState } from '@context'
-import { formatMessageDate, getSender, getSenderFull, getUser } from '@utils'
+import { formatMessageDate, getSender, getSenderFull, getLocalUser } from '@utils'
 
 import DeleteChatModal from './DeleteChatModal'
 
 const UserChatItem = ({ chat }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { selectedChat, setSelectedChat } = ChatState()
-  const user = getUser()
-  const sender = chat.isGroupChat ? chat.chatName : getSender(user, chat.users)
-  const { pic } = getSenderFull(user, chat.users) || {}
+  const localUser = getLocalUser()
+  const sender = chat.isGroupChat ? chat.chatName : getSender(localUser, chat.users)
+  const { pic } = getSenderFull(localUser, chat.users) || {}
   const { content, updatedAt } = chat?.latestMessage || {}
 
   return (

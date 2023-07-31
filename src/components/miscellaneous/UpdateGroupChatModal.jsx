@@ -20,7 +20,7 @@ import { SyncLoader } from 'react-spinners'
 
 import { ChatState } from '@context'
 import { CHAT_EVENT_LISTENERS } from '@config'
-import { getUser } from '@utils'
+import { getLocalUser } from '@utils'
 import { joinGroup, leaveGroup, renameGroup } from '@services/chats'
 import { searchUsers } from '@services/users'
 
@@ -30,7 +30,7 @@ import DeleteChatMessagesModal from './DeleteChatMessagesModal'
 import SuggestionModal from '../SuggestionModal/SuggestionModal'
 
 const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
-  const localUser = getUser()
+  const localUser = getLocalUser()
   const toast = useToast()
   const { selectedChat, socket } = ChatState()
   const {
@@ -104,14 +104,14 @@ const UpdateGroupChatModal = ({ sender, chatId, setMessages }) => {
     setGroupChatName('')
   }
 
-  const handleRemove = async (removeUser) => {
+  const handleRemove = async (removeLocalUser) => {
     // Check if group admin id !== logged in user id and user id who is trying to remove !== logged in user id
-    if (selectedChat.groupAdmin._id !== localUser._id && removeUser._id !== localUser._id) {
+    if (selectedChat.groupAdmin._id !== localUser._id && removeLocalUser._id !== localUser._id) {
       return toast({ title: "Seuls les administrateurs peuvent supprimer quelqu'un", status: 'warning' })
     }
     setIsLoading(true)
     try {
-      const removedUser = await leaveGroup(selectedChat._id, removeUser)
+      const removedUser = await leaveGroup(selectedChat._id, removeLocalUser)
       socket.emit(CHAT_EVENT_LISTENERS.UPDATE_GROUP, removedUser)
     } catch (error) {
       toast({ description: "Échec de la suppression de l'utilisateur" })

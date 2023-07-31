@@ -6,7 +6,7 @@ import { Wifi, WifiOff } from 'react-feather'
 
 import { ChatState } from '@context'
 import { APP_ROUTES, CHAT_EVENT_LISTENERS } from '@config'
-import { checkIsJWTExpired, removeUser, getPageRoute, getUser } from '@utils'
+import { checkIsJWTExpired, removeLocalUser, getPageRoute, getLocalUser } from '@utils'
 
 import TopNavigation from '@components/TopNavigation/TopNavigation'
 import { Auth, Chat, TodayPatientsList, Statistics, Calendar, ForgetPassword, ConfirmLogin } from './pages'
@@ -14,14 +14,14 @@ import { Auth, Chat, TodayPatientsList, Statistics, Calendar, ForgetPassword, Co
 import './App.css'
 
 const App = () => {
-  const user = getUser()
+  const localUser = getLocalUser()
   const toast = useToast()
   const navigate = useNavigate()
   const { socket, setSocketConnected } = ChatState()
 
-  if (!isEmpty(user) && user.token) {
-    if (checkIsJWTExpired(user.token)) {
-      removeUser()
+  if (!isEmpty(localUser) && localUser.token) {
+    if (checkIsJWTExpired(localUser.token)) {
+      removeLocalUser()
       navigate('/')
     }
   }
@@ -64,17 +64,17 @@ const App = () => {
   }, [])
 
   useEffect(() => {
-    if (!user) return
-    socket.emit(CHAT_EVENT_LISTENERS.SETUP, user)
+    if (!localUser) return
+    socket.emit(CHAT_EVENT_LISTENERS.SETUP, localUser)
     socket.on(CHAT_EVENT_LISTENERS.CONNECTED, () => setSocketConnected(true))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [user, socket])
+  }, [localUser, socket])
 
   return (
     <div className="App">
-      {!isEmpty(user) && <TopNavigation />}
+      {!isEmpty(localUser) && <TopNavigation />}
       <Routes>
-        {isEmpty(user) ? (
+        {isEmpty(localUser) ? (
           <>
             <Route path="/" element={<Auth />} />
             <Route path={APP_ROUTES.FORGET_PASSWORD} element={<ForgetPassword />} />

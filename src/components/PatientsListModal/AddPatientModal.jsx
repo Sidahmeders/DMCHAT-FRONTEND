@@ -17,14 +17,14 @@ import {
   InputLeftElement,
 } from '@chakra-ui/react'
 
-import { getUser } from '@utils'
+import { getLocalUser } from '@utils'
 import { CREATE_PATIENT_NAMES } from '@config'
 import { createPatient } from '@services/patients'
 
 const initialValues = Object.values(CREATE_PATIENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
 
 export default function AddPatientModal({ setPatientsData }) {
-  const user = getUser()
+  const localUser = getLocalUser()
   const { isOpen, onOpen, onClose } = useDisclosure()
   const toast = useToast()
   const {
@@ -36,7 +36,7 @@ export default function AddPatientModal({ setPatientsData }) {
 
   const onSubmit = async (data) => {
     try {
-      const createdPatient = await createPatient({ ...data, [CREATE_PATIENT_NAMES.SENDER]: user._id })
+      const createdPatient = await createPatient({ ...data, [CREATE_PATIENT_NAMES.SENDER]: localUser._id })
       setPatientsData((patientsData) => ({
         ...patientsData,
         patients: [createdPatient, ...patientsData.patients],

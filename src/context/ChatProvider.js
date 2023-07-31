@@ -4,7 +4,7 @@ import { useToast } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 
 import { SUGGESTIONS } from '@fakeDB'
-import { getChatSuggestionSettings, getChatTemplateButtons, getUser, notify, getSenderFull } from '@utils'
+import { getChatSuggestionSettings, getChatTemplateButtons, getLocalUser, getSenderFull, notify } from '@utils'
 import { CHAT_EVENT_LISTENERS } from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
 import { fetchGroupChats, fetchUserChats } from '@services/chats'
@@ -57,7 +57,7 @@ const updateChatMessages = debounce(
 )
 
 export const ChatProvider = ({ children, socket }) => {
-  const localUser = getUser()
+  const localUser = getLocalUser()
   const chatSuggestionSettings = getChatSuggestionSettings()
   const toast = useToast()
   const navigate = useNavigate()

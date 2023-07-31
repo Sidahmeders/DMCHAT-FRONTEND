@@ -3,10 +3,10 @@ import { Avatar, Tooltip } from '@chakra-ui/react'
 import { useEffect, useRef } from 'react'
 import { BeatLoader } from 'react-spinners'
 
-import { isLastMessage, getUser, isSameSender, isSameSenderMargin, isSameUser } from '@utils'
+import { isLastMessage, getLocalUser, isSameSender, isSameSenderMargin, isSameUser } from '@utils'
 
 const ScrollableChat = ({ messages, isTyping }) => {
-  const user = getUser()
+  const localUser = getLocalUser()
   const scrollRef = useRef()
 
   useEffect(() => {
@@ -20,7 +20,8 @@ const ScrollableChat = ({ messages, isTyping }) => {
         {messages.length
           ? messages.map((message, index) => (
               <div ref={scrollRef} key={message?._id} style={{ display: 'flex' }}>
-                {(isSameSender(messages, message, index, user?._id) || isLastMessage(messages, index, user?._id)) && (
+                {(isSameSender(messages, message, index, localUser?._id) ||
+                  isLastMessage(messages, index, localUser?._id)) && (
                   <Tooltip label={message?.sender?.name} placement="bottom-start" hasArrow>
                     <Avatar
                       mt="7px"
@@ -35,12 +36,12 @@ const ScrollableChat = ({ messages, isTyping }) => {
 
                 <span
                   style={{
-                    backgroundColor: `${message?.sender?._id === user?._id ? '#BEE3F8' : '#B9F5D0'}`,
+                    backgroundColor: `${message?.sender?._id === localUser?._id ? '#BEE3F8' : '#B9F5D0'}`,
                     borderRadius: '20px',
                     padding: '5px 15px',
                     maxWidth: '75%',
-                    marginLeft: isSameSenderMargin(messages, message, index, user?._id),
-                    marginTop: isSameUser(messages, message, index, user?._id) ? 3 : 10,
+                    marginLeft: isSameSenderMargin(messages, message, index, localUser?._id),
+                    marginTop: isSameUser(messages, message, index, localUser?._id) ? 3 : 10,
                   }}>
                   {message?.content}
                 </span>

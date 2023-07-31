@@ -4,7 +4,7 @@ import { CardBody } from '@chakra-ui/card'
 import { debounce } from 'lodash'
 
 import { AppointmentsState, ChatState } from '@context'
-import { getUser, notify } from '@utils'
+import { getLocalUser, notify } from '@utils'
 import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENT_EVENT_LISTENERS } from '@config'
 import { updateAppointmentSync } from '@services/appointments'
 import { createPayment } from '@services/payments'
@@ -78,7 +78,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
 
       if (paymentVal !== appointment.payment) {
         const paymentUpdate = {
-          [CREATE_PAYMENT_NAMES.SENDER]: getUser()?._id,
+          [CREATE_PAYMENT_NAMES.SENDER]: getLocalUser()?._id,
           [CREATE_PAYMENT_NAMES.PATIENT]: patientId,
           [CREATE_PAYMENT_NAMES.AMOUNT]: paymentVal - appointment.payment,
           [CREATE_PAYMENT_NAMES.PAYER_NAME]: fullName,

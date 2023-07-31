@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { Container, Box, Text, Tab, TabList, TabPanel, TabPanels, Tabs } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
-import { getUser } from '@utils'
+import { getLocalUser } from '@utils'
 
 import Signup from './Signup'
 import Login from './Login'
@@ -12,7 +12,7 @@ export default function Auth() {
   const navigate = useNavigate()
 
   useEffect(() => {
-    if (isEmpty(getUser())) {
+    if (isEmpty(getLocalUser())) {
       navigate('/')
     }
   }, [navigate])

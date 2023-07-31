@@ -1,10 +1,10 @@
-import { getUser } from '@utils'
+import { getLocalUser } from '@utils'
 import { isEmpty } from 'lodash'
 
 class Fetch {
   #user
 
-  constructor(user = getUser()) {
+  constructor(user = getLocalUser()) {
     if (!Fetch.instance) {
       this.#user = user
       Fetch.instance = this

@@ -22,13 +22,13 @@ import {
 import { Settings, Eye, EyeOff } from 'react-feather'
 import { omit } from 'lodash'
 
-import { getUser, setUser } from '@utils'
+import { getLocalUser, setLocalUser } from '@utils'
 import { CREATE_USER_NAMES } from '@config'
 import { updateUser } from '@services/users'
 import UploaderAvatar from './UploaderAvatar'
 
 const EditUserSettings = () => {
-  const localUser = getUser()
+  const localUser = getLocalUser()
   const isAdmin = localUser.role === 'admin'
   const toast = useToast()
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -56,8 +56,11 @@ const EditUserSettings = () => {
     setIsLoading(true)
     try {
       await updateUser(localUser._id, userUpdate)
-      setUser({ ...localUser, ...omit(userUpdate, [CREATE_USER_NAMES.PASSWORD, CREATE_USER_NAMES.CONFIRM_PASSWORD]) })
-      setUserUpdate(getUser())
+      setLocalUser({
+        ...localUser,
+        ...omit(userUpdate, [CREATE_USER_NAMES.PASSWORD, CREATE_USER_NAMES.CONFIRM_PASSWORD]),
+      })
+      setUserUpdate(getLocalUser())
       setCanUpdateUser(false)
       toast({ title: 'utilisateur modifié avec succès', status: 'success' })
     } catch (error) {

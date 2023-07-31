@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { Container, useToast, Flex, Box, Input, Button, Stack, Text } from '@chakra-ui/react'
 import { ChevronLeft, Mail } from 'react-feather'
 
-import { getConfirmationToken, setPageRoute, setUser } from '@utils'
+import { getConfirmationToken, setPageRoute, setLocalUser } from '@utils'
 import { APP_ROUTES } from '@config'
 import { confirmSignIn } from '@services/users'
 
@@ -27,7 +27,7 @@ const ConfirmLogin = () => {
     try {
       const token = getConfirmationToken()
       const userData = await confirmSignIn({ token, otpCode: OTPCode })
-      setUser(userData)
+      setLocalUser(userData)
       toast({ title: 'utilisateur authentifié avec succès', status: 'success' })
       setTimeout(() => {
         setPageRoute(APP_ROUTES.CHATS)

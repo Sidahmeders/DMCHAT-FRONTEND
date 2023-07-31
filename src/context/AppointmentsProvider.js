@@ -3,7 +3,7 @@ import { useToast } from '@chakra-ui/react'
 import { isEmpty } from 'lodash'
 
 import { APPOINTMENTS_IDS } from '../config'
-import { flattenAppointment, formatDate, getUser } from '@utils'
+import { flattenAppointment, formatDate, getLocalUser } from '@utils'
 import { fetchDayAppointments } from '@services/appointments'
 import { fetchDayPayments } from '@services/payments'
 
@@ -52,7 +52,7 @@ export const AppointmentsProvider = ({ children }) => {
   useEffect(() => {
     ;(async () => {
       try {
-        if (isEmpty(getUser())) return
+        if (isEmpty(getLocalUser())) return
         const todayPayments = await fetchDayPayments(selectedDate)
         setTodayPaymentHistory(todayPayments)
       } catch (error) {

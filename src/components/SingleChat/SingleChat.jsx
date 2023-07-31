@@ -17,7 +17,7 @@ import { debounce, isEmpty } from 'lodash'
 import { SUGGESTIONS } from '@fakeDB'
 import { ChatState } from '@context'
 import { CHAT_EVENT_LISTENERS } from '@config'
-import { getChatTemplateButtons, getSender, getSenderFull, getUser } from '@utils'
+import { getChatTemplateButtons, getSender, getSenderFull, getLocalUser } from '@utils'
 import { createMessage } from '@services/messages'
 
 import PeerProfileModal from '../miscellaneous/PeerProfileModal'
@@ -34,7 +34,7 @@ const updateTyping = debounce((chatId, selectedChat, setTyping) => {
 })
 
 const SingleChat = () => {
-  const user = getUser()
+  const localUser = getLocalUser()
   const toast = useToast()
   const {
     socket,
@@ -49,7 +49,7 @@ const SingleChat = () => {
     socketConnected,
   } = ChatState()
 
-  const senderName = getSender(user, selectedChat.users)
+  const senderName = getSender(localUser, selectedChat.users)
   const [newMessage, setNewMessage] = useState('')
   const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
@@ -130,7 +130,7 @@ const SingleChat = () => {
                 </Text>
                 <PeerProfileModal
                   chatId={selectedChat._id}
-                  sender={getSenderFull(user, selectedChat.users)}
+                  sender={getSenderFull(localUser, selectedChat.users)}
                   setMessages={setMessages}
                 />
               </>
@@ -141,7 +141,7 @@ const SingleChat = () => {
                 </Text>
                 <UpdateGroupChatModal
                   chatId={selectedChat._id}
-                  sender={getSenderFull(user, selectedChat.users)}
+                  sender={getSenderFull(localUser, selectedChat.users)}
                   setMessages={setMessages}
                 />
               </>

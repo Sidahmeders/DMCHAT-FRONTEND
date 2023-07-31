@@ -12,9 +12,9 @@ const CHAT_SUGGESTION_SETTINGS = 'chatSuggestionSettings'
 export const getConfirmationToken = () => localStorage.getItem(CONFIRM_TOKEN) || null
 export const setConfirmationToken = (token) => localStorage.setItem(CONFIRM_TOKEN, token)
 
-export const getUser = () => JSON.parse(localStorage.getItem(USER)) || {}
-export const setUser = (userData) => localStorage.setItem(USER, JSON.stringify(userData))
-export const removeUser = () => localStorage.removeItem(USER)
+export const getLocalUser = () => JSON.parse(localStorage.getItem(USER)) || {}
+export const setLocalUser = (userData) => localStorage.setItem(USER, JSON.stringify(userData))
+export const removeLocalUser = () => localStorage.removeItem(USER)
 
 export const getPatient = () => JSON.parse(localStorage.getItem(PATIENT)) || {}
 export const setPatient = (patient) => localStorage.setItem(PATIENT, JSON.stringify(patient))

@@ -13,10 +13,10 @@ const createGroupChat = async (groupChatName, selectedUsers) => {
   })
 }
 
-const leaveGroup = async (chatId, removeUser) => {
+const leaveGroup = async (chatId, removeLocalUser) => {
   return await _fetch.PUT('/api/chats/group/leave', {
     chatId: chatId,
-    userId: removeUser._id,
+    userId: removeLocalUser._id,
   })
 }
 
