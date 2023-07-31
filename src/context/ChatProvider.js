@@ -4,7 +4,7 @@ import { useToast } from '@chakra-ui/react'
 import { debounce } from 'lodash'
 
 import { SUGGESTIONS } from '@fakeDB'
-import { getChatSuggestionSettings, getChatTemplateButtons, getUser, notify } from '@utils'
+import { getChatSuggestionSettings, getChatTemplateButtons, getUser, notify, getSenderFull } from '@utils'
 import { CHAT_EVENT_LISTENERS } from '@config'
 import { fetchMessagesByChatId } from '@services/messages'
 import { fetchGroupChats, fetchUserChats } from '@services/chats'
@@ -20,8 +20,23 @@ const updateChatMessages = debounce(
     setMessages,
     notifications,
     setNotifications,
+    setUserChats,
+    localUser,
     setFetchUserChatsAgain,
   }) => {
+    const sender = getSenderFull(localUser, selectedChat.users)
+    if (sender) {
+      setUserChats((prevChats) =>
+        prevChats.map((chat) => {
+          const senderChat = getSenderFull(localUser, chat.users)
+          if (senderChat._id === sender._id) {
+            return { ...chat, latestMessage: createdMessage }
+          }
+          return chat
+        }),
+      )
+    }
+
     if (selectedChat._id === targetChat._id) {
       setMessages((prevMessages) => [...prevMessages, createdMessage])
     }
@@ -128,6 +143,8 @@ export const ChatProvider = ({ children, socket }) => {
           setMessages,
           notifications,
           setNotifications,
+          setUserChats,
+          localUser,
           setFetchUserChatsAgain,
         })
         const { sender, content } = createdMessage || {}
