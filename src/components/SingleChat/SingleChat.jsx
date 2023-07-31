@@ -44,6 +44,7 @@ const SingleChat = () => {
     setMessages,
     suggestions,
     setSuggestions,
+    setUserChats,
     suggestionSettings,
     isLoadingMessages,
     socketConnected,
@@ -63,6 +64,17 @@ const SingleChat = () => {
       const createdMessage = await createMessage(newMessage, selectedChat._id)
       socket.emit(CHAT_EVENT_LISTENERS.NEW_MESSAGE, { createdMessage, targetChat: selectedChat })
       setMessages([...messages, createdMessage])
+
+      const sender = getSenderFull(localUser, selectedChat.users)
+      setUserChats((prevChats) =>
+        prevChats.map((chat) => {
+          const senderChat = getSenderFull(localUser, chat.users)
+          if (senderChat._id === sender._id) {
+            return { ...chat, latestMessage: createdMessage }
+          }
+          return chat
+        }),
+      )
     } catch (error) {
       toast({ description: error.message })
     }
