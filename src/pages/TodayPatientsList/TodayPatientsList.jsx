@@ -25,47 +25,6 @@ export const DragWrap = ({ id, index, children }) => (
   </Draggable>
 )
 
-const reorderAppointments = async ({ socket, appointmentsList, source, destination }) => {
-  if (source.droppableId === APPOINTMENTS_IDS.EXPECTED || source.droppableId === APPOINTMENTS_IDS.WAITING_ROOM) {
-    const appointments = appointmentsList[source.droppableId]
-
-    const sourceAppointment = appointments[source.index]
-    const destinationAppointment = appointments[destination.index]
-
-    const updatedSourceAppointment = await updateAppointment(sourceAppointment._id, {
-      [CREATE_APPOINTMENT_NAMES.ORDER]: destination.index,
-    })
-    const updatedDestinationAppointment = await updateAppointment(destinationAppointment._id, {
-      [CREATE_APPOINTMENT_NAMES.ORDER]: source.index,
-    })
-
-    socket.emit(APPOINTMENT_EVENT_LISTENERS.REORDER_APPOINTMENT, {
-      sourceDroppableId: source.droppableId,
-      updatedAppointments: [updatedSourceAppointment, updatedDestinationAppointment],
-    })
-  }
-}
-
-const updateAppointmentStatus = async ({ socket, appointmentsList, draggableId, source, destination }) => {
-  const { droppableId: sourceDroppableId } = source || {}
-  const { droppableId: destinationDroppableId } = destination || {}
-
-  const droppedAppointment = appointmentsList[sourceDroppableId].find((appointment) => appointment.id === draggableId)
-
-  const updatedAppointment = await updateAppointment(droppedAppointment.id, {
-    order: Number.MAX_SAFE_INTEGER,
-    [sourceDroppableId]: false,
-    [destinationDroppableId]: true,
-  })
-
-  socket.emit(APPOINTMENT_EVENT_LISTENERS.DROP_APPOINTMENT, {
-    draggableId,
-    sourceDroppableId,
-    destinationDroppableId,
-    updatedAppointment,
-  })
-}
-
 export default function TodayPatientsList() {
   const { socket } = ChatState()
   const { pathname } = useLocation()
@@ -79,14 +38,55 @@ export default function TodayPatientsList() {
       const { draggableId, destination, source } = props
 
       if (source.droppableId === destination.droppableId) {
-        await reorderAppointments({ socket, appointmentsList, source, destination })
+        await reorderAppointments({ source, destination })
       } else {
-        await updateAppointmentStatus({ socket, appointmentsList, draggableId, source, destination })
+        await updateAppointmentStatus({ draggableId, source, destination })
       }
     } catch (error) {
       toast({ description: error.message })
     }
     setIsLoading(false)
+  }
+
+  const reorderAppointments = async ({ source, destination }) => {
+    if (source.droppableId === APPOINTMENTS_IDS.EXPECTED || source.droppableId === APPOINTMENTS_IDS.WAITING_ROOM) {
+      const appointments = appointmentsList[source.droppableId]
+
+      const sourceAppointment = appointments[source.index]
+      const destinationAppointment = appointments[destination.index]
+
+      const updatedSourceAppointment = await updateAppointment(sourceAppointment._id, {
+        [CREATE_APPOINTMENT_NAMES.ORDER]: destination.index,
+      })
+      const updatedDestinationAppointment = await updateAppointment(destinationAppointment._id, {
+        [CREATE_APPOINTMENT_NAMES.ORDER]: source.index,
+      })
+
+      socket.emit(APPOINTMENT_EVENT_LISTENERS.REORDER_APPOINTMENT, {
+        sourceDroppableId: source.droppableId,
+        updatedAppointments: [updatedSourceAppointment, updatedDestinationAppointment],
+      })
+    }
+  }
+
+  const updateAppointmentStatus = async ({ draggableId, source, destination }) => {
+    const { droppableId: sourceDroppableId } = source || {}
+    const { droppableId: destinationDroppableId } = destination || {}
+
+    const droppedAppointment = appointmentsList[sourceDroppableId].find((appointment) => appointment.id === draggableId)
+
+    const updatedAppointment = await updateAppointment(droppedAppointment.id, {
+      order: Number.MAX_SAFE_INTEGER,
+      [sourceDroppableId]: false,
+      [destinationDroppableId]: true,
+    })
+
+    socket.emit(APPOINTMENT_EVENT_LISTENERS.DROP_APPOINTMENT, {
+      draggableId,
+      sourceDroppableId,
+      destinationDroppableId,
+      updatedAppointment,
+    })
   }
 
   useEffect(() => {
