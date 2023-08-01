@@ -27,7 +27,7 @@ const PaymentsHistory = () => {
 
   return (
     <>
-      <Button colorScheme="purple" position="absolute" bottom="2" right="2" leftIcon={<Cloud />} onClick={onOpen}>
+      <Button colorScheme="purple" position="absolute" bottom="1" right="1" leftIcon={<Cloud />} onClick={onOpen}>
         Paiement Suivi
       </Button>
       <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
