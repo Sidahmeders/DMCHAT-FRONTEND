@@ -1,29 +1,16 @@
 import { useEffect, useState } from 'react'
-import {
-  Box,
-  FormControl,
-  IconButton,
-  Input,
-  InputRightElement,
-  InputGroup,
-  Spinner,
-  useToast,
-  Stack,
-  Text,
-} from '@chakra-ui/react'
-import { Send, ArrowLeft, Mail } from 'react-feather'
+import { Box, IconButton, Spinner, Stack, Text } from '@chakra-ui/react'
+import { ArrowLeft, Mail } from 'react-feather'
 import { debounce, isEmpty } from 'lodash'
 
-import { SUGGESTIONS } from '@fakeDB'
 import { ChatState } from '@context'
 import { CHAT_EVENT_LISTENERS } from '@config'
-import { getChatTemplateButtons, getSenderName, getSender, getLocalUser } from '@utils'
-import { createMessage } from '@services/messages'
+import { getSenderName, getSender, getLocalUser } from '@utils'
 
 import PeerProfileModal from '../miscellaneous/PeerProfileModal'
 import UpdateGroupChatModal from '../miscellaneous/UpdateGroupChatModal'
 import ScrollableChat from '../ScrollableChat'
-import SuggestionBox from './SuggestionBox'
+import ChatMessageInput from './ChatMessageInput'
 
 import './SingleChat.scss'
 
@@ -35,74 +22,9 @@ const updateTyping = debounce((chatId, selectedChat, setTyping) => {
 
 const SingleChat = () => {
   const localUser = getLocalUser()
-  const toast = useToast()
-  const {
-    socket,
-    selectedChat,
-    setSelectedChat,
-    messages,
-    setMessages,
-    suggestions,
-    setSuggestions,
-    setUserChats,
-    suggestionSettings,
-    isLoadingMessages,
-    socketConnected,
-  } = ChatState()
-
+  const { socket, selectedChat, setSelectedChat, messages, setMessages, isLoadingMessages } = ChatState()
   const senderName = getSenderName(localUser, selectedChat.users)
-  const [newMessage, setNewMessage] = useState('')
-  const [typing, setTyping] = useState(false)
   const [isTyping, setIsTyping] = useState(false)
-
-  const sendMessage = async (e) => {
-    if (newMessage.trim().length < 1) return
-    if (e.key !== 'Enter' && e.type !== 'click') return
-    try {
-      socket.emit(CHAT_EVENT_LISTENERS.STOP_TYPING, selectedChat._id)
-      setNewMessage('')
-      const createdMessage = await createMessage(newMessage, selectedChat._id)
-      socket.emit(CHAT_EVENT_LISTENERS.NEW_MESSAGE, { createdMessage, targetChat: selectedChat })
-      setMessages([...messages, createdMessage])
-
-      const sender = getSender(localUser, selectedChat.users)
-      setUserChats((prevChats) =>
-        prevChats.map((chat) => {
-          const senderChat = getSender(localUser, chat.users)
-          if (senderChat._id === sender._id) {
-            return { ...chat, latestMessage: createdMessage }
-          }
-          return chat
-        }),
-      )
-    } catch (error) {
-      toast({ description: error.message })
-    }
-  }
-
-  const typingHandler = (e) => {
-    setNewMessage(e.target.value)
-
-    if (!socketConnected) return
-
-    if (!typing) {
-      setTyping(true)
-      socket.emit(CHAT_EVENT_LISTENERS.TYPING, selectedChat._id)
-    }
-
-    let lastTypingTime = new Date().getTime()
-    let timerLength = 5000
-
-    setTimeout(() => {
-      let timeNow = new Date().getTime()
-      let timeDiff = timeNow - lastTypingTime
-
-      if (timeDiff >= timerLength && typing) {
-        socket.emit(CHAT_EVENT_LISTENERS.STOP_TYPING, selectedChat._id)
-        setTyping(false)
-      }
-    }, timerLength)
-  }
 
   useEffect(() => {
     socket.on(CHAT_EVENT_LISTENERS.TYPING, (chatId) => {
@@ -112,18 +34,6 @@ const SingleChat = () => {
       updateTyping(chatId, selectedChat, () => setIsTyping(false))
     })
   }, [selectedChat, socket])
-
-  useEffect(() => {
-    if (suggestionSettings.filterSuggestions) {
-      const filteredSuggestions = [...getChatTemplateButtons(), ...SUGGESTIONS].filter(
-        ({ message: suggestionMessage }) => suggestionMessage.toLowerCase().includes(newMessage.toLowerCase()),
-      )
-      setSuggestions(filteredSuggestions)
-    } else {
-      setSuggestions([...getChatTemplateButtons(), ...SUGGESTIONS])
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [newMessage])
 
   return (
     <>
@@ -180,20 +90,7 @@ const SingleChat = () => {
               </Stack>
             )}
 
-            <SuggestionBox suggestions={suggestions} setNewMessage={setNewMessage} />
-
-            <FormControl mt="3" onKeyDown={sendMessage} isRequired>
-              <InputGroup>
-                <Input
-                  variant="filled"
-                  bg="gray.300"
-                  placeholder="entrer des messages.."
-                  value={newMessage}
-                  onChange={(e) => typingHandler(e)}
-                />
-                <InputRightElement cursor="pointer" mr="2" children={<Send color="#48f" />} onClick={sendMessage} />
-              </InputGroup>
-            </FormControl>
+            <ChatMessageInput />
           </Box>
         </>
       ) : (
