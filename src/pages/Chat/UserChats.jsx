@@ -36,7 +36,7 @@ const UserChats = () => {
       </HStack>
 
       <Box display="flex" flexDir="column" p="4" w="100%" h="100%" borderRadius="lg" overflowY="hidden">
-        <Stack overflowY="scroll">
+        <Stack overflowY="auto">
           {!isLoadingUserChats || userChats.length ? (
             userChats.map((chat) => <UserChatItem key={chat._id} chat={chat} />)
           ) : (
