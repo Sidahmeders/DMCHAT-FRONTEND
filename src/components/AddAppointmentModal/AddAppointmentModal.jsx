@@ -8,8 +8,8 @@ import MotifEditableButtons from './MotifEditableButtons/MotifEditableButtons'
 import ConfigureCalendarAvailabilityBody from './ConfigureCalendarAvailabilityBody'
 
 const AddAppointmentModal = ({ selectedView, selectedSlotInfo, isOpen, onClose, setEvents, setAvailabilities }) => {
-  const { action } = selectedSlotInfo
-  const canAddAppointment = action === 'click' || selectedView === 'day'
+  const { slots } = selectedSlotInfo
+  const canAddAppointment = slots?.length === 1 || selectedView === 'day'
   const [templateButtons, setTemplateButtons] = useState(getMotifTemplateButtons())
 
   return (
