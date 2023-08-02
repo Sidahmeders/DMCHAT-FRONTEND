@@ -114,16 +114,16 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
                 {patient?.fullName} / {patient?.age} ans
               </Text>
             </HStack>
+            <HStack color="Highlight" gap="1" mt="2">
+              <Phone size="1rem" />
+              <Text fontSize="1rem">{formatPhoneNumber(patient?.phoneNumber)}</Text>
+            </HStack>
             <HStack color="Highlight" gap="2" mt="2">
               <HStack gap="6">
                 <Text fontSize="1rem">T: {formatMoney(totalPrice)}</Text>
                 <Text fontSize="1rem">V: {formatMoney(payment)}</Text>
                 <Text fontSize="1rem">R: {formatMoney(paymentLeft)}</Text>
               </HStack>
-            </HStack>
-            <HStack color="Highlight" gap="1" mt="2">
-              <Phone size="1rem" />
-              <Text fontSize="1rem">{formatPhoneNumber(patient?.phoneNumber)} / ##.##.##.##.##</Text>
             </HStack>
           </ModalHeader>
           <ModalBody>
