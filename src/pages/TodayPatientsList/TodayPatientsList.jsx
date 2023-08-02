@@ -29,7 +29,7 @@ export default function TodayPatientsList() {
   const { socket } = ChatState()
   const { pathname } = useLocation()
   const toast = useToast()
-  const { appointmentsList, setAppointmentsList, fetchTodayAppointments } = AppointmentsState()
+  const { appointmentsList, setAppointmentsList, fetchWorkAppointments } = AppointmentsState()
   const [isLoading, setIsLoading] = useState(false)
 
   const onDragEnd = async (props) => {
@@ -93,7 +93,7 @@ export default function TodayPatientsList() {
     ;(async () => {
       setIsLoading(true)
       try {
-        await fetchTodayAppointments()
+        await fetchWorkAppointments()
       } catch (error) {
         toast({ description: error.message })
       }

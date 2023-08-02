@@ -31,7 +31,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
   const { fullName, patientId } = appointmentData
   const toast = useToast()
   const { socket } = ChatState()
-  const { setTodayPaymentHistory, fetchTodayAppointments } = AppointmentsState()
+  const { setTodayPaymentHistory, fetchWorkAppointments } = AppointmentsState()
   const [appointment, setAppointment] = useState(appointmentData)
   const [paymentVal, setPaymentVal] = useState(appointment.payment || 0)
   const [totalPriceVal, setTotalPriceVal] = useState(appointment.totalPrice || 0)
@@ -123,7 +123,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
             setPaymentLeftVal,
           })
           updatePaymentsState({ createdPayment, setTodayPaymentHistory })
-          fetchTodayAppointments()
+          fetchWorkAppointments()
         }
       } catch (error) {
         toast({ description: error.description })
@@ -140,7 +140,7 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
             setPaymentVal,
             setPaymentLeftVal,
           })
-          fetchTodayAppointments()
+          fetchWorkAppointments()
         }
       } catch (error) {
         toast({ description: error.description })

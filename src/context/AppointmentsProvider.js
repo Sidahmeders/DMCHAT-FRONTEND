@@ -19,8 +19,8 @@ export const AppointmentsProvider = ({ children }) => {
   const [todayPaymentHistory, setTodayPaymentHistory] = useState([])
   const [selectedDate, setSelectedDate] = useState(formatDate(new Date()))
 
-  const fetchTodayAppointments = async () => {
-    const todayAppointments = await fetchDayAppointments(new Date())
+  const fetchWorkAppointments = async () => {
+    const todayAppointments = await fetchDayAppointments(selectedDate)
 
     const { expected, awaitingRoom, doneList } = todayAppointments.reduce(
       (prev, appointment) => {
@@ -55,6 +55,7 @@ export const AppointmentsProvider = ({ children }) => {
         if (isEmpty(getLocalUser())) return
         const todayPayments = await fetchDayPayments(selectedDate)
         setTodayPaymentHistory(todayPayments)
+        fetchWorkAppointments()
       } catch (error) {
         toast({ description: error.message })
       }
@@ -67,7 +68,7 @@ export const AppointmentsProvider = ({ children }) => {
       value={{
         appointmentsList,
         setAppointmentsList,
-        fetchTodayAppointments,
+        fetchWorkAppointments,
         todayPaymentHistory,
         setTodayPaymentHistory,
         selectedDate,
