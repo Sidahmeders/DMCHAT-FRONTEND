@@ -89,7 +89,7 @@ const CreateGroupChatModal = () => {
         </Button>
       </Tooltip>
 
-      <Modal isOpen={isOpen} onClose={onClose}>
+      <Modal isOpen={isOpen} closeOnOverlayClick={false} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>Créer une discussion de groupe</ModalHeader>

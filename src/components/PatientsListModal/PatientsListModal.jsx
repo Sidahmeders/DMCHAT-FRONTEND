@@ -86,7 +86,7 @@ export default function PatientListModal() {
     <>
       <Users onClick={onPatientsModalOpen} color="orange" />
 
-      <Modal size="5xl" isOpen={isPatientsModalOpen} onClose={onPatientsModalClose}>
+      <Modal size="5xl" closeOnOverlayClick={false} isOpen={isPatientsModalOpen} onClose={onPatientsModalClose}>
         <ModalOverlay bg="blackAlpha.400" />
         <ModalContent>
           <ModalHeader>Liste des patients</ModalHeader>

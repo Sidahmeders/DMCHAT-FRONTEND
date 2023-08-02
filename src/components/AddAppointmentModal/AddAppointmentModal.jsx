@@ -13,7 +13,7 @@ const AddAppointmentModal = ({ selectedView, selectedSlotInfo, isOpen, onClose, 
   const [templateButtons, setTemplateButtons] = useState(getMotifTemplateButtons())
 
   return (
-    <Modal size="xl" isOpen={isOpen} onClose={onClose}>
+    <Modal size="xl" closeOnOverlayClick={false} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay bg="blackAlpha.400" />
       <ModalContent>
         <Tabs onClick={() => setTemplateButtons(getMotifTemplateButtons())}>
