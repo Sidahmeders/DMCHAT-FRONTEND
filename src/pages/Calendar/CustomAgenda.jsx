@@ -9,7 +9,7 @@ import {
   Text,
 } from '@chakra-ui/react'
 import * as dates from 'date-arithmetic'
-import { Calendar, Activity } from 'react-feather'
+import { Calendar } from 'react-feather'
 import { startOfMonth, toDate } from 'date-fns'
 
 import { formatDate, formatMoney } from '@utils'
@@ -78,7 +78,7 @@ export default function CustomAgenda({ accessors, length, date, events }) {
                 <AccordionPanel key={_id} px="4" py="2" bg={isDone ? 'green.100' : 'orange.100'}>
                   <HStack justifyContent="space-between">
                     <Text display="flex">
-                      {patient?.fullName} <Activity color="#3339" /> {motif?.name}
+                      {patient?.fullName} / {motif?.name}
                     </Text>
                     <Text>{formatMoney(payment || 0)} DA</Text>
                   </HStack>
