@@ -29,7 +29,8 @@ const SuggestionBox = ({ suggestions, setNewMessage }) => {
     <Box
       height={suggestionContainerHeight}
       bg="white"
-      overflow="auto"
+      overflowX="auto"
+      overflowY="hidden"
       borderRadius="md"
       py={suggestions.length ? '1' : '0'}>
       <HStack width="fit-content">
