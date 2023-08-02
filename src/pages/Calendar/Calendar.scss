@@ -47,10 +47,10 @@
 
   .rbc-day-bg.rbc-today {
     &::after {
-      content: '/__***__/';
-      color: rgb(7, 22, 158);
-      background-color: #93fdfd;
+      content: '';
+      background-color: #78ffb5;
       width: 100%;
+      height: 50%;
       display: inline-block;
     }
   }
