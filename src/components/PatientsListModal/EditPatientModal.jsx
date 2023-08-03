@@ -19,7 +19,7 @@ import {
 } from '@chakra-ui/react'
 import { isValid } from 'date-fns'
 
-import { getPatient } from '@utils'
+import { formatDate, getPatient } from '@utils'
 import { CREATE_PATIENT_NAMES } from '@config'
 import { updatePatientById } from '@services/patients'
 
@@ -99,7 +99,7 @@ export default function EditPatientModal({ isOpen, onClose, patientsData, setPat
                         )
                       }
                     />
-                    <Input type="date" placeholder="date de naissance" value={value} onChange={onChange} />
+                    <Input type="date" placeholder="date de naissance" value={formatDate(value)} onChange={onChange} />
                   </InputGroup>
                 )}
               />
