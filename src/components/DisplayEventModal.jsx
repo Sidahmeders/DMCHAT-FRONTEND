@@ -111,7 +111,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
             )}
             <HStack color="Highlight" gap="2" mt="2">
               <Text fontSize="1rem">
-                {patient?.fullName} / {patient?.age} ans
+                {patient?.fullName} / {formatDate(patient?.birthDate)}
               </Text>
             </HStack>
             <HStack color="Highlight" gap="1" mt="2">

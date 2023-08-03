@@ -16,6 +16,7 @@ import {
   InputGroup,
   InputLeftElement,
 } from '@chakra-ui/react'
+import { isValid } from 'date-fns'
 
 import { getLocalUser } from '@utils'
 import { CREATE_PATIENT_NAMES } from '@config'
@@ -87,21 +88,21 @@ export default function AddPatientModal({ setPatientsData }) {
 
                 <Controller
                   control={control}
-                  name={CREATE_PATIENT_NAMES.AGE}
+                  name={CREATE_PATIENT_NAMES.BIRTH_DATE}
                   shouldUnregister={isSubmitted}
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
                       <InputLeftElement
                         pointerEvents="none"
                         children={
-                          Number(value) >= 3 && Number(value) <= 120 ? (
+                          isValid(new Date(value)) ? (
                             <CheckCircle size="1.25rem" color="green" />
                           ) : (
                             <AlertCircle size="1.25rem" color="red" />
                           )
                         }
                       />
-                      <Input type="number" min={1} max={120} placeholder="Age" value={value} onChange={onChange} />
+                      <Input type="date" placeholder="date de naissance" value={value} onChange={onChange} />
                     </InputGroup>
                   )}
                 />

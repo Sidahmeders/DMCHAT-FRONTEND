@@ -13,8 +13,9 @@ import {
   GridItem,
   useToast,
 } from '@chakra-ui/react'
+import { isValid } from 'date-fns'
 
-import { getPatient, setPatient } from '@utils'
+import { formatDate, getPatient, setPatient } from '@utils'
 import { CREATE_PATIENT_NAMES } from '@config'
 import { updatePatientById } from '@services/patients'
 import Loader from '@components/Loader/Loader'
@@ -90,21 +91,21 @@ export default function PatientEditBody() {
             <GridItem colSpan="2">
               <Controller
                 control={control}
-                name={CREATE_PATIENT_NAMES.AGE}
+                name={CREATE_PATIENT_NAMES.BIRTH_DATE}
                 shouldUnregister={isSubmitted}
                 render={({ field: { onChange, value } }) => (
                   <InputGroup>
                     <InputLeftElement
                       pointerEvents="none"
                       children={
-                        Number(value) >= 3 && Number(value) <= 120 ? (
+                        isValid(new Date(value)) ? (
                           <CheckCircle size="1.25rem" color="green" />
                         ) : (
                           <AlertCircle size="1.25rem" color="red" />
                         )
                       }
                     />
-                    <Input type="number" min={1} max={120} placeholder="Age" value={value} onChange={onChange} />
+                    <Input type="date" placeholder="date de naissance" value={formatDate(value)} onChange={onChange} />
                   </InputGroup>
                 )}
               />

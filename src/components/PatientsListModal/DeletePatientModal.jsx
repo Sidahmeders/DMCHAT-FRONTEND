@@ -13,7 +13,7 @@ import {
 } from '@chakra-ui/react'
 import { AlertTriangle } from 'react-feather'
 
-import { getPatient } from '@utils'
+import { formatDate, getPatient } from '@utils'
 import { deletePatientById } from '@services/patients'
 
 import Loader from '../Loader/Loader'
@@ -30,7 +30,7 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
     try {
       await deletePatientById(patient._id)
       toast({
-        title: `${patient.fullName} / ${patient.age} ans a été supprimé avec succès`,
+        title: `${patient.fullName} / ${formatDate(patient.birthDate)} a été supprimé avec succès`,
         status: 'warning',
       })
       setPatientsData((patientsData) => ({
@@ -62,7 +62,8 @@ export default function DeletePatientModal({ isOpen, onClose, setPatientsData })
         <ModalHeader>êtes-vous sûr de vouloir supprimer ce patient</ModalHeader>
         <Loader loading={isLoading}>
           <ModalBody>
-            êtes-vous sûr de vouloir supprimer <strong>{patient.fullName}</strong> / <strong>{patient.age}</strong> ans
+            êtes-vous sûr de vouloir supprimer <strong>{patient.fullName}</strong> /{' '}
+            <strong>{formatDate(patient.birthDate)}</strong>
             <HStack color="red" mt="4">
               <AlertTriangle />
               <Text fontWeight="semibold">veuillez noter que cette action ne peut pas être annulée!</Text>

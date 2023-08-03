@@ -12,7 +12,7 @@ import {
 } from '@chakra-ui/react'
 import { ChevronDown, ChevronUp } from 'react-feather'
 
-import { getPatient, groupAppointments } from '@utils'
+import { formatDate, getPatient, groupAppointments } from '@utils'
 
 import Loader from '../Loader/Loader'
 import PatientEditBody from './PatientEditBody'
@@ -51,7 +51,7 @@ export default function PatientFollowupsModal({ isOpen, onClose }) {
         <ModalHeader>
           <Box display="flex" alignItems="center">
             <span style={{ paddingRight: '1rem' }}>
-              {patient.fullName} / {patient.age} ans
+              {patient.fullName} / {formatDate(patient.birthDate)}
             </span>
             <Button variant="ghost" height="8" mt="0.5" px="3" onClick={() => setIsEditPatientOpen(!isEditPatientOpen)}>
               {isEditPatientOpen ? <ChevronUp /> : <ChevronDown />}

@@ -23,7 +23,7 @@ import { isEmpty, omit } from 'lodash'
 
 import { ChatState } from '@context'
 import { CREATE_APPOINTMENT_NAMES, CREATE_PAYMENT_NAMES, APPOINTMENT_EVENT_LISTENERS } from '@config'
-import { getMotifTemplateButtons, getLocalUser } from '@utils'
+import { getMotifTemplateButtons, getLocalUser, formatDate } from '@utils'
 import { createAppointment, relateAppointment } from '@services/appointments'
 import { fetchPatients } from '@services/patients'
 import { createPayment } from '@services/payments'
@@ -32,8 +32,8 @@ import Loader from '@components/Loader/Loader'
 import PatientHistory from './PatientHistory'
 
 const resolvePatientOptions = (patients) => {
-  return patients.map(({ _id, fullName, age }) => ({
-    label: `${fullName} ${age}`,
+  return patients.map(({ _id, fullName, birthDate }) => ({
+    label: `${fullName} ${formatDate(birthDate)}`,
     value: `${_id}-${fullName}`,
   }))
 }
