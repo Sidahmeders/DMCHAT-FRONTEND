@@ -145,7 +145,7 @@ export default function AddPatientModal({ setPatientsData }) {
                   render={({ field: { onChange, value } }) => (
                     <InputGroup>
                       <InputLeftElement pointerEvents="none" children={<Clipboard size="1.25rem" color="gray" />} />
-                      <Textarea pl="10" placeholder="Etate général" value={value} onChange={onChange} />
+                      <Textarea pl="10" placeholder="Etate général (note)" value={value} onChange={onChange} />
                     </InputGroup>
                   )}
                 />
