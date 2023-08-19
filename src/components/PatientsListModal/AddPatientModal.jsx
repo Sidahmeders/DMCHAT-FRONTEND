@@ -21,6 +21,7 @@ import { isValid } from 'date-fns'
 import { getLocalUser } from '@utils'
 import { CREATE_PATIENT_NAMES } from '@config'
 import { createPatient } from '@services/patients'
+import { useState } from 'react'
 
 const initialValues = Object.values(CREATE_PATIENT_NAMES).reduce((prev, curr) => ({ ...prev, [curr]: '' }), {})
 
@@ -34,6 +35,8 @@ export default function AddPatientModal({ setPatientsData }) {
     reset,
     formState: { isSubmitted, isSubmitting },
   } = useForm({ defaultValues: initialValues })
+
+  const [birthDateInputType, setBirthDateInputType] = useState('text')
 
   const onSubmit = async (data) => {
     try {
@@ -102,7 +105,14 @@ export default function AddPatientModal({ setPatientsData }) {
                           )
                         }
                       />
-                      <Input type="date" placeholder="date de naissance" value={value} onChange={onChange} />
+                      <Input
+                        type={birthDateInputType}
+                        onFocus={() => setBirthDateInputType('date')}
+                        onBlur={() => setBirthDateInputType('text')}
+                        placeholder="date de naissance"
+                        value={value}
+                        onChange={onChange}
+                      />
                     </InputGroup>
                   )}
                 />
