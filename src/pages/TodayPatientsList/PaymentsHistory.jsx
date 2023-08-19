@@ -13,7 +13,6 @@ import {
   Text,
   Input,
 } from '@chakra-ui/react'
-import { Cloud } from 'react-feather'
 
 import { AppointmentsState } from '@context'
 import { formatDate, formatMoney } from '@utils'
@@ -27,8 +26,8 @@ const PaymentsHistory = () => {
 
   return (
     <>
-      <Button colorScheme="purple" position="absolute" bottom="1" right="1" leftIcon={<Cloud />} onClick={onOpen}>
-        Paiement Suivi
+      <Button colorScheme="purple" position="absolute" bottom="1" right="1" onClick={onOpen}>
+        Paiements du {formatDate(selectedDate, 'EEEE dd MMM yyyy')}
       </Button>
       <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
