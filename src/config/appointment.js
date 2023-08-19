@@ -29,7 +29,7 @@ export const MOTIF_ENUM = {
   REMOVABLE_PROSTHESIS: 'removable_prosthesis',
   IMPLANT: 'implant',
   ODF: 'odf',
-  OTHERS: 'autres',
+  OTHERS: 'others',
 }
 
 export const MOTIF_MAP = {
