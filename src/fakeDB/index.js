@@ -113,14 +113,21 @@ export const MOCK_MONTH_DATA = [
 ]
 
 export const PAYMENT_CATEGORY_DATA = [
-  { name: 'Douleur', value: 493500 },
-  { name: 'Fonctionnel', value: 1683500 },
-  { name: 'Esthetique', value: 933500 },
-  { name: 'Autre', value: 983500 },
+  { name: 'Consultation', value: 73500 },
+  { name: 'Extraction', value: 183500 },
+  { name: 'Contrôle', value: 13500 },
+  { name: 'Chirurgie', value: 333500 },
+  { name: 'Soin', value: 84400 },
+  { name: 'Prothèse fixe', value: 233500 },
+  { name: 'Prothèse amovible', value: 433500 },
+  { name: 'Implant', value: 193500 },
+  { name: 'ODF', value: 263500 },
+  { name: 'Autre', value: 383500 },
 ]
 
 export const MOCK_PATIENTS_AGE_RATIO_DATA = [
-  { name: '4-18', count: 292 },
+  { name: '1-12', count: 23 },
+  { name: '13-18', count: 292 },
   { name: '19-30', count: 359 },
   { name: '31-45', count: 412 },
   { name: '46+', count: 189 },

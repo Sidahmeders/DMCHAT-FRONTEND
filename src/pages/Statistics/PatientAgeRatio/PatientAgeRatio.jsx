@@ -10,7 +10,7 @@ import CustomTooltip from './CustomTooltip'
 import CustomLegend from './CustomLegend'
 import RenderCustomizedLabel from './RenderCustomizedLabel'
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042']
+const COLORS = ['#22DDDD', '#0088FE', '#00C49F', '#FFBB28', '#FF8042']
 
 const sortPatientsRatio = (a, b) => {
   const [ageOne] = a?.name?.split('-')
