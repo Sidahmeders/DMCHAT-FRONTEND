@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { Calendar as BigCalendar, DateLocalizer, dateFnsLocalizer } from 'react-big-calendar'
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop'
 import { registerLocale } from 'react-datepicker'
-import { format, parse, startOfWeek, getDay, addMonths, subMonths, addHours } from 'date-fns'
+import { format, parse, startOfWeek, getDay, addHours, addDays, addMonths, subDays, subMonths } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
 import { formatDate } from '@utils'
@@ -64,8 +64,20 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   const [availabilities, setAvailabilities] = useState({})
 
   const swipeHandlers = useSwipeable({
-    onSwipedLeft: () => setSelectedDate(addMonths(selectedDate, 1)),
-    onSwipedRight: () => setSelectedDate(subMonths(selectedDate, 1)),
+    onSwipedLeft: () => {
+      if (selectedView === 'month') {
+        setSelectedDate(addMonths(selectedDate, 1))
+      } else {
+        setSelectedDate(addDays(selectedDate, 1))
+      }
+    },
+    onSwipedRight: () => {
+      if (selectedView === 'month') {
+        setSelectedDate(subMonths(selectedDate, 1))
+      } else {
+        setSelectedDate(subDays(selectedDate, 1))
+      }
+    },
   })
 
   const showMoreDetails = (callEvent) => {
