@@ -199,7 +199,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
                   <InputLeftElement
                     pointerEvents="none"
                     children={
-                      value?.length >= 5 && value?.length <= 50 ? (
+                      value?.length >= 2 && value?.length <= 50 ? (
                         <CheckCircle size="1.25rem" color="green" />
                       ) : (
                         <AlertCircle size="1.25rem" color="red" />
