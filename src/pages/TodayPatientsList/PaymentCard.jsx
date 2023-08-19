@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Button, InputGroup, Input, useToast } from '@chakra-ui/react'
+import { Button, InputGroup, Input, useToast, InputLeftElement } from '@chakra-ui/react'
 import { CardBody } from '@chakra-ui/card'
 import { debounce } from 'lodash'
 
@@ -154,15 +154,15 @@ const PaymentCard = ({ appointmentData, showPaymentCard }) => {
       <CardBody p="0.25rem 1rem" mr="0">
         <InputGroup gap="2">
           <InputGroup className="payments-input">
-            <label>T</label>
+            <InputLeftElement children={<label>T :</label>} />
             <Input type="number" min={0} step={500} value={totalPriceVal} onChange={updateTotalPriceVal} />
           </InputGroup>
           <InputGroup className="payments-input">
-            <label>V</label>
+            <InputLeftElement children={<label>V :</label>} />
             <Input type="number" value={paymentVal} min={0} step={500} onChange={updatePaymentVal} />
           </InputGroup>
           <InputGroup className="payments-input">
-            <label>R</label>
+            <InputLeftElement children={<label>R :</label>} />
             <Input type="number" readOnly value={paymentLeftVal} />
           </InputGroup>
         </InputGroup>
