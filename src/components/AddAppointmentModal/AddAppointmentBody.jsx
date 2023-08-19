@@ -335,7 +335,7 @@ export default function AddAppointmentBody({ selectedSlotInfo, handleClose, setE
                         <InputGroup>
                           <InputLeftElement
                             pointerEvents="none"
-                            children={<DollarSign size="1.25rem" color={value >= 1000 ? 'green' : 'red'} />}
+                            children={<DollarSign size="1.25rem" color="gray" />}
                           />
                           <Input
                             type="number"
