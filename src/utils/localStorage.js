@@ -8,6 +8,7 @@ const PAGE_ROUTE = 'pageRoute'
 const MOTIF_TEMPLATE_BUTTONS = 'motifTemplateButtons'
 const CHAT_TEMPLATE_BUTTONS = 'chatTemplateButtons'
 const CHAT_SUGGESTION_SETTINGS = 'chatSuggestionSettings'
+const CALENDAR_VIEW = 'calendarView'
 
 export const getConfirmationToken = () => localStorage.getItem(CONFIRM_TOKEN) || null
 export const setConfirmationToken = (token) => localStorage.setItem(CONFIRM_TOKEN, token)
@@ -62,3 +63,6 @@ export const getChatSuggestionSettings = () => {
 export const setChatSuggestionSettings = (settings) => {
   localStorage.setItem(CHAT_SUGGESTION_SETTINGS, JSON.stringify(settings))
 }
+
+export const getCalendarView = () => localStorage.getItem(CALENDAR_VIEW) || 'month'
+export const setCalendarView = (view) => localStorage.setItem(CALENDAR_VIEW, view)

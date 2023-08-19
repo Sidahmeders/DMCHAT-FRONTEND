@@ -8,7 +8,7 @@ import { registerLocale } from 'react-datepicker'
 import { format, parse, startOfWeek, getDay, addHours, addDays, addMonths, subDays, subMonths } from 'date-fns'
 import { fr } from 'date-fns/locale'
 
-import { formatDate } from '@utils'
+import { formatDate, getCalendarView, setCalendarView } from '@utils'
 import { AVAILABILITY_BG_COLORS } from '@config'
 import { fetchMonthAppointments, updateAppointment } from '@services/appointments'
 import { fetchCalendarAvailabilities } from '@services/calendar'
@@ -55,11 +55,12 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
   } = useDisclosure()
   const toast = useToast()
   const clickRef = useRef(null)
+  const defaultView = getCalendarView()
 
   const [events, setEvents] = useState([])
   const [selectedDate, setSelectedDate] = useState(new Date())
   const [selectedSlotInfo, setSelectedSlotInfo] = useState({})
-  const [selectedView, setSelectedView] = useState('month')
+  const [selectedView, setSelectedView] = useState(defaultView)
   const [selectedEvent, setSelectedEvent] = useState({})
   const [availabilities, setAvailabilities] = useState({})
 
@@ -207,7 +208,11 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         onDoubleClickEvent={onDoubleClickEvent}
         onSelectSlot={onSelectSlot}
         onEventDrop={onEventDrop}
-        onView={setSelectedView}
+        defaultView={defaultView}
+        onView={(view) => {
+          setSelectedView(view)
+          setCalendarView(view)
+        }}
         views={{ month: true, day: true, agenda: CustomAgenda }}
         dayPropGetter={(date) => ({ style: { background: AVAILABILITY_BG_COLORS[availabilities[formatDate(date)]] } })}
         components={{ toolbar: (props) => <CustomToolbar setSelectedDate={setSelectedDate} {...props} /> }}
