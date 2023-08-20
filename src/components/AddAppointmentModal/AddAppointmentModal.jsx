@@ -1,11 +1,12 @@
 import { useState } from 'react'
-import { Modal, ModalContent, ModalOverlay, Tabs, TabList, Tab, TabPanels, TabPanel } from '@chakra-ui/react'
+import { Modal, ModalContent, ModalOverlay, Tabs, TabList, Tab, TabPanels, TabPanel, Box } from '@chakra-ui/react'
 
 import { getMotifTemplateButtons } from '@utils'
 
 import AddAppointmentBody from './AddAppointmentBody'
 import MotifEditableButtons from './MotifEditableButtons/MotifEditableButtons'
 import ConfigureCalendarAvailabilityBody from './ConfigureCalendarAvailabilityBody'
+import { X } from 'react-feather'
 
 const AddAppointmentModal = ({ selectedView, selectedSlotInfo, isOpen, onClose, setEvents, setAvailabilities }) => {
   const { slots } = selectedSlotInfo
@@ -21,6 +22,19 @@ const AddAppointmentModal = ({ selectedView, selectedSlotInfo, isOpen, onClose, 
             {canAddAppointment && <Tab>Ajouter rendez-vous</Tab>}
             {canAddAppointment && <Tab>Modifier boutons</Tab>}
             <Tab>Définir la disponibilité</Tab>
+            <Box
+              onClick={onClose}
+              cursor="pointer"
+              position="absolute"
+              right="1"
+              mt="1"
+              p="1"
+              _hover={{
+                background: '#ddd6',
+                borderRadius: '6px',
+              }}>
+              <X />
+            </Box>
           </TabList>
 
           <TabPanels>
