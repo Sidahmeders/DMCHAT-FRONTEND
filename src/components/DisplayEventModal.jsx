@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Info, FileMinus, FilePlus, Clipboard, Phone, CheckCircle, MinusCircle } from 'react-feather'
+import { Info, Phone, CheckCircle, MinusCircle } from 'react-feather'
 import {
   Modal,
   ModalContent,
@@ -12,9 +12,10 @@ import {
   Text,
   useToast,
   Textarea,
-  InputGroup,
-  InputRightElement,
+  FormControl,
+  FormLabel,
   HStack,
+  Input,
 } from '@chakra-ui/react'
 
 import { formatDate, formatPhoneNumber, formatMoney } from '@utils'
@@ -128,24 +129,25 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
           </ModalHeader>
           <ModalBody>
             <Stack spacing="2">
-              <Text pl="1">
-                Motif de consultation: <strong>{motif?.name}</strong>
-              </Text>
+              <FormControl>
+                <FormLabel>Motif de consultation:</FormLabel>
+                <Input value={motif?.name} readOnly />
+              </FormControl>
               <HStack>
-                <InputGroup>
+                <FormControl>
+                  <FormLabel>Diagnostique:</FormLabel>
                   <Textarea value={diagnostic} readOnly />
-                  <InputRightElement children={<FileMinus color="#9996" />} />
-                </InputGroup>
-                <InputGroup>
+                </FormControl>
+                <FormControl>
+                  <FormLabel>Plan de traitement:</FormLabel>
                   <Textarea value={treatmentPlan} readOnly />
-                  <InputRightElement children={<FilePlus color="#9996" />} />
-                </InputGroup>
+                </FormControl>
               </HStack>
               <HStack>
-                <InputGroup>
+                <FormControl>
+                  <FormLabel>Etate général (note):</FormLabel>
                   <Textarea value={patient?.generalState} readOnly />
-                  <InputRightElement children={<Clipboard color="#9996" />} />
-                </InputGroup>
+                </FormControl>
               </HStack>
             </Stack>
           </ModalBody>
