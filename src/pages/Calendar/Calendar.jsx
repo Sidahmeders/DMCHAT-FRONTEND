@@ -160,7 +160,13 @@ export default function Calendar({ localizer = fnslocalizer, ...props }) {
         const eventsList = monthAppointments.map((event) => ({
           ...event,
           id: event._id,
-          title: `${event?.patient?.fullName} / ${event?.motif?.name} / ${event?.title} / ${event?.payment || '0'}`,
+          title: `
+            ${event?.patient?.fullName} /
+            ${event?.motif?.name} /
+            ${event?.title} /
+            T: ${event?.totalPrice || '0'} /
+            V: ${event?.payment || '0'}
+          `,
           start: new Date(event.startDate),
           end: new Date(event.endDate),
         }))
