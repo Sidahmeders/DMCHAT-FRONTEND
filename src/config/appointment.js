@@ -29,6 +29,7 @@ export const MOTIF_ENUM = {
   REMOVABLE_PROSTHESIS: 'removable_prosthesis',
   IMPLANT: 'implant',
   ODF: 'odf',
+  SCALING: 'scaling',
   OTHERS: 'others',
 }
 
@@ -42,9 +43,7 @@ export const MOTIF_MAP = {
   [MOTIF_ENUM.REMOVABLE_PROSTHESIS]: 'Prothèse amovible',
   [MOTIF_ENUM.IMPLANT]: 'Implant',
   [MOTIF_ENUM.ODF]: 'ODF',
-  [MOTIF_ENUM.PAIN]: 'douleur',
-  [MOTIF_ENUM.FUNCTIONAL]: 'fonctionnel',
-  [MOTIF_ENUM.AESTHETIC]: 'esthetique',
+  [MOTIF_ENUM.SCALING]: 'détartrage',
   [MOTIF_ENUM.OTHERS]: 'autres',
 }
 
@@ -57,7 +56,8 @@ export const MOTIF_TEMPLATE_VALUES = [
   { id: '#6', name: 'Prothèse fixe', value: MOTIF_ENUM.FIXED_PROSTHESIS, isRequired: true },
   { id: '#7', name: 'Prothèse amovible', value: MOTIF_ENUM.REMOVABLE_PROSTHESIS, isRequired: true },
   { id: '#8', name: 'Implant', value: MOTIF_ENUM.IMPLANT, isRequired: true },
-  { id: '#9', name: 'ODF', value: MOTIF_ENUM.ODF, isRequired: true },
+  { id: '#9', name: 'Détartrage', value: MOTIF_ENUM.SCALING, isRequired: true },
+  { id: '#10', name: 'ODF', value: MOTIF_ENUM.ODF, isRequired: true },
 ]
 
 export const APPOINTMENTS_IDS = {
