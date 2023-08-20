@@ -34,7 +34,12 @@ const PaymentsHistory = () => {
         <DrawerContent>
           <DrawerHeader px="4" fontSize="18" fontWeight="bold" color="purple.500">
             <Text>Paiements du {formatDate(selectedDate, 'EEEE MM/dd')}</Text>
-            <Input mt="2" type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
+            <Input
+              mt="2"
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(formatDate(e.target.value))}
+            />
           </DrawerHeader>
           <DrawerCloseButton fontSize="14" marginTop="5px" color="purple" />
           <DrawerBody>
