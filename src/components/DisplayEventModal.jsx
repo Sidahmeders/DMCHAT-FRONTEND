@@ -160,7 +160,7 @@ export default function DisplayEventModal({ selectedEvent, setEvents, isOpen, on
               </>
             ) : (
               <Button type="submit" mr={3} colorScheme="red" onClick={deleteEvent}>
-                Supprimer définitivement
+                Confirmer est sortie
               </Button>
             )}
             <Button

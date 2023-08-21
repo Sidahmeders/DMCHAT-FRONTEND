@@ -58,7 +58,7 @@ const GroupChatItem = ({ chatGroup }) => {
           <HStack>
             {canDeleteGroup ? (
               <Button size="sm" colorScheme="red" onClick={deleteGroupChat}>
-                Supprimer définitivement
+                Confirmer est sortie
               </Button>
             ) : (
               <Button size="sm" colorScheme="orange" onClick={setCanDeleteGroup}>

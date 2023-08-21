@@ -63,7 +63,7 @@ const DeleteChatModal = ({ chat, isOpen, onOpen, onClose }) => {
           <ModalFooter>
             {canDeleteChat ? (
               <Button colorScheme="red" onClick={handleChatDelete}>
-                Supprimer définitivement
+                Confirmer est sortie
               </Button>
             ) : (
               <Button colorScheme="orange" onClick={setCanDeleteChat}>

@@ -59,7 +59,7 @@ const DeleteUserModal = ({ user, setUsersList, isOpen, onOpen, onClose }) => {
           <ModalFooter>
             {canDeleteUser ? (
               <Button colorScheme="red" onClick={handleDeleteUser}>
-                Supprimer définitivement
+                Confirmer est sortie
               </Button>
             ) : (
               <Button colorScheme="orange" onClick={setCanDeleteUser}>

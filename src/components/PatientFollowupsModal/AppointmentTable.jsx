@@ -256,7 +256,7 @@ export default function AppointmentTable({ appointmentsGroup, appointments, setA
               {canShowConfirmUpdate ? (
                 <>
                   <Button type="submit" colorScheme="red" mr={3} onClick={saveUpdateHandler} isDisabled={isLoading}>
-                    Confirmer les modifications
+                    Confirmer est sortie
                   </Button>
                 </>
               ) : (
