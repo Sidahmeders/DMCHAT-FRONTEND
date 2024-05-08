@@ -3,7 +3,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { Cast, Calendar, PieChart } from 'react-feather'
 import { getPageRoute, setPageRoute } from '@utils'
 import { APP_ROUTES } from '@config'
-import ChatNotification from '../miscellaneous/ChatNotification'
+// import ChatNotification from '../miscellaneous/ChatNotification'
 import PatientListModal from '../PatientsListModal/PatientsListModal'
 import { DragDropContext, Droppable } from 'react-beautiful-dnd'
 import './TopNavigation.scss'
@@ -101,13 +101,6 @@ export default function TopNavigation() {
             {...provided.droppableProps}
             onMouseDown={handleMouseDown}
             onTouchStart={handleTouchStart}>
-            <Link
-              className={`${selectedRoute === APP_ROUTES.CHATS ? 'selected' : ''}`}
-              onClick={() => setPageRoute(APP_ROUTES.CHATS)}
-              to={APP_ROUTES.CHATS}>
-              <ChatNotification />
-            </Link>
-
             <Link
               className={`${selectedRoute === APP_ROUTES.TODAY_PATIENTS_LIST ? 'selected' : ''}`}
               onClick={() => setPageRoute(APP_ROUTES.TODAY_PATIENTS_LIST)}
